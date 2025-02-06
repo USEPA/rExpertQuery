@@ -124,7 +124,8 @@ EQ_CompareParams <- function(default, user) {
 
     # date params
     date.params <- c("report_cycle", "assess_date_end", "assess_date_start",
-                     "mon_end_date", "mon_start_date")
+                     "mon_end_date", "mon_start_date", "comp_date_end", "comp_date_start",
+                     "tmdl_date_end", "tmdl_date_start")
 
     # create param filters for POST
     params.body <- comp.params %>%
@@ -134,7 +135,8 @@ EQ_CompareParams <- function(default, user) {
         param == "report_cycle" & value == "any" ~ "-1",
         param == "region" & !is.null(value) ~  paste0("0", value),
         param %in% c("au_status", "delisted",
-                     "pollutant_ind", "vis") & !is.null(value) ~ substr(value, 1, 1),
+                     "pollutant_ind", "vis",
+                     "in_meas", "indian_country") & !is.null(value) ~ substr(value, 1, 1),
         param == "use_support" & value == "Fully Supporting" ~ "F",
         param == "use_support" & value == "Not Supporting" ~ "N",
         param == "use_support" & value == "Insufficient Information" ~ "I",

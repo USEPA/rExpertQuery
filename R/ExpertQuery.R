@@ -7,28 +7,49 @@
 #' https://owapps.epa.gov/expertquery/api-key-signup
 #' @param act_agency Character string. Denotes the agency that is establishing/issuing the action
 #' associated with an Assessment. Options are "State", "Tribe", or "EPA". Default = NULL.
-#' @param act_id
+#' @param act_id Character string. Unique Identifier for the Action associated with an Assessment
+#' that will be used to track the Action entered (such as the corresponding information and
+#' associated documents) in ATTAINS, and its associated name. Default = NULL
 #' @param act_name
 #' @param act_type Character string. Identifies the type of Action associated with an Action.
 #' Options can be viewed with EQ_DomainValues(act_type).Default = NULL
-#' @param au_name
-#' @param auid
-#' @param comp_date_end
-#' @param comp_date_start
-#' @param fisc_year_end
-#' @param fisc_year_start
-#' @param in_meas
-#' @param indian_country
-#' @param obj_id
-#' @param org_id
-#' @param org_name
-#' @param org_type
-#' @param param_group
+#' @param au_name Character string. The name assigned to an Assessment Unit by the Organization.
+#' Default = NULL.
+#' @param auid Character string. A unique identifier assigned to an Assessment Unit by the
+#' Organization. Default = NULL.
+#' @param comp_date_end Character string. The ending date of the date range during which the
+#' Action is planned to be completed. Usually this refers to the date that the TMDL Action date is
+#' initially submitted to EPA. Format is "YYYY-MM-DD". Default = NULL.
+#' @param comp_date_start Character string. The starting date of the date range during which the
+#' Action is planned to be completed. Usually this refers to the date that the TMDL Action date is
+#' initially submitted to EPA. Format is "YYYY-MM-DD". Default = NULL.
+#' @param fisc_year_end Character string. The ending year for the date range of fiscal years in
+#' which a particular action, program, or project was initiated or established. Format is "YYYY".
+#' Default = NULL.
+#' @param fisc_year_start  Character string. The starting year for the date range of fiscal years
+#' in which a particular action, program, or project was initiated or established. Format is "YYYY".
+#' Default = NULL.
+#' @param in_meas Character string. EPA can determine whether the Action should count towards 303(d)
+#' measures. Draft Actions get partial credit and finalized Actions get full cred. By default, all
+#' measures count towards the measures unless EPA changes this flag for a specific action. Options
+#' are "Yes" or "No". Default = NULL.
+#' @param indian_country Character string. Indicates if the water is either wholly or partially in
+#' Indian country. Options are "Yes" or "No". Default = NULL.
+#' @param org_id Character string. A unique identifier assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_id"). Default = NULL.
+#' @param org_name Character string. A unique name assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_name"). Default = NULL.
+#' @param param_name The name of the characteristic being  monitored and assessed. Options can be
+#' viewed with EQ_DomainValues("param_name"). Default = NULL.
+#' @param param_group Character string. A collection of related Parameters. Options can be viewed
+#' with EQ_DomainValues("param_attain"). Default = NULL.
 #' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
-#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options.
+#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options. Default = NULL.
 #' @param statecode Character string. FIPS state alpha code that identifies a state (e.g.
 #' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
-#' @param water_type
+#' @param water_type Character string. An Assessment Unit must have at least one water type, and it
+#' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
+#' = NULL.
 #'
 #' @return A data frame of ATTAINS actions served via Expert Query webservices including
 #' the columns "objectId", "region", "state", "organizationType", "organizationId",
@@ -40,8 +61,8 @@
 EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name = NULL,
                        act_type = NULL, au_name = NULL, auid = NULL, comp_date_end = NULL,
                        comp_date_start = NULL, fisc_year_end = NULL, fisc_year_start = NULL,
-                       in_meas = NULL, indian_country = NULL, obj_id = NULL, org_id = NULL,
-                       org_name = NULL, org_type = NULL, param = NULL, param_group = NULL,
+                       in_meas = NULL, indian_country = NULL, org_id = NULL,
+                       org_name = NULL, param_name = NULL, param_group = NULL,
                        region = NULL, statecode = NULL, water_type = NULL)  {
 
   # check for api key
@@ -93,29 +114,39 @@ EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_nam
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:
 #' https://owapps.epa.gov/expertquery/api-key-signup
-#' @param act_id
-#' @param act_name
+#' @param act_id Character string. Unique Identifier for the Action associated with an Assessment
+#' that will be used to track the Action entered (such as the corresponding information and
+#' associated documents) in ATTAINS, and its associated name. Default = NULL
+#' @param act_name Character string. Unique identifier for the Action that will be used to track
+#' the Action entered (such as the corresponding information and associated documents) in ATTAINs,
+#' and its associated name (name of TMDL Report, 4B Report, Alternative Report, etc.). Default =
+#' NULL.
 #' @param act_type Character string. Identifies the type of Action associated with an Action.
 #' Options can be viewed with EQ_DomainValues(act_type).
-#' @param comp_date_end
-#' @param comp_date_start
-#' @param doc_file_name
-#' @param doc_key
-#' @param doc_name
-#' @param doc_query
-#' @param doc_type
-#' @param doc_url
-#' @param file_type
-#' @param fisc_year_start
-#' @param obj_id
-#' @param org_id
-#' @param org_name
+#' @param comp_date_end Character string. The ending date of the date range during which the
+#' Action is planned to be completed. Usually this refers to the date that the TMDL Action date is
+#' initially submitted to EPA. Format is "YYYY-MM-DD". Default = NULL.
+#' @param comp_date_start Character string. The starting date of the date range during which the
+#' Action is planned to be completed. Usually this refers to the date that the TMDL Action date is
+#' initially submitted to EPA. Format is "YYYY-MM-DD". Default = NULL.
+#' @param doc_file_name Character string. The document file name of the Actions Document.
+#' Default = NULL.
+#' @param doc_name Character string. The document name of the Actions Document. Default = NULL.
+#' @param doc_type Character string. The document type of the Actions Document. Default = NULL.
+#' @param org_id Character string. A unique identifier assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_id"). Default = NULL.
+#' @param org_name Character string. A unique name assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_name"). Default = NULL.
 #' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
-#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options.
+#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options. Default = NULL.
 #' @param statecode Character string. FIPS state alpha code that identifies a state (e.g.
 #' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
-#' @param tmdl_date_end
-#' @param tmdl_date_start
+#' @param tmdl_date_end Character string. This should correspond to the ending date of the date
+#' range that EPA approved the official final TMDL submitted (such as the date on the approval
+#' letter). Format is "YYYY-MM-DD". Default = NULL.
+#' @param tmdl_date_start Character string. This should correspond to the starting date of the date
+#' range that EPA approved the official final TMDL submitted (such as the date on the approval
+#' letter). Format is "YYYY-MM-DD". Default = NULL.
 #'
 #' @return A data frame of ATTAINS actions documents served via Expert Query webservices including
 #' the columns "objectId", "organizationName", "organizationType", "region", "state", "tmdlDate",'
@@ -126,10 +157,9 @@ EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_nam
 #'
 EQ_ActionsDocuments <- function(api_key = NULL, act_id = NULL, act_name = NULL, act_type = NULL,
                                 comp_date_end = NULL, comp_date_start = NULL, doc_file_name = NULL,
-                                doc_key = NULL, doc_name = NULL, doc_query = NULL, doc_type = NULL,
-                                doc_url = NULL, file_type = NULL, fisc_year_start = NULL,
-                                obj_id = NULL, org_id = NULL, org_name = NULL, region = NULL,
-                                statecode = NULL, tmdl_date_end = NULL, tmdl_date_start = NULL) {
+                                doc_name = NULL, doc_type = NULL, org_id = NULL, org_name = NULL,
+                                region = NULL, statecode = NULL, tmdl_date_end = NULL,
+                                tmdl_date_start = NULL) {
 
   # check for api key
   if(is.null(api_key)) {
@@ -412,19 +442,26 @@ EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL,
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:
 #' https://owapps.epa.gov/expertquery/api-key-signup
-#' @param au_name
-#' @param au_status
-#' @param au_id
+#' @param au_name Character string. The name assigned to an Assessment Unit by the Organization.
+#' Default = NULL.
+#' @param au_status Character string. The current condition or status of an Assessment Unit.
+#' Options are "Active", "Historical" or "Retired". Default = "Active".
+#' @param au_id Character string. A unique identifier assigned to an Assessment Unit by the
+#' Organization. Default = NULL.
 #' @param cycle_id
 #' @param loc_txt
 #' @param loc_type
 #' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
 #' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options.
-#' @param report_cyle
+#' @param report_cycle Character string. The Integrated Reporting cycle of the data. Format is
+#' "YYYY" or "latest", which will select the most recent available cycle. Default = "latest".
 #' @param statecode Character string. FIPS state alpha code that identifies a state (e.g.
 #' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
-#' @param use_class
-#' @param water_type
+#' @param use_class Character string. The Use Class assigned to an Assessment Unit. Options can be
+#' viewed with EQ_DomainValues("use_class"). Default = NULL.
+#' @param water_type Character string. An Assessment Unit must have at least one water type, and it
+#' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
+#' = NULL.
 #'
 #' @return A data frame of ATTAINS assessment units served via Expert Query webservices including
 #' the columns "region", "state", "organizationType", "organizationId", "organizationName",
@@ -487,24 +524,29 @@ EQ_AssessmentUnits <- function(api_key = NULL, au_name = NULL, au_status = "A", 
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:
 #' https://owapps.epa.gov/expertquery/api-key-signup
-#' @param au_name
-#' @param au_status
-#' @param auid
-#' @param cycle_id
-#' @param mon_loc_id
-#' @param mon_loc_org
-#' @param nhd_id
-#' @param obj_id
-#' @param org_id
-#' @param org_name
-#' @param org_type
+#' @param au_name Character string. The name assigned to an Assessment Unit by the Organization.
+#' @param au_status Character string. The current condition or status of an Assessment Unit.
+#' Options are "Active", "Historical" or "Retired". Default = "Active".
+#' @param auid Character string. A unique identifier assigned to an Assessment Unit by the
+#' Organization. Default = NULL.
+#' @param loc_text Character string. Description of the location of the Assessment Unit. Default =
+#' NULL.
+#' @param org_id Character string. A unique identifier assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_id"). Default = NULL.
+#' @param org_name Character string. A unique name assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_name"). Default = NULL.
 #' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
-#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options.
-#' @param report_cycle
+#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options. Default = NULL.
+#' @param report_cycle Character string. The Integrated Reporting cycle of the data. Format is
+#' "YYYY" or "latest", which will select the most recent available cycle. Default = "latest".
 #' @param statecode Character string. FIPS state alpha code that identifies a state (e.g.
 #' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
-#' @param use_class
-#' @param water_type
+#' Default = NULL.
+#' @param use_class Character string. The Use Class assigned to an Assessment Unit. Options can be
+#' viewed with EQ_DomainValues("use_class"). Default = NULL.
+#' @param water_type Character string. An Assessment Unit must have at least one water type, and it
+#' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
+#' = NULL.
 #'
 #' @return A data frame of ATTAINS assessment units with monitoring locations served via Expert
 #' Query webservices including the columns "objectId", "region", "state", "organizationType",
@@ -516,8 +558,8 @@ EQ_AssessmentUnits <- function(api_key = NULL, au_name = NULL, au_status = "A", 
 #' @export
 #'
 EQ_AUsMLs <- function(api_key = NULL, au_name = NULL, au_status = "A", auid = NULL,
-                      cycle_id = NULL, mon_loc_id = NULL, mon_loc_org = NULL,  nhd_id = NULL,
-                      obj_id = NULL, org_id = NULL, org_name = NULL, org_type = NULL,
+                      cycle_id = NULL, mon_loc_id = NULL, mon_loc_org = NULL,
+                      org_id = NULL, org_name = NULL,
                       region = NULL, report_cycle = "latest", statecode = NULL, use_class = NULL,
                       water_type = NULL)  {
 
@@ -571,18 +613,22 @@ EQ_AUsMLs <- function(api_key = NULL, au_name = NULL, au_status = "A", auid = NU
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:
 #' https://owapps.epa.gov/expertquery/api-key-signup
-#' @param au_name
-#' @param auid
-#' @param cycle_id
-#' @param obj_id
-#' @param org_id
-#' @param org_name
+#' @param au_name Character string. The name assigned to an Assessment Unit by the Organization.
+#' Default = NULL.
+#' @param auid Character string. A unique identifier assigned to an Assessment Unit by the
+#' Organization. Default = NULL.
+#' @param org_id Character string. A unique identifier assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_id"). Default = NULL.
+#' @param org_name Character string. A unique name assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_name"). Default = NULL.
 #' @param org_type
 #' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
-#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options.
-#' @param report_cycle
+#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options. Default = NULL.
+#' @param report_cycle Character string. The Integrated Reporting cycle of the data. Format is
+#' "YYYY" or "latest", which will select the most recent available cycle. Default = "latest".
 #' @param statecode Character string. FIPS state alpha code that identifies a state (e.g.
 #' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
+#' Default = NULL.
 #'
 #' @return A data frame of ATTAINS catchment correspondence served via Expert Query webservices
 #' including the columns "region", "state", "organizationType", "organizationId",
@@ -592,8 +638,8 @@ EQ_AUsMLs <- function(api_key = NULL, au_name = NULL, au_status = "A", auid = NU
 #'
 #' @export
 #'
-EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL, cycle_id = NULL,
-                         obj_id = NULL, org_id = NULL, org_name = NULL, org_type = NULL,
+EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL,
+                         org_id = NULL, org_name = NULL, org_type = NULL,
                          region = NULL, report_cycle = "latest", statecode = NULL)  {
 
   # check for api key
@@ -646,27 +692,41 @@ EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL, cycle_id =
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:
 #' https://owapps.epa.gov/expertquery/api-key-signup
-#' @param au_name
-#' @param auid
-#' @param cause
+#' @param au_name Character string. The name assigned to an Assessment Unit by the Organization.
+#' Default = NULL.
+#' @param auid Character string. A unique identifier assigned to an Assessment Unit by the
+#' Organization. Default = NULL.
+#' @param cause Character string. A cause of impairment associated with a Probable Source. Options
+#' can be viewed with EQ_DomainValue("cause"). Default = NULL.
 #' @param confirmed Character string. Indicator of whether the source has been confirmed. Options
 #' are "yes" or "no". Default = NULL.
-#' @param cycle_id
-#' @param epa_ir_cat
-#' @param obj_id
-#' @param org_id
-#' @param org_name
-#' @param org_type
-#' @param overall_status
-#' @param param_group
+#' @param epa_ir_cat The overall EPA Integrated Report Category for the Assessment Unit ID,
+#' calculated by ATTAINS. Options are "1", "2", "3", "4A", "4B", "4C", "5", "5A", and "5R". Default
+#' = NULL.
+#' @param org_id Character string. A unique identifier assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_id"). Default = NULL.
+#' @param org_name Character string. A unique name assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_name"). Default = NULL.
+#' @param overall_status Character string.The overall support status for the Assessment Unit ID,
+#' calculated by ATTAINs. Options are "Fully Supporting", "Not Supporting", "Not Assessed". Default
+#' = NULL.
+#' @param param_group A collection of related Parameters. Options can be viewed with
+#' EQ_DomainValues("param_attain"). Default = NULL.
 #' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
-#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options.
-#' @param report_cycle
-#' @param source
-#' @param state_ir_cat
+#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options. Default = NULL.
+#' @param report_cycle Character string. The Integrated Reporting cycle of the data. Format is
+#' "YYYY" or "latest", which will select the most recent available cycle. Default = "latest".
+#' @param source Character string. Indicates the specific Source types associated with the Action
+#' or Assessment. Options can be viewed with EQ_DomainValue("source"). Default = NULL.
+#' @param state_ir_cat Character string. Label of Organization-specific Integrated Reporting
+#' categories as defined by the Organization's Domain Administrator. Options can be viewed with
+#' EQ_DomainValues("state_ir_cat). Default = NULL.
 #' @param statecode Character string. FIPS state alpha code that identifies a state (e.g.
 #' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
-#' @param water_type
+#' Default = NULL.
+#' @param water_type type Character string. An Assessment Unit must have at least one water type, and it
+#' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
+#' = NULL.
 #'
 #' @return A data frame of ATTAINS sources served via Expert Query webservices including
 #' the columns "objectId", "region", "state", "organizationType", "organizationId",
@@ -677,8 +737,8 @@ EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL, cycle_id =
 #' @export
 #'
 EQ_Sources <- function(api_key = NULL, au_name = NULL, auid = NULL, cause = NULL,
-                       confirmed = NULL, cycle_id = NULL, epa_ir_cat = NULL, obj_id = NULL,
-                       org_id = NULL, org_name = NULL, org_type = NULL,
+                       confirmed = NULL, epa_ir_cat = NULL,
+                       org_id = NULL, org_name = NULL,
                        overall_status = NULL, param_group = NULL, region = NULL,
                        report_cycle = "latest", source = NULL, state_ir_cat = NULL,
                        statecode = NULL, water_type = NULL)  {
@@ -735,35 +795,75 @@ EQ_Sources <- function(api_key = NULL, au_name = NULL, auid = NULL, cause = NULL
 #' https://owapps.epa.gov/expertquery/api-key-signup
 #' @param act_agency Character string. Denotes the agency that is establishing/issuing the action
 #' associated with an Assessment. Options are "state", "tribe", or "epa". Default = NULL.
-#' @param act_id
-#' @param act_name
-#' @param au_name
-#' @param auid
-#' @param comp_date_end
-#' @param comp_date_start
-#' @param fisc_year_end
-#' @param fisc_year_start
-#' @param in_meas
-#' @param indian_country
-#' @param obj_id
-#' @param org_id
-#' @param org_name
-#' @param org_type
+#' @param act_id Character string. Unique Identifier for the Action associated with an Assessment
+#' that will be used to track the Action entered (such as the corresponding information and
+#' associated documents) in ATTAINS, and its associated name. Default = NULL.
+#' @param act_name Character string. Unique identifier for the Action that will be used to track
+#' the Action entered (such as the corresponding information and associated documents) in ATTAINs,
+#' and its associated name (name of TMDL Report, 4B Report, Alternative Report, etc.). Default =
+#' NULL.
+#' @param ad_param Character string. In the context of a TMDL, Addressed Parameters refer to
+#' associated parameters (parameters identified as causes of impairment in the Section 303(d) list
+#' or later identified as such through the TMDL process) that are being addressed by the pollutant
+#' TMDL. Options can be viewed with EQ_DomainValues("ad_param"). Default = NULL.
+#' @param ad_param_group Character string. Groups of Addressed Parameters. Options can be viewed
+#' with EQ_DomainValues("ad_param_group").Default = NULL.
+#' @param au_name Character string. The name assigned to an Assessment Unit by the Organization.
+#' Default = NULL.
+#' @param auid Character string. A unique identifier assigned to an Assessment Unit by the
+#' Organization. Default = NULL.
+#' @param comp_date_end Character string. The ending date of the date range during which the
+#' Action is planned to be completed. Usually this refers to the date that the TMDL Action date is
+#' initially submitted to EPA. Format is "YYYY-MM-DD". Default = NULL.
+#' @param comp_date_start Character string. The starting date of the date range during which the
+#' Action is planned to be completed. Usually this refers to the date that the TMDL Action date is
+#' initially submitted to EPA. Format is "YYYY-MM-DD". Default = NULL.
+#' @param fisc_year_end Character string. The ending year for the date range of fiscal years in
+#' which a particular action, program, or project was initiated or established. Format is "YYYY".
+#' Default = NULL.
+#' @param fisc_year_start  Character string. The starting year for the date range of fiscal years
+#' in which a particular action, program, or project was initiated or established. Format is "YYYY".
+#' Default = NULL.
+#' @param in_meas Character string. EPA can determine whether the Action should count towards 303(d)
+#' measures. Draft Actions get partial credit and finalized Actions get full cred. By default, all
+#' measures count towards the measures unless EPA changes this flag for a specific action. Options
+#' are "Yes" or "No". Default = NULL.
+#' @param indian_country Character string. Indicates if the water is either wholly or partially in
+#' Indian country. Options are "Yes" or "No". Default = NULL.
+#' @param mos_exp Character string. Refers to the Explicit Margin of Safety for the Associated
+#' Pollutant as identified in the TMDL. Options can be viewed with EQ_DomainValues("mos_exp").
+#' Default = NULL.
+#' @param mos_imp Character string. Refers to the Implicit Margin of Safety for the Associated
+#' Pollutant as identified in the TMDL. Options can be viewed with EQ_DomainValues("mos_imp").
+#' Default = NULL.
+#' @param npdes_id Character string. Identification numbers of the NPDES permits within the
+#' waterbody and are associated to a TMDL pollutant. Default = NULL.
+#' @param org_id Character string. A unique identifier assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_id"). Default = NULL.
+#' @param org_name Character string. A unique name assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_name"). Default = NULL.
+#' @param other_id Character string. Alternative code identifying the TMDL Report (an example could
+#' be a state assigned identifier that is different from the ID in the Action ID). Default = NULL.
+#' @param poll_group Character string. Indicates the group the Pollutant belongs to. Options can
+#' be viewed with EQ_DomainValues("poll_group"). Default = NULL.
+#' @param pollutant Character string. Indicates the Pollutant for which the TMDL load was
+#' calculated. Options can be viewed with EQ_DomainValues("pollutant"). Default = NULL.
 #' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
-#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options.
+#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options. Default = NULL.
+#' @param source_type Character string. Indicates the Source breakdown for the TMDL. Options are
+#' "Nonpoint source", "Both", "Point source", and "Unknown". Default = NULL.
 #' @param statecode Character string. FIPS state alpha code that identifies a state (e.g.
 #' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
-#' @param tmdl_date_start
-#' @param water_type
-#' @param ad_param
-#' @param ad_param_group
-#' @param mos_exp
-#' @param mos_imp
-#' @param npdes_id
-#' @param other_id
-#' @param pollutant
-#' @param poll_group
-#' @param source_type
+#' Default = NULL.
+#' @param tmdl_date_end Character string. This should correspond to the ending date of the date
+#' range that EPA approved the official final TMDL submitted (such as the date on the approval
+#' letter). Format is "YYYY-MM-DD". Default = NULL.
+#' @param tmdl_date_start Character string. This should correspond to the starting date of the date
+#' range that EPA approved the official final TMDL submitted (such as the date on the approval
+#' letter). Format is "YYYY-MM-DD". Default = NULL.
+#' @param water_type Character string. An Assessment Unit must have at least one water type, and it
+#' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
+#' = NULL.
 #'
 #' @return A data frame of ATTAINS tmdls served via Expert Query webservices including
 #' the columns "objectId", "region", "state", "organizationType", "organizationId",
@@ -780,7 +880,7 @@ EQ_Sources <- function(api_key = NULL, au_name = NULL, auid = NULL, cause = NULL
 EQ_TMDLs <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name = NULL,
                      au_name = NULL, auid = NULL, comp_date_end = NULL, comp_date_start = NULL,
                      fisc_year_end = NULL, fisc_year_start = NULL, in_meas = NULL,
-                     indian_country = NULL,  obj_id = NULL, org_id = NULL, org_name = NULL,
+                     indian_country = NULL, org_id = NULL, org_name = NULL,
                      org_type = NULL, region = NULL, statecode = NULL, tmdl_date_end = NULL,
                      tmdl_date_start = NULL, water_type = NULL, ad_param = NULL,
                      ad_param_group = NULL, mos_exp = NULL, mos_imp = NULL, npdes_id = NULL,
