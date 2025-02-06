@@ -79,7 +79,7 @@ size_source,sizeSource,,no,no,yes,no,no,no,no,no
 size_units,waterSizeUnits,,no,no,yes,no,no,no,no,no
 source,sourceName,,no,no,no,no,no,no,yes,no
 source_scale,sourceScale,,no,no,yes,no,no,no,no,no
-state_ir_cat,stateIrCategory,,no,no,yes,no,no,no,yes,no
+state_ir_cat,stateIrCategory,StateIRCategoryCode,no,no,yes,no,no,no,yes,no
 statecode,state,,yes,yes,yes,yes,yes,yes,yes,yes
 tmdl_cycle_hi,cycleScheduledForTmdlHi,,no,no,yes,no,no,no,no,no
 tmdl_cycle_lo,cycleScheduledForTmdlLo,,no,no,yes,no,no,no,no,no
@@ -88,12 +88,12 @@ tmdl_date_start,tmdlDateLo,,no,yes,no,no,no,no,no,yes
 use_class,useClassName,UseClassUse,no,no,yes,yes,yes,no,no,no
 use_group,useGroup,,no,no,yes,no,no,no,no,no
 use_ir_cat,useIrCategory,,no,no,yes,no,no,no,no,no
-use_name,useName,,no,no,yes,no,no,no,no,no
-use_state_ir_cat,useStateIrCategory,,no,no,yes,no,no,no,no,no
-use_support,useSupport,,no,no,yes,no,no,no,no,no
+use_name,useName,UseName,no,no,yes,no,no,no,no,no
+use_state_ir_cat,useStateIrCategory,StateIRCategoryCode,no,no,yes,no,no,no,no,no
+use_support,useSupport,none,no,no,yes,no,no,no,no,no
 vis,vision303dPriority,,no,no,yes,no,no,no,no,no
 water_size,waterSize,,no,no,yes,no,no,no,no,no
-water_type,waterType,,yes,no,yes,yes,yes,no,yes,yes
+water_type,waterType,WaterTypeCode,yes,no,yes,yes,yes,no,yes,yes
 ad_param,addressedParameter,,no,no,no,no,no,no,no,yes
 ad_param_group,addressedParameterGroup,,no,no,no,no,no,no,no,yes
 mos_exp,explicitMarginOfSafety,,no,no,no,no,no,no,no,yes

@@ -290,7 +290,9 @@ EQ_ActionsDocuments <- function(api_key = NULL, act_id = NULL, act_name = NULL, 
 #' Load Allocation. Format is "YYYY-MM-DD". Default = NULL.
 #' @param seas_start_date_lo The starting date for the range of start dates that applies to a Waste
 #' Load Allocation. Format is "YYYY-MM-DD". Default = NULL.
-#' @param state_ir_cat
+#' @param state_ir_cat Character string. Label of Organization-specific Integrated Reporting
+#' categories as defined by the Organization's Domain Administrator. Options can be viewed with
+#' EQ_DomainValues("state_ir_cat). Default = NULL.
 #' @param statecode Character string. FIPS state alpha code that identifies a state (e.g.
 #' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
 #' @param tmdl_cycle_hi Character string. The ending date for the range of dates for cycle when
@@ -301,14 +303,25 @@ EQ_ActionsDocuments <- function(api_key = NULL, act_id = NULL, act_name = NULL, 
 #' NULL.
 #' @param use_class Character string. The Use Class assigned to an Assessment Unit. Options can be
 #' viewed with EQ_DomainValues("use_class"). Default = NULL.
-#' @param use_group This represents a collection of related Uses
-#' @param use_ir_cat
-#' @param use_name
-#' @param use_state_ir_cat
-#' @param use_suppor"
-#' @param vis
-#' @param water_size
-#' @param water_type
+#' @param use_group Character string. This represents a collection of related Uses. Options are
+#' "DRINKINGWATER_USE", "ECOLOGICAL_USE", "FISHCONSUMPTION_USE", "RECREATION_USE", and
+#' "OTHER_USE". Default = NULL.
+#' @param use_ir_cat Character string. The EPA Integrated Report Category for the Assessment Unit
+#' ID/Use combination, calculated by ATTAINS. Options are "1", "2", "3", "4A", "4B", "4C", "5",
+#' "5A", and "5R". Default = NULL.
+#' @param use_name Character string. Name of the designated Use. Options can be viewed with
+#' EQ_DomainValues("use_name"). Default = NULL.
+#' @param use_state_ir_cat Character string. Label of Organization-specific Integrated Reporting
+#' categories for the Assessment Unit/Use combination as defined by the Organization's Domain
+#' Administrator.
+#' @param use_support Character string. The decision as to whether the Use Name (designated use) is
+#' Fully Supporting, Not Supporting, Insufficient Information, or Not Assessed. Options are
+#' "Fully Supporting","Not Supporting", "Insufficent Information" or "Not Assessed."
+#' @param vis Character string. Indicates if the water has been identified as a priority water by
+#' the state under the 303(d) Vision. Options are "Yes" or "No". Default = NULL.
+#' @param water_type Character string. An Assessment Unit must have at least one water type, and it
+#' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
+#' = NULL.
 #'
 #' @return A data frame of ATTAINS assessments served via Expert Query webservices including the
 #' columns "objectId", "region", "state", "organizationType", "organizationId", "organizationName",
@@ -345,11 +358,10 @@ EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL,
                            pollut_ind = NULL, region = NULL, report_cycle = "latest",
                            seas_end_date_hi = NULL, seas_end_date_lo = NULL,
                            seas_start_date_hi = NULL, seas_start_date_lo = NULL,
-                           state_ir_cat = NULL,
-                           statecode = NULL, tmdl_cycle_hi = NULL, tmdl_cycle_lo = NULL,
-                           use_class = NULL, use_group = NULL,
+                           state_ir_cat = NULL, statecode = NULL, tmdl_cycle_hi = NULL,
+                           tmdl_cycle_lo = NULL, use_class = NULL, use_group = NULL,
                            use_ir_cat = NULL, use_name = NULL, use_state_ir_cat = NULL,
-                           use_support = NULL, vis = NULL, water_size = NULL, water_type = NULL) {
+                           use_support = NULL, vis = NULL, water_type = NULL) {
 
   # check for api key
   if(is.null(api_key)) {
