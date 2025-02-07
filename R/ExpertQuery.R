@@ -213,7 +213,8 @@ EQ_ActionsDocuments <- function(api_key = NULL, act_id = NULL, act_name = NULL, 
 #' @param act_agency Character string. Denotes the agency that is establishing/issuing the action
 #' associated with an Assessment. Options are "State", "Tribe", or "EPA". Default = NULL.
 #' @param act_status Character string Status of the Action associated with an assessment. Options
-#' are "Draft", "Submitted", or "Final". Default = NULL.
+#' are "Draft", ""EPA Final Action", "EPA Review", "Modify", "Public Review", "State Final Action",
+#' or "Withdrawn". Default = NULL.
 #' @param act_type Character string. Identifies the type of Action associated with an Action.
 #' Options can be viewed with EQ_DomainValues("act_type"). Default = NULL.
 #' @param act_id Character string. Unique Identifier for the Action associated with an Assessment

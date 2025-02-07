@@ -88,7 +88,7 @@ tmdlEndpoint,,,,,,,,30
 useClassName,,,18,10,8,,,
 useGroup,,,16,,,,,
 useIrCategory,,,20,,,,,
-useName,,,17,,,,,
+useName,,,17,40,,,,
 useStateIrCategory,,,21,,,,,
 useSupport,,,19,,,,,
 vision303dPriority,,,39,,,,,
