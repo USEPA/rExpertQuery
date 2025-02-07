@@ -216,7 +216,8 @@ EQ_ActionsDocuments <- function(api_key = NULL, act_id = NULL, act_name = NULL, 
 #' are "Draft", ""EPA Final Action", "EPA Review", "Modify", "Public Review", "State Final Action",
 #' or "Withdrawn". Default = NULL.
 #' @param act_type Character string. Identifies the type of Action associated with an Action.
-#' Options can be viewed with EQ_DomainValues("act_type"). Default = NULL.
+#' Options are FILL IN FROM EQ.
+#' Default = NULL.
 #' @param act_id Character string. Unique Identifier for the Action associated with an Assessment
 #' that will be used to track the Action entered (such as the corresponding information and
 #' associated documents) in ATTAINS, and its associated name. Default = NULL.
