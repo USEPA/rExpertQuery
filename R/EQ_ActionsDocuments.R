@@ -39,10 +39,11 @@
 #' range that EPA approved the official final TMDL submitted (such as the date on the approval
 #' letter). Format is "YYYY-MM-DD". Default = NULL.
 #'
-#' @return A data frame of ATTAINS actions documents served via Expert Query webservices including
-#' the columns "objectId", "organizationName", "organizationType", "region", "state", "tmdlDate",'
-#' "documentDesc", "documentFileName", "documentFileTypeName", "documentKey", "documentName",
-#' and "actionDocumentType".
+#' @return A data frame of ATTAINS Actions Documents with the columns "objectId",
+#' "actionDocumentUrl", "actionId", "actionName", "actionType", "completionDate", "organizationId",
+#' "organizationName", "organizationType", "region", "state", "tmdlDate", "documentDesc",
+#' "documentFileName", "documentFileTypeName", "documentKey", "documentName", and "
+#' actionDocumentType".
 #'
 #' @export
 #'

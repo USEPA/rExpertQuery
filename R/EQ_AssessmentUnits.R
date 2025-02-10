@@ -23,11 +23,11 @@
 #' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
 #' = NULL.
 #'
-#' @return A data frame of ATTAINS assessment units served via Expert Query webservices including
-#' the columns "region", "state", "organizationType", "organizationId", "organizationName",
-#' "waterType", "locationTypeCode", "locationText", "useClassName", "assessmentUnitId",
-#' "assessmentUnitName", "assessmentUnitStatus", "reportingCycle", "cycleId",
-#' "locationDescription", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits".
+#' @return A data frame of ATTAINS Assessment Units with the columns "region", "state",
+#' "organizationType", "organizationId", "organizationName", "waterType", "locationTypeCode",
+#' "locationText", "useClassName", "assessmentUnitId", "assessmentUnitName", "assessmentUnitStatus",
+#' "reportingCycle", "cycleId", "locationDescription", "sizeSource", "sourceScale", "waterSize",
+#' and "waterSizeUnits".
 #'
 #' @export
 #'

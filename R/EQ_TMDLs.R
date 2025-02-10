@@ -77,13 +77,12 @@
 #' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
 #' = NULL.
 #'
-#' @return A data frame of ATTAINS tmdls served via Expert Query webservices including
-#' the columns "objectId", "region", "state", "organizationType", "organizationId",
-#' "organizationName", "waterType", "pollutantGroup", "pollutant", "addressedParameterGroup",
-#' "addressedParameter", "sourceType", "npdesIdentifier", "otherIdentifier", "actionId",
-#' "actionName", "actionAgency", "inIndianCountry", "explicitMarginOfSafety",
-#' "implicitMarginOfSafety", "includeInMeasure", "completionDate", "tmdlDate",
-#' "fiscalYearEstablished", "assessmentUnitId", "assessmentUnitName", "loadAllocation",
+#' @return A data frame of ATTAINS TMDLs with the columns "objectId", "region", "state",
+#' "organizationType", "organizationId", "organizationName", "waterType", "pollutantGroup",
+#' "pollutant", "addressedParameterGroup", "addressedParameter", "sourceType", "npdesIdentifier",
+#' "otherIdentifier", "actionId", "actionName", "actionAgency", "inIndianCountry",
+#' "explicitMarginOfSafety", "implicitMarginOfSafety", "includeInMeasure", "completionDate",
+#' "tmdlDate", "fiscalYearEstablished", "assessmentUnitId", "assessmentUnitName", "loadAllocation",
 #' "loadAllocationUnits", "locationDescription", "tmdlEndpoint", "waterSize", "waterSizeUnits",
 #' "wasteLoadAllocation", and "planSummaryLink".
 #'

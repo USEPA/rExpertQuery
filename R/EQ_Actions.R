@@ -53,8 +53,11 @@
 #' = NULL.
 #'
 #' @return A data frame of ATTAINS actions with the columns "objectId", "region", "state",
-#' "organizationType", "organizationId", "organizationName", "waterType", "assessmentUnitId",
-#' "assessmentUnitName", "parameterGroup", "locationDescription", "waterSize", and "waterSizeUnits".
+#' "organizationType", "organizationId", "organizationName", "waterType", "parameterGroup",
+#' "parameter", "actionType", "actionId", "actionName", "actionAgency", "inIndianCountry",
+#' "includeInMeasure", "completionDate", "assessmentUnitId", "assessmentUnitName",
+#' "fiscalYearEstablished", "locationDescription", "waterSize", "waterSizeUnits", and
+#' "planSummaryLink".
 #'
 #' @export
 #'

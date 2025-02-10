@@ -21,11 +21,9 @@
 #' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
 #' Default = NULL.
 #'
-#' @return A data frame of ATTAINS catchment correspondence served via Expert Query webservices
-#' including the columns "region", "state", "organizationType", "organizationId",
-#' "organizationName", "waterType", "locationTypeCode", "locationText", "useClassName",
-#' "assessmentUnitId", "assessmentUnitName", "assessmentUnitStatus", "reportingCycle", "cycleId",
-#' "locationDescription", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits".
+#' @return A data frame of ATTAINS Catchment Correspondence with the columns "objectId", "region",
+#' "state", "organizationType", "organizationId", "organizationName", "assesssmentUnitId",
+#' "assessmentUnitName", "catchmentNhdPlusId", "reportingCycle", and "cycleId".
 #'
 #' @export
 #'
