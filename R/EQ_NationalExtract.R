@@ -2,7 +2,8 @@
 #'
 #' Returns data frame of user-specified Expert Query National Extracts for use cases where
 #' nationwide data is desired. Also useful in situations where the the desired query would yield
-#' more than 1 million rows as the national extracts can be sorted and filtered after import.
+#' more than 1 million rows as the national extracts can be sorted and filtered after import. The
+#' National Extracts are large files and can take several minutes to download and import.
 #'
 #' National extracts can and more information about Expert Query can be found here:
 #' https://owapps.epa.gov/expertquery/national-downloads
@@ -18,9 +19,37 @@
 #'
 #' "actions" (Actions):
 #'
-#'  "assessments" (Assessments), "au" (Assessment Units),
-#' "auml" (Assessment Units with Monitoring Locations), "catch_corr" (Catchment Correspondence),
-#' "sources" (Sources), and "tmdl" (TMDLs)
+#' "assessments" (Assessments): "objectId", "region", "state", "organizationType", "organizationId",
+#' "organizationName", "waterType", "reportingCycle", "cycleLastAssessed", "assessmentUnitId",
+#' "assessmentUnitName", "assessmentUnitStatus", "overallStatus", "epaIrCategory",
+#' "stateIrCategory", "useGroup", "useName", "useClassName", "useSupport", "useIrCategory",
+#' "useStateIrCategory", "monitoringStartDate", "monitoringEndDate", "assessmentDate",
+#' "assessmentTypes", assessmentMethods", "assessmentBasis", "parameterGroup", "parameterName",
+#' "parameterStatus", "parameterAttainment", parameterIrCategory" "parameterStateIrCategory",
+#' delisted", "delistedReason", "pollutantIndicator", "cycleFirstListed",
+#' "alternateListingIdentifier", "vision303dPriority", "cwa303dPriorityRanking",
+#' "cycleScheduledForTmdl", "cycleExpectedToAttain", "consentDecreeCycle", "cycleId",
+#' "seasonStartDate", "seasonEndDate", "associatedActionId", "associatedActionName",
+#' "associatedActionType", "associatedActionStatus", "associatedActionAgency",
+#' "locationDescription", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits".
+#'
+#'
+#' "au" (Assessment Units):
+#'
+#' "auml" (Assessment Units with Monitoring Locations):
+#'
+#' "catch_corr" (Catchment Correspondence):
+#'
+#' "sources" (Sources):
+#'
+#' "tmdl" (TMDLs): "objectId", "region", "state", "organizationType", "organizationId",
+#' "organizationName", "waterType", "pollutantGroup", "pollutant", "addressedParameterGroup",
+#' "addressedParameter", "sourceType", "npdesIdentifier", "otherIdentifier", "actionId",
+#' "actionName", "actionAgency", "inIndianCountry", "explicitMarginOfSafety",
+#' implicitMarginOfSafety", "includeInMeasure", "completionDate", "tmdlDate",
+#' "fiscalYearEstablished", "assessmentUnitId",  "assessmentUnitName", "loadAllocation",
+#' "loadAllocationUnits", "locationDescription", "tmdlEndpoint", "waterSize", "waterSizeUnits",
+#' "wasteLoadAllocation", and "planSummaryLink".
 #'
 #' @export
 #'
@@ -52,7 +81,7 @@ EQ_NationalExtract <- function(extract = NULL) {
   # select profile based on user selection
   # when json is updated, date.print will be determined for each profile below label
   if (extract == "actions") {
-    file <- "actions.csv.zip"
+    file <- "actions.csv"
 
     label <- "Actions Profile"
   }
@@ -98,7 +127,7 @@ EQ_NationalExtract <- function(extract = NULL) {
     " It was last updated on ", date.print, "."
   ))
 
-  url <- paste0(base.url, folder.num, "/", file, ".zip")
+  url <- paste0(base.url, nat.url, folder.num, "/", file, ".zip")
 
   # set up tempfile
   temp <- tempfile(fileext = ".zip")
@@ -120,13 +149,36 @@ EQ_NationalExtract <- function(extract = NULL) {
   csv.file <- unzipped.file[grep("\\.csv$", unzipped.file, ignore.case = TRUE)]
 
   print(paste0(
-    "EQ_NationalExtract: ", "opening ", label, " (Expert Query National Extract).",
-    "."
+    "EQ_NationalExtract: ", "opening ", label, " (Expert Query National Extract)."
   ))
 
   # open large csv file
   # can add verbose = FALSE, if we want to remove the progress bar here
   df <- data.table::fread(csv.file)
+
+  # import cross walk to convert column names to match other rExpertQuery function output
+  # import crosswalk ref file
+  col.cw <- utils::read.csv(file = "inst/extdata/EQColumnsForPOST.csv") %>%
+    dplyr::select(col.name, nat_extract, dplyr::all_of(extract)) %>%
+    dplyr::filter(!is.na(.data[[extract]])) %>%
+    dplyr::arrange((.data[[extract]]))
+
+  # combine the three TMDLENDPOINT columns to match output from EQ_TMDLs function
+  if(extract == "tmdl") {
+    df <- df %>%
+      dplyr::mutate(TMDLENDPOINT1 = ifelse(is.na(TMDLENDPOINT1), "", TMDLENDPOINT1),
+                    TMDLENDPOINT2 = ifelse(is.na(TMDLENDPOINT2), "", TMDLENDPOINT2),
+                    TMDLENDPOINT3 = ifelse(is.na(TMDLENDPOINT3), "", TMDLENDPOINT3)) %>%
+      dplyr::mutate(TMDLENDPOINT = paste0(TMDLENDPOINT1, TMDLENDPOINT2, TMDLENDPOINT3)) %>%
+      dplyr::select(-TMDLENDPOINT1, -TMDLENDPOINT2, -TMDLENDPOINT3)
+  }
+
+  # change column names
+  data.table::setnames(df, as.character(col.cw$nat_extract), as.character(col.cw$col.name),
+                       skip_absent = TRUE)
+
+  # change order of columns
+  data.table::setcolorder(df, as.character(col.cw$col.name))
 
   unlink(temp)
 
@@ -135,7 +187,7 @@ EQ_NationalExtract <- function(extract = NULL) {
   # remove intermediate objects
   rm(
     url, latest.json, base.url, nat.url, folder.num, date.print, label, file, temp,
-    unzipped.file, csv.file
+    unzipped.file, csv.file, col.cw
   )
 
   return(df)
