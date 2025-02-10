@@ -1,14 +1,26 @@
 #' Import Expert Query National Extract
 #'
-#' Returns data frame of user-specified Expert Query National Extracts for use in TADA functions.
+#' Returns data frame of user-specified Expert Query National Extracts for use cases where
+#' nationwide data is desired. Also useful in situations where the the desired query would yield
+#' more than 1 million rows as the national extracts can be sorted and filtered after import.
+#'
 #' National extracts can and more information about Expert Query can be found here:
 #' https://owapps.epa.gov/expertquery/national-downloads
 #'
-#' @param profile Character argument. Specifies which Expert Query National Extract should be
-#' imported. Options are "actions", "assessments", "au", "auml", "catchment", "sources", and
-#' "tmdl". The default is NULL, which means no extract will be returned.
+#' @param extract Character argument. Specifies which Expert Query National Extract should be
+#' imported. Options are "actions" (Actions), "assessments" (Assessments), "au" (Assessment Units),
+#' "auml" (Assessment Units with Monitoring Locations), "catch_corr" (Catchment Correspondence),
+#' "sources" (Sources), and "tmdl" (TMDLs). There is no national extract option available for
+#' Actions Documents. The default is NULL which means no extract will be returned.
 #'
-#' @return A data frame containing the user-specified national extract.
+#' @return A data frame containing the user-specified national extract. The columns returned will
+#' vary based on the extract selected and are as follows:
+#'
+#' "actions" (Actions):
+#'
+#'  "assessments" (Assessments), "au" (Assessment Units),
+#' "auml" (Assessment Units with Monitoring Locations), "catch_corr" (Catchment Correspondence),
+#' "sources" (Sources), and "tmdl" (TMDLs)
 #'
 #' @export
 #'
@@ -17,13 +29,13 @@
 #'
 #' aus_monloc <- TADA_EQExtractRetrieval(profile = "auml")
 #'
-EQ_NationalExtract <- function(profile = NULL) {
-  if (is.null(profile)) {
+EQ_NationalExtract <- function(extract = NULL) {
+  if (is.null(extract)) {
     stop("EQ_NationalExtract: Function requires user to select Expert Query Profile to return.")
   }
 
-  if (is.null(profile) &
-      !profile %in% c("actions", "assessments", "au", "auml", "catchment", "sources", "tmdl")) {
+  if (is.null(extract) &
+      !extract %in% c("actions", "assessments", "au", "auml", "catch_corr", "sources", "tmdl")) {
     stop("EQ_NationalExtract: Function requires user to select Expert Query Profile to return.")
   }
 
@@ -39,43 +51,43 @@ EQ_NationalExtract <- function(profile = NULL) {
 
   # select profile based on user selection
   # when json is updated, date.print will be determined for each profile below label
-  if (profile == "actions") {
+  if (extract == "actions") {
     file <- "actions.csv.zip"
 
     label <- "Actions Profile"
   }
 
-  if (profile == "assessments") {
+  if (extract == "assessments") {
     file <- "assessments.csv"
 
     label <- "Assessments Profile"
   }
 
-  if (profile == "au") {
+  if (extract == "au") {
     file <- "assessment_units.csv"
 
     label <- "Assessment Units Profile"
   }
 
-  if (profile == "auml") {
+  if (extract == "auml") {
     file <- "assessment_units_monitoring_locations.csv"
 
     label <- "Assessment Units with Monitoring Locations Profile"
   }
 
-  if (profile == "catchment") {
+  if (extract == "catchment") {
     file <- "catchment_correspondence.csv"
 
     label <- "Catchment Correspondance Profile"
   }
 
-  if (profile == "sources") {
+  if (extract == "sources") {
     file <- "sources.csv"
 
     label <- "Sources Profile"
   }
 
-  if (profile == "tmdl") {
+  if (extract == "tmdl") {
     file <- "tmdl.csv"
 
     label <- "Total Maximum Daily Load Profile"
