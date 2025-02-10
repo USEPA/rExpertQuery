@@ -294,7 +294,8 @@ EQ_CompareParams <- function(default, user) {
       stop(paste0(function.url.name,
                   ": The current query exceeds the maximum query size of ",
                   format(row.n$maxCount, big.mark = ","), " rows.",
-                  "Please refine the search or use the Expert Query National Extract."))
+                  "Please refine the search or use EQ_NationalExtract to import",
+                  " the Expert Query National Extract."))
     }
 
     # if row count is less than one million, print message with row count and continue
@@ -374,7 +375,8 @@ EQ_CompareParams <- function(default, user) {
       stop(paste0(function.url.name,
                   ": The current query exceeds the maximum query size of ",
                   format(row.n$maxCount, big.mark = ","), " rows.",
-                  "Please refine the search or use the Expert Query National Extract."))
+                  "Please refine the search or use EQ_NationalExtract to import the Expert Query
+                  National Extract."))
     }
 
     # if row count is less than one million, print message with row count and continue

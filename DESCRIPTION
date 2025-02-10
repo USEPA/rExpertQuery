@@ -20,7 +20,8 @@ Imports:
   tidyr,
   tibble,
   httr,
-  utils
+  utils,
+  magrittr
 Suggests:
   pkgdown,
   rmarkdown,

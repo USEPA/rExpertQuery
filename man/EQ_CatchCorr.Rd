@@ -10,7 +10,6 @@ EQ_CatchCorr(
   auid = NULL,
   org_id = NULL,
   org_name = NULL,
-  org_type = NULL,
   region = NULL,
   report_cycle = "latest",
   statecode = NULL

@@ -1,6 +1,6 @@
 #' Expert Query Actions
 #'
-#' Return actions data from Expert Query.
+#' Query ATTAINS Actions data via Expert Query web services and return as data frame.
 #'
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:
@@ -52,10 +52,9 @@
 #' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
 #' = NULL.
 #'
-#' @return A data frame of ATTAINS actions served via Expert Query webservices including
-#' the columns "objectId", "region", "state", "organizationType", "organizationId",
-#' "organizationName", "waterType", "assessmentUnitId", "assessmentUnitName", "parameterGroup",
-#' "locationDescription", "waterSize", and "waterSizeUnits".
+#' @return A data frame of ATTAINS actions with the columns "objectId", "region", "state",
+#' "organizationType", "organizationId", "organizationName", "waterType", "assessmentUnitId",
+#' "assessmentUnitName", "parameterGroup", "locationDescription", "waterSize", and "waterSizeUnits".
 #'
 #' @export
 #'
@@ -71,22 +70,22 @@ EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_nam
     stop("EQ_Actions: An api key is required to access EQ web services.")
   }
 
-  # get param crosswalk for building query
+  # get param and filter crosswalk for building query
   params.cw <- EQ_ExtractParams(extract = "actions")
 
-  # get default params from EQ_Assessments
+  # get default params from EQ_Actions
   default.params <- EQ_DefaultParams(EQ_Actions) %>%
     # format for building body
     EQ_FormatParams()
 
-  # create df of user entered params
+  # create data frame of user supplied params
   user.params <- as.list(match.call()[-1]) %>%
     tibble::enframe(name = "param", value = "value") %>%
     as.data.frame() %>%
     # format for building body
     EQ_FormatParams()
 
-  # compare default and user params to build df of all params and values for body
+  # compare default and user params to build data frame of all params and values for body
   params.df <- EQ_CompareParams(default = default.params, user = user.params)
 
   # remove intermediate objects
@@ -98,11 +97,12 @@ EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_nam
   # create post headers
   post.headers <- EQ_CreateHeader(key = api_key)
 
-  # query EQ (check number of rows before download, stop if it exceeds max rows)
+  # query EQ (check number of rows before download, stop and print message if it exceeds max rows)
   query.df <- EQ_PostAndContent(headers = post.headers,
                                 body.list = post.bodies,
                                 extract = "actions")
 
+  # remove intermediate objects
   rm(params.cw, params.df, post.bodies, post.headers)
 
   return(query.df)
