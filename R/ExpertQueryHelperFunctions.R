@@ -1,11 +1,12 @@
 #' Expert Query Extract Params
 #'
-#' Return the crosswalk for params for the specified Exper Query Extract.
+#' Return the crosswalk for params and filter names for POST request for the specified Expert Query
+#' Extract.
 #'
 #' @param extract enter extract type. Options are: "actions", "act_docs",
 #' "assessments", "aus", "au_mls", "catch_corr", "sources", and "tmdl".
 #'
-#' @return A df of the params for the selecte extract
+#' @return A df of the params for the selected extract
 #'
 EQ_ExtractParams <- function(extract = NULL)  {
 
