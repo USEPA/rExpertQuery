@@ -8,6 +8,13 @@
 #' National extracts can and more information about Expert Query can be found here:
 #' https://owapps.epa.gov/expertquery/national-downloads
 #'
+#' * If using VPN, suggest signing out of VPN before running this function as it can cause
+#' 403 error and prevent download of national extracts.
+#'
+#' HRM NOTE 2/10/25 - error in data.table::fread for actions profile, assessments and tmdls tested
+#' and working well. Resume checking with assessment units (problem with column names should be
+#' fixed, but did not verify yet)
+#'
 #' @param extract Character argument. Specifies which Expert Query National Extract should be
 #' imported. Options are "actions" (Actions), "assessments" (Assessments), "au" (Assessment Units),
 #' "auml" (Assessment Units with Monitoring Locations), "catch_corr" (Catchment Correspondence),
@@ -17,7 +24,11 @@
 #' @return A data frame containing the user-specified national extract. The columns returned will
 #' vary based on the extract selected and are as follows:
 #'
-#' "actions" (Actions):
+#' "actions" (Actions): "objectId", "region", "state", "organizationType", "organizationId",
+#' "organizationName", "waterType", "parameterGroup", "parameter", "actionType", "actionId",
+#' "actionName", "actionAgency", "inIndianCountry", "includeInMeasure", "completionDate",
+#' "assessmentUnitId", "assessmentUnitName", "fiscalYearEstablished", "locationDescription".
+#' "waterSize", "waterSizeUnits", and "planSummaryLink".
 #'
 #' "assessments" (Assessments): "objectId", "region", "state", "organizationType", "organizationId",
 #' "organizationName", "waterType", "reportingCycle", "cycleLastAssessed", "assessmentUnitId",
@@ -34,7 +45,7 @@
 #' "locationDescription", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits".
 #'
 #'
-#' "au" (Assessment Units):
+#' "aus" (Assessment Units):
 #'
 #' "auml" (Assessment Units with Monitoring Locations):
 #'
@@ -64,7 +75,7 @@ EQ_NationalExtract <- function(extract = NULL) {
   }
 
   if (is.null(extract) &
-      !extract %in% c("actions", "assessments", "au", "auml", "catch_corr", "sources", "tmdl")) {
+      !extract %in% c("actions", "assessments", "aus", "auml", "catch_corr", "sources", "tmdl")) {
     stop("EQ_NationalExtract: Function requires user to select Expert Query Profile to return.")
   }
 
@@ -92,10 +103,12 @@ EQ_NationalExtract <- function(extract = NULL) {
     label <- "Assessments Profile"
   }
 
-  if (extract == "au") {
+  if (extract == "aus") {
     file <- "assessment_units.csv"
 
     label <- "Assessment Units Profile"
+
+    extract <- "assessment_units"
   }
 
   if (extract == "auml") {
