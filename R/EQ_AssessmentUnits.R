@@ -11,9 +11,6 @@
 #' Options are "Active", "Historical" or "Retired". Default = "Active".
 #' @param au_id Character string. A unique identifier assigned to an Assessment Unit by the
 #' Organization. Default = NULL.
-#' @param cycle_id
-#' @param loc_txt
-#' @param loc_type
 #' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
 #' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options.
 #' @param report_cycle Character string. The Integrated Reporting cycle of the data. Format is

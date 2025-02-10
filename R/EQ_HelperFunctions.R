@@ -6,7 +6,7 @@
 #' @param extract enter extract type. Options are: "actions", "act_docs",
 #' "assessments", "aus", "au_mls", "catch_corr", "sources", and "tmdl".
 #'
-#' @return A df of the params for the selected extract
+#' @return A df of the params for the selected extract.
 #'
 EQ_ExtractParams <- function(extract = NULL)  {
 
@@ -34,11 +34,11 @@ EQ_ExtractParams <- function(extract = NULL)  {
 
 #' Expert Query Default Params
 #'
-#' Format user-supplied params in the Expert Query export functions.
+#' Get default params from the rExpert Query export functions.
 #'
 #' @param funct The Expert Query exported function to call parameters from
 #'
-#' @return A df of the params for the selecte extract
+#' @return A data frame of the default params for the selected function.
 #'
 
 EQ_DefaultParams <- function(func) {
@@ -54,16 +54,17 @@ return(params.df)
 
 #' Expert Query Format Params
 #'
-#' Format user-supplied params in the Expert Query export functions.
+#' Format user-supplied or default params from rExpertQuery exported functions to transform all
+#' param values to character strings.
 #'
-#' @param funct The Expert Query exported function to call parameters from
+#' @param .data The data frame of params and their values. The value column may contain character,
+#' numeric, or language values.
 #'
-#' @return A df of the params for the selecte extract
+#' @return A data frame of the params and their values. All values are character strings.
 #'
 
 EQ_FormatParams <- function(.data) {
-  # change language to character in value column
-
+  # change language or numeric to character in value column
   params.df <- .data
 
   params.df$value <- sapply(params.df$value, function(x) {
@@ -85,12 +86,16 @@ EQ_FormatParams <- function(.data) {
 
 #' Expert Query Compare Params
 #'
-#' Compare user-supplied and default params in the Expert Query export functions to create df of
-#' all params that should be used to build body for post request.
+#' Compare user-supplied and default params in rExportQuery exported functions to create data frame
+#'of all params that should be used to build the filters section of the POST request body.
 #'
-#' @param funct The Expert Query exported function to call parameters from
+#' @param default The data frame of default params and their values. All values must be character
+#' strings.
+#' @param user The data frame of user-supplied params and their values. All values must be character
+#' strings.
 #'
-#' @return A df of the params for the selecte extract
+#' @return A data frame of all params and values that should be used as filters in the body of  the
+#' POST request.
 #'
 
 EQ_CompareParams <- function(default, user) {
@@ -106,19 +111,22 @@ EQ_CompareParams <- function(default, user) {
   # remove intermediate objects
   rm(default.params, default, user)
 
-  # return all params for use in body
+  # return all params for use in filter for POST request body
   return(all.params)
 }
 
 #' Expert Query Create Body
 #'
-#' Compare body for count and query post rquests
+#' Create character strings to use as the body for POST requests to return counts and retrieve
+#' data in exported rExportQuery functions.
 #'
-#' @param comp.params The EQ_CompareParams output from the query.
-#' @param crosswalk The crosswalk between params and Expert Query field names.
-#' @param extract The Expert Query Data profile type.
+#' @param comp.params A data frame of the EQ_CompareParams output for the query.
+#' @param crosswalk The crosswalk between param names and Expert Query field names for the POST
+#' request. This is imported from an internal rExpertQuery reference file.
+#' @param extract The Expert Query Data extract type.
 #'
-#' @return A df of the params for the selecte extract
+#' @return A list containing two character strings. The first character string is for the body
+#' of the count POST request. The second character string is for the body of the data POST request.
 #'
 
   EQ_CreateBody <- function(comp.params, crosswalk, extract) {
@@ -214,9 +222,9 @@ EQ_CompareParams <- function(default, user) {
 
   #' Expert Query Create Header
   #'
-  #' Create header for POST
+  #' Create header for count and data POST requests.
   #'
-  #' @param key api key unique to each user.
+  #' @param key Character string. The api key unique to the user.
   #'
   #' @return A character string for the POST header.
   #'
@@ -236,13 +244,15 @@ EQ_CompareParams <- function(default, user) {
 
   #' Expert Query Create POST and Get Content
   #'
-  #' Create POST and get content from Expert Query Webservices
+  #' Create POST request and get content from Expert Query web services via exported rExportQuery
+  #' functions.
   #'
-  #' @param headers Headers for POST request created in EQ_CreateHeader.
-  #' @param body.list List of character strings for count and query POSTs created in EPA_CreateBody.
-  #' @param extract The Expert Query Data profile type.
+  #' @param headers Character string. Header for POST request created in EQ_CreateHeader.
+  #' @param body.list List of character strings for count and query POSTs created in EQ_CreateBody.
+  #' @param extract Character string. The Expert Query Data profile type.
   #'
-  #' @return A df of the query result or a printed message if the query rows exceed one million.
+  #' @return A data frame of the query result or a printed message if the query rows exceed one
+  #' million.
 
   EQ_PostAndContent <- function(headers, body.list, extract) {
 

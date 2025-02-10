@@ -13,7 +13,6 @@
 #' be viewed with EQ_DomainValues("org_id"). Default = NULL.
 #' @param org_name Character string. A unique name assigned to the Organization. Options can
 #' be viewed with EQ_DomainValues("org_name"). Default = NULL.
-#' @param org_type
 #' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
 #' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options. Default = NULL.
 #' @param report_cycle Character string. The Integrated Reporting cycle of the data. Format is
@@ -31,8 +30,8 @@
 #' @export
 #'
 EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL,
-                         org_id = NULL, org_name = NULL, org_type = NULL,
-                         region = NULL, report_cycle = "latest", statecode = NULL)  {
+                         org_id = NULL, org_name = NULL, region = NULL,
+                         report_cycle = "latest", statecode = NULL)  {
 
   # check for api key
   if(is.null(api_key)) {
