@@ -28,6 +28,8 @@ Suggests:
   devtools,
   spelling,
   yaml,
-  roxygen2
+  roxygen2,
+  usethis,
+  testthis
 LazyData: true
 LazyDataCompression: xz

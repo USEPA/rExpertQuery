@@ -324,19 +324,40 @@ EQ_CompareParams <- function(default, user) {
   #'
   #' Provides information on allowable values for a param by leveraging ATTAINS web services.
   #'
-  #' @param query_param Character string. A param name from a rExpertQuery function. Default =
-  #' NULL. When query_param = NULL, a df of the param names with allowable value information
-  #' provided by ATTAINS web services is provided.
+  #' @param domain Character string.
   #'
   #' @return A df allowable values for the selected query_param.
   #'
-  EQ_DomainValues <- function(query_param = NULL) {
+  EQ_DomainValues <- function(domain = NULL) {
 
     base.url <- "https://attains.epa.gov/attains-public/api/domains"
 
+    if(is.null(domain)) {
+
+      print(paste0(
+        "EQ_DomainValues: getting list of available domain names."
+      ))
+
+      # set up tempfile
+      temp <- tempfile(fileext = ".zip")
+
+      # download zipped file
+      httr::GET(base.url, httr::write_disk(temp, overwrite = TRUE))
+
+      # unzip file
+      unzipped.file <- utils::unzip(temp, exdir = tempdir())
+
+      # identify csv file to read in
+      csv.file <- unzipped.file[grep("\\.csv$", unzipped.file, ignore.case = TRUE)]
+
+      # open large csv file
+      # can add verbose = FALSE, if we want to remove the progress bar here
+      df <- data.table::fread(csv.file)
+    }
 
     params.cw <- utils::read.csv(file = "inst/extdata/EQParamsCrosswalk.csv") %>%
-      dplyr::select(param, eq_name) %>%
+      dplyr::select(param, attains_ws_name, attains_ws_field) %>%
+      dplyr::filter(!is.na(attains_ws_name))
 
 
     extract.url.name <- dplyr::case_when(
