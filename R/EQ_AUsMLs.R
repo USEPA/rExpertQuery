@@ -38,7 +38,7 @@
 #'
 #' @export
 #'
-EQ_AUsMLs <- function(api_key = NULL, au_name = NULL, au_status = "A", auid = NULL,
+EQ_AUsMLs <- function(api_key = NULL, au_name = NULL, au_status = "Active", auid = NULL,
                       cycle_id = NULL, mon_loc_id = NULL, mon_loc_org = NULL,
                       org_id = NULL, org_name = NULL,
                       region = NULL, report_cycle = "latest", statecode = NULL, use_class = NULL,

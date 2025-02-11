@@ -11,13 +11,14 @@
 #' * If using VPN, suggest signing out of VPN before running this function as it can cause
 #' 403 error and prevent download of national extracts.
 #'
-#' HRM NOTE 2/10/25 - error in data.table::fread for actions profile, assessments and tmdls tested
+#' HRM NOTE 2/10/25 - error in data.table::fread for actions profile. Assessments, aus, aus_mls
+#'  and tmdls tested
 #' and working well. Resume checking with assessment units (problem with column names should be
 #' fixed, but did not verify yet)
 #'
 #' @param extract Character argument. Specifies which Expert Query National Extract should be
 #' imported. Options are "actions" (Actions), "assessments" (Assessments), "au" (Assessment Units),
-#' "auml" (Assessment Units with Monitoring Locations), "catch_corr" (Catchment Correspondence),
+#' "au_mls" (Assessment Units with Monitoring Locations), "catch_corr" (Catchment Correspondence),
 #' "sources" (Sources), and "tmdl" (TMDLs). There is no national extract option available for
 #' Actions Documents. The default is NULL which means no extract will be returned.
 #'
@@ -45,9 +46,16 @@
 #' "locationDescription", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits".
 #'
 #'
-#' "aus" (Assessment Units):
+#' "aus" (Assessment Units): "objectId", "region", "state", "organizationType", "organizationId",
+#' "organizationName", "useClassName", "assessmentUnitId", "assessmentUnitName",
+#' "assessmentUnitStatus", "reportingCycle", "cycleId", "locationDescription", "sizeSource",
+#' "sourceScale", "waterSize", and "waterSizeUnits".
 #'
-#' "auml" (Assessment Units with Monitoring Locations):
+#' "au_mls" (Assessment Units with Monitoring Locations): "objectId", "region", "state",
+#' "organizationType", "organizationId", "organizationName", "waterType", "useClassName",
+#' "monitoringLocationId", "monitoringLocationOrgId", "assessmentUnitId", "assessmentUnitName",
+#' "assessmentUnitStatus", "reportingCycle", "cycleId", locationDescription",
+#' "monitoringLocationDataLink", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits"
 #'
 #' "catch_corr" (Catchment Correspondence):
 #'
@@ -67,7 +75,7 @@
 #' @examples
 #' assessments <- TADA_EQExtractRetrieval(profile = "assessments")
 #'
-#' aus_monloc <- TADA_EQExtractRetrieval(profile = "auml")
+#' aus_monloc <- TADA_EQExtractRetrieval(profile = "au_mls")
 #'
 EQ_NationalExtract <- function(extract = NULL) {
   if (is.null(extract)) {
@@ -75,7 +83,8 @@ EQ_NationalExtract <- function(extract = NULL) {
   }
 
   if (is.null(extract) &
-      !extract %in% c("actions", "assessments", "aus", "auml", "catch_corr", "sources", "tmdl")) {
+      !extract %in% c("actions", "assessments", "aus", "au_mls",
+                      "catch_corr", "sources", "tmdl")) {
     stop("EQ_NationalExtract: Function requires user to select Expert Query Profile to return.")
   }
 
@@ -111,13 +120,15 @@ EQ_NationalExtract <- function(extract = NULL) {
     extract <- "assessment_units"
   }
 
-  if (extract == "auml") {
+  if (extract == "au_mls") {
     file <- "assessment_units_monitoring_locations.csv"
 
     label <- "Assessment Units with Monitoring Locations Profile"
+
+    extract <- "assessment_units_mls"
   }
 
-  if (extract == "catchment") {
+  if (extract == "catch_corr") {
     file <- "catchment_correspondence.csv"
 
     label <- "Catchment Correspondance Profile"
