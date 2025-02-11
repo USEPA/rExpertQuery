@@ -11,10 +11,10 @@
 #' * If using VPN, suggest signing out of VPN before running this function as it can cause
 #' 403 error and prevent download of national extracts.
 #'
-#' HRM NOTE 2/10/25 - error in data.table::fread for actions profile. Assessments, aus, aus_mls
-#'  and tmdls tested
-#' and working well. Resume checking with assessment units (problem with column names should be
-#' fixed, but did not verify yet)
+#' ** The National Extracts are large files. You must have enough memory available in order for
+#' these functions to import them into R successfully.
+#'
+#' HRM NOTE 2/11/25 - can download but not import catchment correspondence
 #'
 #' @param extract Character argument. Specifies which Expert Query National Extract should be
 #' imported. Options are "actions" (Actions), "assessments" (Assessments), "au" (Assessment Units),
@@ -57,9 +57,14 @@
 #' "assessmentUnitStatus", "reportingCycle", "cycleId", locationDescription",
 #' "monitoringLocationDataLink", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits"
 #'
-#' "catch_corr" (Catchment Correspondence):
+#' "catch_corr" (Catchment Correspondence): "objectId", "region", "state", organizationType",
+#' "organizationId", "organizationName", "assessmentUnitId", "assessmentUnitName",
+#' "catchmentNhdPlusId", "reportingCycle", and "cycleId".
 #'
-#' "sources" (Sources):
+#' "sources" (Sources): "objectId", "region", "state", "organizationType", "organizationId",
+#' "organizationName", "waterType", "assessmentUnitId", "assessmentUnitName", "reportingCycle",
+#' "overallStatus", "epaIrCategory", "stateIrCategory", "parameterGroup", "causeName",
+#' "sourceName", "confirmed", "cycleId", "locationDescription", "waterSize", and "waterSizeUnits".
 #'
 #' "tmdl" (TMDLs): "objectId", "region", "state", "organizationType", "organizationId",
 #' "organizationName", "waterType", "pollutantGroup", "pollutant", "addressedParameterGroup",
