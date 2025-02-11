@@ -14,7 +14,7 @@
 #' ** The National Extracts are large files. You must have enough memory available in order for
 #' these functions to import them into R successfully.
 #'
-#' HRM NOTE 2/11/25 - can download but not import catchment correspondence
+#' HRM NOTE 2/11/25 - can download but not import catchment correspondence due to file size.
 #'
 #' @param extract Character argument. Specifies which Expert Query National Extract should be
 #' imported. Options are "actions" (Actions), "assessments" (Assessments), "au" (Assessment Units),
