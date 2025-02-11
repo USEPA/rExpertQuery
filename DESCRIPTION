@@ -23,13 +23,15 @@ Imports:
   utils,
   magrittr
 Suggests:
-  pkgdown,
-  rmarkdown,
-  devtools,
-  spelling,
-  yaml,
-  roxygen2,
-  usethis,
-  testthis
+    pkgdown,
+    rmarkdown,
+    devtools,
+    spelling,
+    yaml,
+    roxygen2,
+    usethis,
+    testthis,
+    testthat (>= 3.0.0)
 LazyData: true
 LazyDataCompression: xz
+Config/testthat/edition: 3
