@@ -339,88 +339,11 @@ EQ_CompareParams <- function(default, user) {
         "EQ_DomainValues: getting list of available domain names."
       ))
 
-      # set up tempfile
-      temp <- tempfile(fileext = ".zip")
+      raw.data <- jsonlite::fromJSON(base.url) %>%
+        dplyr::select(domain)
 
-      # download zipped file
-      httr::GET(base.url, httr::write_disk(temp, overwrite = TRUE))
 
-      # unzip file
-      unzipped.file <- utils::unzip(temp, exdir = tempdir())
-
-      # identify csv file to read in
-      csv.file <- unzipped.file[grep("\\.csv$", unzipped.file, ignore.case = TRUE)]
-
-      # open large csv file
-      # can add verbose = FALSE, if we want to remove the progress bar here
-      df <- data.table::fread(csv.file)
     }
-
-    params.cw <- utils::read.csv(file = "inst/extdata/EQParamsCrosswalk.csv") %>%
-      dplyr::select(param, attains_ws_name, attains_ws_field) %>%
-      dplyr::filter(!is.na(attains_ws_name))
-
-
-    extract.url.name <- dplyr::case_when(
-      extract == "actions" ~ extract,
-      extract == "act_docs" ~ "actionDocuments",
-      extract == "assessments" ~ extract,
-      extract == "aus" ~ "assessmentUnits",
-      extract == "au_mls" ~ "assessmentUnitsMonitoringLocations",
-      extract == "catch_corr" ~ "catchmentCorrespondence",
-      extract == "sources" ~ extract,
-      extract == "tmdl" ~ extract
-    )
-
-    function.url.name <- dplyr::case_when(
-      extract == "actions" ~ "EQ_Actions",
-      extract == "act_docs" ~ "EQ_ActionDocuments",
-      extract == "assessments" ~ "EQ_Assessments",
-      extract == "aus" ~ "EQ_AssessmentUnits",
-      extract == "au_mls" ~ "EQ_AUsMLs",
-      extract == "catch_corr" ~ "EQ_CatchCorr",
-      extract == "sources" ~ "EQ_Sources",
-      extract == "tmdl" ~ "EQ_TMDL"
-    )
-
-    query.url <- paste0(base.url, extract.url.name)
-
-
-    row.res <- httr::POST(url = paste0(query.url, "/count"),
-                          httr::add_headers(.headers = headers),
-                          body = body.list[[1]])
-
-    row.n <- httr::content(row.res, as = "parse", encoding = "UTF-8")
-
-    # stop function if row count exceeds one million
-    if(isTRUE(row.n$count > row.n$maxCount)) {
-      stop(paste0(function.url.name,
-                  ": The current query exceeds the maximum query size of ",
-                  format(row.n$maxCount, big.mark = ","), " rows.",
-                  "Please refine the search or use EQ_NationalExtract to import the Expert Query
-                  National Extract."))
-    }
-
-    # if row count is less than one million, print message with row count and continue
-    if(isTRUE(row.n$count < row.n$maxCount)) {
-      print(paste0(function.url.name,
-                   ": The current query will return ",
-                   format(row.n$count, big.mark = ","), " rows."))
-    }
-
-    # remove intermediate objects
-    rm(row.res, row.n)
-
-    query.res <- httr::POST(url = query.url,
-                            httr::add_headers(.headers = headers),
-                            body = body.list[[2]])
-
-    query.df <- suppressWarnings(httr::content(query.res, as = "parsed", encoding = "UTF-8"))
-
-    # remove intermediate objects
-    rm(headers, base.url, extract.url.name, function.url.name, query.url, body.list)
-
-    return(query.df)
   }
 
   #' Pipe operator
