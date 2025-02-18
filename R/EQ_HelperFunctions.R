@@ -324,7 +324,8 @@ EQ_CompareParams <- function(default, user) {
   #'
   #' Provides information on allowable values for a param by leveraging ATTAINS web services.
   #'
-  #' @param domain Character string.
+  #' @param domain Character string. Running this function without entering a value for domain
+  #' will return a list of all allowable domain values.
   #'
   #' @return A df allowable values for the selected query_param.
   #'

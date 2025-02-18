@@ -35,7 +35,7 @@ doc_file_name,documentFileName,,,no,yes,no,no,no,no,no,no
 doc_key,documentKey,,,no,no,no,no,no,no,no,no
 doc_name,documentName,,,no,yes,no,no,no,no,no,no
 doc_query,documentQuery,,,no,no,no,no,no,no,no,no
-doc_type,actionDocumentType,,,no,yes,no,no,no,no,no,no
+doc_type,actionDocumentType,DocumentTypeCode,name,no,yes,no,no,no,no,no,no
 doc_url,actionDocumentUrl,,,no,no,no,no,no,no,no,no
 epa_ir_cat,epaIrCategory,,,no,no,yes,no,no,no,yes,no
 expect_attain_cycle_hi,cycleExpectedToAttainHi,,,no,no,yes,no,no,no,no,no
@@ -49,7 +49,7 @@ last_cycle_end,cycleLastAssessedHi,,,no,no,yes,no,no,no,no,no
 last_cycle_start,cycleLastAssessedLo,,,no,no,yes,no,no,no,no,no
 loc_desc,locationDescription,,,no,no,yes,no,no,no,no,no
 loc_txt,locationText,,,no,no,no,yes,no,no,no,no
-loc_type,locationTypeCode,,,no,no,no,yes,no,no,no,no
+loc_type,locationTypeCode,LocationTypeCode,,no,no,no,yes,no,no,no,no
 mon_end_date_hi,monitoringEndDateHi,,,no,no,yes,no,no,no,no,no
 mon_end_date_lo,monitoringEndDateLo,,,no,no,yes,no,no,no,no,no
 mon_loc_id,monitoringLocationId,,,no,no,no,no,yes,no,no,no

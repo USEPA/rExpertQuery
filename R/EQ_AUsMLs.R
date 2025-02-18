@@ -10,8 +10,10 @@
 #' Options are "Active", "Historical" or "Retired". Default = "Active".
 #' @param auid Character string. A unique identifier assigned to an Assessment Unit by the
 #' Organization. Default = NULL.
-#' @param loc_text Character string. Description of the location of the Assessment Unit. Default =
-#' NULL.
+#' @param mon_loc_id Character string. Unique identifier for the monitoring location.
+#' @param mon_org_id Character string. The unique identifier assigned to the Organization that
+#' conducted the monitoring. For all possible options see the WQP domain list for Organizations
+#' here: https://cdx.epa.gov/wqx/download/DomainValues/Organization_CSV.zip.
 #' @param org_id Character string. A unique identifier assigned to the Organization. Options can
 #' be viewed with EQ_DomainValues("org_id"). Default = NULL.
 #' @param org_name Character string. A unique name assigned to the Organization. Options can
