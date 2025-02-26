@@ -1,6 +1,6 @@
 ## rExpertQuery
 
-An R package for retrieving ATTAINS data efficiently via Expert Query web services.
+An R package for retrieving ATTAINS data efficiently via Expert Query web services (https://www.epa.gov/waterdata/expert-query).
 
 ## Open-Source Code Policy
 
@@ -20,4 +20,4 @@ This United States Environmental Protection Agency (EPA) GitHub project code is 
 
 ## Contact
 
-If you have any questions, please reach out to the TADA Team at mywaterway\@epa.gov.
+If you have any questions, please reach out to the ATTAINS Team at attains\@epa.gov.
