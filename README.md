@@ -1,6 +1,6 @@
 ## rExpertQuery
 
-An R package for retrieving ATTAINS data efficiently via Expert Query web services (https://www.epa.gov/waterdata/expert-query).
+A draft R package (UNDER ACTIVE DEVELOPMENT) for retrieving ATTAINS data efficiently via Expert Query web services (https://www.epa.gov/waterdata/expert-query).
 
 ## Open-Source Code Policy
 
