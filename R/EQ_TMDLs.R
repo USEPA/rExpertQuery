@@ -1,0 +1,141 @@
+#' Expert Query TMDLs
+#'
+#' Return tmdl data from Expert Query.
+#'
+#' @param api_key Character string. Users must supply their unique api key to access Expert
+#' Query web services. To obtain an api, submit the form at:
+#' https://owapps.epa.gov/expertquery/api-key-signup
+#' @param act_agency Character string. Denotes the agency that is establishing/issuing the action
+#' associated with an Assessment. Options are "state", "tribe", or "epa". Default = NULL.
+#' @param act_id Character string. Unique Identifier for the Action associated with an Assessment
+#' that will be used to track the Action entered (such as the corresponding information and
+#' associated documents) in ATTAINS, and its associated name. Default = NULL.
+#' @param act_name Character string. Unique identifier for the Action that will be used to track
+#' the Action entered (such as the corresponding information and associated documents) in ATTAINs,
+#' and its associated name (name of TMDL Report, 4B Report, Alternative Report, etc.). Default =
+#' NULL.
+#' @param ad_param Character string. In the context of a TMDL, Addressed Parameters refer to
+#' associated parameters (parameters identified as causes of impairment in the Section 303(d) list
+#' or later identified as such through the TMDL process) that are being addressed by the pollutant
+#' TMDL. Options can be viewed with EQ_DomainValues("ad_param"). Default = NULL.
+#' @param ad_param_group Character string. Groups of Addressed Parameters. Options can be viewed
+#' with EQ_DomainValues("ad_param_group").Default = NULL.
+#' @param au_name Character string. The name assigned to an Assessment Unit by the Organization.
+#' Default = NULL.
+#' @param auid Character string. A unique identifier assigned to an Assessment Unit by the
+#' Organization. Default = NULL.
+#' @param comp_date_end Character string. The ending date of the date range during which the
+#' Action is planned to be completed. Usually this refers to the date that the TMDL Action date is
+#' initially submitted to EPA. Format is "YYYY-MM-DD". Default = NULL.
+#' @param comp_date_start Character string. The starting date of the date range during which the
+#' Action is planned to be completed. Usually this refers to the date that the TMDL Action date is
+#' initially submitted to EPA. Format is "YYYY-MM-DD". Default = NULL.
+#' @param fisc_year_end Character string. The ending year for the date range of fiscal years in
+#' which a particular action, program, or project was initiated or established. Format is "YYYY".
+#' Default = NULL.
+#' @param fisc_year_start  Character string. The starting year for the date range of fiscal years
+#' in which a particular action, program, or project was initiated or established. Format is "YYYY".
+#' Default = NULL.
+#' @param in_meas Character string. EPA can determine whether the Action should count towards 303(d)
+#' measures. Draft Actions get partial credit and finalized Actions get full cred. By default, all
+#' measures count towards the measures unless EPA changes this flag for a specific action. Options
+#' are "Yes" or "No". Default = NULL.
+#' @param indian_country Character string. Indicates if the water is either wholly or partially in
+#' Indian country. Options are "Yes" or "No". Default = NULL.
+#' @param mos_exp Character string. Refers to the Explicit Margin of Safety for the Associated
+#' Pollutant as identified in the TMDL. Options can be viewed with EQ_DomainValues("mos_exp").
+#' Default = NULL.
+#' @param mos_imp Character string. Refers to the Implicit Margin of Safety for the Associated
+#' Pollutant as identified in the TMDL. Options can be viewed with EQ_DomainValues("mos_imp").
+#' Default = NULL.
+#' @param npdes_id Character string. Identification numbers of the NPDES permits within the
+#' waterbody and are associated to a TMDL pollutant. Default = NULL.
+#' @param org_id Character string. A unique identifier assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_id"). Default = NULL.
+#' @param org_name Character string. A unique name assigned to the Organization. Options can
+#' be viewed with EQ_DomainValues("org_name"). Default = NULL.
+#' @param other_id Character string. Alternative code identifying the TMDL Report (an example could
+#' be a state assigned identifier that is different from the ID in the Action ID). Default = NULL.
+#' @param poll_group Character string. Indicates the group the Pollutant belongs to. Options can
+#' be viewed with EQ_DomainValues("poll_group"). Default = NULL.
+#' @param pollutant Character string. Indicates the Pollutant for which the TMDL load was
+#' calculated. Options can be viewed with EQ_DomainValues("pollutant"). Default = NULL.
+#' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
+#' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options. Default = NULL.
+#' @param source_type Character string. Indicates the Source breakdown for the TMDL. Options are
+#' "Nonpoint source", "Both", "Point source", and "Unknown". Default = NULL.
+#' @param statecode Character string. FIPS state alpha code that identifies a state (e.g.
+#' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
+#' Default = NULL.
+#' @param tmdl_date_end Character string. This should correspond to the ending date of the date
+#' range that EPA approved the official final TMDL submitted (such as the date on the approval
+#' letter). Format is "YYYY-MM-DD". Default = NULL.
+#' @param tmdl_date_start Character string. This should correspond to the starting date of the date
+#' range that EPA approved the official final TMDL submitted (such as the date on the approval
+#' letter). Format is "YYYY-MM-DD". Default = NULL.
+#' @param water_type Character string. An Assessment Unit must have at least one water type, and it
+#' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
+#' = NULL.
+#'
+#' @return A data frame of ATTAINS TMDLs with the columns "objectId", "region", "state",
+#' "organizationType", "organizationId", "organizationName", "waterType", "pollutantGroup",
+#' "pollutant", "addressedParameterGroup", "addressedParameter", "sourceType", "npdesIdentifier",
+#' "otherIdentifier", "actionId", "actionName", "actionAgency", "inIndianCountry",
+#' "explicitMarginOfSafety", "implicitMarginOfSafety", "includeInMeasure", "completionDate",
+#' "tmdlDate", "fiscalYearEstablished", "assessmentUnitId", "assessmentUnitName", "loadAllocation",
+#' "loadAllocationUnits", "locationDescription", "tmdlEndpoint", "waterSize", "waterSizeUnits",
+#' "wasteLoadAllocation", and "planSummaryLink".
+#'
+#' @export
+#'
+EQ_TMDLs <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name = NULL,
+                     au_name = NULL, auid = NULL, comp_date_end = NULL, comp_date_start = NULL,
+                     fisc_year_end = NULL, fisc_year_start = NULL, in_meas = NULL,
+                     indian_country = NULL, org_id = NULL, org_name = NULL, region = NULL,
+                     statecode = NULL, tmdl_date_end = NULL, tmdl_date_start = NULL,
+                     water_type = NULL, ad_param = NULL, ad_param_group = NULL, mos_exp = NULL,
+                     mos_imp = NULL, npdes_id = NULL, other_id = NULL, pollutant = NULL,
+                     poll_group = NULL, source_type = NULL)  {
+
+  # check for api key
+  if(is.null(api_key)) {
+    stop("EQ_TMDLs: An api key is required to access EQ web services.")
+  }
+
+  # get param crosswalk for building query
+  params.cw <- EQ_ExtractParams(extract = "tmdl")
+
+  # get default params from EQ_Assessments
+  default.params <- EQ_DefaultParams(EQ_TMDLs) %>%
+    # format for building body
+    EQ_FormatParams()
+
+  # create df of user entered params
+  user.params <- as.list(match.call()[-1]) %>%
+    tibble::enframe(name = "param", value = "value") %>%
+    as.data.frame() %>%
+    # format for building body
+    EQ_FormatParams()
+
+  # compare default and user params to build df of all params and values for body
+  params.df <- EQ_CompareParams(default = default.params, user = user.params)
+
+  # remove intermediate objects
+  rm(user.params, default.params)
+
+  # create post bodies
+  post.bodies <- EQ_CreateBody(comp.params = params.df, crosswalk = params.cw, extract = "tmdl")
+
+  # create post headers
+  post.headers <- EQ_CreateHeader(key = api_key)
+
+  # query EQ (check number of rows before download, stop if it exceeds max rows)
+  query.df <- EQ_PostAndContent(headers = post.headers,
+                                body.list = post.bodies,
+                                extract = "tmdl")
+  # should rows where ml is NA be filtered out?
+
+  rm(params.cw, params.df, post.bodies, post.headers)
+
+  return(query.df)
+}
