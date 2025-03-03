@@ -202,7 +202,7 @@ EQ_NationalExtract <- function(extract = NULL) {
                     TMDLENDPOINT3 = ifelse(is.na(.data$TMDLENDPOINT3), "", .data$TMDLENDPOINT3)) %>%
       dplyr::mutate(TMDLENDPOINT = paste0(.data$TMDLENDPOINT1, .data$TMDLENDPOINT2,
                                           .data$TMDLENDPOINT3)) %>%
-      dplyr::select(-TMDLENDPOINT1, -TMDLENDPOINT2, -TMDLENDPOINT3)
+      dplyr::select(-'TMDLENDPOINT1', -'TMDLENDPOINT2', -'TMDLENDPOINT3')
   }
 
   # change column names
