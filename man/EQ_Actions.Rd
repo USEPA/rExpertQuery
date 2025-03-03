@@ -98,11 +98,13 @@ may have multiple water types. Options can be viewed with EQ_DomainValues("water
 = NULL.}
 }
 \value{
-A data frame of ATTAINS actions served via Expert Query webservices including
-the columns "objectId", "region", "state", "organizationType", "organizationId",
-"organizationName", "waterType", "assessmentUnitId", "assessmentUnitName", "parameterGroup",
-"locationDescription", "waterSize", and "waterSizeUnits".
+A data frame of ATTAINS actions with the columns "objectId", "region", "state",
+"organizationType", "organizationId", "organizationName", "waterType", "parameterGroup",
+"parameter", "actionType", "actionId", "actionName", "actionAgency", "inIndianCountry",
+"includeInMeasure", "completionDate", "assessmentUnitId", "assessmentUnitName",
+"fiscalYearEstablished", "locationDescription", "waterSize", "waterSizeUnits", and
+"planSummaryLink".
 }
 \description{
-Return actions data from Expert Query.
+Query ATTAINS Actions data via Expert Query web services and return as data frame.
 }

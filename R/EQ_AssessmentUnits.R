@@ -9,7 +9,7 @@
 #' Default = NULL.
 #' @param au_status Character string. The current condition or status of an Assessment Unit.
 #' Options are "Active", "Historical" or "Retired". Default = "Active".
-#' @param au_id Character string. A unique identifier assigned to an Assessment Unit by the
+#' @param auid Character string. A unique identifier assigned to an Assessment Unit by the
 #' Organization. Default = NULL.
 #' @param region Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
 #' See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options.
@@ -32,8 +32,8 @@
 #' @export
 #'
 EQ_AssessmentUnits <- function(api_key = NULL, au_name = NULL, au_status = "A", auid = NULL,
-                               cycle_id = NULL, loc_txt = NULL, loc_type = NULL, region = NULL,
-                               report_cycle = NULL, statecode = NULL, use_class = NULL)  {
+                               region = NULL, report_cycle = NULL, statecode = NULL,
+                               use_class = NULL, water_type = NULL)  {
 
   # check for api key
   if(is.null(api_key)) {

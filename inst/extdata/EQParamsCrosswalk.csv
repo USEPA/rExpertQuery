@@ -27,8 +27,8 @@ cwa,cwa303dPriorityRanking,,,no,no,yes,no,no,no,no,no
 cycle_first_end,cycleFirstListedHi,,,no,no,yes,no,no,no,no,no
 cycle_first_state,cycleFirstListedLo,,,no,no,yes,no,no,no,no,no
 cycle_id,cycleId,,,no,no,yes,yes,yes,yes,yes,no
-cycle_last_end,cycleLastAssessedHi,,,,,,yes,,,,
-cycle_last_start,cycleLastAssessedLo,,,,,,yes,,,,
+cycle_last_end,cycleLastAssessedHi,,,no,no,yes,yes,no,no,no,no
+cycle_last_start,cycleLastAssessedLo,,,no,no,yes,yes,no,no,no,no
 delist_reason,delistedReason,,,no,no,yes,no,no,no,no,no
 delisted,delisted,,,no,no,yes,no,no,no,no,no
 doc_file_name,documentFileName,,,no,yes,no,no,no,no,no,no
@@ -45,8 +45,6 @@ fisc_year_end,fiscalYearEstablishedHi,,,yes,no,no,no,no,no,no,yes
 fisc_year_start,fiscalYearEstablisheLo,,,yes,no,no,no,no,no,no,yes
 in_meas,includeInMeasure,,,yes,no,no,no,no,no,no,yes
 indian_country,inIndianCountry,,,yes,no,no,no,no,no,no,yes
-last_cycle_end,cycleLastAssessedHi,,,no,no,yes,no,no,no,no,no
-last_cycle_start,cycleLastAssessedLo,,,no,no,yes,no,no,no,no,no
 loc_desc,locationDescription,,,no,no,yes,no,no,no,no,no
 loc_txt,locationText,,,no,no,no,yes,no,no,no,no
 loc_type,locationTypeCode,LocationTypeCode,name,no,no,no,yes,no,no,no,no

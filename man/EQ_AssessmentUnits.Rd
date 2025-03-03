@@ -49,11 +49,11 @@ may have multiple water types. Options can be viewed with EQ_DomainValues("water
 = NULL.}
 }
 \value{
-A data frame of ATTAINS assessment units served via Expert Query webservices including
-the columns "region", "state", "organizationType", "organizationId", "organizationName",
-"waterType", "locationTypeCode", "locationText", "useClassName", "assessmentUnitId",
-"assessmentUnitName", "assessmentUnitStatus", "reportingCycle", "cycleId",
-"locationDescription", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits".
+A data frame of ATTAINS Assessment Units with the columns "region", "state",
+"organizationType", "organizationId", "organizationName", "waterType", "locationTypeCode",
+"locationText", "useClassName", "assessmentUnitId", "assessmentUnitName", "assessmentUnitStatus",
+"reportingCycle", "cycleId", "locationDescription", "sizeSource", "sourceScale", "waterSize",
+and "waterSizeUnits".
 }
 \description{
 Return assessment units data from Expert Query.

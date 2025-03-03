@@ -1,0 +1,20 @@
+#' Pipe operator
+#'
+#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @importFrom magrittr %>%
+#' @usage lhs \%>\% rhs
+#' @export
+#' @param lhs A value or the magrittr placeholder.
+#' @param rhs A function call using the magrittr semantics.
+#' @return The result of calling `rhs(lhs)`.
+NULL
+
+
+utils::globalVariables(c(
+  ".data", "TMDLENDPOINT1", "TMDLENDPOINT2", "TMDLENDPOINT3", "col.name",
+  "eq_name", "nat_extract", "param", "value"
+))

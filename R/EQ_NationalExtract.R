@@ -78,9 +78,9 @@
 #' @export
 #'
 #' @examples
-#' assessments <- TADA_EQExtractRetrieval(profile = "assessments")
+#' assessments <- EQ_NationalExtract(extract = "assessments")
 #'
-#' aus_monloc <- TADA_EQExtractRetrieval(profile = "au_mls")
+#' aus_monloc <- EQ_NationalExtract(extract = "au_mls")
 #'
 EQ_NationalExtract <- function(extract = NULL) {
   if (is.null(extract)) {
@@ -195,10 +195,11 @@ EQ_NationalExtract <- function(extract = NULL) {
   # combine the three TMDLENDPOINT columns to match output from EQ_TMDLs function
   if(extract == "tmdl") {
     df <- df %>%
-      dplyr::mutate(TMDLENDPOINT1 = ifelse(is.na(TMDLENDPOINT1), "", TMDLENDPOINT1),
-                    TMDLENDPOINT2 = ifelse(is.na(TMDLENDPOINT2), "", TMDLENDPOINT2),
-                    TMDLENDPOINT3 = ifelse(is.na(TMDLENDPOINT3), "", TMDLENDPOINT3)) %>%
-      dplyr::mutate(TMDLENDPOINT = paste0(TMDLENDPOINT1, TMDLENDPOINT2, TMDLENDPOINT3)) %>%
+      dplyr::mutate(TMDLENDPOINT1 = ifelse(is.na(.data$TMDLENDPOINT1), "", .data$TMDLENDPOINT1),
+                    TMDLENDPOINT2 = ifelse(is.na(.data$TMDLENDPOINT2), "", .data$TMDLENDPOINT2),
+                    TMDLENDPOINT3 = ifelse(is.na(.data$TMDLENDPOINT3), "", .data$TMDLENDPOINT3)) %>%
+      dplyr::mutate(TMDLENDPOINT = paste0(.data$TMDLENDPOINT1, .data$TMDLENDPOINT2,
+                                          .data$TMDLENDPOINT3)) %>%
       dplyr::select(-TMDLENDPOINT1, -TMDLENDPOINT2, -TMDLENDPOINT3)
   }
 

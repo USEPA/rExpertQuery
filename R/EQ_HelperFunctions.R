@@ -36,7 +36,7 @@ EQ_ExtractParams <- function(extract = NULL)  {
 #'
 #' Get default params from the rExpert Query export functions.
 #'
-#' @param funct The Expert Query exported function to call parameters from
+#' @param func The Expert Query exported function to call parameters from
 #'
 #' @return A data frame of the default params for the selected function.
 #'
@@ -162,7 +162,7 @@ EQ_CompareParams <- function(default, user) {
       dplyr::group_by(eq_name) %>%
       dplyr::mutate(value = paste0(value, collapse = ",")) %>%
       dplyr::distinct() %>%
-      dplyr::mutate(value = case_when(
+      dplyr::mutate(value = dplyr::case_when(
         !param %in% date.params ~ paste0('"', eq_name, '":', "[", value, "]"),
         .default = paste0('"', eq_name, '":', value))) %>%
       dplyr::ungroup() %>%
@@ -319,44 +319,3 @@ EQ_CompareParams <- function(default, user) {
 
     return(query.df)
   }
-
-  #' Expert Query Domain Values
-  #'
-  #' Provides information on allowable values for a param by leveraging ATTAINS web services.
-  #'
-  #' @param domain Character string. Running this function without entering a value for domain
-  #' will return a list of all allowable domain values.
-  #'
-  #' @return A df allowable values for the selected query_param.
-  #'
-  EQ_DomainValues <- function(domain = NULL) {
-
-    base.url <- "https://attains.epa.gov/attains-public/api/domains"
-
-    if(is.null(domain)) {
-
-      print(paste0(
-        "EQ_DomainValues: getting list of available domain names."
-      ))
-
-      raw.data <- jsonlite::fromJSON(base.url) %>%
-        dplyr::select(domain)
-
-
-    }
-  }
-
-  #' Pipe operator
-  #'
-  #' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
-  #'
-  #' @name %>%
-  #' @rdname pipe
-  #' @keywords internal
-  #' @importFrom magrittr %>%
-  #' @usage lhs \%>\% rhs
-  #' @export
-  #' @param lhs A value or the magrittr placeholder.
-  #' @param rhs A function call using the magrittr semantics.
-  #' @return The result of calling `rhs(lhs)`.
-  NULL

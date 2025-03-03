@@ -2,12 +2,12 @@ Package: rExpertQuery
 Type: Package
 Title: R Tools for Expert Query
 Version: 0.1.0
-Author@R: 
+Authors@R: 
   person(given = "Hillary",
            family = "Marler",
            role = c("aut", "cre"),
            email = "marler.hillary@epa.gov",
-           comment = c(ORCID = "0009-0006-0323-1172")
+           comment = c(ORCID = "0009-0006-0323-1172"))
 Description: Access ATTAINS data efficiently via Expert Query web services.
 License: CC0
 Copyright: This software is in the public domain because it contains materials
@@ -16,22 +16,25 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports:
+  data.table,
   dplyr,
-  tidyr,
-  tibble,
   httr,
-  utils,
+  jsonlite,
+  lubridate,
   magrittr
+  tibble,
+  tidyr,
+  utils
 Suggests:
+    devtools,
     pkgdown,
     rmarkdown,
-    devtools,
-    spelling,
-    yaml,
     roxygen2,
-    usethis,
+    spelling,
     testthis,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    usethis,
+    yaml
 LazyData: true
 LazyDataCompression: xz
 Config/testthat/edition: 3

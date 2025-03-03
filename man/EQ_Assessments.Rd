@@ -267,21 +267,21 @@ may have multiple water types. Options can be viewed with EQ_DomainValues("water
 = NULL.}
 }
 \value{
-A data frame of ATTAINS assessments served via Expert Query webservices including the
-columns "objectId", "region", "state", "organizationType", "organizationId", "organizationName",
-"waterType", "reportingCycle", "cycleLastAssessed", "assessmentUnitId", "assessmentUnitName",
-"assessmentUnitStatus", "overallStatus", "epaIrCategory", "stateIrCategory", "useGroup",
-"useName", "useClassName", "useSupport", "useIrCategory", "useStateIrCategory",
-"monitoringStartDate", "monitoringEndDate", "assessmentDate", "assessmentTypes",
-"assessmentMethods", "assessmentBasis", "parameterGroup", "parameterName", "parameterStatus",
-"parameterAttainment", "parameterIrCategory", "parameterStateIrCategory", "delisted",
-"delistedReason", "pollutantIndicator", "cycleFirstListed", "alternateListingIdentifier",
-"vision303dPriority", "cwa303dPriorityRanking", "cycleScheduledForTmdl", "cycleExpectedToAttain",
-"consentDecreeCycle", "cycleId", "seasonStartDate", "seasonEndDate", "associatedActionId",
-"associatedActionName", "associatedActionType", "associatedActionStatus",
-"associatedActionAgency", "locationDescription", "sizeSource", "sourceScale", "waterSize", and
-"waterSizeUnits".
+A data frame of ATTAINS Assessments with the columns "objectId", "region", "state",
+"organizationType", "organizationId", "organizationName", "waterType", "reportingCycle",
+"cycleLastAssessed", "assessmentUnitId", "assessmentUnitName", "assessmentUnitStatus",
+"overallStatus", "epaIrCategory", "stateIrCategory", "useGroup", "useName", "useClassName",
+"useSupport", "useIrCategory", "useStateIrCategory", "monitoringStartDate", "monitoringEndDate",
+"assessmentDate", "assessmentTypes", "assessmentMethods", "assessmentBasis", "parameterGroup",
+"parameterName", "parameterStatus", "parameterAttainment", "parameterIrCategory",
+"parameterStateIrCategory", "delisted", "delistedReason", "pollutantIndicator",
+"cycleFirstListed", "alternateListingIdentifier", "vision303dPriority", "cwa303dPriorityRanking",
+"cycleScheduledForTmdl", "cycleExpectedToAttain", "consentDecreeCycle", "cycleId",
+"seasonStartDate", "seasonEndDate", "associatedActionId", "associatedActionName",
+"associatedActionType", "associatedActionStatus", "associatedActionAgency",
+"locationDescription", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits".
 }
 \description{
-Return assessments data from Expert Query.
+Return a data frame of ATTAINS Assessments data from Expert Query web services, filtered by
+user inputs.
 }
