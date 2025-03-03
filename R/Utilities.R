@@ -15,6 +15,5 @@ NULL
 
 
 utils::globalVariables(c(
-  ".data", "TMDLENDPOINT1", "TMDLENDPOINT2", "TMDLENDPOINT3", "col.name",
-  "nat_extract", "value"
+  ".data"
 ))

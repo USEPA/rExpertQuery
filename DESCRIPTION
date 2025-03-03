@@ -22,6 +22,7 @@ Imports:
   jsonlite,
   lubridate,
   magrittr,
+  rlang,
   tibble,
   tidyr,
   utils
