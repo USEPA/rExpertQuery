@@ -262,16 +262,6 @@ the state under the 303(d) Vision. Options are "Yes" or "No". Default = NULL.}
 \item{water_type}{Character string. An Assessment Unit must have at least one water type, and it
 may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
 = NULL.}
-
-\item{last_cycle_end}{Character string. Ending year for the cycle the Assessment Unit was last
-assessed, which can include any conclusions related to the Assessment Unit and can include
-delisting decisions. This does not need to match the current Assessment Cycle. Format is
-"YYYY". Default = NULL.}
-
-\item{last_cycle_start}{Character string. Starting year for the cycle the Assessment Unit was
-last assessed, which can include any conclusions related to the Assessment Unit and can include
-delisting decisions. This does not need to match the current Assessment Cycle. Format is
-"YYYY". Default = NULL.}
 }
 \value{
 A data frame of ATTAINS Assessments with the columns "objectId", "region", "state",

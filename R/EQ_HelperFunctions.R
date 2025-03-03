@@ -26,7 +26,7 @@ EQ_ExtractParams <- function(extract = NULL)  {
   # import crosswalk ref file
   params.cw <- utils::read.csv(file = "inst/extdata/EQParamsCrosswalk.csv") %>%
     dplyr::filter(.data[[extract.filter]] == "yes") %>%
-    dplyr::select(param, eq_name)
+    dplyr::select('param', 'eq_name')
 
   # return the crosswalk
   return(params.cw)
@@ -102,7 +102,7 @@ EQ_CompareParams <- function(default, user) {
 
   # filter out any default params that user entered a value for
     default.params <- default %>%
-    dplyr::filter(!param %in% user$param)
+    dplyr::filter(!'param' %in% user$param)
 
   # combine user supplied and default params
   all.params <- user %>%
