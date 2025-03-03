@@ -62,6 +62,8 @@ return(params.df)
 #'
 #' @return A data frame of the params and their values. All values are character strings.
 #'
+#' @importFrom rlang .data
+#'
 
 EQ_FormatParams <- function(.data) {
   # change language or numeric to character in value column
@@ -79,7 +81,7 @@ EQ_FormatParams <- function(.data) {
   )
 
   params.df <- params.df %>%
-    dplyr::mutate(value = as.character(value))
+    dplyr::mutate(value = as.character(.data$value))
 
   return(params.df)
 }
