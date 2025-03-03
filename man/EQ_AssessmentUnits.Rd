@@ -9,13 +9,11 @@ EQ_AssessmentUnits(
   au_name = NULL,
   au_status = "A",
   auid = NULL,
-  cycle_id = NULL,
-  loc_txt = NULL,
-  loc_type = NULL,
   region = NULL,
   report_cycle = NULL,
   statecode = NULL,
-  use_class = NULL
+  use_class = NULL,
+  water_type = NULL
 )
 }
 \arguments{
@@ -29,6 +27,9 @@ Default = NULL.}
 \item{au_status}{Character string. The current condition or status of an Assessment Unit.
 Options are "Active", "Historical" or "Retired". Default = "Active".}
 
+\item{auid}{Character string. A unique identifier assigned to an Assessment Unit by the
+Organization. Default = NULL.}
+
 \item{region}{Numeric (integer). Integer from 1 to 10 to identify the EPA region of interest.
 See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options.}
 
@@ -40,9 +41,6 @@ statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statec
 
 \item{use_class}{Character string. The Use Class assigned to an Assessment Unit. Options can be
 viewed with EQ_DomainValues("use_class"). Default = NULL.}
-
-\item{au_id}{Character string. A unique identifier assigned to an Assessment Unit by the
-Organization. Default = NULL.}
 
 \item{water_type}{Character string. An Assessment Unit must have at least one water type, and it
 may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default

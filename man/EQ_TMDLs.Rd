@@ -19,7 +19,6 @@ EQ_TMDLs(
   indian_country = NULL,
   org_id = NULL,
   org_name = NULL,
-  org_type = NULL,
   region = NULL,
   statecode = NULL,
   tmdl_date_end = NULL,

@@ -21,7 +21,7 @@ Imports:
   httr,
   jsonlite,
   lubridate,
-  magrittr
+  magrittr,
   tibble,
   tidyr,
   utils

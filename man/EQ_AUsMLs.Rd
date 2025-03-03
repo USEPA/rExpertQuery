@@ -9,7 +9,6 @@ EQ_AUsMLs(
   au_name = NULL,
   au_status = "Active",
   auid = NULL,
-  cycle_id = NULL,
   mon_loc_id = NULL,
   mon_loc_org = NULL,
   org_id = NULL,
@@ -36,6 +35,10 @@ Organization. Default = NULL.}
 
 \item{mon_loc_id}{Character string. Unique identifier for the monitoring location.}
 
+\item{mon_loc_org}{Character string. The unique identifier assigned to the Organization that
+conducted the monitoring. For all possible options see the WQP domain list for Organizations
+here: https://cdx.epa.gov/wqx/download/DomainValues/Organization_CSV.zip.}
+
 \item{org_id}{Character string. A unique identifier assigned to the Organization. Options can
 be viewed with EQ_DomainValues("org_id"). Default = NULL.}
 
@@ -58,10 +61,6 @@ viewed with EQ_DomainValues("use_class"). Default = NULL.}
 \item{water_type}{Character string. An Assessment Unit must have at least one water type, and it
 may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
 = NULL.}
-
-\item{mon_org_id}{Character string. The unique identifier assigned to the Organization that
-conducted the monitoring. For all possible options see the WQP domain list for Organizations
-here: https://cdx.epa.gov/wqx/download/DomainValues/Organization_CSV.zip.}
 }
 \value{
 A data frame of ATTAINS Assessment Units with Monitoring Locations with the columns

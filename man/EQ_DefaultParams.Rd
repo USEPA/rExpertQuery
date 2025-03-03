@@ -7,7 +7,7 @@
 EQ_DefaultParams(func)
 }
 \arguments{
-\item{funct}{The Expert Query exported function to call parameters from}
+\item{func}{The Expert Query exported function to call parameters from}
 }
 \value{
 A data frame of the default params for the selected function.

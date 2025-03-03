@@ -65,14 +65,6 @@
 #' @param expect_attain_cycle_lo Character string. Lower end of  range of Cycles (years) by which
 #' the Assessment Unit is expected to attain its standards (use to indicate whether or not this
 #' cause should be considered towards category 4B). Format is YYYY (ex: "2028"). Default = NULL.
-#' @param last_cycle_end Character string. Ending year for the cycle the Assessment Unit was last
-#' assessed, which can include any conclusions related to the Assessment Unit and can include
-#' delisting decisions. This does not need to match the current Assessment Cycle. Format is
-#' "YYYY". Default = NULL.
-#' @param last_cycle_start Character string. Starting year for the cycle the Assessment Unit was
-#' last assessed, which can include any conclusions related to the Assessment Unit and can include
-#' delisting decisions. This does not need to match the current Assessment Cycle. Format is
-#' "YYYY". Default = NULL.
 #' @param mon_end_date_hi Character string. Ending date for the range of dates on which monitoring
 #' ended. Format is "YYYY-MM-DD". Default = NULL.
 #' @param mon_end_date_lo Character string. Starting date for the range of dates on which monitoring
