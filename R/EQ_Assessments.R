@@ -1,6 +1,7 @@
 #' Expert Query Assessments
 #'
-#' Return assessments data from Expert Query.
+#' Return a data frame of ATTAINS Assessments data from Expert Query web services, filtered by
+#' user inputs.
 #'
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:
