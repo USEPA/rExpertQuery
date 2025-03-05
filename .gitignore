@@ -1,7 +1,9 @@
+# R studio files
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+rExpertQuery.Rproj
 
 # to ignore temporarily (for dev purposes)
 EQ_DomainValues.R
