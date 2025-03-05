@@ -86,8 +86,10 @@ these functions to import them into R successfully.
 HRM NOTE 2/11/25 - can download but not import catchment correspondence due to file size.
 }
 \examples{
+\dontrun{
 assessments <- EQ_NationalExtract(extract = "assessments")
 
 aus_monloc <- EQ_NationalExtract(extract = "au_mls")
+}
 
 }

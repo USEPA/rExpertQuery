@@ -80,9 +80,11 @@
 #' @importFrom rlang .data
 #'
 #' @examples
+#' \dontrun{
 #' assessments <- EQ_NationalExtract(extract = "assessments")
 #'
 #' aus_monloc <- EQ_NationalExtract(extract = "au_mls")
+#' }
 #'
 EQ_NationalExtract <- function(extract = NULL) {
   if (is.null(extract)) {
