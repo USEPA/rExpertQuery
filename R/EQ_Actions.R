@@ -61,6 +61,13 @@
 #'
 #' @export
 #'
+#' @examples
+#' # actions from OR from 2000 to 2004
+#' OR_actions_ex <- EQ_Actions(statecode = "OR", fisc_year_start = "2000",
+#'                                     fisc_year_end = "2005")
+#'
+#' aus_monloc <- EQ_NationalExtract(extract = "au_mls")
+#'
 EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name = NULL,
                        act_type = NULL, au_name = NULL, auid = NULL, comp_date_end = NULL,
                        comp_date_start = NULL, fisc_year_end = NULL, fisc_year_start = NULL,
@@ -88,7 +95,7 @@ EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_nam
     # format for building body
     EQ_FormatParams()
 
-  # compare default and user params to build data frame of all params and values for body
+   # compare default and user params to build data frame of all params and values for body
   params.df <- EQ_CompareParams(default = default.params, user = user.params)
 
   # remove intermediate objects

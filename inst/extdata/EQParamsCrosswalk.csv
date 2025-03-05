@@ -25,7 +25,7 @@ comp_date_start,completionDateLo,,,yes,yes,no,no,no,no,no,yes
 confirmed,confirmed,,,no,no,no,no,no,no,yes,no
 cwa,cwa303dPriorityRanking,,,no,no,yes,no,no,no,no,no
 cycle_first_end,cycleFirstListedHi,,,no,no,yes,no,no,no,no,no
-cycle_first_state,cycleFirstListedLo,,,no,no,yes,no,no,no,no,no
+cycle_first_start,cycleFirstListedLo,,,no,no,yes,no,no,no,no,no
 cycle_id,cycleId,,,no,no,yes,yes,yes,yes,yes,no
 cycle_last_end,cycleLastAssessedHi,,,no,no,yes,yes,no,no,no,no
 cycle_last_start,cycleLastAssessedLo,,,no,no,yes,yes,no,no,no,no
@@ -42,7 +42,7 @@ expect_attain_cycle_hi,cycleExpectedToAttainHi,,,no,no,yes,no,no,no,no,no
 expect_attain_cycle_lo,cycleExpectedToAttainLo,,,no,no,yes,no,no,no,no,no
 file_type,documentFileTypeName,,,no,no,no,no,no,no,no,no
 fisc_year_end,fiscalYearEstablishedHi,,,yes,no,no,no,no,no,no,yes
-fisc_year_start,fiscalYearEstablisheLo,,,yes,no,no,no,no,no,no,yes
+fisc_year_start,fiscalYearEstablishedLo,,,yes,no,no,no,no,no,no,yes
 in_meas,includeInMeasure,,,yes,no,no,no,no,no,no,yes
 indian_country,inIndianCountry,,,yes,no,no,no,no,no,no,yes
 loc_desc,locationDescription,,,no,no,yes,no,no,no,no,no
