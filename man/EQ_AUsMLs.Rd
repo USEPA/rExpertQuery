@@ -7,9 +7,8 @@
 EQ_AUsMLs(
   api_key = NULL,
   au_name = NULL,
-  au_status = "A",
+  au_status = "Active",
   auid = NULL,
-  cycle_id = NULL,
   mon_loc_id = NULL,
   mon_loc_org = NULL,
   org_id = NULL,
@@ -34,6 +33,12 @@ Options are "Active", "Historical" or "Retired". Default = "Active".}
 \item{auid}{Character string. A unique identifier assigned to an Assessment Unit by the
 Organization. Default = NULL.}
 
+\item{mon_loc_id}{Character string. Unique identifier for the monitoring location.}
+
+\item{mon_loc_org}{Character string. The unique identifier assigned to the Organization that
+conducted the monitoring. For all possible options see the WQP domain list for Organizations
+here: https://cdx.epa.gov/wqx/download/DomainValues/Organization_CSV.zip.}
+
 \item{org_id}{Character string. A unique identifier assigned to the Organization. Options can
 be viewed with EQ_DomainValues("org_id"). Default = NULL.}
 
@@ -56,17 +61,14 @@ viewed with EQ_DomainValues("use_class"). Default = NULL.}
 \item{water_type}{Character string. An Assessment Unit must have at least one water type, and it
 may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
 = NULL.}
-
-\item{loc_text}{Character string. Description of the location of the Assessment Unit. Default =
-NULL.}
 }
 \value{
-A data frame of ATTAINS assessment units with monitoring locations served via Expert
-Query webservices including the columns "objectId", "region", "state", "organizationType",
-"organizationId", "organizationName", "waterType", "useClassName", "monitoringLocationId",
-"monitoringLocationOrgId", "assessmentUnitId", "assessmentUnitName", "assessmentUnitStatus",
-"reportingCycle", "locationDescription", "monitoringLocationDataLink", "sizeSource",
-"sourceScale", "waterSize", an "waterSizeUnits".
+A data frame of ATTAINS Assessment Units with Monitoring Locations with the columns
+"objectId", "region", "state", "organizationType", "organizationId", "organizationName",
+"waterType", "useClassName", "monitoringLocationId", "monitoringLocationOrgId",
+"assessmentUnitId", "assessmentUnitName", "assessmentUnitStatus", "reportingCycle",
+"locationDescrption", "monitoringLocationDataLink", "sizeSource", "sourceScale", "waterSize",
+and "waterSizeUnits".
 }
 \description{
 Return assessment units with monitoring locations data from Expert Query.

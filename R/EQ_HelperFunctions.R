@@ -26,7 +26,7 @@ EQ_ExtractParams <- function(extract = NULL)  {
   # import crosswalk ref file
   params.cw <- utils::read.csv(file = "inst/extdata/EQParamsCrosswalk.csv") %>%
     dplyr::filter(.data[[extract.filter]] == "yes") %>%
-    dplyr::select(param, eq_name)
+    dplyr::select('param', 'eq_name')
 
   # return the crosswalk
   return(params.cw)
@@ -36,7 +36,7 @@ EQ_ExtractParams <- function(extract = NULL)  {
 #'
 #' Get default params from the rExpert Query export functions.
 #'
-#' @param funct The Expert Query exported function to call parameters from
+#' @param func The Expert Query exported function to call parameters from
 #'
 #' @return A data frame of the default params for the selected function.
 #'
@@ -62,6 +62,8 @@ return(params.df)
 #'
 #' @return A data frame of the params and their values. All values are character strings.
 #'
+#' @importFrom rlang .data
+#'
 
 EQ_FormatParams <- function(.data) {
   # change language or numeric to character in value column
@@ -79,7 +81,7 @@ EQ_FormatParams <- function(.data) {
   )
 
   params.df <- params.df %>%
-    dplyr::mutate(value = as.character(value))
+    dplyr::mutate(value = as.character(.data$value))
 
   return(params.df)
 }
@@ -102,7 +104,7 @@ EQ_CompareParams <- function(default, user) {
 
   # filter out any default params that user entered a value for
     default.params <- default %>%
-    dplyr::filter(!param %in% user$param)
+    dplyr::filter(!'param' %in% user$param)
 
   # combine user supplied and default params
   all.params <- user %>%
@@ -128,6 +130,7 @@ EQ_CompareParams <- function(default, user) {
 #' @return A list containing two character strings. The first character string is for the body
 #' of the count POST request. The second character string is for the body of the data POST request.
 #'
+#' @importFrom rlang .data
 
   EQ_CreateBody <- function(comp.params, crosswalk, extract) {
 
@@ -138,36 +141,36 @@ EQ_CompareParams <- function(default, user) {
 
     # create param filters for POST
     params.body <- comp.params %>%
-      dplyr::filter(!value %in% c("NULL", "latest"),
-                    param != "api_key") %>%
+      dplyr::filter(!.data$value %in% c("NULL", "latest"),
+                    .data$param != "api_key") %>%
       dplyr::mutate(value = dplyr::case_when(
-        param == "report_cycle" & value == "any" ~ "-1",
-        param == "region" & !is.null(value) ~  paste0("0", value),
-        param %in% c("au_status", "delisted",
+        .data$param == "report_cycle" & value == "any" ~ "-1",
+        .data$param == "region" & !is.null(value) ~  paste0("0", value),
+        .data$param %in% c("au_status", "delisted",
                      "pollutant_ind", "vis",
-                     "in_meas", "indian_country") & !is.null(value) ~ substr(value, 1, 1),
-        param == "use_support" & value == "Fully Supporting" ~ "F",
-        param == "use_support" & value == "Not Supporting" ~ "N",
-        param == "use_support" & value == "Insufficient Information" ~ "I",
-        param == "use_support" & value == "Not Assessed" ~ "X",
-        param %in% c("assess_date_end", "assess_date_start",
-                      "mon_end_date", "mon_start_date") ~ format(as.Date(value, "%Y-%m-%d"),
+                     "in_meas", "indian_country") & !is.null(.data$value) ~ substr(.data$value, 1, 1),
+        .data$param == "use_support" & .data$value == "Fully Supporting" ~ "F",
+        .data$param == "use_support" & .data$value == "Not Supporting" ~ "N",
+        .data$param == "use_support" & .data$value == "Insufficient Information" ~ "I",
+        .data$param == "use_support" & .data$value == "Not Assessed" ~ "X",
+        .data$param %in% c("assess_date_end", "assess_date_start",
+                      "mon_end_date", "mon_start_date") ~ format(as.Date(.data$value, "%Y-%m-%d"),
                                                                  "%m-%d-%Y"),
-        .default = as.character(value)
+        .default = as.character(.data$value)
       )) %>%
-      dplyr::left_join(crosswalk, by = dplyr::join_by(param)) %>%
-      dplyr::mutate(value = gsub('c\\(|\\)|"', '', value)) %>%
-      tidyr::separate_rows(value, sep = ',\\s*') %>%
-      dplyr::mutate(value = paste0('"', value, '"')) %>%
-      dplyr::group_by(eq_name) %>%
-      dplyr::mutate(value = paste0(value, collapse = ",")) %>%
+      dplyr::left_join(crosswalk, by = dplyr::join_by(.data$param)) %>%
+      dplyr::mutate(value = gsub('c\\(|\\)|"', '', .data$value)) %>%
+      tidyr::separate_rows(.data$value, sep = ',\\s*') %>%
+      dplyr::mutate(value = paste0('"', .data$value, '"')) %>%
+      dplyr::group_by(.data$eq_name) %>%
+      dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
       dplyr::distinct() %>%
-      dplyr::mutate(value = case_when(
-        !param %in% date.params ~ paste0('"', eq_name, '":', "[", value, "]"),
-        .default = paste0('"', eq_name, '":', value))) %>%
+      dplyr::mutate(value = dplyr::case_when(
+        !.data$param %in% date.params ~ paste0('"', .data$eq_name, '":', "[", .data$value, "]"),
+        .default = paste0('"', .data$eq_name, '":', .data$value))) %>%
       dplyr::ungroup() %>%
-      dplyr::mutate(value = paste0(value, collapse = ",")) %>%
-      dplyr::select(value) %>%
+      dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
+      dplyr::select(.data$value) %>%
       dplyr::distinct() %>%
       dplyr::pull()
 
@@ -192,12 +195,12 @@ EQ_CompareParams <- function(default, user) {
 
     # create string of column names base on extract selection
     columns.string <- utils::read.csv(file = "inst/extdata/EQColumnsForPOST.csv") %>%
-      dplyr::select(col.name, dplyr::all_of(extract.filter)) %>%
+      dplyr::select('col.name', dplyr::all_of(extract.filter)) %>%
       dplyr::filter(!is.na(get(extract.filter))) %>%
       dplyr::arrange(get(extract.filter)) %>%
-      dplyr::select(col.name) %>%
-      dplyr::mutate(col.name = paste0('"', col.name, '"'),
-                    col.name = paste0(col.name, collapse = ',')) %>%
+      dplyr::select(.data$col.name) %>%
+      dplyr::mutate(col.name = paste0('"', .data$col.name, '"'),
+                    col.name = paste0(.data$col.name, collapse = ',')) %>%
       dplyr::distinct() %>%
       dplyr::pull()
 
@@ -319,44 +322,3 @@ EQ_CompareParams <- function(default, user) {
 
     return(query.df)
   }
-
-  #' Expert Query Domain Values
-  #'
-  #' Provides information on allowable values for a param by leveraging ATTAINS web services.
-  #'
-  #' @param domain Character string. Running this function without entering a value for domain
-  #' will return a list of all allowable domain values.
-  #'
-  #' @return A df allowable values for the selected query_param.
-  #'
-  EQ_DomainValues <- function(domain = NULL) {
-
-    base.url <- "https://attains.epa.gov/attains-public/api/domains"
-
-    if(is.null(domain)) {
-
-      print(paste0(
-        "EQ_DomainValues: getting list of available domain names."
-      ))
-
-      raw.data <- jsonlite::fromJSON(base.url) %>%
-        dplyr::select(domain)
-
-
-    }
-  }
-
-  #' Pipe operator
-  #'
-  #' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
-  #'
-  #' @name %>%
-  #' @rdname pipe
-  #' @keywords internal
-  #' @importFrom magrittr %>%
-  #' @usage lhs \%>\% rhs
-  #' @export
-  #' @param lhs A value or the magrittr placeholder.
-  #' @param rhs A function call using the magrittr semantics.
-  #' @return The result of calling `rhs(lhs)`.
-  NULL

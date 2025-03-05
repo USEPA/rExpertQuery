@@ -75,11 +75,12 @@ range that EPA approved the official final TMDL submitted (such as the date on t
 letter). Format is "YYYY-MM-DD". Default = NULL.}
 }
 \value{
-A data frame of ATTAINS actions documents served via Expert Query webservices including
-the columns "objectId", "organizationName", "organizationType", "region", "state", "tmdlDate",'
-"documentDesc", "documentFileName", "documentFileTypeName", "documentKey", "documentName",
-and "actionDocumentType".
+A data frame of ATTAINS Actions Documents with the columns "objectId",
+"actionDocumentUrl", "actionId", "actionName", "actionType", "completionDate", "organizationId",
+"organizationName", "organizationType", "region", "state", "tmdlDate", "documentDesc",
+"documentFileName", "documentFileTypeName", "documentKey", "documentName", and "
+actionDocumentType".
 }
 \description{
-Return actions documents data from Expert Query.
+Query ATTAINS Actions Documents data via Expert Query web services and return as data frame.
 }

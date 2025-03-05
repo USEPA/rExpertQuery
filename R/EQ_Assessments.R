@@ -46,10 +46,10 @@
 #' Unit and Cause were first included on the 303(d) list. Format is "YYYY".
 #' @param cycle_first_start Character string. Starting date for the range of cycles where the
 #' Assessment Unit and Cause were first included on the 303(d) list. Format is "YYYY".
-#' @param cycle_first_end Character string. Ending date for the range of cycles where the Assessment
-#' Unit and Cause were first included on the 303(d) list. Format is "YYYY".
-#' @param cycle_first_start Character string. Starting date for the range of cycles where the
-#' Assessment Unit and Cause were first included on the 303(d) list. Format is "YYYY".
+#' @param cycle_last_end Character string. Ending date for the range of cycles where the Assessment
+#' Unit and Cause were last included on the 303(d) list. Format is "YYYY".
+#' @param cycle_last_start Character string. Starting date for the range of cycles where the
+#' Assessment Unit and Cause were last included on the 303(d) list. Format is "YYYY".
 #' @param delist_reason Character string. The specific reason or explanation for removing a
 #' waterbody or segment from a list of impaired waters or areas of concern. Options can be viewed
 #' with EQ_DomainValues("delist_reason"). Default = NULL.
@@ -65,14 +65,6 @@
 #' @param expect_attain_cycle_lo Character string. Lower end of  range of Cycles (years) by which
 #' the Assessment Unit is expected to attain its standards (use to indicate whether or not this
 #' cause should be considered towards category 4B). Format is YYYY (ex: "2028"). Default = NULL.
-#' @param last_cycle_end Character string. Ending year for the cycle the Assessment Unit was last
-#' assessed, which can include any conclusions related to the Assessment Unit and can include
-#' delisting decisions. This does not need to match the current Assessment Cycle. Format is
-#' "YYYY". Default = NULL.
-#' @param last_cycle_start Character string. Starting year for the cycle the Assessment Unit was
-#' last assessed, which can include any conclusions related to the Assessment Unit and can include
-#' delisting decisions. This does not need to match the current Assessment Cycle. Format is
-#' "YYYY". Default = NULL.
 #' @param mon_end_date_hi Character string. Ending date for the range of dates on which monitoring
 #' ended. Format is "YYYY-MM-DD". Default = NULL.
 #' @param mon_end_date_lo Character string. Starting date for the range of dates on which monitoring
@@ -126,7 +118,7 @@
 #' @param tmdl_cycle_hi Character string. The ending date for the range of dates for cycle when
 #' the jurisdiction anticipates submitting the TMDL for EPA approval. Format is "YYYY". Default =
 #' NULL.
-#' @param tmdl_cycle_hi Character string. The starting date for the range of dates for cycle when
+#' @param tmdl_cycle_lo Character string. The starting date for the range of dates for cycle when
 #' the jurisdiction anticipates submitting the TMDL for EPA approval. Format is "YYYY". Default =
 #' NULL.
 #' @param use_class Character string. The Use Class assigned to an Assessment Unit. Options can be
@@ -175,11 +167,10 @@ EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL,
                            cycle_first_end = NULL, cycle_first_start = NULL, cycle_last_end = NULL,
                            cycle_last_start = NULL, delist_reason = NULL, delisted = NULL,
                            epa_ir_cat = NULL, expect_attain_cycle_hi = NULL,
-                           expect_attain_cycle_lo = NULL, last_cycle_end = NULL,
-                           last_cycle_start = NULL, mon_end_date_hi = NULL,
+                           expect_attain_cycle_lo = NULL, mon_end_date_hi = NULL,
                            mon_end_date_lo = NULL, mon_start_date_hi = NULL,
                            mon_start_date_lo = NULL, org_id = NULL, org_name = NULL,
-                           org_type = NULL, overall_status = NULL, param_attain = NULL,
+                           overall_status = NULL, param_attain = NULL,
                            param_group = NULL, param_ir_cat = NULL, param_name = NULL,
                            param_state_ir_cat = NULL, param_status = NULL,
                            pollut_ind = NULL, region = NULL, report_cycle = "latest",

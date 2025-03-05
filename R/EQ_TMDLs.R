@@ -91,11 +91,11 @@
 EQ_TMDLs <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name = NULL,
                      au_name = NULL, auid = NULL, comp_date_end = NULL, comp_date_start = NULL,
                      fisc_year_end = NULL, fisc_year_start = NULL, in_meas = NULL,
-                     indian_country = NULL, org_id = NULL, org_name = NULL,
-                     org_type = NULL, region = NULL, statecode = NULL, tmdl_date_end = NULL,
-                     tmdl_date_start = NULL, water_type = NULL, ad_param = NULL,
-                     ad_param_group = NULL, mos_exp = NULL, mos_imp = NULL, npdes_id = NULL,
-                     other_id = NULL, pollutant = NULL, poll_group = NULL, source_type = NULL)  {
+                     indian_country = NULL, org_id = NULL, org_name = NULL, region = NULL,
+                     statecode = NULL, tmdl_date_end = NULL, tmdl_date_start = NULL,
+                     water_type = NULL, ad_param = NULL, ad_param_group = NULL, mos_exp = NULL,
+                     mos_imp = NULL, npdes_id = NULL, other_id = NULL, pollutant = NULL,
+                     poll_group = NULL, source_type = NULL)  {
 
   # check for api key
   if(is.null(api_key)) {

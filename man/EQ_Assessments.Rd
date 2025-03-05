@@ -31,15 +31,12 @@ EQ_Assessments(
   epa_ir_cat = NULL,
   expect_attain_cycle_hi = NULL,
   expect_attain_cycle_lo = NULL,
-  last_cycle_end = NULL,
-  last_cycle_start = NULL,
   mon_end_date_hi = NULL,
   mon_end_date_lo = NULL,
   mon_start_date_hi = NULL,
   mon_start_date_lo = NULL,
   org_id = NULL,
   org_name = NULL,
-  org_type = NULL,
   overall_status = NULL,
   param_attain = NULL,
   param_group = NULL,
@@ -131,6 +128,12 @@ Unit and Cause were first included on the 303(d) list. Format is "YYYY".}
 \item{cycle_first_start}{Character string. Starting date for the range of cycles where the
 Assessment Unit and Cause were first included on the 303(d) list. Format is "YYYY".}
 
+\item{cycle_last_end}{Character string. Ending date for the range of cycles where the Assessment
+Unit and Cause were last included on the 303(d) list. Format is "YYYY".}
+
+\item{cycle_last_start}{Character string. Starting date for the range of cycles where the
+Assessment Unit and Cause were last included on the 303(d) list. Format is "YYYY".}
+
 \item{delist_reason}{Character string. The specific reason or explanation for removing a
 waterbody or segment from a list of impaired waters or areas of concern. Options can be viewed
 with EQ_DomainValues("delist_reason"). Default = NULL.}
@@ -150,16 +153,6 @@ cause should be considered towards category 4B). Format is YYYY (ex: "2028"). De
 \item{expect_attain_cycle_lo}{Character string. Lower end of  range of Cycles (years) by which
 the Assessment Unit is expected to attain its standards (use to indicate whether or not this
 cause should be considered towards category 4B). Format is YYYY (ex: "2028"). Default = NULL.}
-
-\item{last_cycle_end}{Character string. Ending year for the cycle the Assessment Unit was last
-assessed, which can include any conclusions related to the Assessment Unit and can include
-delisting decisions. This does not need to match the current Assessment Cycle. Format is
-"YYYY". Default = NULL.}
-
-\item{last_cycle_start}{Character string. Starting year for the cycle the Assessment Unit was
-last assessed, which can include any conclusions related to the Assessment Unit and can include
-delisting decisions. This does not need to match the current Assessment Cycle. Format is
-"YYYY". Default = NULL.}
 
 \item{mon_end_date_hi}{Character string. Ending date for the range of dates on which monitoring
 ended. Format is "YYYY-MM-DD". Default = NULL.}
@@ -233,7 +226,11 @@ EQ_DomainValues("state_ir_cat). Default = NULL.}
 \item{statecode}{Character string. FIPS state alpha code that identifies a state (e.g.
 statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.}
 
-\item{tmdl_cycle_hi}{Character string. The starting date for the range of dates for cycle when
+\item{tmdl_cycle_hi}{Character string. The ending date for the range of dates for cycle when
+the jurisdiction anticipates submitting the TMDL for EPA approval. Format is "YYYY". Default =
+NULL.}
+
+\item{tmdl_cycle_lo}{Character string. The starting date for the range of dates for cycle when
 the jurisdiction anticipates submitting the TMDL for EPA approval. Format is "YYYY". Default =
 NULL.}
 
@@ -267,21 +264,21 @@ may have multiple water types. Options can be viewed with EQ_DomainValues("water
 = NULL.}
 }
 \value{
-A data frame of ATTAINS assessments served via Expert Query webservices including the
-columns "objectId", "region", "state", "organizationType", "organizationId", "organizationName",
-"waterType", "reportingCycle", "cycleLastAssessed", "assessmentUnitId", "assessmentUnitName",
-"assessmentUnitStatus", "overallStatus", "epaIrCategory", "stateIrCategory", "useGroup",
-"useName", "useClassName", "useSupport", "useIrCategory", "useStateIrCategory",
-"monitoringStartDate", "monitoringEndDate", "assessmentDate", "assessmentTypes",
-"assessmentMethods", "assessmentBasis", "parameterGroup", "parameterName", "parameterStatus",
-"parameterAttainment", "parameterIrCategory", "parameterStateIrCategory", "delisted",
-"delistedReason", "pollutantIndicator", "cycleFirstListed", "alternateListingIdentifier",
-"vision303dPriority", "cwa303dPriorityRanking", "cycleScheduledForTmdl", "cycleExpectedToAttain",
-"consentDecreeCycle", "cycleId", "seasonStartDate", "seasonEndDate", "associatedActionId",
-"associatedActionName", "associatedActionType", "associatedActionStatus",
-"associatedActionAgency", "locationDescription", "sizeSource", "sourceScale", "waterSize", and
-"waterSizeUnits".
+A data frame of ATTAINS Assessments with the columns "objectId", "region", "state",
+"organizationType", "organizationId", "organizationName", "waterType", "reportingCycle",
+"cycleLastAssessed", "assessmentUnitId", "assessmentUnitName", "assessmentUnitStatus",
+"overallStatus", "epaIrCategory", "stateIrCategory", "useGroup", "useName", "useClassName",
+"useSupport", "useIrCategory", "useStateIrCategory", "monitoringStartDate", "monitoringEndDate",
+"assessmentDate", "assessmentTypes", "assessmentMethods", "assessmentBasis", "parameterGroup",
+"parameterName", "parameterStatus", "parameterAttainment", "parameterIrCategory",
+"parameterStateIrCategory", "delisted", "delistedReason", "pollutantIndicator",
+"cycleFirstListed", "alternateListingIdentifier", "vision303dPriority", "cwa303dPriorityRanking",
+"cycleScheduledForTmdl", "cycleExpectedToAttain", "consentDecreeCycle", "cycleId",
+"seasonStartDate", "seasonEndDate", "associatedActionId", "associatedActionName",
+"associatedActionType", "associatedActionStatus", "associatedActionAgency",
+"locationDescription", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits".
 }
 \description{
-Return assessments data from Expert Query.
+Return a data frame of ATTAINS Assessments data from Expert Query web services, filtered by
+user inputs.
 }

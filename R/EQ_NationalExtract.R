@@ -77,10 +77,14 @@
 #'
 #' @export
 #'
-#' @examples
-#' assessments <- TADA_EQExtractRetrieval(profile = "assessments")
+#' @importFrom rlang .data
 #'
-#' aus_monloc <- TADA_EQExtractRetrieval(profile = "au_mls")
+#' @examples
+#' \dontrun{
+#' assessments <- EQ_NationalExtract(extract = "assessments")
+#'
+#' aus_monloc <- EQ_NationalExtract(extract = "au_mls")
+#' }
 #'
 EQ_NationalExtract <- function(extract = NULL) {
   if (is.null(extract)) {
@@ -187,19 +191,22 @@ EQ_NationalExtract <- function(extract = NULL) {
 
   # import cross walk to convert column names to match other rExpertQuery function output
   # import crosswalk ref file
-  col.cw <- utils::read.csv(file = "inst/extdata/EQColumnsForPOST.csv") %>%
-    dplyr::select(col.name, nat_extract, dplyr::all_of(extract)) %>%
+  col.cw <- system.file("extdata", "EQColumnsForPOST.csv", package = "rExpertQuery")
+
+  col.cw <- utils::read.csv(col.cw) %>%
+    dplyr::select('col.name', 'nat_extract', dplyr::all_of(extract)) %>%
     dplyr::filter(!is.na(.data[[extract]])) %>%
     dplyr::arrange((.data[[extract]]))
 
   # combine the three TMDLENDPOINT columns to match output from EQ_TMDLs function
   if(extract == "tmdl") {
     df <- df %>%
-      dplyr::mutate(TMDLENDPOINT1 = ifelse(is.na(TMDLENDPOINT1), "", TMDLENDPOINT1),
-                    TMDLENDPOINT2 = ifelse(is.na(TMDLENDPOINT2), "", TMDLENDPOINT2),
-                    TMDLENDPOINT3 = ifelse(is.na(TMDLENDPOINT3), "", TMDLENDPOINT3)) %>%
-      dplyr::mutate(TMDLENDPOINT = paste0(TMDLENDPOINT1, TMDLENDPOINT2, TMDLENDPOINT3)) %>%
-      dplyr::select(-TMDLENDPOINT1, -TMDLENDPOINT2, -TMDLENDPOINT3)
+      dplyr::mutate(TMDLENDPOINT1 = ifelse(is.na(.data$TMDLENDPOINT1), "", .data$TMDLENDPOINT1),
+                    TMDLENDPOINT2 = ifelse(is.na(.data$TMDLENDPOINT2), "", .data$TMDLENDPOINT2),
+                    TMDLENDPOINT3 = ifelse(is.na(.data$TMDLENDPOINT3), "", .data$TMDLENDPOINT3)) %>%
+      dplyr::mutate(TMDLENDPOINT = paste0(.data$TMDLENDPOINT1, .data$TMDLENDPOINT2,
+                                          .data$TMDLENDPOINT3)) %>%
+      dplyr::select(-'TMDLENDPOINT1', -'TMDLENDPOINT2', -'TMDLENDPOINT3')
   }
 
   # change column names

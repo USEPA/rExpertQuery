@@ -11,7 +11,7 @@
 #' @param auid Character string. A unique identifier assigned to an Assessment Unit by the
 #' Organization. Default = NULL.
 #' @param mon_loc_id Character string. Unique identifier for the monitoring location.
-#' @param mon_org_id Character string. The unique identifier assigned to the Organization that
+#' @param mon_loc_org Character string. The unique identifier assigned to the Organization that
 #' conducted the monitoring. For all possible options see the WQP domain list for Organizations
 #' here: https://cdx.epa.gov/wqx/download/DomainValues/Organization_CSV.zip.
 #' @param org_id Character string. A unique identifier assigned to the Organization. Options can
@@ -41,8 +41,7 @@
 #' @export
 #'
 EQ_AUsMLs <- function(api_key = NULL, au_name = NULL, au_status = "Active", auid = NULL,
-                      cycle_id = NULL, mon_loc_id = NULL, mon_loc_org = NULL,
-                      org_id = NULL, org_name = NULL,
+                      mon_loc_id = NULL, mon_loc_org = NULL, org_id = NULL, org_name = NULL,
                       region = NULL, report_cycle = "latest", statecode = NULL, use_class = NULL,
                       water_type = NULL)  {
 
