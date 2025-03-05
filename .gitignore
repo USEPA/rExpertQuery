@@ -4,6 +4,7 @@
 .RData
 .Ruserdata
 rExpertQuery.Rproj
+test.txt
 
 # to ignore temporarily (for dev purposes)
 EQ_DomainValues.R
