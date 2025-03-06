@@ -166,7 +166,7 @@
 #' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
 #' testkey <- "YOURAPIKEY"
 #'
-#' # Assessments from latest cycle for Massachuesetts
+#' # Assessments from latest cycle for Massachusetts
 #' MA_assessments <- EQ_Assessments(statecode = "MA",
 #'                               api_key = testkey)
 #'
