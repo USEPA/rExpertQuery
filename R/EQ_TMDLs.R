@@ -88,6 +88,24 @@
 #'
 #' @export
 #'
+#' @examples
+#'  \dontrun{
+#'
+#' # to run examples add your api key below
+#' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+#' testkey <- "YOURAPIKEY"
+#'
+#' # Indiana query for source equal to "AGRICULTURE"
+#'  SD_nonpoint_tmdls <- EQ_TMDLs(statecode = "SD",
+#'                                source_type = "Nonpoint source",
+#'                                api_key = testkey)
+#'
+#' # Region 4 TMDLs with addressed parameter group "ALGAL GROWTH"
+#' R4_paramgroup_algalgrowth <- EQ_TMDLs(region = 4,
+#'                                       ad_param_group = "ALGAL GROWTH",
+#'                                       api_key = testkey)
+#'               }
+#'
 EQ_TMDLs <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name = NULL,
                      au_name = NULL, auid = NULL, comp_date_end = NULL, comp_date_start = NULL,
                      fisc_year_end = NULL, fisc_year_start = NULL, in_meas = NULL,

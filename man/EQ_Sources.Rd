@@ -88,3 +88,21 @@ A data frame of ATTAINS Sources with the columns "objectId", "region", "state",
 \description{
 Return sources data from Expert Query.
 }
+\examples{
+ \dontrun{
+
+# to run examples add your api key below
+# to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+testkey <- "YOURAPIKEY"
+
+# Mercury TMDLS from Louisiana
+ LA_mercury_tmdls <- EQ_TMDLs(statecode = "LA",
+                              pollutant = "MERCURY",
+                              api_key = testkey)
+
+# Query for sources records associated with parameter group "NUISANCER EXOTIC SPECIES"
+Sources_exoticspecies_paramgroup <- EQ_Sources(param_group = "NUISANCE EXOTIC SPECIES",
+                                               api_key = testkey)
+              }
+
+}

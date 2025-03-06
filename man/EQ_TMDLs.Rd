@@ -151,3 +151,22 @@ A data frame of ATTAINS TMDLs with the columns "objectId", "region", "state",
 \description{
 Return tmdl data from Expert Query.
 }
+\examples{
+ \dontrun{
+
+# to run examples add your api key below
+# to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+testkey <- "YOURAPIKEY"
+
+# Indiana query for source equal to "AGRICULTURE"
+ SD_nonpoint_tmdls <- EQ_TMDLs(statecode = "SD",
+                               source_type = "Nonpoint source",
+                               api_key = testkey)
+
+# Region 4 TMDLs with addressed parameter group "ALGAL GROWTH"
+R4_paramgroup_algalgrowth <- EQ_TMDLs(region = 4,
+                                      ad_param_group = "ALGAL GROWTH",
+                                      api_key = testkey)
+              }
+
+}
