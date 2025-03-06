@@ -159,6 +159,22 @@
 #'
 #' @export
 #'
+#' @examples
+#'  \dontrun{
+#'
+#' # to run examples add your api key below
+#' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+#' testkey <- "YOURAPIKEY"
+#'
+#' # Assessments from latest cycle for Massachuesetts
+#' MA_assessments <- EQ_Assessments(statecode = "MA",
+#'                               api_key = testkey)
+#'
+#' # EPA IR category 5 assessments from Montana
+#' MT_cat_5_2000 <- EQ_Actions(statecode = "MT",
+#'                             epa_ir_cat = "5",,
+#'                             api_key = testkey)
+#'               }
 EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL, act_type = NULL,
                            act_id = NULL, alt_list_id = NULL, assess_basis = NULL,
                            assess_date_end = NULL, assess_date_start = NULL, assess_methods = NULL,

@@ -101,8 +101,8 @@ CA_actions_docs <- EQ_Actions(statecode = "CA",
                               api_key = testkey)
 
 # Actions Documents from Minnesota and Wisconsin containing "mercury"
-MN_WI_mercury <- EQ_Actions(statecode = c("MN", "WI"),
-              doc_query = "mercury",
-              api_key = testkey)
+R4_nutrient_actions_docs <- EQ_Actions(region = 4,
+                                       doc_query = "mercury",
+                                       api_key = testkey)
               }
 }
