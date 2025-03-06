@@ -171,9 +171,9 @@
 #'                               api_key = testkey)
 #'
 #' # EPA IR category 5 assessments from Montana
-#' MT_cat_5_2000 <- EQ_Actions(statecode = "MT",
-#'                             epa_ir_cat = "5",,
-#'                             api_key = testkey)
+#' MT_cat_5 <- EQ_Assessments(statecode = "MT",
+#'                           epa_ir_cat = 5,
+#'                           api_key = testkey)
 #'               }
 EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL, act_type = NULL,
                            act_id = NULL, alt_list_id = NULL, assess_basis = NULL,
@@ -224,7 +224,8 @@ EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL,
   rm(user.params, default.params)
 
   # create post bodies
-  post.bodies <- EQ_CreateBody(comp.params = params.df, crosswalk = params.cw, extract = "assessments")
+  post.bodies <- EQ_CreateBody(comp.params = params.df, crosswalk = params.cw,
+                               extract = "assessments")
 
   # create post headers
   post.headers <- EQ_CreateHeader(key = api_key)
