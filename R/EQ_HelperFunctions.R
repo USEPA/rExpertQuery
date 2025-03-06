@@ -34,7 +34,7 @@ EQ_ExtractParams <- function(extract = NULL)  {
 
 #' Expert Query Default Params
 #'
-#' Get default params from the rExpert Query export functions.
+#' Get default params from the rExpertQuery export functions.
 #'
 #' @param func The Expert Query exported function to call parameters from
 #'

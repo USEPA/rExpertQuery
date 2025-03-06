@@ -39,7 +39,7 @@ associated with an Assessment. Options are "State", "Tribe", or "EPA". Default =
 that will be used to track the Action entered (such as the corresponding information and
 associated documents) in ATTAINS, and its associated name. Default = NULL}
 
-\item{act_name}{Character string. The name associated with the action (ex: name of TMDL REport,
+\item{act_name}{Character string. The name associated with the action (ex: name of TMDL Report,
 4B Report, Alternative Report, etc).}
 
 \item{act_type}{Character string. Identifies the type of Action associated with an Action.

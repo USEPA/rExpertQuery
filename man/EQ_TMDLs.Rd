@@ -48,7 +48,7 @@ that will be used to track the Action entered (such as the corresponding informa
 associated documents) in ATTAINS, and its associated name. Default = NULL.}
 
 \item{act_name}{Character string. Unique identifier for the Action that will be used to track
-the Action entered (such as the corresponding information and associated documents) in ATTAINs,
+the Action entered (such as the corresponding information and associated documents) in ATTAINS,
 and its associated name (name of TMDL Report, 4B Report, Alternative Report, etc.). Default =
 NULL.}
 

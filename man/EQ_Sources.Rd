@@ -51,7 +51,7 @@ be viewed with EQ_DomainValues("org_id"). Default = NULL.}
 be viewed with EQ_DomainValues("org_name"). Default = NULL.}
 
 \item{overall_status}{Character string.The overall support status for the Assessment Unit ID,
-calculated by ATTAINs. Options are "Fully Supporting", "Not Supporting", "Not Assessed". Default
+calculated by ATTAINS. Options are "Fully Supporting", "Not Supporting", "Not Assessed". Default
 = NULL.}
 
 \item{param_group}{A collection of related Parameters. Options can be viewed with

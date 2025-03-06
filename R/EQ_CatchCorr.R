@@ -3,7 +3,7 @@
 #' Return ATTAINS Catchment Correspondence data via Expert Query web services.
 #'
 #' #' * If using VPN, suggest signing out of VPN before running this function as it can cause
-#' 403 error and prevent download of catchment correspondance data.
+#' 403 error and prevent download of catchment correspondence data.
 #'
 #' ** Catchment Correspondence queries can generate large files. You must have enough memory
 #' available for these functions to import them into R successfully. Best practice is to make

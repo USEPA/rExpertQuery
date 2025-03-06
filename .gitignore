@@ -9,7 +9,6 @@ test.txt
 # to ignore temporarily (for dev purposes)
 EQ_DomainValues.R
 EQ_DomainValues.Rd
-pipe.Rd
 
 # git
 .github
