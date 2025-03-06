@@ -54,5 +54,24 @@ A data frame of ATTAINS Assessment Units with the columns "region", "state",
 and "waterSizeUnits".
 }
 \description{
-Return assessment units data from Expert Query.
+Return ATTAINS Assessment Units data via Expert Query web services.
+}
+\examples{
+ \dontrun{
+
+# to run examples add your api key below
+# to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+testkey <- "YOURAPIKEY"
+
+# Active estaury Assessment Units from Maryland
+MD_estuary <- EQ_AssessmentUnits(statecode = "MD",
+                                water_type = "ESTUARY",
+                                api_key = testkey)
+
+# Active Assessment Units from Rhode Island from the 2016 report cycle
+RI_aus_2016 <- EQ_Assessments(statecode = "RI",
+                          report_cycle = 2016,
+                          api_key = testkey)
+              }
+
 }
