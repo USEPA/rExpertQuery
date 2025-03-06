@@ -144,6 +144,9 @@ EQ_CompareParams <- function(default, user) {
                      "seas_start_date_lo", "tmdl_cycle_hi", "tmdl_cycle_lo", "tmdl_date_end",
                      "tmdl_date_start")
 
+    # text string query params
+    query.params <- c("doc_query")
+
     # create param filters for POST
     params.body <- comp.params %>%
       dplyr::filter(!.data$value %in% c("NULL", "latest"),
@@ -171,7 +174,9 @@ EQ_CompareParams <- function(default, user) {
       dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
       dplyr::distinct() %>%
       dplyr::mutate(value = dplyr::case_when(
-        !.data$param %in% date.params ~ paste0('"', .data$eq_name, '":', "[", .data$value, "]"),
+        !.data$param %in% date.params & !.data$param %in% query.params ~ paste0('"', .data$eq_name,
+                                                                                '":', "[",
+                                                                                .data$value, "]"),
         .default = paste0('"', .data$eq_name, '":', .data$value))) %>%
       dplyr::ungroup() %>%
       dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%

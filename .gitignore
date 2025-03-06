@@ -11,3 +11,6 @@ EQ_DomainValues.R
 EQ_DomainValues.Rd
 pipe.Rd
 
+# git
+.github
+

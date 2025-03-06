@@ -14,6 +14,7 @@ EQ_ActionsDocuments(
   doc_file_name = NULL,
   doc_name = NULL,
   doc_type = NULL,
+  doc_query = NULL,
   org_id = NULL,
   org_name = NULL,
   region = NULL,
@@ -54,6 +55,8 @@ Default = NULL.}
 
 \item{doc_type}{Character string. The document type of the Actions Document. Default = NULL.}
 
+\item{doc_query}{Character string. Document text search terms.}
+
 \item{org_id}{Character string. A unique identifier assigned to the Organization. Options can
 be viewed with EQ_DomainValues("org_id"). Default = NULL.}
 
@@ -83,4 +86,23 @@ actionDocumentType".
 }
 \description{
 Query ATTAINS Actions Documents data via Expert Query web services and return as data frame.
+}
+\examples{
+\dontrun{
+
+# to run examples add your api key below
+# to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+testkey <- "YOURAPIKEY"
+
+# Actions Documents from California established between fiscal years 2018 and 2020
+CA_actions_docs <- EQ_Actions(statecode = "CA",
+                              comp_date_start = "2000-01-01",
+                              comp_date_end = "2010-12-31",
+                              api_key = testkey)
+
+# Actions Documents from Minnesota and Wisconsin containing "mercury"
+MN_WI_mercury <- EQ_Actions(statecode = c("MN", "WI"),
+              doc_query = "mercury",
+              api_key = testkey)
+              }
 }
