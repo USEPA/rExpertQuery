@@ -109,6 +109,7 @@ A data frame of ATTAINS actions with the columns "objectId", "region", "state",
 Query ATTAINS Actions data via Expert Query web services and return as data frame.
 }
 \examples{
+\dontrun{
 # actions from OR established between fiscal years 2018 and 2020
 OR_actions_ex <- EQ_Actions(statecode = "OR", fisc_year_start = 2018, fisc_year_end = 2020,
                             api_key = testkey)
@@ -116,5 +117,6 @@ OR_actions_ex <- EQ_Actions(statecode = "OR", fisc_year_start = 2018, fisc_year_
 Region5_4B<- EQ_Actions(region = 5,
               act_type = "4B Restoration Approach",
               api_key = testkey)
+              }
 
 }
