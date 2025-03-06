@@ -25,7 +25,7 @@ comp_date_start,completionDateLo,,,yes,yes,no,no,no,no,no,yes
 confirmed,confirmed,,,no,no,no,no,no,no,yes,no
 cwa,cwa303dPriorityRanking,,,no,no,yes,no,no,no,no,no
 cycle_first_end,cycleFirstListedHi,,,no,no,yes,no,no,no,no,no
-cycle_first_state,cycleFirstListedLo,,,no,no,yes,no,no,no,no,no
+cycle_first_start,cycleFirstListedLo,,,no,no,yes,no,no,no,no,no
 cycle_id,cycleId,,,no,no,yes,yes,yes,yes,yes,no
 cycle_last_end,cycleLastAssessedHi,,,no,no,yes,yes,no,no,no,no
 cycle_last_start,cycleLastAssessedLo,,,no,no,yes,yes,no,no,no,no
@@ -34,7 +34,7 @@ delisted,delisted,,,no,no,yes,no,no,no,no,no
 doc_file_name,documentFileName,,,no,yes,no,no,no,no,no,no
 doc_key,documentKey,,,no,no,no,no,no,no,no,no
 doc_name,documentName,,,no,yes,no,no,no,no,no,no
-doc_query,documentQuery,,,no,no,no,no,no,no,no,no
+doc_query,documentQuery,,,no,yes,no,no,no,no,no,no
 doc_type,actionDocumentType,DocumentTypeCode,name,no,yes,no,no,no,no,no,no
 doc_url,actionDocumentUrl,,,no,no,no,no,no,no,no,no
 epa_ir_cat,epaIrCategory,,,no,no,yes,no,no,no,yes,no
@@ -42,7 +42,7 @@ expect_attain_cycle_hi,cycleExpectedToAttainHi,,,no,no,yes,no,no,no,no,no
 expect_attain_cycle_lo,cycleExpectedToAttainLo,,,no,no,yes,no,no,no,no,no
 file_type,documentFileTypeName,,,no,no,no,no,no,no,no,no
 fisc_year_end,fiscalYearEstablishedHi,,,yes,no,no,no,no,no,no,yes
-fisc_year_start,fiscalYearEstablisheLo,,,yes,no,no,no,no,no,no,yes
+fisc_year_start,fiscalYearEstablishedLo,,,yes,no,no,no,no,no,no,yes
 in_meas,includeInMeasure,,,yes,no,no,no,no,no,no,yes
 indian_country,inIndianCountry,,,yes,no,no,no,no,no,no,yes
 loc_desc,locationDescription,,,no,no,yes,no,no,no,no,no
@@ -65,9 +65,9 @@ org_type,organizationType,,,no,no,yes,no,yes,yes,yes,yes
 other_id,otherIdentifier,,,no,no,no,no,no,no,no,yes
 overall_status,overallStatus,,,no,no,yes,no,no,no,yes,no
 param_attain,parameterAttainment,ParameterAttainmentCode,name,no,no,yes,no,no,no,no,no
-param_group,parameterGroup,ParameterGroupCodeType,name,yes,yes,yes,no,no,no,yes,no
+param_group,parameterGroup,ParameterGroupCodeType,name,yes,no,yes,no,no,no,yes,no
 param_ir_cat,parameterIrCategory,,,no,no,yes,no,no,no,no,no
-param_name,parameterName,ParameterName,name,yes,yes,yes,no,no,no,no,no
+param_name,parameterName,ParameterName,name,yes,no,yes,no,no,no,no,no
 param_state_ir_cat,parameterStateIrCategory,StateIRCategoryCode,name,no,no,yes,no,no,no,no,no
 param_status,parameterStatus,ParameterStatus,name,no,no,yes,no,no,no,no,no
 poll_group,pollutantGroup,,,no,no,no,no,no,no,no,yes

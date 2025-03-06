@@ -1,6 +1,6 @@
 #' Expert Query Assessment Units
 #'
-#' Return assessment units data from Expert Query.
+#' Return ATTAINS Assessment Units data via Expert Query web services.
 #'
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:
@@ -30,6 +30,24 @@
 #' and "waterSizeUnits".
 #'
 #' @export
+#'
+#' @examples
+#'  \dontrun{
+#'
+#' # to run examples add your api key below
+#' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+#' testkey <- "YOURAPIKEY"
+#'
+#' # Active estaury Assessment Units from Maryland
+#' MD_estuary <- EQ_AssessmentUnits(statecode = "MD",
+#'                                 water_type = "ESTUARY",
+#'                                 api_key = testkey)
+#'
+#' # Active Assessment Units from Rhode Island from the 2016 report cycle
+#' RI_aus_2016 <- EQ_Assessments(statecode = "RI",
+#'                           report_cycle = 2016,
+#'                           api_key = testkey)
+#'               }
 #'
 EQ_AssessmentUnits <- function(api_key = NULL, au_name = NULL, au_status = "A", auid = NULL,
                                region = NULL, report_cycle = NULL, statecode = NULL,

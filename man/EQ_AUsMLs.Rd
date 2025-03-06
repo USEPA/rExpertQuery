@@ -71,5 +71,22 @@ A data frame of ATTAINS Assessment Units with Monitoring Locations with the colu
 and "waterSizeUnits".
 }
 \description{
-Return assessment units with monitoring locations data from Expert Query.
+Return ATTAINS Assessment Units with Monitoring Locations data via Expert Query web services.
+}
+\examples{
+ \dontrun{
+
+# to run examples add your api key below
+# to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+testkey <- "YOURAPIKEY"
+
+# Alaska Assessment Units with Monitoring Locations
+AK_aus_mls <- EQ_AUsMLs(statecode = "AK",
+                        api_key = testkey)
+
+# Red Lake Band of Chippewa Indians (Minnesota) Assessment Units with Monitoring Locations
+RedLake_aus_mls <- EQ_AUsMLs(org_id = "REDLAKE",
+                            api_key = testkey)
+              }
+
 }

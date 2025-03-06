@@ -9,7 +9,7 @@
 #' that will be used to track the Action entered (such as the corresponding information and
 #' associated documents) in ATTAINS, and its associated name. Default = NULL
 #' @param act_name Character string. Unique identifier for the Action that will be used to track
-#' the Action entered (such as the corresponding information and associated documents) in ATTAINs,
+#' the Action entered (such as the corresponding information and associated documents) in ATTAINS,
 #' and its associated name (name of TMDL Report, 4B Report, Alternative Report, etc.). Default =
 #' NULL.
 #' @param act_type Character string. Identifies the type of Action associated with an Action.
@@ -24,6 +24,7 @@
 #' Default = NULL.
 #' @param doc_name Character string. The document name of the Actions Document. Default = NULL.
 #' @param doc_type Character string. The document type of the Actions Document. Default = NULL.
+#' @param doc_query Character string. Document text search terms.
 #' @param org_id Character string. A unique identifier assigned to the Organization. Options can
 #' be viewed with EQ_DomainValues("org_id"). Default = NULL.
 #' @param org_name Character string. A unique name assigned to the Organization. Options can
@@ -47,11 +48,29 @@
 #'
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#'
+#' # to run examples add your api key below
+#' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+#' testkey <- "YOURAPIKEY"
+#'
+#' # Actions Documents from California established between fiscal years 2018 and 2020
+#' CA_actions_docs <- EQ_Actions(statecode = "CA",
+#'                               comp_date_start = "2000-01-01",
+#'                               comp_date_end = "2010-12-31",
+#'                               api_key = testkey)
+#'
+#' # Actions Documents from Minnesota and Wisconsin containing "mercury"
+#' R4_nutrient_actions_docs <- EQ_Actions(region = 4,
+#'                                        doc_query = "mercury",
+#'                                        api_key = testkey)
+#'               }
 EQ_ActionsDocuments <- function(api_key = NULL, act_id = NULL, act_name = NULL, act_type = NULL,
                                 comp_date_end = NULL, comp_date_start = NULL, doc_file_name = NULL,
-                                doc_name = NULL, doc_type = NULL, org_id = NULL, org_name = NULL,
-                                region = NULL, statecode = NULL, tmdl_date_end = NULL,
-                                tmdl_date_start = NULL) {
+                                doc_name = NULL, doc_type = NULL, doc_query = NULL, org_id = NULL,
+                                org_name = NULL, region = NULL, statecode = NULL,
+                                tmdl_date_end = NULL, tmdl_date_start = NULL) {
 
   # check for api key
   if(is.null(api_key)) {

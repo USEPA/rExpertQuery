@@ -21,7 +21,7 @@
 #' @param org_name Character string. A unique name assigned to the Organization. Options can
 #' be viewed with EQ_DomainValues("org_name"). Default = NULL.
 #' @param overall_status Character string.The overall support status for the Assessment Unit ID,
-#' calculated by ATTAINs. Options are "Fully Supporting", "Not Supporting", "Not Assessed". Default
+#' calculated by ATTAINS. Options are "Fully Supporting", "Not Supporting", "Not Assessed". Default
 #' = NULL.
 #' @param param_group A collection of related Parameters. Options can be viewed with
 #' EQ_DomainValues("param_attain"). Default = NULL.
@@ -48,6 +48,23 @@
 #' "waterSize", and "waterSizeUnits".
 #'
 #' @export
+#'
+#' @examples
+#'  \dontrun{
+#'
+#' # to run examples add your api key below
+#' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+#' testkey <- "YOURAPIKEY"
+#'
+#' # Mercury TMDLS from Louisiana
+#'  LA_mercury_tmdls <- EQ_TMDLs(statecode = "LA",
+#'                               pollutant = "MERCURY",
+#'                               api_key = testkey)
+#'
+#' # Query for sources records associated with parameter group "NUISANCER EXOTIC SPECIES"
+#' Sources_exoticspecies_paramgroup <- EQ_Sources(param_group = "NUISANCE EXOTIC SPECIES",
+#'                                                api_key = testkey)
+#'               }
 #'
 EQ_Sources <- function(api_key = NULL, au_name = NULL, auid = NULL, cause = NULL,
                        confirmed = NULL, epa_ir_cat = NULL,

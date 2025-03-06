@@ -34,7 +34,7 @@ EQ_ExtractParams <- function(extract = NULL)  {
 
 #' Expert Query Default Params
 #'
-#' Get default params from the rExpert Query export functions.
+#' Get default params from the rExpertQuery export functions.
 #'
 #' @param func The Expert Query exported function to call parameters from
 #'
@@ -104,7 +104,7 @@ EQ_CompareParams <- function(default, user) {
 
   # filter out any default params that user entered a value for
     default.params <- default %>%
-    dplyr::filter(!'param' %in% user$param)
+    dplyr::filter(!.data$param %in% user$param)
 
   # combine user supplied and default params
   all.params <- user %>%
@@ -135,9 +135,17 @@ EQ_CompareParams <- function(default, user) {
   EQ_CreateBody <- function(comp.params, crosswalk, extract) {
 
     # date params
-    date.params <- c("report_cycle", "assess_date_end", "assess_date_start",
-                     "mon_end_date", "mon_start_date", "comp_date_end", "comp_date_start",
-                     "tmdl_date_end", "tmdl_date_start")
+    date.params <- c("assess_date_end", "assess_date_start", "cd_cycle_end", "cd_cycle_start",
+                     "comp_date_end", "comp_date_start", "cycle_first_end", "cycle_first_start",
+                     "cycle_last_end", "cycle_last_start", "expect_attain_cycle_hi",
+                     "expect_attain_cycle_lo", "fisc_year_start", "fisc_year_end",
+                     "mon_end_date_hi", "mon_end_date_lo", "mon_start_date_hi", "mon_start_date_lo",
+                     "report_cycle", "seas_end_date_hi", "seas_end_date_lo", "seas_start_date_hi",
+                     "seas_start_date_lo", "tmdl_cycle_hi", "tmdl_cycle_lo", "tmdl_date_end",
+                     "tmdl_date_start")
+
+    # text string query params
+    query.params <- c("doc_query")
 
     # create param filters for POST
     params.body <- comp.params %>%
@@ -158,7 +166,7 @@ EQ_CompareParams <- function(default, user) {
                                                                  "%m-%d-%Y"),
         .default = as.character(.data$value)
       )) %>%
-      dplyr::left_join(crosswalk, by = dplyr::join_by(.data$param)) %>%
+      dplyr::left_join(crosswalk, by = dplyr::join_by('param')) %>%
       dplyr::mutate(value = gsub('c\\(|\\)|"', '', .data$value)) %>%
       tidyr::separate_rows(.data$value, sep = ',\\s*') %>%
       dplyr::mutate(value = paste0('"', .data$value, '"')) %>%
@@ -166,11 +174,13 @@ EQ_CompareParams <- function(default, user) {
       dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
       dplyr::distinct() %>%
       dplyr::mutate(value = dplyr::case_when(
-        !.data$param %in% date.params ~ paste0('"', .data$eq_name, '":', "[", .data$value, "]"),
+        !.data$param %in% date.params & !.data$param %in% query.params ~ paste0('"', .data$eq_name,
+                                                                                '":', "[",
+                                                                                .data$value, "]"),
         .default = paste0('"', .data$eq_name, '":', .data$value))) %>%
       dplyr::ungroup() %>%
       dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
-      dplyr::select(.data$value) %>%
+      dplyr::select('value') %>%
       dplyr::distinct() %>%
       dplyr::pull()
 

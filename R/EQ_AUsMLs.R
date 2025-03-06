@@ -1,6 +1,6 @@
 #' Expert Query Assessment Units with Monitoring Locations
 #'
-#' Return assessment units with monitoring locations data from Expert Query.
+#' Return ATTAINS Assessment Units with Monitoring Locations data via Expert Query web services.
 #'
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:
@@ -39,6 +39,22 @@
 #'  and "waterSizeUnits".
 #'
 #' @export
+#'
+#' @examples
+#'  \dontrun{
+#'
+#' # to run examples add your api key below
+#' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+#' testkey <- "YOURAPIKEY"
+#'
+#' # Alaska Assessment Units with Monitoring Locations
+#' AK_aus_mls <- EQ_AUsMLs(statecode = "AK",
+#'                         api_key = testkey)
+#'
+#' # Red Lake Band of Chippewa Indians (Minnesota) Assessment Units with Monitoring Locations
+#' RedLake_aus_mls <- EQ_AUsMLs(org_id = "REDLAKE",
+#'                             api_key = testkey)
+#'               }
 #'
 EQ_AUsMLs <- function(api_key = NULL, au_name = NULL, au_status = "Active", auid = NULL,
                       mon_loc_id = NULL, mon_loc_org = NULL, org_id = NULL, org_name = NULL,

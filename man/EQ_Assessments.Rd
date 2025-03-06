@@ -102,7 +102,7 @@ completed. Format is "YYYY-MM-DD". Default = NULL.}
 can be viewed with EQ_DomainValues"(assess_methods"). Default = NULL.}
 
 \item{assess_types}{Character string. Code representing the type of Assessment that was
-performed. Options can be viewe with EQ_DomainValues("assess_types")}
+performed. Options can be viewed with EQ_DomainValues("assess_types")}
 
 \item{au_name}{Character string. The name assigned to an Assessment Unit by the Organization.
 Default = NULL.}
@@ -173,7 +173,7 @@ be viewed with EQ_DomainValues("org_id"). Default = NULL.}
 be viewed with EQ_DomainValues("org_name"). Default = NULL.}
 
 \item{overall_status}{Character string.The overall support status for the Assessment Unit ID,
-calculated by ATTAINs. Options are "Fully Supporting", "Not Supporting", "Not Assessed". Default
+calculated by ATTAINS. Options are "Fully Supporting", "Not Supporting", "Not Assessed". Default
 = NULL.}
 
 \item{param_attain}{The attainment status for the Parameter for a specific Use. Options can be
@@ -254,7 +254,7 @@ Administrator.}
 
 \item{use_support}{Character string. The decision as to whether the Use Name (designated use) is
 Fully Supporting, Not Supporting, Insufficient Information, or Not Assessed. Options are
-"Fully Supporting","Not Supporting", "Insufficent Information" or "Not Assessed."}
+"Fully Supporting","Not Supporting", "Insufficient Information" or "Not Assessed."}
 
 \item{vis}{Character string. Indicates if the water has been identified as a priority water by
 the state under the 303(d) Vision. Options are "Yes" or "No". Default = NULL.}
@@ -281,4 +281,21 @@ A data frame of ATTAINS Assessments with the columns "objectId", "region", "stat
 \description{
 Return a data frame of ATTAINS Assessments data from Expert Query web services, filtered by
 user inputs.
+}
+\examples{
+ \dontrun{
+
+# to run examples add your api key below
+# to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+testkey <- "YOURAPIKEY"
+
+# Assessments from latest cycle for Massachusetts
+MA_assessments <- EQ_Assessments(statecode = "MA",
+                              api_key = testkey)
+
+# EPA IR category 5 assessments from Montana
+MT_cat_5 <- EQ_Assessments(statecode = "MT",
+                          epa_ir_cat = 5,
+                          api_key = testkey)
+              }
 }

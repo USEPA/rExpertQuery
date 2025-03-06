@@ -1,6 +1,13 @@
 #' Expert Query Catchment Correspondence
 #'
-#' Return catchment correspondence data from Expert Query.
+#' Return ATTAINS Catchment Correspondence data via Expert Query web services.
+#'
+#' #' * If using VPN, suggest signing out of VPN before running this function as it can cause
+#' 403 error and prevent download of catchment correspondence data.
+#'
+#' ** Catchment Correspondence queries can generate large files. You must have enough memory
+#' available for these functions to import them into R successfully. Best practice is to make
+#' your initial query as specific as possible to reduce size of file returned.
 #'
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:
@@ -27,6 +34,22 @@
 #'
 #' @export
 #'
+#' @examples
+#'  \dontrun{
+#'
+#' # to run examples add your api key below
+#' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+#' testkey <- "YOURAPIKEY"
+#'
+#' # Catchment Correspondence for Illinois' Big Muddy River (Assessment Unit IL_N-99)
+#' IL_ILN99 <- EQ_CatchCorr(statecode = "IL",
+#'                          auid = "IL_N-99",
+#'                          api_key = testkey)
+#'
+#' # Catchment Correspondence for Washington, DC
+#' DC_catchcorr <- EQ_AUsMLs(statecode = "DC",
+#'                             api_key = testkey)
+#'               }
 EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL,
                          org_id = NULL, org_name = NULL, region = NULL,
                          report_cycle = "latest", statecode = NULL)  {
