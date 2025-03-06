@@ -48,5 +48,30 @@ A data frame of ATTAINS Catchment Correspondence with the columns "objectId", "r
 "assessmentUnitName", "catchmentNhdPlusId", "reportingCycle", and "cycleId".
 }
 \description{
-Return catchment correspondence data from Expert Query.
+Return ATTAINS Catchment Correspondence data via Expert Query web services.
+}
+\details{
+#' * If using VPN, suggest signing out of VPN before running this function as it can cause
+403 error and prevent download of catchment correspondance data.
+
+** Catchment Correspondence queries can generate large files. You must have enough memory
+available for these functions to import them into R successfully. Best practice is to make
+your initial query as specific as possible to reduce size of file returned.
+}
+\examples{
+ \dontrun{
+
+# to run examples add your api key below
+# to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+testkey <- "YOURAPIKEY"
+
+# Catchment Correspondence for Illinois' Big Muddy River (Assessment Unit IL_N-99)
+IL_ILN99 <- EQ_CatchCorr(statecode = "IL",
+                         auid = "IL_N-99",
+                         api_key = testkey)
+
+# Catchment Correspondence for Washington, DC
+DC_catchcorr <- EQ_AUsMLs(statecode = "DC",
+                            api_key = testkey)
+              }
 }
