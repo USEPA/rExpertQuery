@@ -1,6 +1,27 @@
 ## rExpertQuery
 
+[![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+
+[![](https://github.com/USEPA/rExpertQuery/actions/workflows/main.yml/badge.svg)](https://github.com/USEPA/rExpertQuery/actions/workflows/main.yml)
+
 A draft R package (UNDER ACTIVE DEVELOPMENT) for retrieving ATTAINS data efficiently via Expert Query web services (https://www.epa.gov/waterdata/expert-query).
+
+## Installation
+
+You must first have R and R Studio installed to use the rExpert Query (see instructions below if 
+needed). rExpert Query is in active development, therefore we highly recommend that you update it
+and all of its dependency libraries each time you use the package. 
+
+You can install and/or update the [rExpertQuery Package](https://github.com/USEPA/rExpertQuery) and 
+all dependencies by running:
+
+```{r}
+if(!"remotes"%in%installed.packages()){
+install.packages("remotes")
+}
+
+remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
+```
 
 ## Open-Source Code Policy
 

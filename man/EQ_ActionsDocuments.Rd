@@ -95,14 +95,14 @@ Query ATTAINS Actions Documents data via Expert Query web services and return as
 testkey <- "YOURAPIKEY"
 
 # Actions Documents from California established between fiscal years 2018 and 2020
-CA_actions_docs <- EQ_Actions(statecode = "CA",
+CA_actions_docs <- EQ_ActionsDocuments(statecode = "CA",
                               comp_date_start = "2000-01-01",
                               comp_date_end = "2010-12-31",
                               api_key = testkey)
 
-# Actions Documents from Minnesota and Wisconsin containing "mercury"
-R4_nutrient_actions_docs <- EQ_Actions(region = 4,
-                                       doc_query = "mercury",
+# Actions Documents from Minnesota and Wisconsin containing "nutrient"
+R4_nutrient_actions_docs <- EQ_ActionsDocuments(region = 4,
+                                       doc_query = "nutrient",
                                        api_key = testkey)
               }
 }
