@@ -29,7 +29,7 @@
 #' @param assess_methods Character string. The name of the Assessment Method being used. Options
 #' can be viewed with EQ_DomainValues"(assess_methods"). Default = NULL.
 #' @param assess_types Character string. Code representing the type of Assessment that was
-#' performed. Options can be viewe with EQ_DomainValues("assess_types")
+#' performed. Options can be viewed with EQ_DomainValues("assess_types")
 #' @param au_name Character string. The name assigned to an Assessment Unit by the Organization.
 #' Default = NULL.
 #' @param au_status Character string. The current condition or status of an Assessment Unit.
@@ -78,7 +78,7 @@
 #' @param org_name Character string. A unique name assigned to the Organization. Options can
 #' be viewed with EQ_DomainValues("org_name"). Default = NULL.
 #' @param overall_status Character string.The overall support status for the Assessment Unit ID,
-#' calculated by ATTAINs. Options are "Fully Supporting", "Not Supporting", "Not Assessed". Default
+#' calculated by ATTAINS. Options are "Fully Supporting", "Not Supporting", "Not Assessed". Default
 #' = NULL.
 #' @param param_attain The attainment status for the Parameter for a specific Use. Options can be
 #' viewed with EQ_DomainValues("param_attain"). Default = NULL.
@@ -136,7 +136,7 @@
 #' Administrator.
 #' @param use_support Character string. The decision as to whether the Use Name (designated use) is
 #' Fully Supporting, Not Supporting, Insufficient Information, or Not Assessed. Options are
-#' "Fully Supporting","Not Supporting", "Insufficent Information" or "Not Assessed."
+#' "Fully Supporting","Not Supporting", "Insufficient Information" or "Not Assessed."
 #' @param vis Character string. Indicates if the water has been identified as a priority water by
 #' the state under the 303(d) Vision. Options are "Yes" or "No". Default = NULL.
 #' @param water_type Character string. An Assessment Unit must have at least one water type, and it
@@ -159,6 +159,22 @@
 #'
 #' @export
 #'
+#' @examples
+#'  \dontrun{
+#'
+#' # to run examples add your api key below
+#' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+#' testkey <- "YOURAPIKEY"
+#'
+#' # Assessments from latest cycle for Massachusetts
+#' MA_assessments <- EQ_Assessments(statecode = "MA",
+#'                               api_key = testkey)
+#'
+#' # EPA IR category 5 assessments from Montana
+#' MT_cat_5 <- EQ_Assessments(statecode = "MT",
+#'                           epa_ir_cat = 5,
+#'                           api_key = testkey)
+#'               }
 EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL, act_type = NULL,
                            act_id = NULL, alt_list_id = NULL, assess_basis = NULL,
                            assess_date_end = NULL, assess_date_start = NULL, assess_methods = NULL,
@@ -207,7 +223,8 @@ EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL,
   rm(user.params, default.params)
 
   # create post bodies
-  post.bodies <- EQ_CreateBody(comp.params = params.df, crosswalk = params.cw, extract = "assessments")
+  post.bodies <- EQ_CreateBody(comp.params = params.df, crosswalk = params.cw,
+                               extract = "assessments")
 
   # create post headers
   post.headers <- EQ_CreateHeader(key = api_key)

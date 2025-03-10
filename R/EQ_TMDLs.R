@@ -11,7 +11,7 @@
 #' that will be used to track the Action entered (such as the corresponding information and
 #' associated documents) in ATTAINS, and its associated name. Default = NULL.
 #' @param act_name Character string. Unique identifier for the Action that will be used to track
-#' the Action entered (such as the corresponding information and associated documents) in ATTAINs,
+#' the Action entered (such as the corresponding information and associated documents) in ATTAINS,
 #' and its associated name (name of TMDL Report, 4B Report, Alternative Report, etc.). Default =
 #' NULL.
 #' @param ad_param Character string. In the context of a TMDL, Addressed Parameters refer to
@@ -87,6 +87,24 @@
 #' "wasteLoadAllocation", and "planSummaryLink".
 #'
 #' @export
+#'
+#' @examples
+#'  \dontrun{
+#'
+#' # to run examples add your api key below
+#' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+#' testkey <- "YOURAPIKEY"
+#'
+#' # Indiana query for source equal to "AGRICULTURE"
+#'  SD_nonpoint_tmdls <- EQ_TMDLs(statecode = "SD",
+#'                                source_type = "Nonpoint source",
+#'                                api_key = testkey)
+#'
+#' # Region 4 TMDLs with addressed parameter group "ALGAL GROWTH"
+#' R4_paramgroup_algalgrowth <- EQ_TMDLs(region = 4,
+#'                                       ad_param_group = "ALGAL GROWTH",
+#'                                       api_key = testkey)
+#'               }
 #'
 EQ_TMDLs <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name = NULL,
                      au_name = NULL, auid = NULL, comp_date_end = NULL, comp_date_start = NULL,

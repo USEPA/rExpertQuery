@@ -13,5 +13,5 @@ EQ_DefaultParams(func)
 A data frame of the default params for the selected function.
 }
 \description{
-Get default params from the rExpert Query export functions.
+Get default params from the rExpertQuery export functions.
 }

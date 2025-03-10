@@ -10,7 +10,7 @@
 #' @param act_id Character string. Unique Identifier for the Action associated with an Assessment
 #' that will be used to track the Action entered (such as the corresponding information and
 #' associated documents) in ATTAINS, and its associated name. Default = NULL
-#' @param act_name Character string. The name associated with the action (ex: name of TMDL REport,
+#' @param act_name Character string. The name associated with the action (ex: name of TMDL Report,
 #' 4B Report, Alternative Report, etc).
 #' @param act_type Character string. Identifies the type of Action associated with an Action.
 #' Options can be viewed with EQ_DomainValues(act_type).Default = NULL
@@ -61,6 +61,23 @@
 #'
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#'
+#' # to run examples add your api key below
+#' # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+#' testkey <- "YOURAPIKEY"
+#'
+#' # actions from OR established between fiscal years 2018 and 2020
+#' OR_actions_ex <- EQ_Actions(statecode = "OR", fisc_year_start = 2018, fisc_year_end = 2020,
+#'                             api_key = testkey)
+#'
+#' # 4B Restoration Approach Actions from Region 5
+#' Region5_4B<- EQ_Actions(region = 5,
+#'               act_type = "4B Restoration Approach",
+#'               api_key = testkey)
+#'               }
+#'
 EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name = NULL,
                        act_type = NULL, au_name = NULL, auid = NULL, comp_date_end = NULL,
                        comp_date_start = NULL, fisc_year_end = NULL, fisc_year_start = NULL,
@@ -87,7 +104,7 @@ EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_nam
     # format for building body
     EQ_FormatParams()
 
-  # compare default and user params to build data frame of all params and values for body
+   # compare default and user params to build data frame of all params and values for body
   params.df <- EQ_CompareParams(default = default.params, user = user.params)
 
   # remove intermediate objects

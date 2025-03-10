@@ -1,9 +1,9 @@
 #' Import Expert Query National Extract
 #'
-#' Returns data frame of user-specified Expert Query National Extracts for use cases where
-#' nationwide data is desired. Also useful in situations where the the desired query would yield
-#' more than 1 million rows as the national extracts can be sorted and filtered after import. The
-#' National Extracts are large files and can take several minutes to download and import.
+#' Returns data frame of user-specified Expert Query National Extracts of ATTAINS data for use cases
+#' where nationwide data is desired. Also useful in situations where the the desired query would
+#' yield more than 1 million rows as the national extracts can be sorted and filtered after import.
+#' The National Extracts are large files and can take several minutes to download and import.
 #'
 #' National extracts can and more information about Expert Query can be found here:
 #' https://owapps.epa.gov/expertquery/national-downloads
