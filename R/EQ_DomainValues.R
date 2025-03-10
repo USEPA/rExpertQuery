@@ -10,6 +10,8 @@
 #'
 #' @return A df allowable values for the selected query_param.
 #'
+#'@importFrom rlang .data
+#'
 EQ_DomainValues <- function(domain = NULL) {
   # base URL to query ATTAINS web services
   base.url <- "https://attains.epa.gov/attains-public/api/domains"
@@ -45,7 +47,7 @@ EQ_DomainValues <- function(domain = NULL) {
     if (domain %in% param.cw$param) {
       # filter for domains which have values in web service
       param.ws <- param.cw %>%
-        dplyr::filter(attains_ws_name != "")
+        dplyr::filter(.data$attains_ws_name != "")
 
       # check to see if user supplied domain has values in web service
       if (!domain %in% param.ws$param) {
@@ -58,8 +60,8 @@ EQ_DomainValues <- function(domain = NULL) {
 
       # filter crosswalk by user supplied domain value
       param.filter <- param.cw %>%
-        dplyr::filter(param %in% domain) %>%
-        dplyr::select(param, attains_ws_name, attains_ws_field) %>%
+        dplyr::filter(.data$param %in% domain) %>%
+        dplyr::select('param', 'attains_ws_name', 'attains_ws_field') %>%
         dplyr::distinct()
 
       raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter$attains_ws_name)) %>%

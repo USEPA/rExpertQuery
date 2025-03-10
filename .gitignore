@@ -11,4 +11,5 @@ GettingStartedWithrExpertQuery.Rmd
 
 # git
 .github
-
+vignettes/
+inst/doc
