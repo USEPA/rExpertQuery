@@ -19,6 +19,7 @@ Imports:
   data.table,
   dplyr,
   httr,
+  httr2,
   jsonlite,
   lubridate,
   magrittr,

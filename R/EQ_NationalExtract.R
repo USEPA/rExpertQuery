@@ -170,8 +170,11 @@ EQ_NationalExtract <- function(extract = NULL) {
   # increase timeout (for large files)
   options(timeout = 1200)
 
-  # download zipped file
-  httr::GET(url, httr::write_disk(temp, overwrite = TRUE))
+  # get request
+  req <- httr2::request(url)
+
+  # get request
+  get.req <- httr2::req_perform(req, path = temp)
 
   print(paste0(
     "EQ_NationalExtract: unzipping ", label, " (Expert Query National Extract)."
