@@ -65,7 +65,7 @@ EQ_DomainValues <- function(domain = NULL) {
         dplyr::distinct()
 
       raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter$attains_ws_name)) %>%
-        dplyr::select(dplyr::all_of(param.cw2$attains_ws_field)) %>%
+        dplyr::select(dplyr::all_of(param.cw$attains_ws_field)) %>%
         dplyr::rename(domainValue = 1)
 
       rm(param.filter, base.url, param.cw)
