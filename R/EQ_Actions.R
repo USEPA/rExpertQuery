@@ -66,10 +66,9 @@ EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_nam
                        comp_date_start = NULL, fisc_year_end = NULL, fisc_year_start = NULL,
                        in_meas = NULL, indian_country = NULL, org_id = NULL,
                        org_name = NULL, param_name = NULL, param_group = NULL,
-                       region = NULL, statecode = NULL, water_type = NULL)  {
-
+                       region = NULL, statecode = NULL, water_type = NULL) {
   # check for api key
-  if(is.null(api_key)) {
+  if (is.null(api_key)) {
     stop("EQ_Actions: An api key is required to access EQ web services.")
   }
 
@@ -101,9 +100,11 @@ EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_nam
   post.headers <- EQ_CreateHeader(key = api_key)
 
   # query EQ (check number of rows before download, stop and print message if it exceeds max rows)
-  query.df <- EQ_PostAndContent(headers = post.headers,
-                                body.list = post.bodies,
-                                extract = "actions")
+  query.df <- EQ_PostAndContent(
+    headers = post.headers,
+    body.list = post.bodies,
+    extract = "actions"
+  )
 
   # remove intermediate objects
   rm(params.cw, params.df, post.bodies, post.headers)

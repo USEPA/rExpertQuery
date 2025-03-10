@@ -33,10 +33,9 @@
 #'
 EQ_AssessmentUnits <- function(api_key = NULL, au_name = NULL, au_status = "A", auid = NULL,
                                region = NULL, report_cycle = NULL, statecode = NULL,
-                               use_class = NULL, water_type = NULL)  {
-
+                               use_class = NULL, water_type = NULL) {
   # check for api key
-  if(is.null(api_key)) {
+  if (is.null(api_key)) {
     stop("EQ_AssessmentUnits: An api key is required to access EQ web services.")
   }
 
@@ -68,9 +67,11 @@ EQ_AssessmentUnits <- function(api_key = NULL, au_name = NULL, au_status = "A", 
   post.headers <- EQ_CreateHeader(key = api_key)
 
   # query EQ (check number of rows before download, stop if it exceeds max rows)
-  query.df <- EQ_PostAndContent(headers = post.headers,
-                                body.list = post.bodies,
-                                extract = "aus")
+  query.df <- EQ_PostAndContent(
+    headers = post.headers,
+    body.list = post.bodies,
+    extract = "aus"
+  )
 
   rm(params.cw, params.df, post.bodies, post.headers)
 

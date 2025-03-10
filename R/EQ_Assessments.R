@@ -180,9 +180,8 @@ EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL,
                            tmdl_cycle_lo = NULL, use_class = NULL, use_group = NULL,
                            use_ir_cat = NULL, use_name = NULL, use_state_ir_cat = NULL,
                            use_support = NULL, vis = NULL, water_type = NULL) {
-
   # check for api key
-  if(is.null(api_key)) {
+  if (is.null(api_key)) {
     stop("EQ_Assessments: An api key is required to access EQ web services.")
   }
 
@@ -214,9 +213,11 @@ EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL,
   post.headers <- EQ_CreateHeader(key = api_key)
 
   # query EQ (check number of rows before download, stop if it exceeds max rows)
-  query.df <- EQ_PostAndContent(headers = post.headers,
-                                body.list = post.bodies,
-                                extract = "assessments")
+  query.df <- EQ_PostAndContent(
+    headers = post.headers,
+    body.list = post.bodies,
+    extract = "assessments"
+  )
 
   rm(params.cw, params.df, post.bodies, post.headers)
 

@@ -52,9 +52,8 @@ EQ_ActionsDocuments <- function(api_key = NULL, act_id = NULL, act_name = NULL, 
                                 doc_name = NULL, doc_type = NULL, org_id = NULL, org_name = NULL,
                                 region = NULL, statecode = NULL, tmdl_date_end = NULL,
                                 tmdl_date_start = NULL) {
-
   # check for api key
-  if(is.null(api_key)) {
+  if (is.null(api_key)) {
     stop("EQ_ActionsDocuments: An api key is required to access EQ web services.")
   }
 
@@ -86,9 +85,11 @@ EQ_ActionsDocuments <- function(api_key = NULL, act_id = NULL, act_name = NULL, 
   post.headers <- EQ_CreateHeader(key = api_key)
 
   # query EQ (check number of rows before download, stop if it exceeds max rows)
-  query.df <- EQ_PostAndContent(headers = post.headers,
-                                body.list = post.bodies,
-                                extract = "act_docs")
+  query.df <- EQ_PostAndContent(
+    headers = post.headers,
+    body.list = post.bodies,
+    extract = "act_docs"
+  )
 
   rm(params.cw, params.df, post.bodies, post.headers)
 
