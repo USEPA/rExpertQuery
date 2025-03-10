@@ -35,7 +35,7 @@ doc_file_name,documentFileName,,,no,yes,no,no,no,no,no,no
 doc_key,documentKey,,,no,no,no,no,no,no,no,no
 doc_name,documentName,,,no,yes,no,no,no,no,no,no
 doc_query,documentQuery,,,no,yes,no,no,no,no,no,no
-doc_type,actionDocumentType,DocumentTypeCode,name,no,yes,no,no,no,no,no,no
+doc_type,actionDocumentType,ActionDocumentType,name,no,yes,no,no,no,no,no,no
 doc_url,actionDocumentUrl,,,no,no,no,no,no,no,no,no
 epa_ir_cat,epaIrCategory,,,no,no,yes,no,no,no,yes,no
 expect_attain_cycle_hi,cycleExpectedToAttainHi,,,no,no,yes,no,no,no,no,no

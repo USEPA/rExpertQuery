@@ -71,10 +71,9 @@ EQ_Sources <- function(api_key = NULL, au_name = NULL, auid = NULL, cause = NULL
                        org_id = NULL, org_name = NULL,
                        overall_status = NULL, param_group = NULL, region = NULL,
                        report_cycle = "latest", source = NULL, state_ir_cat = NULL,
-                       statecode = NULL, water_type = NULL)  {
-
+                       statecode = NULL, water_type = NULL) {
   # check for api key
-  if(is.null(api_key)) {
+  if (is.null(api_key)) {
     stop("EQ_Sources: An api key is required to access EQ web services.")
   }
 
@@ -106,9 +105,11 @@ EQ_Sources <- function(api_key = NULL, au_name = NULL, auid = NULL, cause = NULL
   post.headers <- EQ_CreateHeader(key = api_key)
 
   # query EQ (check number of rows before download, stop if it exceeds max rows)
-  query.df <- EQ_PostAndContent(headers = post.headers,
-                                body.list = post.bodies,
-                                extract = "sources")
+  query.df <- EQ_PostAndContent(
+    headers = post.headers,
+    body.list = post.bodies,
+    extract = "sources"
+  )
   # should rows where ml is NA be filtered out?
 
   rm(params.cw, params.df, post.bodies, post.headers)

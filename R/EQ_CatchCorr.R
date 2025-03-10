@@ -52,10 +52,9 @@
 #'               }
 EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL,
                          org_id = NULL, org_name = NULL, region = NULL,
-                         report_cycle = "latest", statecode = NULL)  {
-
+                         report_cycle = "latest", statecode = NULL) {
   # check for api key
-  if(is.null(api_key)) {
+  if (is.null(api_key)) {
     stop("EQ_CatchCorr: An api key is required to access EQ web services.")
   }
 
@@ -87,9 +86,11 @@ EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL,
   post.headers <- EQ_CreateHeader(key = api_key)
 
   # query EQ (check number of rows before download, stop if it exceeds max rows)
-  query.df <- EQ_PostAndContent(headers = post.headers,
-                                body.list = post.bodies,
-                                extract = "catch_corr")
+  query.df <- EQ_PostAndContent(
+    headers = post.headers,
+    body.list = post.bodies,
+    extract = "catch_corr"
+  )
   # should rows where ml is NA be filtered out?
 
   rm(params.cw, params.df, post.bodies, post.headers)

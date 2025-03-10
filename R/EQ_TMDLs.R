@@ -113,10 +113,9 @@ EQ_TMDLs <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name 
                      statecode = NULL, tmdl_date_end = NULL, tmdl_date_start = NULL,
                      water_type = NULL, ad_param = NULL, ad_param_group = NULL, mos_exp = NULL,
                      mos_imp = NULL, npdes_id = NULL, other_id = NULL, pollutant = NULL,
-                     poll_group = NULL, source_type = NULL)  {
-
+                     poll_group = NULL, source_type = NULL) {
   # check for api key
-  if(is.null(api_key)) {
+  if (is.null(api_key)) {
     stop("EQ_TMDLs: An api key is required to access EQ web services.")
   }
 
@@ -148,9 +147,11 @@ EQ_TMDLs <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name 
   post.headers <- EQ_CreateHeader(key = api_key)
 
   # query EQ (check number of rows before download, stop if it exceeds max rows)
-  query.df <- EQ_PostAndContent(headers = post.headers,
-                                body.list = post.bodies,
-                                extract = "tmdl")
+  query.df <- EQ_PostAndContent(
+    headers = post.headers,
+    body.list = post.bodies,
+    extract = "tmdl"
+  )
   # should rows where ml is NA be filtered out?
 
   rm(params.cw, params.df, post.bodies, post.headers)
