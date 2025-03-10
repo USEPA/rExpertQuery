@@ -53,7 +53,27 @@ rExpertQuery supports querying and downloading data within and across organizati
 tribes), such as querying all the data within an EPA region or all nutrient TMDLs nationally. 
 However, it's crucial to be aware of certain complexities inherent in the data and the querying process. Users are cautioned against direct comparisons between states due to differences in water quality standards and assessment methodologies. 
 
-While Expert Query facilitates data querying, it lacks built-in summary capabilities. Users are encouraged to download and summarize data, but use caution when relying on row counts, as duplicate entries may occur. The complexity arises from multiple tables that have many-to-many relationships. 
+While Expert Query facilitates data querying, it lacks built-in summary capabilities. Users are encouraged to download and summarize data, but use caution when relying on row counts, as duplicate entries may occur. The complexity arises from multiple tables that have many-to-many relationships.
+
+## Installation
+
+You must first have R and R Studio installed to use the rExpert Query (see instructions below if 
+needed). rExpert Query is in active development, therefore we highly recommend that you update it
+and all of its dependency libraries each time you use the package. 
+
+You can install and/or update the [rExpertQuery Package](https://github.com/USEPA/rExpertQuery) and 
+all dependencies by running:
+  
+```{r install}
+# if not installed, install "remotes"  
+if(!"remotes"%in%installed.packages()){
+install.packages("remotes")
+}
+
+# install rExpertQuery and dependencies
+remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
+```
+
 
 ## Expert Query API Keys
 
@@ -77,7 +97,7 @@ parameters available can be found with "?EQ_Actions".
 ?EQ_Actions
 ```
 
-
+Shown below are a few examples of 
 
 
 
