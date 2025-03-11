@@ -245,7 +245,6 @@ EQ_CompareParams <- function(default, user) {
 
     headers.setup <- c(
       `X-Api-Key` = key,
-      # `Content-Type` = "application/json",
       Accept = "application/json"
     )
 
