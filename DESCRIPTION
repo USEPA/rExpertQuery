@@ -18,11 +18,11 @@ RoxygenNote: 7.3.2
 Imports:
   data.table,
   dplyr,
-  httr,
   httr2,
   jsonlite,
   lubridate,
   magrittr,
+  readr,
   rlang,
   tibble,
   tidyr,
