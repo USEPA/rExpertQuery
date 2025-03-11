@@ -245,7 +245,6 @@ EQ_CompareParams <- function(default, user) {
 
     headers.setup <- c(
       `X-Api-Key` = key,
-      `Content-Type` = "application/json",
       Accept = "application/json"
     )
 
@@ -269,8 +268,10 @@ EQ_CompareParams <- function(default, user) {
 
   EQ_PostAndContent <- function(headers, body.list, extract) {
 
+    # base url to build requests
     base.url <- "https://api.epa.gov/expertquery/api/attains/"
 
+    # extract name to add to url for request
     extract.url.name <- dplyr::case_when(
       extract == "actions" ~ extract,
       extract == "act_docs" ~ "actionDocuments",
@@ -282,6 +283,7 @@ EQ_CompareParams <- function(default, user) {
       extract == "tmdl" ~ extract
     )
 
+    # extract name to add to print messages for user
     function.url.name <- dplyr::case_when(
       extract == "actions" ~ "EQ_Actions",
       extract == "act_docs" ~ "EQ_ActionDocuments",
@@ -293,42 +295,49 @@ EQ_CompareParams <- function(default, user) {
       extract == "tmdl" ~ "EQ_TMDL"
     )
 
+    # create url for query
     query.url <- paste0(base.url, extract.url.name)
 
-
-    row.res <- httr::POST(url = paste0(query.url, "/count"),
-                          httr::add_headers(.headers = headers),
-                          body = body.list[[1]])
-
-    row.n <- httr::content(row.res, as = "parse", encoding = "UTF-8")
+    # request to find number of results
+    row.res <- httr2::request(paste0(query.url, "/count")) %>%
+      httr2::req_method("POST") %>%
+      httr2::req_headers(!!!headers) %>%
+      httr2::req_body_raw(body.list[[1]],
+                          type = "application/json") %>%
+      httr2::req_perform() %>%
+      httr2::resp_body_json()
 
     # stop function if row count exceeds one million
-    if(isTRUE(row.n$count > row.n$maxCount)) {
+    if(isTRUE(row.res$count > row.res$maxCount)) {
       stop(paste0(function.url.name,
                   ": The current query exceeds the maximum query size of ",
-                  format(row.n$maxCount, big.mark = ","), " rows.",
+                  format(row.res$maxCount, big.mark = ","), " rows.",
                   "Please refine the search or use EQ_NationalExtract to import",
                   " the Expert Query National Extract."))
     }
 
     # if row count is less than one million, print message with row count and continue
-    if(isTRUE(row.n$count < row.n$maxCount)) {
+    if(isTRUE(row.res$count < row.res$maxCount)) {
       print(paste0(function.url.name,
                    ": The current query will return ",
-                   format(row.n$count, big.mark = ","), " rows."))
+                   format(row.res$count, big.mark = ","), " rows."))
     }
 
     # remove intermediate objects
-    rm(row.res, row.n)
+    rm(row.res)
 
-    query.res <- httr::POST(url = query.url,
-                            httr::add_headers(.headers = headers),
-                            body = body.list[[2]])
-
-    query.df <- suppressWarnings(httr::content(query.res, as = "parsed", encoding = "UTF-8"))
+    # request to return query results
+    query.res <- httr2::request(query.url) %>%
+      httr2::req_method("POST") %>%
+      httr2::req_headers(!!!headers) %>%
+      httr2::req_body_raw(body.list[[2]],
+                          type = "application/json") %>%
+      httr2::req_perform() %>%
+      httr2::resp_body_string() %>%
+      readr::read_csv()
 
     # remove intermediate objects
     rm(headers, base.url, extract.url.name, function.url.name, query.url, body.list)
 
-    return(query.df)
+    return(query.res)
   }
