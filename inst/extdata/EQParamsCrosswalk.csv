@@ -5,7 +5,7 @@ act_id,actionID,,,yes,yes,no,no,no,no,no,yes
 act_id,associatedActionId,,,no,no,yes,no,no,no,no,no
 act_name,actionName,,,yes,yes,yes,no,no,no,no,yes
 act_status,associatedActionStatus,ActionStatusType,name,no,no,yes,no,no,no,no,no
-act_type,actionType,ActionType,name,yes,yes,yes,no,no,no,no,no
+act_type,actionType,ActionType,code,yes,yes,yes,no,no,no,no,no
 ad_param,addressedParameter,ParameterName,name,no,no,no,no,no,no,no,yes
 ad_param_group,addressedParameterGroup,ParemeterGroupTypeCode,name,no,no,no,no,no,no,no,yes
 alt_list_id,alternateListingIdentifier,,,no,no,yes,no,no,no,no,no
@@ -17,7 +17,7 @@ assess_types,assessmentTypes,AssessmentTypeCode,name,no,no,yes,no,no,no,no,no
 au_name,assessmentUnitName,,,yes,no,yes,yes,yes,yes,yes,yes
 au_status,assessmentUnitStatus,StatusIndicator,name,no,no,yes,yes,yes,no,no,no
 auid,assessmentUnitId,,,yes,no,yes,yes,yes,yes,yes,yes
-cause,causeName,,,no,no,no,no,no,no,yes,no
+cause,causeName,ParameterName,name,no,no,no,no,no,no,yes,no
 cd_cycle_end,consentDecreeCycleHi,,,no,no,yes,no,no,no,no,no
 cd_cycle_start,consentDecreeCycleLo,,,no,no,yes,no,no,no,no,no
 comp_date_end,completionDateHi,,,yes,yes,no,no,no,no,no,yes
@@ -29,7 +29,7 @@ cycle_first_start,cycleFirstListedLo,,,no,no,yes,no,no,no,no,no
 cycle_id,cycleId,,,no,no,yes,yes,yes,yes,yes,no
 cycle_last_end,cycleLastAssessedHi,,,no,no,yes,yes,no,no,no,no
 cycle_last_start,cycleLastAssessedLo,,,no,no,yes,yes,no,no,no,no
-delist_reason,delistedReason,,,no,no,yes,no,no,no,no,no
+delist_reason,delistedReason,DelistingReasonCode,name,no,no,yes,no,no,no,no,no
 delisted,delisted,,,no,no,yes,no,no,no,no,no
 doc_file_name,documentFileName,,,no,yes,no,no,no,no,no,no
 doc_key,documentKey,,,no,no,no,no,no,no,no,no
