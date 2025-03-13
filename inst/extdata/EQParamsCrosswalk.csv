@@ -95,7 +95,7 @@ use_group,useGroup,,,no,no,yes,no,no,no,no,no
 use_ir_cat,useIrCategory,,,no,no,yes,no,no,no,no,no
 use_name,useName,UseClassUse,name,no,no,yes,no,no,no,no,no
 use_state_ir_cat,useStateIrCategory,,,no,no,yes,no,no,no,no,no
-use_support,useSupport,,,no,no,yes,no,no,no,no,no
+use_support,useSupport,UseAttainmentCode,name,no,no,yes,no,no,no,no,no
 vis,vision303dPriority,,,no,no,yes,no,no,no,no,no
 water_size,waterSize,,,no,no,yes,no,no,no,no,no
-water_type,waterType,,,yes,no,yes,yes,yes,no,yes,yes
+water_type,waterType,WaterTypeCode,name,yes,no,yes,yes,yes,no,yes,yes
