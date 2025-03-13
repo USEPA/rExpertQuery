@@ -8,10 +8,7 @@
 #' @param act_id Character string. Unique Identifier for the Action associated with an Assessment
 #' that will be used to track the Action entered (such as the corresponding information and
 #' associated documents) in ATTAINS, and its associated name. Default = NULL
-#' @param act_name Character string. Unique identifier for the Action that will be used to track
-#' the Action entered (such as the corresponding information and associated documents) in ATTAINS,
-#' and its associated name (name of TMDL Report, 4B Report, Alternative Report, etc.). Default =
-#' NULL.
+#' @param act_name Character string. The name associated with the action.Default = NULL.
 #' @param act_type Character string. Identifies the type of Action associated with an Action.
 #' Options can be viewed with EQ_DomainValues(act_type).
 #' @param comp_date_end Character string. The ending date of the date range during which the

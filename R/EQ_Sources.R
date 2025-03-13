@@ -15,7 +15,9 @@
 #' are "yes" or "no". Default = NULL.
 #' @param epa_ir_cat The overall EPA Integrated Report Category for the Assessment Unit ID,
 #' calculated by ATTAINS. Options are "1", "2", "3", "4A", "4B", "4C", "5", "5A", and "5R". Default
-#' = NULL.
+#' = NULL. For more information on how the categories are defined and calculated within ATTAINS
+#' see:
+#' https://www.epa.gov/sites/default/files/2018-09/documents/attains_calculations_of_epa_ir_categories_2018-08-31.pdf
 #' @param org_id Character string. A unique identifier assigned to the Organization. Options can
 #' be viewed with EQ_DomainValues("org_id"). Default = NULL.
 #' @param org_name Character string. A unique name assigned to the Organization. Options can
