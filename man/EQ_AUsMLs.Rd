@@ -55,8 +55,9 @@ See https://www.epa.gov/aboutepa/regional-and-geographic-offices for options. De
 statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
 Default = NULL.}
 
-\item{use_class}{Character string. The Use Class assigned to an Assessment Unit. Options can be
-viewed with EQ_DomainValues("use_class"). Default = NULL.}
+\item{use_class}{Character string. The Use Class assigned to an Assessment Unit. Options are
+"CULTURAL_USE", "DRINKING_WATER_USE", "ECOLOGICAL USE", "FISHCONSUMPTION_USE", "OTHER_USE",
+and "RECREATION_USE". Default = NULL.}
 
 \item{water_type}{Character string. An Assessment Unit must have at least one water type, and it
 may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default

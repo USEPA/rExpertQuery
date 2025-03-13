@@ -123,8 +123,9 @@
 #' @param tmdl_cycle_lo Character string. The starting date for the range of dates for cycle when
 #' the jurisdiction anticipates submitting the TMDL for EPA approval. Format is "YYYY". Default =
 #' NULL.
-#' @param use_class Character string. The Use Class assigned to an Assessment Unit. Options can be
-#' viewed with EQ_DomainValues("use_class"). Default = NULL.
+#' @param use_class Character string. The Use Class assigned to an Assessment Unit. Options are
+#' "CULTURAL_USE", "DRINKING_WATER_USE", "ECOLOGICAL USE", "FISHCONSUMPTION_USE", "OTHER_USE",
+#' and "RECREATION_USE". Default = NULL.
 #' @param use_group Character string. This represents a collection of related Uses. Options are
 #' "DRINKINGWATER_USE", "ECOLOGICAL_USE", "FISHCONSUMPTION_USE", "RECREATION_USE", and
 #' "OTHER_USE". Default = NULL.

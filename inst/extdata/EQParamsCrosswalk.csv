@@ -40,7 +40,7 @@ doc_url,actionDocumentUrl,,,no,no,no,no,no,no,no,no
 epa_ir_cat,epaIrCategory,,,no,no,yes,no,no,no,yes,no
 expect_attain_cycle_hi,cycleExpectedToAttainHi,,,no,no,yes,no,no,no,no,no
 expect_attain_cycle_lo,cycleExpectedToAttainLo,,,no,no,yes,no,no,no,no,no
-file_type,documentFileTypeName,,,no,no,no,no,no,no,no,no
+file_type,documentFileTypeName,DocumentFileType,name,no,no,no,no,no,no,no,no
 fisc_year_end,fiscalYearEstablishedHi,,,yes,no,no,no,no,no,no,yes
 fisc_year_start,fiscalYearEstablishedLo,,,yes,no,no,no,no,no,no,yes
 in_meas,includeInMeasure,,,yes,no,no,no,no,no,no,yes
@@ -85,7 +85,7 @@ source,sourceName,,,no,no,no,no,no,no,yes,no
 source_scale,sourceScale,SizeSourceScaleText,name,no,no,yes,no,no,no,no,no
 source_type,sourceType,SourceName,name,no,no,no,no,no,no,no,yes
 state_ir_cat,stateIrCategory,,,no,no,yes,no,no,no,yes,no
-statecode,state,,,yes,yes,yes,yes,yes,yes,yes,yes
+statecode,state,OrgStateCode,name,yes,yes,yes,yes,yes,yes,yes,yes
 tmdl_cycle_hi,cycleScheduledForTmdlHi,,,no,no,yes,no,no,no,no,no
 tmdl_cycle_lo,cycleScheduledForTmdlLo,,,no,no,yes,no,no,no,no,no
 tmdl_date_end,tmdlDateHi,,,no,yes,no,no,no,no,no,yes
@@ -93,7 +93,7 @@ tmdl_date_start,tmdlDateLo,,,no,yes,no,no,no,no,no,yes
 use_class,useClassName,,,no,no,yes,yes,yes,no,no,no
 use_group,useGroup,,,no,no,yes,no,no,no,no,no
 use_ir_cat,useIrCategory,,,no,no,yes,no,no,no,no,no
-use_name,useName,,,no,no,yes,no,no,no,no,no
+use_name,useName,UseClassUse,name,no,no,yes,no,no,no,no,no
 use_state_ir_cat,useStateIrCategory,,,no,no,yes,no,no,no,no,no
 use_support,useSupport,,,no,no,yes,no,no,no,no,no
 vis,vision303dPriority,,,no,no,yes,no,no,no,no,no
