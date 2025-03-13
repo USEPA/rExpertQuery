@@ -24,7 +24,8 @@ EQ_ExtractParams <- function(extract = NULL)  {
 
 
   # import crosswalk ref file
-  params.cw <- utils::read.csv(file = "inst/extdata/EQParamsCrosswalk.csv") %>%
+  params.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
+                                           package = "rExpertQuery")) %>%
     dplyr::filter(.data[[extract.filter]] == "yes") %>%
     dplyr::select('param', 'eq_name')
 
@@ -204,7 +205,8 @@ EQ_CompareParams <- function(default, user) {
 
 
     # create string of column names base on extract selection
-    columns.string <- utils::read.csv(file = "inst/extdata/EQColumnsForPOST.csv") %>%
+    columns.string <- utils::read.csv(system.file("extdata", "EQColumnsForPOST.csv",
+                                                  package = "rExpertQuery")) %>%
       dplyr::select('col.name', dplyr::all_of(extract.filter)) %>%
       dplyr::filter(!is.na(get(extract.filter))) %>%
       dplyr::arrange(get(extract.filter)) %>%

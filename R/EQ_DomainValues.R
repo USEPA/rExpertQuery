@@ -31,11 +31,9 @@ EQ_DomainValues <- function(domain = NULL) {
   }
 
   if (!is.null(domain)) {
-    # get file path for parameter crosswalk
-    param.cw <- system.file("extdata", "EQParamsCrosswalk.csv", package = "rExpertQuery")
-
     # read in parameter crosswalk
-    param.cw <- utils::read.csv(param.cw)
+    param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
+                                            package = "rExpertQuery"))
 
     # check to make sure user supplied domain value is valid
     if (!domain %in% param.cw$param) {
