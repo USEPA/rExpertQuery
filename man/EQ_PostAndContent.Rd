@@ -2,7 +2,8 @@
 % Please edit documentation in R/EQ_HelperFunctions.R
 \name{EQ_PostAndContent}
 \alias{EQ_PostAndContent}
-\title{Expert Query Create POST and Get Content}
+\title{Create POST request and GET content from Expert Query via Expert Query web services (internal
+function)}
 \usage{
 EQ_PostAndContent(headers, body.list, extract)
 }
@@ -18,6 +19,7 @@ A data frame of the query result or a printed message if the query rows exceed o
 million.
 }
 \description{
-Create POST request and get content from Expert Query web services via exported rExportQuery
-functions.
+Create POST request and GET content from Expert Query via Expert Query web services (internal
+function)
 }
+\keyword{internal}

@@ -2,7 +2,8 @@
 % Please edit documentation in R/EQ_HelperFunctions.R
 \name{EQ_FormatParams}
 \alias{EQ_FormatParams}
-\title{Expert Query Format Params}
+\title{Format user-supplied or default params from rExpertQuery functions to transform all
+param values to character strings (internal function)}
 \usage{
 EQ_FormatParams(.data)
 }
@@ -14,6 +15,7 @@ numeric, or language values.}
 A data frame of the params and their values. All values are character strings.
 }
 \description{
-Format user-supplied or default params from rExpertQuery exported functions to transform all
-param values to character strings.
+Format user-supplied or default params from rExpertQuery functions to transform all
+param values to character strings (internal function)
 }
+\keyword{internal}

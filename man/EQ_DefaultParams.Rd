@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_HelperFunctions.R
 \name{EQ_DefaultParams}
 \alias{EQ_DefaultParams}
-\title{Expert Query Default Params}
+\title{Get default params from specified rExpertQuery function (internal function)}
 \usage{
 EQ_DefaultParams(func)
 }
@@ -13,5 +13,6 @@ EQ_DefaultParams(func)
 A data frame of the default params for the selected function.
 }
 \description{
-Get default params from the rExpertQuery export functions.
+Get default params from specified rExpertQuery function (internal function)
 }
+\keyword{internal}

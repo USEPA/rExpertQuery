@@ -2,7 +2,8 @@
 % Please edit documentation in R/EQ_HelperFunctions.R
 \name{EQ_ExtractParams}
 \alias{EQ_ExtractParams}
-\title{Expert Query Extract Params}
+\title{Extract crosswalk for params and filter names for POST request for the specified query
+(internal function)}
 \usage{
 EQ_ExtractParams(extract = NULL)
 }
@@ -14,6 +15,7 @@ EQ_ExtractParams(extract = NULL)
 A df of the params for the selected extract.
 }
 \description{
-Return the crosswalk for params and filter names for POST request for the specified Expert Query
-Extract.
+Extract crosswalk for params and filter names for POST request for the specified query
+(internal function)
 }
+\keyword{internal}

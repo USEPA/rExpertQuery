@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_CatchCorr.R
 \name{EQ_CatchCorr}
 \alias{EQ_CatchCorr}
-\title{Expert Query Catchment Correspondence}
+\title{Query and return ATTAINS Catchment Correspondence data via Expert Query web services}
 \usage{
 EQ_CatchCorr(
   api_key = NULL,
@@ -48,12 +48,10 @@ A data frame of ATTAINS Catchment Correspondence with the columns "objectId", "r
 "assessmentUnitName", "catchmentNhdPlusId", "reportingCycle", and "cycleId".
 }
 \description{
-Return ATTAINS Catchment Correspondence data via Expert Query web services.
-}
-\details{
 #' * If using VPN, suggest signing out of VPN before running this function as it can cause
 403 error and prevent download of catchment correspondence data.
-
+}
+\details{
 ** Catchment Correspondence queries can generate large files. You must have enough memory
 available for these functions to import them into R successfully. Best practice is to make
 your initial query as specific as possible to reduce size of file returned.

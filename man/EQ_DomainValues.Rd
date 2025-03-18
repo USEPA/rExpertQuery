@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_DomainValues.R
 \name{EQ_DomainValues}
 \alias{EQ_DomainValues}
-\title{Expert Query Domain Values}
+\title{Provides allowable values for a param by leveraging ATTAINS web services.}
 \usage{
 EQ_DomainValues(domain = NULL)
 }
@@ -14,9 +14,6 @@ will return a list of all allowable domain values.}
 A df allowable values for the selected query_param.
 }
 \description{
-Provides information on allowable values for a param by leveraging ATTAINS web services.
-}
-\details{
 HRM Note 3/10/25 - Crosswalk between ATTAINS and EQ domains not yet complete. This function
 does not yet work for all EQ params as a result.
 }

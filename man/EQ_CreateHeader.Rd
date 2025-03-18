@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_HelperFunctions.R
 \name{EQ_CreateHeader}
 \alias{EQ_CreateHeader}
-\title{Expert Query Create Header}
+\title{Create header for count and data POST requests (internal function)}
 \usage{
 EQ_CreateHeader(key)
 }
@@ -13,5 +13,6 @@ EQ_CreateHeader(key)
 A character string for the POST header.
 }
 \description{
-Create header for count and data POST requests.
+Create header for count and data POST requests (internal function)
 }
+\keyword{internal}
