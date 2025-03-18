@@ -8,6 +8,8 @@
 #'
 #' @return A df of the params for the selected extract.
 #'
+#' @keywords internal
+#'
 EQ_ExtractParams <- function(extract = NULL)  {
 
   # select filter column
@@ -40,6 +42,8 @@ EQ_ExtractParams <- function(extract = NULL)  {
 #'
 #' @return A data frame of the default params for the selected function.
 #'
+#' @keywords internal
+#'
 
 EQ_DefaultParams <- function(func) {
 
@@ -63,6 +67,8 @@ return(params.df)
 #' @return A data frame of the params and their values. All values are character strings.
 #'
 #' @importFrom rlang .data
+#'
+#' @keywords internal
 #'
 
 EQ_FormatParams <- function(.data) {
@@ -99,6 +105,8 @@ EQ_FormatParams <- function(.data) {
 #' @return A data frame of all params and values that should be used as filters in the body of  the
 #' POST request.
 #'
+#' @keywords internal
+#'
 
 EQ_CompareParams <- function(default, user) {
 
@@ -131,6 +139,9 @@ EQ_CompareParams <- function(default, user) {
 #' of the count POST request. The second character string is for the body of the data POST request.
 #'
 #' @importFrom rlang .data
+#'
+#' @keywords internal
+#'
 
   EQ_CreateBody <- function(comp.params, crosswalk, extract) {
 
@@ -241,6 +252,8 @@ EQ_CompareParams <- function(default, user) {
   #'
   #' @return A character string for the POST header.
   #'
+  #' @keywords internal
+  #'
   EQ_CreateHeader <- function(key) { # create headers for POST
 
     headers.setup <- c(
@@ -265,6 +278,9 @@ EQ_CompareParams <- function(default, user) {
   #'
   #' @return A data frame of the query result or a printed message if the query rows exceed one
   #' million.
+  #'
+  #' @keywords internal
+  #'
 
   EQ_PostAndContent <- function(headers, body.list, extract) {
 
