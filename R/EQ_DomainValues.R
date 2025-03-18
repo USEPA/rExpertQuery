@@ -1,6 +1,4 @@
-#' Expert Query Domain Values
-#'
-#' Provides information on allowable values for a param by leveraging ATTAINS web services.
+#' Provides allowable values for a param by leveraging ATTAINS web services.
 #'
 #' HRM Note 3/10/25 - Crosswalk between ATTAINS and EQ domains not yet complete. This function
 #' does not yet work for all EQ params as a result.

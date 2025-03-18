@@ -1,7 +1,5 @@
-#' Expert Query Extract Params
-#'
-#' Return the crosswalk for params and filter names for POST request for the specified Expert Query
-#' Extract.
+#' Extract crosswalk for params and filter names for POST request for the specified query
+#' (internal function)
 #'
 #' @param extract enter extract type. Options are: "actions", "act_docs",
 #' "assessments", "aus", "au_mls", "catch_corr", "sources", and "tmdl".
@@ -34,9 +32,7 @@ EQ_ExtractParams <- function(extract = NULL)  {
   return(params.cw)
 }
 
-#' Expert Query Default Params
-#'
-#' Get default params from the rExpertQuery export functions.
+#' Get default params from specified rExpertQuery function (internal function)
 #'
 #' @param func The Expert Query exported function to call parameters from
 #'
@@ -56,10 +52,9 @@ params.df <- formals(func) %>%
 return(params.df)
 }
 
-#' Expert Query Format Params
-#'
-#' Format user-supplied or default params from rExpertQuery exported functions to transform all
-#' param values to character strings.
+
+#' Format user-supplied or default params from rExpertQuery functions to transform all
+#' param values to character strings (internal function)
 #'
 #' @param .data The data frame of params and their values. The value column may contain character,
 #' numeric, or language values.
@@ -92,10 +87,9 @@ EQ_FormatParams <- function(.data) {
   return(params.df)
 }
 
-#' Expert Query Compare Params
-#'
-#' Compare user-supplied and default params in rExportQuery exported functions to create data frame
-#'of all params that should be used to build the filters section of the POST request body.
+
+#' Compare user-supplied and default params in rExportQuery functions to create data frame
+#' of all params for building the filters section of the POST request body (internal function)
 #'
 #' @param default The data frame of default params and their values. All values must be character
 #' strings.
@@ -125,10 +119,9 @@ EQ_CompareParams <- function(default, user) {
   return(all.params)
 }
 
-#' Expert Query Create Body
-#'
+
 #' Create character strings to use as the body for POST requests to return counts and retrieve
-#' data in exported rExportQuery functions.
+#' data in rExportQuery functions (internal function)
 #'
 #' @param comp.params A data frame of the EQ_CompareParams output for the query.
 #' @param crosswalk The crosswalk between param names and Expert Query field names for the POST
@@ -244,9 +237,8 @@ EQ_CompareParams <- function(default, user) {
   }
 
 
-  #' Expert Query Create Header
-  #'
-  #' Create header for count and data POST requests.
+
+  #' Create header for count and data POST requests (internal function)
   #'
   #' @param key Character string. The api key unique to the user.
   #'
@@ -267,10 +259,8 @@ EQ_CompareParams <- function(default, user) {
 
   }
 
-  #' Expert Query Create POST and Get Content
-  #'
-  #' Create POST request and get content from Expert Query web services via exported rExportQuery
-  #' functions.
+  #' Create POST request and GET content from Expert Query via Expert Query web services (internal
+  #' function)
   #'
   #' @param headers Character string. Header for POST request created in EQ_CreateHeader.
   #' @param body.list List of character strings for count and query POSTs created in EQ_CreateBody.
