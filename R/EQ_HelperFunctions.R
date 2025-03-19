@@ -24,7 +24,7 @@ EQ_ExtractParams <- function(extract = NULL)  {
 
 
   # import crosswalk ref file
-  params.cw <- utils::read.csv(file = "inst/extdata/EQParamsCrosswalk.csv") %>%
+  params.cw <- readr::read_csv(file = "inst/extdata/EQParamsCrosswalk.csv") %>%
     dplyr::filter(.data[[extract.filter]] == "yes") %>%
     dplyr::select('param', 'eq_name')
 
