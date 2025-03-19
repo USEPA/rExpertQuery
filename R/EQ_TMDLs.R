@@ -9,10 +9,7 @@
 #' @param act_id Character string. Unique Identifier for the Action associated with an Assessment
 #' that will be used to track the Action entered (such as the corresponding information and
 #' associated documents) in ATTAINS, and its associated name. Default = NULL.
-#' @param act_name Character string. Unique identifier for the Action that will be used to track
-#' the Action entered (such as the corresponding information and associated documents) in ATTAINS,
-#' and its associated name (name of TMDL Report, 4B Report, Alternative Report, etc.). Default =
-#' NULL.
+#' @param act_name Character string. The name associated with the action.Default = NULL.
 #' @param ad_param Character string. In the context of a TMDL, Addressed Parameters refer to
 #' associated parameters (parameters identified as causes of impairment in the Section 303(d) list
 #' or later identified as such through the TMDL process) that are being addressed by the pollutant

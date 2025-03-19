@@ -196,9 +196,8 @@ EQ_NationalExtract <- function(extract = NULL) {
 
   # import cross walk to convert column names to match other rExpertQuery function output
   # import crosswalk ref file
-  col.cw <- system.file("extdata", "EQColumnsForPOST.csv", package = "rExpertQuery")
-
-  col.cw <- utils::read.csv(col.cw) %>%
+  col.cw <- utils::read.csv(system.file("extdata", "EQColumnsForPOST.csv",
+                                        package = "rExpertQuery")) %>%
     dplyr::select("col.name", "nat_extract", dplyr::all_of(extract)) %>%
     dplyr::filter(!is.na(.data[[extract]])) %>%
     dplyr::arrange((.data[[extract]]))

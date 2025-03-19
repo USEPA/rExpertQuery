@@ -15,8 +15,9 @@
 #' "YYYY" or "latest", which will select the most recent available cycle. Default = "latest".
 #' @param statecode Character string. FIPS state alpha code that identifies a state (e.g.
 #' statecode = "DE" for Delaware). See https://www.waterqualitydata.us/Codes/statecode for options.
-#' @param use_class Character string. The Use Class assigned to an Assessment Unit. Options can be
-#' viewed with EQ_DomainValues("use_class"). Default = NULL.
+#' @param use_class Character string. The Use Class assigned to an Assessment Unit. Options are
+#' "CULTURAL_USE", "DRINKING_WATER_USE", "ECOLOGICAL USE", "FISHCONSUMPTION_USE", "OTHER_USE",
+#' and "RECREATION_USE". Default = NULL.
 #' @param water_type Character string. An Assessment Unit must have at least one water type, and it
 #' may have multiple water types. Options can be viewed with EQ_DomainValues("water_type"). Default
 #' = NULL.

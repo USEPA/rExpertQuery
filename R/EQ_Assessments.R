@@ -48,14 +48,16 @@
 #' @param cycle_last_start Character string. Starting date for the range of cycles where the
 #' Assessment Unit and Cause were last included on the 303(d) list. Format is "YYYY".
 #' @param delist_reason Character string. The specific reason or explanation for removing a
-#' waterbody or segment from a list of impaired waters or areas of concern. Options can be viewed
-#' with EQ_DomainValues("delist_reason"). Default = NULL.
+#' waterbody or segment from a list of impaired waters or areas of concern. Options are "Applicable
+#' WQS. Default = NULL.
 #' @param delisted Character string. Indicates whether a waterbody or segment has been removed from
 #' a list of impaired waters or areas of concern due to meeting the required water quality standards
 #' or improvement targets. Options are "No" or "Yes". Default = NULL.
 #' @param epa_ir_cat The overall EPA Integrated Report Category for the Assessment Unit ID,
 #' calculated by ATTAINS. Options are "1", "2", "3", "4A", "4B", "4C", "5", "5A", and "5R". Default
-#' = NULL.
+#' = NULL. For more information on how the categories are defined and calculated within ATTAINS
+#' see:
+#' https://www.epa.gov/sites/default/files/2018-09/documents/attains_calculations_of_epa_ir_categories_2018-08-31.pdf
 #' @param expect_attain_cycle_hi Character string. Upper end of  range of Cycles (years) by which
 #' the Assessment Unit is expected to attain its standards (use to indicate whether or not this
 #' cause should be considered towards category 4B). Format is YYYY (ex: "2028"). Default = NULL.
@@ -118,8 +120,9 @@
 #' @param tmdl_cycle_lo Character string. The starting date for the range of dates for cycle when
 #' the jurisdiction anticipates submitting the TMDL for EPA approval. Format is "YYYY". Default =
 #' NULL.
-#' @param use_class Character string. The Use Class assigned to an Assessment Unit. Options can be
-#' viewed with EQ_DomainValues("use_class"). Default = NULL.
+#' @param use_class Character string. The Use Class assigned to an Assessment Unit. Options are
+#' "CULTURAL_USE", "DRINKING_WATER_USE", "ECOLOGICAL USE", "FISHCONSUMPTION_USE", "OTHER_USE",
+#' and "RECREATION_USE". Default = NULL.
 #' @param use_group Character string. This represents a collection of related Uses. Options are
 #' "DRINKINGWATER_USE", "ECOLOGICAL_USE", "FISHCONSUMPTION_USE", "RECREATION_USE", and
 #' "OTHER_USE". Default = NULL.
