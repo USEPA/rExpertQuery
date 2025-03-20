@@ -209,7 +209,7 @@ EQ_CompareParams <- function(default, user) {
 
 
     # create string of column names base on extract selection
-    columns.string <- utils::read.csv(system.file("extdata", "EQColumnsForPOST.csv",
+    columns.string <- readr::read_csv(system.file("extdata", "EQColumnsForPOST.csv",
                                                   package = "rExpertQuery")) %>%
       dplyr::select('col.name', dplyr::all_of(extract.filter)) %>%
       dplyr::filter(!is.na(get(extract.filter))) %>%
