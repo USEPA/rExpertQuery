@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_Sources.R
 \name{EQ_Sources}
 \alias{EQ_Sources}
-\title{Expert Query Sources}
+\title{Query and return ATTAINS Sources data via Expert Query web services}
 \usage{
 EQ_Sources(
   api_key = NULL,
@@ -88,7 +88,7 @@ A data frame of ATTAINS Sources with the columns "objectId", "region", "state",
 "waterSize", and "waterSizeUnits".
 }
 \description{
-Return sources data from Expert Query.
+Query and return ATTAINS Sources data via Expert Query web services
 }
 \examples{
  \dontrun{

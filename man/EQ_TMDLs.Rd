@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_TMDLs.R
 \name{EQ_TMDLs}
 \alias{EQ_TMDLs}
-\title{Expert Query TMDLs}
+\title{Query and return ATTAINS TMDL data via Expert Query web services}
 \usage{
 EQ_TMDLs(
   api_key = NULL,
@@ -146,7 +146,7 @@ A data frame of ATTAINS TMDLs with the columns "objectId", "region", "state",
 "wasteLoadAllocation", and "planSummaryLink".
 }
 \description{
-Return tmdl data from Expert Query.
+Query and return ATTAINS TMDL data via Expert Query web services
 }
 \examples{
  \dontrun{

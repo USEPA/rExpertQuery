@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_Assessments.R
 \name{EQ_Assessments}
 \alias{EQ_Assessments}
-\title{Expert Query Assessments}
+\title{Query and return ATTAINS Assessments data via Expert Query web services}
 \usage{
 EQ_Assessments(
   api_key = NULL,
@@ -282,8 +282,7 @@ A data frame of ATTAINS Assessments with the columns "objectId", "region", "stat
 "locationDescription", "sizeSource", "sourceScale", "waterSize", and "waterSizeUnits".
 }
 \description{
-Return a data frame of ATTAINS Assessments data from Expert Query web services, filtered by
-user inputs.
+Query and return ATTAINS Assessments data via Expert Query web services
 }
 \examples{
  \dontrun{

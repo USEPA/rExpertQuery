@@ -2,7 +2,8 @@
 % Please edit documentation in R/EQ_HelperFunctions.R
 \name{EQ_CreateBody}
 \alias{EQ_CreateBody}
-\title{Expert Query Create Body}
+\title{Create character strings to use as the body for POST requests to return counts and retrieve
+data in rExportQuery functions (internal function)}
 \usage{
 EQ_CreateBody(comp.params, crosswalk, extract)
 }
@@ -20,5 +21,6 @@ of the count POST request. The second character string is for the body of the da
 }
 \description{
 Create character strings to use as the body for POST requests to return counts and retrieve
-data in exported rExportQuery functions.
+data in rExportQuery functions (internal function)
 }
+\keyword{internal}

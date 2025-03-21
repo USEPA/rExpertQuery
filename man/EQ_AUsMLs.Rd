@@ -2,7 +2,8 @@
 % Please edit documentation in R/EQ_AUsMLs.R
 \name{EQ_AUsMLs}
 \alias{EQ_AUsMLs}
-\title{Expert Query Assessment Units with Monitoring Locations}
+\title{Query and return ATTAINS Assessment Units with Monitoring Locations data via Expert Query web
+services}
 \usage{
 EQ_AUsMLs(
   api_key = NULL,
@@ -72,7 +73,8 @@ A data frame of ATTAINS Assessment Units with Monitoring Locations with the colu
 and "waterSizeUnits".
 }
 \description{
-Return ATTAINS Assessment Units with Monitoring Locations data via Expert Query web services.
+Query and return ATTAINS Assessment Units with Monitoring Locations data via Expert Query web
+services
 }
 \examples{
  \dontrun{

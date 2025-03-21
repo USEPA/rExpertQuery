@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_ActionsDocuments.R
 \name{EQ_ActionsDocuments}
 \alias{EQ_ActionsDocuments}
-\title{Expert Query Actions Documents}
+\title{Query and return ATTAINS Actions Documents data via Expert Query web services}
 \usage{
 EQ_ActionsDocuments(
   api_key = NULL,
@@ -82,7 +82,7 @@ A data frame of ATTAINS Actions Documents with the columns "objectId",
 actionDocumentType".
 }
 \description{
-Query ATTAINS Actions Documents data via Expert Query web services and return as data frame.
+Query and return ATTAINS Actions Documents data via Expert Query web services
 }
 \examples{
 \dontrun{

@@ -2,7 +2,8 @@
 % Please edit documentation in R/EQ_NationalExtract.R
 \name{EQ_NationalExtract}
 \alias{EQ_NationalExtract}
-\title{Import Expert Query National Extract}
+\title{Returns user-specified Expert Query National Extracts of ATTAINS data for use cases
+where nationwide data is desired.}
 \usage{
 EQ_NationalExtract(extract = NULL)
 }
@@ -67,8 +68,7 @@ implicitMarginOfSafety", "includeInMeasure", "completionDate", "tmdlDate",
 "wasteLoadAllocation", and "planSummaryLink".
 }
 \description{
-Returns data frame of user-specified Expert Query National Extracts of ATTAINS data for use cases
-where nationwide data is desired. Also useful in situations where the the desired query would
+This function is also useful in situations where the the desired query would
 yield more than 1 million rows as the national extracts can be sorted and filtered after import.
 The National Extracts are large files and can take several minutes to download and import.
 }

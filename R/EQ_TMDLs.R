@@ -1,6 +1,5 @@
-#' Expert Query TMDLs
-#'
-#' Return tmdl data from Expert Query.
+
+#' Query and return ATTAINS TMDL data via Expert Query web services
 #'
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:

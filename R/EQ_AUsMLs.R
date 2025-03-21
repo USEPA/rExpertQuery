@@ -1,6 +1,5 @@
-#' Expert Query Assessment Units with Monitoring Locations
-#'
-#' Return ATTAINS Assessment Units with Monitoring Locations data via Expert Query web services.
+#' Query and return ATTAINS Assessment Units with Monitoring Locations data via Expert Query web
+#' services
 #'
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query web services. To obtain an api, submit the form at:

@@ -1,6 +1,4 @@
-#' Expert Query Catchment Correspondence
-#'
-#' Return ATTAINS Catchment Correspondence data via Expert Query web services.
+#' Query and return ATTAINS Catchment Correspondence data via Expert Query web services
 #'
 #' #' * If using VPN, suggest signing out of VPN before running this function as it can cause
 #' 403 error and prevent download of catchment correspondence data.

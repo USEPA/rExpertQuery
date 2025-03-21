@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_AssessmentUnits.R
 \name{EQ_AssessmentUnits}
 \alias{EQ_AssessmentUnits}
-\title{Expert Query Assessment Units}
+\title{Query and return ATTAINS Assessment Units data via Expert Query web services}
 \usage{
 EQ_AssessmentUnits(
   api_key = NULL,
@@ -55,7 +55,7 @@ A data frame of ATTAINS Assessment Units with the columns "region", "state",
 and "waterSizeUnits".
 }
 \description{
-Return ATTAINS Assessment Units data via Expert Query web services.
+Query and return ATTAINS Assessment Units data via Expert Query web services
 }
 \examples{
  \dontrun{

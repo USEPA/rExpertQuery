@@ -2,7 +2,8 @@
 % Please edit documentation in R/EQ_HelperFunctions.R
 \name{EQ_CompareParams}
 \alias{EQ_CompareParams}
-\title{Expert Query Compare Params}
+\title{Compare user-supplied and default params in rExportQuery functions to create data frame
+of all params for building the filters section of the POST request body (internal function)}
 \usage{
 EQ_CompareParams(default, user)
 }
@@ -18,6 +19,7 @@ A data frame of all params and values that should be used as filters in the body
 POST request.
 }
 \description{
-Compare user-supplied and default params in rExportQuery exported functions to create data frame
-of all params that should be used to build the filters section of the POST request body.
+Compare user-supplied and default params in rExportQuery functions to create data frame
+of all params for building the filters section of the POST request body (internal function)
 }
+\keyword{internal}

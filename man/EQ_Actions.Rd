@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_Actions.R
 \name{EQ_Actions}
 \alias{EQ_Actions}
-\title{Expert Query Actions}
+\title{Query and return ATTAINS Actions data via Expert Query web services}
 \usage{
 EQ_Actions(
   api_key = NULL,
@@ -105,7 +105,7 @@ A data frame of ATTAINS actions with the columns "objectId", "region", "state",
 "planSummaryLink".
 }
 \description{
-Query ATTAINS Actions data via Expert Query web services and return as data frame.
+Query and return ATTAINS Actions data via Expert Query web services
 }
 \examples{
 \dontrun{
