@@ -2,7 +2,7 @@
 
 [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 
-[![](https://github.com/USEPA/rExpertQuery/actions/workflows/main.yml/badge.svg)](https://github.com/USEPA/rExpertQuery/actions/workflows/main.yml)
+[![Codecov test coverage](https://codecov.io/gh/USEPA/rExpertQuery/graph/badge.svg)](https://app.codecov.io/gh/USEPA/rExpertQuery)
 
 A draft R package (UNDER ACTIVE DEVELOPMENT) for retrieving ATTAINS data efficiently via Expert Query web services (https://www.epa.gov/waterdata/expert-query).
 
