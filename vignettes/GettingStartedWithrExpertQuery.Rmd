@@ -1,0 +1,217 @@
+---
+title: "Getting Started With rExpertQuery"
+format: html
+editor: visual
+author: "ATTAINS Team"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_caption: yes
+    fig_height: 8
+    fig_width: 8
+vignette: >
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Getting Started With rExpertQuery}
+  %\VignetteEngine{knitr::rmarkdown}
+description: An overview of rExpertQuery functions for querying and downloading ATTAINS data via Expert Query web services.
+editor_options:
+  chunk_output_type: console
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include = FALSE}
+library(knitr)
+```
+
+```{css, echo = F, eval = FALSE}
+pre {
+  max-height: auto;
+  overflow-y: auto;
+}
+
+pre[class] {
+  max-height: auto;
+}
+```
+
+## About Expert Query and rExpertQuery
+
+Expery Query (https://owapps.epa.gov/expertquery/attains/tmdl) empowers users to access surface 
+water quality data from the Assessment and TMDL Tracking and Implementation System (ATTAINS), 
+encompassing Assessment decisions (under Clean Water Act Sections 303(d), 305(b), and 106) and 
+Action data like Total Maximum Daily Loads (TMDLs), Advance Restoration Plans (ARPs), and 
+Protection Approaches.
+
+The tool supports querying and downloading data within and across organizations (states or tribes), 
+such as querying all the data within an EPA region or all nutrient TMDLs nationally. It also allows 
+users to download national ATTAINS data extracts.
+
+rExpertQuery takes this a step further as its functions facilitate querying the Expert Query web
+services from R functions which allow the user to import the resulting data sets directly in to
+R for more detailed review and analysis.
+
+It is crucial to be aware of certain complexities inherent in the data and querying process. Users 
+are cautioned against direct comparisons between states due to differences in water quality standards 
+and assessment methodologies. 
+
+While Expert Query facilitates data querying, it lacks built-in summary capabilities. Users are 
+encouraged to download and summarize data, but use caution when relying on row counts, as duplicate 
+entries may occur. This complexity arises from multiple tables that have many-to-many relationships.
+Future vignettes and functions may provide examples of how to summarize Expert Query data.
+
+
+## Installation
+
+You must first have R and R Studio installed to use the rExpert Query (see instructions below if 
+needed). rExpert Query is in active development, therefore we highly recommend that you update it
+and all of its dependency libraries each time you use the package. 
+
+You can install and/or update the [rExpertQuery Package](https://github.com/USEPA/rExpertQuery) and 
+all dependencies by running:
+
+```{r install, eval = TRUE, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE}
+if(!"remotes"%in%installed.packages()){
+install.packages("remotes")
+}
+
+remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
+
+library(dplyr)
+library(data.table)
+```
+
+```{r testkey, include=FALSE}
+testkey <- "53BVce47MQ3KXKibjx35g4ojaDQGh8qWfbdO8cE0"
+```
+
+
+## EQ_Actions
+
+*EQ_Actions()* queries ATTAINS Actions data by a variety of user supplied parameters. For example,
+you might like to run a relatively simple query  return data for all Region 4 Actions that should be
+included in Measures.
+
+```{r eq_actions_ex1, echo = TRUE, results = FALSE, message = FALSE, warning = FALSE}
+# query Actions from Region 4 that are included in Measures
+R4_actions_in_meas <- rExpertQuery::EQ_Actions(api_key = testkey, region = 4, in_meas = "Yes" )
+
+```
+
+This query returns `r formatC(nrow(R4_actions_in_meas), big.mark = ",")` results, so we'll review only a small random subset of them in a data 
+table just to get an idea of what those results look like:
+
+```{r R4urlprep, include = FALSE}
+# Actions Documents containing "nutrient"
+R4_actions_in_meas$planSummaryLink <- paste0('<a href="',R4_actions_in_meas$planSummaryLink,'" target="_blank">',R4_actions_in_meas$planSummaryLink, '</a>')
+```
+
+```{r r4_datatable}
+# create random subset of R4 query results
+R4_subset <- R4_actions_in_meas %>%
+  dplyr::slice_sample(n=20)
+
+# create data tab;e
+DT::datatable(R4_subset, options = list(pageLength = 2, scrollX = TRUE))
+```
+
+You might also want to create a more specific query. For example, you might want to find all 
+Actions from Missouri that were issued by EPA with completion dates between 2000-01-01 and 
+2020-12-31. As this more detailed query returns a smaller data set, the data table shows all
+results of the query
+
+```{r eq_actions_ex2, results = TRUE, message = FALSE, warning = FALSE}
+# query Actions for Missouri Actions with action agency "EPA" and parameter group "PATHOGENS"
+MO_epa <- rExpertQuery::EQ_Actions(api_key = testkey, statecode = "MO",
+                                   act_agency = "EPA",
+                                   param_group = "PATHOGENS",
+                                   comp_date_start = "2000-01-01",
+                                   comp_date_end = "2020-12-31")
+```
+
+```{r MOurlprep, include = FALSE}
+# Actions Documents containing "nutrient"
+MO_epa$planSummaryLink <- paste0('<a href="',MO_epa$planSummaryLink,'" target="_blank">',MO_epa$planSummaryLink, '</a>')
+```
+
+```{r mo_data table}
+# view MO results
+DT::datatable(MO_epa, options = list(pageLength = 10, scrollX = TRUE))
+```
+## EQ_ActionsDocuments
+
+*EQ_Actions()* queries ATTAINS Actions Documents data with user supplied parameters. One
+of its unique features is that you can search the documents themselves by keyword or phrase. For
+example, you might want to find all Actions Documents which contained the keyword "farm".
+
+```{r farm}
+# Actions Documents containing "nutrient"
+Farm_docs <- rExpertQuery::EQ_ActionsDocuments(doc_query = "farm",
+                                        api_key = testkey)
+
+```
+
+This query yields `r formatC(nrow(Farm_docs), big.mark = ",")` results. As well as providing the Action and Document Name for all results, *EQ_Actions()* also returns the column "actionDocumentUrl"
+containg the URL to link to the document. Becaue the query yields so many results, we'll take a look at a smaller subset of them in a data table to understand the structure of the results.
+
+```{r farmurlprep, include = FALSE}
+# Actions Documents containing "nutrient"
+Farm_docs$actionDocumentUrl <- paste0('<a href="',Farm_docs$actionDocumentUrl,'" target="_blank">',Farm_docs$actionDocumentUrl, '</a>')
+```
+
+```{r}
+
+Farm_docs_subset <- Farm_docs %>%
+  dplyr::slice_sample(n = 20)
+
+DT::datatable(Farm_docs_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+You can also query by more typical parameters like organization name (org_name), EPA region (region)
+, or action type (act_type). The example below demonstrates using the function to search for 4B Restoration Approach documents from Pennsylvania.
+
+```{r}
+PA_4B <- rExpertQuery::EQ_ActionsDocuments(statecode = "PA", act_type = "4B Restoration Approach",
+                                           api = testkey)
+```
+
+```{r farmurlprep, include = FALSE}
+# Actions Documents containing "nutrient"
+PA_4B$actionDocumentUrl <- paste0('<a href="',PA_4B$actionDocumentUrl,'" target="_blank">',PA_4B$actionDocumentUrl, '</a>')
+```
+ 
+ As there are only `r formatC(nrows(PA_4B), big.mark = ",)` 4B Restoration Approach documents from Pennsylvania, we can review them all in the table below. As in the other Actions Document Example,
+ the actionDocumentUrl column contains a link to the document.
+
+## EQ_Assessments
+*EQ_Assessments()* queries ATTAINS Assessments data
+
+## EQ_AssessmentUnits
+
+Content in development
+
+## EQ_AUsMLs
+
+Content in development
+
+## EQ_CatchCorr
+
+Content in development
+
+## EQ_NationalExtract
+
+Content in development
+
+## EQ_Sources
+
+Content in development
+
+## EQ_TMDLs
+
+Content in development
+
+## EQ_DomainValues
+
+Content in development
+
