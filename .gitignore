@@ -10,6 +10,5 @@ test.txt
 GettingStartedWithrExpertQuery.Rmd
 
 # git
-vignettes/
 inst/doc
 docs
