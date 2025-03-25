@@ -29,6 +29,7 @@ Imports:
   utils
 Suggests:
     devtools,
+    DT,
     knitr,
     pkgdown,
     rmarkdown,
