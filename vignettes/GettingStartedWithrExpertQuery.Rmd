@@ -269,7 +269,8 @@ WA_ausmls <- rExpertQuery::EQ_AssessmentUnits(statecode = "WA",
 Content in development
 ```{r dc.catchcorr}
 
-DC_catch <- rExpertQuery::EQ_CatchCorr(statecode = "DC")
+DC_catch <- rExpertQuery::EQ_CatchCorr(statecode = "DC",
+                                       api_key = testkey)
 
 ```
 
