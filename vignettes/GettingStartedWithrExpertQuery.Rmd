@@ -289,7 +289,7 @@ Nat_tmdls <- rExpertQuery::EQ_NationalExtract("tmdls")
 
 ```
 
-```{r nat.tmdls}
+```{r nat.actions}
 
 Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
 
