@@ -276,8 +276,8 @@ DC_catch <- rExpertQuery::EQ_CatchCorr(statecode = "DC",
 
 ```{r il.au.catch}
 
-IL_dj12_catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
-                          auid = "IL_DJ-12",
+IL_N99_catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
+                          auid = "IL_N-99",
                           api_key = testkey)
 
 ```
