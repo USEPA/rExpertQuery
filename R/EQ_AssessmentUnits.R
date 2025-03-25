@@ -48,7 +48,7 @@
 #'                           api_key = testkey)
 #'               }
 #'
-EQ_AssessmentUnits <- function(api_key = NULL, au_name = NULL, au_status = "A", auid = NULL,
+EQ_AssessmentUnits <- function(api_key = NULL, au_name = NULL, au_status = "Active", auid = NULL,
                                region = NULL, report_cycle = NULL, statecode = NULL,
                                use_class = NULL, water_type = NULL) {
   # check for api key

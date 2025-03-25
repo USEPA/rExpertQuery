@@ -243,9 +243,9 @@ RI_aus <- rExpertQuery::EQ_AssessmentUnits(statecode = "RI",
 
 ```
 
-```{r ar.retired}
+```{r fl.retired}
 
-AR_retired <- rExpertQuery::EQ_AssessmentUnits(statecode = "AR",
+FL_retired <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
                                            au_status = "Retired",
                                            api_key = testkey)
 

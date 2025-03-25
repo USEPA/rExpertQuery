@@ -7,7 +7,7 @@
 EQ_AssessmentUnits(
   api_key = NULL,
   au_name = NULL,
-  au_status = "A",
+  au_status = "Active",
   auid = NULL,
   region = NULL,
   report_cycle = NULL,
