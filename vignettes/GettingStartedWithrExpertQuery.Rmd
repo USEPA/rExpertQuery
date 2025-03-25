@@ -286,7 +286,7 @@ IL_N99_catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
 
 ```{r nat.tmdls}
 
-Nat_tmdls <- rExpertQuery::EQ_NationalExtract("tmdls")
+Nat_tmdls <- rExpertQuery::EQ_NationalExtract("tmdl")
 
 ```
 
