@@ -337,5 +337,10 @@ Dom_vals <- rExpertQuery::EQ_DomainValues()
 
 ```
 
+```{r dom.vals.org}
+
+Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
+
+```
 
 
