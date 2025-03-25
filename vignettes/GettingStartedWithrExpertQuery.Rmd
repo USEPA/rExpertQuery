@@ -236,14 +236,14 @@ assessment units, but input params can be adjusted to query for "Retired" or "Hi
 assessment units in addition to or instead of "Active". The example below shows a simple example for
 querying for Active assessment units for a single state.
 
-```{r ri.aus}
+```{r ri.aus, results = TRUE, message = FALSE, warning = FALSE}
 
 RI_aus <- rExpertQuery::EQ_AssessmentUnits(statecode = "RI",
                                            api_key = testkey)
 
 ```
 
-```{r fl.retired}
+```{r fl.retired, results = TRUE, message = FALSE, warning = FALSE}
 
 FL_retired <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
                                            au_status = "Retired",
@@ -254,12 +254,12 @@ FL_retired <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
 ## EQ_AUsMLs
 
 Content in development
-```{r}
+```{r akausmls, results = TRUE, message = FALSE, warning = FALSE}
 AK_ausmls <- rExpertQuery::EQ_AssessmentUnits(statecode = "AK",
                                               api_key = testkey)
 ```
 
-```{r}
+```{r waausmls, results = TRUE, message = FALSE, warning = FALSE}
 WA_ausmls <- rExpertQuery::EQ_AssessmentUnits(statecode = "WA",
                                               api_key = testkey)
 ```
@@ -267,14 +267,14 @@ WA_ausmls <- rExpertQuery::EQ_AssessmentUnits(statecode = "WA",
 ## EQ_CatchCorr
 
 Content in development
-```{r dc.catchcorr}
+```{r dc.catchcorr, results = TRUE, message = FALSE, warning = FALSE}
 
 DC_catch <- rExpertQuery::EQ_CatchCorr(statecode = "DC",
                                        api_key = testkey)
 
 ```
 
-```{r il.au.catch}
+```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
 
 IL_N99_catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
                           auid = "IL_N-99",
@@ -284,13 +284,13 @@ IL_N99_catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
 
 ## EQ_NationalExtract
 
-```{r nat.tmdls}
+```{r nat.tmdls, results = TRUE, message = FALSE, warning = FALSE}
 
 Nat_tmdls <- rExpertQuery::EQ_NationalExtract("tmdl")
 
 ```
 
-```{r nat.actions}
+```{r nat.actions, results = TRUE, message = FALSE, warning = FALSE}
 
 Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
 
@@ -298,13 +298,13 @@ Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
 ## EQ_Sources
 
 Content in development
-```{r wi.source.hab}
+```{r wi.source.hab, results = TRUE, message = FALSE, warning = FALSE}
 WI_habalt_sources <- rExpertQuery::EQ_Sources(statecode = "WI",
                                  param_group = "HABITAT ALTERATIONS",
                                  api_key = testkey)
 ```
 
-```{r source.legacy}
+```{r source.legacy, results = TRUE, message = FALSE, warning = FALSE}
 legacy_sources <- rExpertQuery::EQ_Sources(source = "LEGACY/HISTORICAL POLLUTANTS",
                              api_key = testkey)
 ```
@@ -312,14 +312,14 @@ legacy_sources <- rExpertQuery::EQ_Sources(source = "LEGACY/HISTORICAL POLLUTANT
 ## EQ_TMDLs
 
 Content in development
-```{r hi.tmdl.both}
+```{r hi.tmdl.both, results = TRUE, message = FALSE, warning = FALSE}
 
 HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
                                source_type = "Both",
                                api_key = testkey)
 ```
 
-```{r pathogens.r10}
+```{r pathogens.r10, results = TRUE, message = FALSE, warning = FALSE}
 
 R10_pathogens <- rExpertQuery::EQ_TMDLs(region = 10,
                              ad_param_group = "PATHOGENS",
@@ -331,14 +331,14 @@ R10_pathogens <- rExpertQuery::EQ_TMDLs(region = 10,
 ## EQ_DomainValues
 
 Content in development
-```{r see.dom.vals}
+```{r see.dom.vals, results = TRUE, message = FALSE, warning = FALSE}
 
 Dom_vals <- rExpertQuery::EQ_DomainValues()
 
 
 ```
 
-```{r dom.vals.org}
+```{r dom.vals.org, results = TRUE, message = FALSE, warning = FALSE}
 
 Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
 
