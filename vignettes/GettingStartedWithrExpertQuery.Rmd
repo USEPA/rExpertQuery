@@ -332,7 +332,7 @@ R10_pathogens <- rExpertQuery::EQ_TMDLs(region = 10,
 Content in development
 ```{r see.dom.vals}
 
-Dom_vals <- rExpertQuery::
+Dom_vals <- rExpertQuery::EQ_DomainValues()
 
 
 ```
