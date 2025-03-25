@@ -318,9 +318,9 @@ HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
                                api_key = testkey)
 ```
 
-```{r}
+```{r pathogens.r10}
 
- R10_pathogens <- rExpertQuery::EQ_TMDLs(region = 10,
+R10_pathogens <- rExpertQuery::EQ_TMDLs(region = 10,
                              ad_param_group = "PATHOGENS",
                              api_key = testkey)
                
@@ -330,4 +330,12 @@ HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
 ## EQ_DomainValues
 
 Content in development
+```{r see.dom.vals}
+
+Dom_vals <- rExpertQuery::
+
+
+```
+
+
 

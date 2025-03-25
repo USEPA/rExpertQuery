@@ -10,6 +10,8 @@
 #'
 #' @importFrom rlang .data
 #'
+#' @export
+#'
 EQ_DomainValues <- function(domain = NULL) {
   # base URL to query ATTAINS web services
   base.url <- "https://attains.epa.gov/attains-public/api/domains"
