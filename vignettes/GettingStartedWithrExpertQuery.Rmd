@@ -243,6 +243,8 @@ RI_aus <- rExpertQuery::EQ_AssessmentUnits(statecode = "RI",
 
 ```
 
+We can take a look at a random selection of 20 of the `r `
+
 ```{r fl.retired, results = TRUE, message = FALSE, warning = FALSE}
 
 FL_retired <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
@@ -321,10 +323,10 @@ HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
 
 ```{r unknown.r10, results = TRUE, message = FALSE, warning = FALSE}
 
-R10_unknown <- rExpertQuery::EQ_TMDLs(region = 10,
-                             ad_param_group = "CAUSE UNKNOWN",
-                             api_key = testkey)
-               
+# R10_unknown <- rExpertQuery::EQ_TMDLs(region = 10,
+#                              ad_param_group = "CAUSE UNKNOWN",
+#                              api_key = testkey)
+#                
 ```
 
 
