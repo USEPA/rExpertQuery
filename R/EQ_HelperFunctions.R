@@ -8,8 +8,7 @@
 #'
 #' @keywords internal
 #'
-EQ_ExtractParams <- function(extract = NULL)  {
-
+EQ_ExtractParams <- function(extract = NULL) {
   # select filter column
   extract.filter <- dplyr::case_when(
     extract == "actions" ~ extract,
@@ -25,9 +24,10 @@ EQ_ExtractParams <- function(extract = NULL)  {
 
   # import crosswalk ref file
   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
-                                           package = "rExpertQuery")) %>%
+    package = "rExpertQuery"
+  )) %>%
     dplyr::filter(.data[[extract.filter]] == "yes") %>%
-    dplyr::select('param', 'eq_name')
+    dplyr::select("param", "eq_name")
 
   # return the crosswalk
   return(params.cw)
@@ -43,14 +43,13 @@ EQ_ExtractParams <- function(extract = NULL)  {
 #'
 
 EQ_DefaultParams <- function(func) {
+  # create df of function formals
+  params.df <- formals(func) %>%
+    as.list() %>%
+    tibble::enframe(name = "param", value = "value") %>%
+    as.data.frame()
 
-# create df of function formals
-params.df <- formals(func) %>%
-  as.list() %>%
-  tibble::enframe(name = "param", value = "value") %>%
-  as.data.frame()
-
-return(params.df)
+  return(params.df)
 }
 
 
@@ -79,8 +78,7 @@ EQ_FormatParams <- function(.data) {
     } else {
       x
     }
-  }
-  )
+  })
 
   params.df <- params.df %>%
     dplyr::mutate(value = as.character(.data$value))
@@ -104,9 +102,8 @@ EQ_FormatParams <- function(.data) {
 #'
 
 EQ_CompareParams <- function(default, user) {
-
   # filter out any default params that user entered a value for
-    default.params <- default %>%
+  default.params <- default %>%
     dplyr::filter(!.data$param %in% user$param)
 
   # combine user supplied and default params
@@ -137,215 +134,234 @@ EQ_CompareParams <- function(default, user) {
 #' @keywords internal
 #'
 
-  EQ_CreateBody <- function(comp.params, crosswalk, extract) {
+EQ_CreateBody <- function(comp.params, crosswalk, extract) {
+  # date params
+  date.params <- c(
+    "assess_date_end", "assess_date_start", "cd_cycle_end", "cd_cycle_start",
+    "comp_date_end", "comp_date_start", "cycle_first_end", "cycle_first_start",
+    "cycle_last_end", "cycle_last_start", "expect_attain_cycle_hi",
+    "expect_attain_cycle_lo", "fisc_year_start", "fisc_year_end",
+    "mon_end_date_hi", "mon_end_date_lo", "mon_start_date_hi", "mon_start_date_lo",
+    "report_cycle", "seas_end_date_hi", "seas_end_date_lo", "seas_start_date_hi",
+    "seas_start_date_lo", "tmdl_cycle_hi", "tmdl_cycle_lo", "tmdl_date_end",
+    "tmdl_date_start"
+  )
 
-    # date params
-    date.params <- c("assess_date_end", "assess_date_start", "cd_cycle_end", "cd_cycle_start",
-                     "comp_date_end", "comp_date_start", "cycle_first_end", "cycle_first_start",
-                     "cycle_last_end", "cycle_last_start", "expect_attain_cycle_hi",
-                     "expect_attain_cycle_lo", "fisc_year_start", "fisc_year_end",
-                     "mon_end_date_hi", "mon_end_date_lo", "mon_start_date_hi", "mon_start_date_lo",
-                     "report_cycle", "seas_end_date_hi", "seas_end_date_lo", "seas_start_date_hi",
-                     "seas_start_date_lo", "tmdl_cycle_hi", "tmdl_cycle_lo", "tmdl_date_end",
-                     "tmdl_date_start")
+  # text string query params
+  query.params <- c("doc_query")
 
-    # text string query params
-    query.params <- c("doc_query")
+  # create param filters for POST
+  params.body <- comp.params %>%
+    dplyr::filter(
+      !.data$value %in% c("NULL", "latest"),
+      .data$param != "api_key"
+    ) %>%
+    dplyr::mutate(value = dplyr::case_when(
+      .data$param == "report_cycle" & value == "any" ~ "-1",
+      .data$param == "region" & !is.null(value) ~ paste0("0", value),
+      .data$param %in% c(
+        "au_status", "delisted",
+        "pollutant_ind", "vis",
+        "in_meas", "indian_country"
+      ) & !is.null(.data$value) ~ substr(.data$value, 1, 1),
+      .data$param == "use_support" & .data$value == "Fully Supporting" ~ "F",
+      .data$param == "use_support" & .data$value == "Not Supporting" ~ "N",
+      .data$param == "use_support" & .data$value == "Insufficient Information" ~ "I",
+      .data$param == "use_support" & .data$value == "Not Assessed" ~ "X",
+      .data$param %in% c(
+        "assess_date_end", "assess_date_start",
+        "mon_end_date", "mon_start_date"
+      ) ~ format(
+        as.Date(.data$value, "%Y-%m-%d"),
+        "%m-%d-%Y"
+      ),
+      .default = as.character(.data$value)
+    )) %>%
+    dplyr::left_join(crosswalk, by = dplyr::join_by("param")) %>%
+    dplyr::mutate(value = gsub('c\\(|\\)|"', "", .data$value)) %>%
+    tidyr::separate_rows(.data$value, sep = ",\\s*") %>%
+    dplyr::mutate(value = paste0('"', .data$value, '"')) %>%
+    dplyr::group_by(.data$eq_name) %>%
+    dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
+    dplyr::distinct() %>%
+    dplyr::mutate(value = dplyr::case_when(
+      !.data$param %in% date.params & !.data$param %in% query.params ~ paste0(
+        '"', .data$eq_name,
+        '":', "[",
+        .data$value, "]"
+      ),
+      .default = paste0('"', .data$eq_name, '":', .data$value)
+    )) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
+    dplyr::select("value") %>%
+    dplyr::distinct() %>%
+    dplyr::pull()
 
-    # create param filters for POST
-    params.body <- comp.params %>%
-      dplyr::filter(!.data$value %in% c("NULL", "latest"),
-                    .data$param != "api_key") %>%
-      dplyr::mutate(value = dplyr::case_when(
-        .data$param == "report_cycle" & value == "any" ~ "-1",
-        .data$param == "region" & !is.null(value) ~  paste0("0", value),
-        .data$param %in% c("au_status", "delisted",
-                     "pollutant_ind", "vis",
-                     "in_meas", "indian_country") & !is.null(.data$value) ~ substr(.data$value, 1, 1),
-        .data$param == "use_support" & .data$value == "Fully Supporting" ~ "F",
-        .data$param == "use_support" & .data$value == "Not Supporting" ~ "N",
-        .data$param == "use_support" & .data$value == "Insufficient Information" ~ "I",
-        .data$param == "use_support" & .data$value == "Not Assessed" ~ "X",
-        .data$param %in% c("assess_date_end", "assess_date_start",
-                      "mon_end_date", "mon_start_date") ~ format(as.Date(.data$value, "%Y-%m-%d"),
-                                                                 "%m-%d-%Y"),
-        .default = as.character(.data$value)
-      )) %>%
-      dplyr::left_join(crosswalk, by = dplyr::join_by('param')) %>%
-      dplyr::mutate(value = gsub('c\\(|\\)|"', '', .data$value)) %>%
-      tidyr::separate_rows(.data$value, sep = ',\\s*') %>%
-      dplyr::mutate(value = paste0('"', .data$value, '"')) %>%
-      dplyr::group_by(.data$eq_name) %>%
-      dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
-      dplyr::distinct() %>%
-      dplyr::mutate(value = dplyr::case_when(
-        !.data$param %in% date.params & !.data$param %in% query.params ~ paste0('"', .data$eq_name,
-                                                                                '":', "[",
-                                                                                .data$value, "]"),
-        .default = paste0('"', .data$eq_name, '":', .data$value))) %>%
-      dplyr::ungroup() %>%
-      dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
-      dplyr::select('value') %>%
-      dplyr::distinct() %>%
-      dplyr::pull()
+  # setup body for finding row count of query
+  count.setup <- paste0(
+    '{"filters":{',
+    params.body, "}}"
+  )
 
-    # setup body for finding row count of query
-    count.setup <- paste0(
-      '{"filters":{',
-      params.body, '}}'
-    )
-
-    # select filter column
-    extract.filter <- dplyr::case_when(
-      extract == "actions" ~ extract,
-      extract == "act_docs" ~ "action_documents",
-      extract == "assessments" ~ extract,
-      extract == "aus" ~ "assessment_units",
-      extract == "au_mls" ~ "assessment_units_mls",
-      extract == "catch_corr" ~ "catchment_correspondence",
-      extract == "sources" ~ extract,
-      extract == "tmdl" ~ extract
-    )
+  # select filter column
+  extract.filter <- dplyr::case_when(
+    extract == "actions" ~ extract,
+    extract == "act_docs" ~ "action_documents",
+    extract == "assessments" ~ extract,
+    extract == "aus" ~ "assessment_units",
+    extract == "au_mls" ~ "assessment_units_mls",
+    extract == "catch_corr" ~ "catchment_correspondence",
+    extract == "sources" ~ extract,
+    extract == "tmdl" ~ extract
+  )
 
 
-    # create string of column names base on extract selection
-    columns.string <- readr::read_csv(system.file("extdata", "EQColumnsForPOST.csv",
-                                                  package = "rExpertQuery")) %>%
-      dplyr::select('col.name', dplyr::all_of(extract.filter)) %>%
-      dplyr::filter(!is.na(get(extract.filter))) %>%
-      dplyr::arrange(get(extract.filter)) %>%
-      dplyr::select(.data$col.name) %>%
-      dplyr::mutate(col.name = paste0('"', .data$col.name, '"'),
-                    col.name = paste0(.data$col.name, collapse = ',')) %>%
-      dplyr::distinct() %>%
-      dplyr::pull()
+  # create string of column names base on extract selection
+  columns.string <- readr::read_csv(system.file("extdata", "EQColumnsForPOST.csv",
+    package = "rExpertQuery"
+  )) %>%
+    dplyr::select("col.name", dplyr::all_of(extract.filter)) %>%
+    dplyr::filter(!is.na(get(extract.filter))) %>%
+    dplyr::arrange(get(extract.filter)) %>%
+    dplyr::select(.data$col.name) %>%
+    dplyr::mutate(
+      col.name = paste0('"', .data$col.name, '"'),
+      col.name = paste0(.data$col.name, collapse = ",")
+    ) %>%
+    dplyr::distinct() %>%
+    dplyr::pull()
 
-    #create column string for POST
-    extract.cols <- paste0('"columns":[', columns.string, "]}")
+  # create column string for POST
+  extract.cols <- paste0('"columns":[', columns.string, "]}")
 
-    # set up body for POST including filters, options, and columns
-    body.setup <- paste0(
-      '{"filters":{',
-      params.body, '},',
-      '"options":{"format":"csv"},',
-      extract.cols
-    )
+  # set up body for POST including filters, options, and columns
+  body.setup <- paste0(
+    '{"filters":{',
+    params.body, "},",
+    '"options":{"format":"csv"},',
+    extract.cols
+  )
 
-    post.bodies <- list(count.setup, body.setup)
+  post.bodies <- list(count.setup, body.setup)
 
-    rm(comp.params, params.body, count.setup, body.setup)
+  rm(comp.params, params.body, count.setup, body.setup)
 
-   return(post.bodies)
+  return(post.bodies)
+}
+
+
+
+#' Create header for count and data POST requests (internal function)
+#'
+#' @param key Character string. The api key unique to the user.
+#'
+#' @return A character string for the POST header.
+#'
+#' @keywords internal
+#'
+EQ_CreateHeader <- function(key) { # create headers for POST
+
+  headers.setup <- c(
+    `X-Api-Key` = key,
+    Accept = "application/json"
+  )
+
+  rm(key)
+
+  return(headers.setup)
+}
+
+#' Create POST request and GET content from Expert Query via Expert Query web services (internal
+#' function)
+#'
+#' @param headers Character string. Header for POST request created in EQ_CreateHeader.
+#' @param body.list List of character strings for count and query POSTs created in EQ_CreateBody.
+#' @param extract Character string. The Expert Query Data profile type.
+#'
+#' @return A data frame of the query result or a printed message if the query rows exceed one
+#' million.
+#'
+#' @keywords internal
+#'
+
+EQ_PostAndContent <- function(headers, body.list, extract) {
+  # base url to build requests
+  base.url <- "https://api.epa.gov/expertquery/api/attains/"
+
+  # extract name to add to url for request
+  extract.url.name <- dplyr::case_when(
+    extract == "actions" ~ extract,
+    extract == "act_docs" ~ "actionDocuments",
+    extract == "assessments" ~ extract,
+    extract == "aus" ~ "assessmentUnits",
+    extract == "au_mls" ~ "assessmentUnitsMonitoringLocations",
+    extract == "catch_corr" ~ "catchmentCorrespondence",
+    extract == "sources" ~ extract,
+    extract == "tmdl" ~ extract
+  )
+
+  # extract name to add to print messages for user
+  function.url.name <- dplyr::case_when(
+    extract == "actions" ~ "EQ_Actions",
+    extract == "act_docs" ~ "EQ_ActionDocuments",
+    extract == "assessments" ~ "EQ_Assessments",
+    extract == "aus" ~ "EQ_AssessmentUnits",
+    extract == "au_mls" ~ "EQ_AUsMLs",
+    extract == "catch_corr" ~ "EQ_CatchCorr",
+    extract == "sources" ~ "EQ_Sources",
+    extract == "tmdl" ~ "EQ_TMDL"
+  )
+
+  # create url for query
+  query.url <- paste0(base.url, extract.url.name)
+
+  # request to find number of results
+  row.res <- httr2::request(paste0(query.url, "/count")) %>%
+    httr2::req_method("POST") %>%
+    httr2::req_headers(!!!headers) %>%
+    httr2::req_body_raw(body.list[[1]],
+      type = "application/json"
+    ) %>%
+    httr2::req_perform() %>%
+    httr2::resp_body_json()
+
+  # stop function if row count exceeds one million
+  if (isTRUE(row.res$count > row.res$maxCount)) {
+    stop(paste0(
+      function.url.name,
+      ": The current query exceeds the maximum query size of ",
+      format(row.res$maxCount, big.mark = ","), " rows.",
+      "Please refine the search or use EQ_NationalExtract to import",
+      " the Expert Query National Extract."
+    ))
   }
 
-
-
-  #' Create header for count and data POST requests (internal function)
-  #'
-  #' @param key Character string. The api key unique to the user.
-  #'
-  #' @return A character string for the POST header.
-  #'
-  #' @keywords internal
-  #'
-  EQ_CreateHeader <- function(key) { # create headers for POST
-
-    headers.setup <- c(
-      `X-Api-Key` = key,
-      Accept = "application/json"
-    )
-
-    rm(key)
-
-    return(headers.setup)
-
+  # if row count is less than one million, print message with row count and continue
+  if (isTRUE(row.res$count < row.res$maxCount)) {
+    print(paste0(
+      function.url.name,
+      ": The current query will return ",
+      format(row.res$count, big.mark = ","), " rows."
+    ))
   }
 
-  #' Create POST request and GET content from Expert Query via Expert Query web services (internal
-  #' function)
-  #'
-  #' @param headers Character string. Header for POST request created in EQ_CreateHeader.
-  #' @param body.list List of character strings for count and query POSTs created in EQ_CreateBody.
-  #' @param extract Character string. The Expert Query Data profile type.
-  #'
-  #' @return A data frame of the query result or a printed message if the query rows exceed one
-  #' million.
-  #'
-  #' @keywords internal
-  #'
+  # remove intermediate objects
+  rm(row.res)
 
-  EQ_PostAndContent <- function(headers, body.list, extract) {
+  # request to return query results
+  query.res <- httr2::request(query.url) %>%
+    httr2::req_method("POST") %>%
+    httr2::req_headers(!!!headers) %>%
+    httr2::req_body_raw(body.list[[2]],
+      type = "application/json"
+    ) %>%
+    httr2::req_perform() %>%
+    httr2::resp_body_string() %>%
+    readr::read_csv()
 
-    # base url to build requests
-    base.url <- "https://api.epa.gov/expertquery/api/attains/"
+  # remove intermediate objects
+  rm(headers, base.url, extract.url.name, function.url.name, query.url, body.list)
 
-    # extract name to add to url for request
-    extract.url.name <- dplyr::case_when(
-      extract == "actions" ~ extract,
-      extract == "act_docs" ~ "actionDocuments",
-      extract == "assessments" ~ extract,
-      extract == "aus" ~ "assessmentUnits",
-      extract == "au_mls" ~ "assessmentUnitsMonitoringLocations",
-      extract == "catch_corr" ~ "catchmentCorrespondence",
-      extract == "sources" ~ extract,
-      extract == "tmdl" ~ extract
-    )
-
-    # extract name to add to print messages for user
-    function.url.name <- dplyr::case_when(
-      extract == "actions" ~ "EQ_Actions",
-      extract == "act_docs" ~ "EQ_ActionDocuments",
-      extract == "assessments" ~ "EQ_Assessments",
-      extract == "aus" ~ "EQ_AssessmentUnits",
-      extract == "au_mls" ~ "EQ_AUsMLs",
-      extract == "catch_corr" ~ "EQ_CatchCorr",
-      extract == "sources" ~ "EQ_Sources",
-      extract == "tmdl" ~ "EQ_TMDL"
-    )
-
-    # create url for query
-    query.url <- paste0(base.url, extract.url.name)
-
-    # request to find number of results
-    row.res <- httr2::request(paste0(query.url, "/count")) %>%
-      httr2::req_method("POST") %>%
-      httr2::req_headers(!!!headers) %>%
-      httr2::req_body_raw(body.list[[1]],
-                          type = "application/json") %>%
-      httr2::req_perform() %>%
-      httr2::resp_body_json()
-
-    # stop function if row count exceeds one million
-    if(isTRUE(row.res$count > row.res$maxCount)) {
-      stop(paste0(function.url.name,
-                  ": The current query exceeds the maximum query size of ",
-                  format(row.res$maxCount, big.mark = ","), " rows.",
-                  "Please refine the search or use EQ_NationalExtract to import",
-                  " the Expert Query National Extract."))
-    }
-
-    # if row count is less than one million, print message with row count and continue
-    if(isTRUE(row.res$count < row.res$maxCount)) {
-      print(paste0(function.url.name,
-                   ": The current query will return ",
-                   format(row.res$count, big.mark = ","), " rows."))
-    }
-
-    # remove intermediate objects
-    rm(row.res)
-
-    # request to return query results
-    query.res <- httr2::request(query.url) %>%
-      httr2::req_method("POST") %>%
-      httr2::req_headers(!!!headers) %>%
-      httr2::req_body_raw(body.list[[2]],
-                          type = "application/json") %>%
-      httr2::req_perform() %>%
-      httr2::resp_body_string() %>%
-      readr::read_csv()
-
-    # remove intermediate objects
-    rm(headers, base.url, extract.url.name, function.url.name, query.url, body.list)
-
-    return(query.res)
-  }
+  return(query.res)
+}

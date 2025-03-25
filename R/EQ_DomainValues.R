@@ -8,7 +8,7 @@
 #'
 #' @return A df allowable values for the selected query_param.
 #'
-#'@importFrom rlang .data
+#' @importFrom rlang .data
 #'
 EQ_DomainValues <- function(domain = NULL) {
   # base URL to query ATTAINS web services
@@ -31,7 +31,8 @@ EQ_DomainValues <- function(domain = NULL) {
   if (!is.null(domain)) {
     # read in parameter crosswalk
     param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
-                                            package = "rExpertQuery"))
+      package = "rExpertQuery"
+    ))
 
     # check to make sure user supplied domain value is valid
     if (!domain %in% param.cw$param) {
@@ -57,7 +58,7 @@ EQ_DomainValues <- function(domain = NULL) {
       # filter crosswalk by user supplied domain value
       param.filter <- param.cw %>%
         dplyr::filter(.data$param %in% domain) %>%
-        dplyr::select('param', 'attains_ws_name', 'attains_ws_field') %>%
+        dplyr::select("param", "attains_ws_name", "attains_ws_field") %>%
         dplyr::distinct()
 
       raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter$attains_ws_name)) %>%

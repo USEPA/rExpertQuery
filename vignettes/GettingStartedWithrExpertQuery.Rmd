@@ -74,8 +74,8 @@ You can install and/or update the [rExpertQuery Package](https://github.com/USEP
 all dependencies by running:
 
 ```{r install, eval = TRUE, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE}
-if(!"remotes"%in%installed.packages()){
-install.packages("remotes")
+if (!"remotes" %in% installed.packages()) {
+  install.packages("remotes")
 }
 
 remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
@@ -97,8 +97,7 @@ included in Measures.
 
 ```{r eq.actions.r4, echo = TRUE, results = FALSE, message = FALSE, warning = FALSE}
 # query Actions from Region 4 that are included in Measures
-R4_actions_in_meas <- rExpertQuery::EQ_Actions(api_key = testkey, region = 4, in_meas = "Yes" )
-
+R4_actions_in_meas <- rExpertQuery::EQ_Actions(api_key = testkey, region = 4, in_meas = "Yes")
 ```
 
 This query returns `r formatC(nrow(R4_actions_in_meas), big.mark = ",")` results, so we'll review only a small random subset of them in a data 
@@ -106,13 +105,13 @@ table just to get an idea of what those results look like:
 
 ```{r r4.url.prep, include = FALSE}
 # Actions Documents containing "nutrient"
-R4_actions_in_meas$planSummaryLink <- paste0('<a href="',R4_actions_in_meas$planSummaryLink,'" target="_blank">',R4_actions_in_meas$planSummaryLink, '</a>')
+R4_actions_in_meas$planSummaryLink <- paste0('<a href="', R4_actions_in_meas$planSummaryLink, '" target="_blank">', R4_actions_in_meas$planSummaryLink, "</a>")
 ```
 
 ```{r r4.datatable}
 # create random subset of R4 query results
 R4_subset <- R4_actions_in_meas %>%
-  dplyr::slice_sample(n=20)
+  dplyr::slice_sample(n = 20)
 
 # create data tab;e
 DT::datatable(R4_subset, options = list(pageLength = 2, scrollX = TRUE))
@@ -125,16 +124,18 @@ results of the query
 
 ```{r eq.actions.ex2, results = TRUE, message = FALSE, warning = FALSE}
 # query Actions for Missouri Actions with action agency "EPA" and parameter group "PATHOGENS"
-MO_epa <- rExpertQuery::EQ_Actions(api_key = testkey, statecode = "MO",
-                                   act_agency = "EPA",
-                                   param_group = "PATHOGENS",
-                                   comp_date_start = "2000-01-01",
-                                   comp_date_end = "2020-12-31")
+MO_epa <- rExpertQuery::EQ_Actions(
+  api_key = testkey, statecode = "MO",
+  act_agency = "EPA",
+  param_group = "PATHOGENS",
+  comp_date_start = "2000-01-01",
+  comp_date_end = "2020-12-31"
+)
 ```
 
 ```{r mo.url.prep, include = FALSE}
 # Actions Documents containing "nutrient"
-MO_epa$planSummaryLink <- paste0('<a href="',MO_epa$planSummaryLink,'" target="_blank">',MO_epa$planSummaryLink, '</a>')
+MO_epa$planSummaryLink <- paste0('<a href="', MO_epa$planSummaryLink, '" target="_blank">', MO_epa$planSummaryLink, "</a>")
 ```
 
 ```{r mo.data.table}
@@ -149,9 +150,10 @@ example, you might want to find all Actions Documents which contained the keywor
 
 ```{r nutrients, results = TRUE, message = FALSE, warning = FALSE}
 # Actions Documents containing "nutrient"
-Nutrient_docs <- rExpertQuery::EQ_ActionsDocuments(doc_query = "nutrient",
-                                        api_key = testkey)
-
+Nutrient_docs <- rExpertQuery::EQ_ActionsDocuments(
+  doc_query = "nutrient",
+  api_key = testkey
+)
 ```
 
 This query yields `r formatC(nrow(Nutrient_docs), big.mark = ",")` results. As well as providing the Action and Document Name for all results, *EQ_Actions()* also returns the column "actionDocumentUrl"
@@ -159,11 +161,10 @@ containg the URL to link to the document. Becaue the query yields so many result
 
 ```{r nutrients.url.prep, include = FALSE}
 # Actions Documents containing "nutrient"
-Nutrient_docs$actionDocumentUrl <- paste0('<a href="',Nutrient_docs$actionDocumentUrl, '" target="_blank">', Nutrient_docs$actionDocumentUrl, '</a>')
+Nutrient_docs$actionDocumentUrl <- paste0('<a href="', Nutrient_docs$actionDocumentUrl, '" target="_blank">', Nutrient_docs$actionDocumentUrl, "</a>")
 ```
 
 ```{r nutrients.data.table}
-
 Nutrient_docs_subset <- Nutrient_docs %>%
   dplyr::slice_sample(n = 20)
 
@@ -174,22 +175,22 @@ You can also query by more typical parameters like organization name (org_name),
 , or action type (act_type). The example below demonstrates using the function to search for 4B Restoration Approach documents from Pennsylvania.
 
 ```{r pa.4b.ex, results = TRUE, message = FALSE, warning = FALSE}
-PA_4B <- rExpertQuery::EQ_ActionsDocuments(statecode = "PA", act_type = "4B Restoration Approach",
-                                           api = testkey)
+PA_4B <- rExpertQuery::EQ_ActionsDocuments(
+  statecode = "PA", act_type = "4B Restoration Approach",
+  api = testkey
+)
 ```
 
 ```{r pa.url.prep, include = FALSE}
 # Actions Documents containing "nutrient"
-PA_4B$actionDocumentUrl <- paste0('<a href="',PA_4B$actionDocumentUrl,'" target="_blank">',PA_4B$actionDocumentUrl, '</a>')
+PA_4B$actionDocumentUrl <- paste0('<a href="', PA_4B$actionDocumentUrl, '" target="_blank">', PA_4B$actionDocumentUrl, "</a>")
 ```
  
 ```{r pa.4b.table}
-
 PA_4B_subset <- PA_4B %>%
   dplyr::slice_sample(n = 20)
 
 DT::datatable(PA_4B_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
 ```
  
  
@@ -200,8 +201,10 @@ DT::datatable(PA_4B_subset, options = list(pageLength = 5, scrollX = TRUE), esca
 *EQ_Assessments()* queries ATTAINS Assessments data. For many use cases, querying Assessments for
 a single organization or state is desirable. The next example shows how to query by a single state and use class for the latest cycle.
 ```{r ky.assess, results = TRUE, message = FALSE, warning = FALSE}
-KY_assessments <- rExpertQuery::EQ_Assessments(statecode = "KY",
-                                           api_key = testkey)
+KY_assessments <- rExpertQuery::EQ_Assessments(
+  statecode = "KY",
+  api_key = testkey
+)
 ```
 
 There are `r formatC(nrow(KY_assessments), big.mark = ",")` results for the basic latest cycle Kentucky query. It is also possible to design more specific assessment queries. 
@@ -212,19 +215,19 @@ group with at least one parameter with the status "Cause". The data table below 
 sample of the results from this Region 3 Query.
 
 ```{r R3.ecological, results = TRUE, message = FALSE, warning = FALSE}
-R3_ecological <- rExpertQuery::EQ_Assessments(region = 3,
-                                            use_group = "ECOLOGICAL_USE",
-                                            param_status = "Cause",
-                                            api_key = testkey)
+R3_ecological <- rExpertQuery::EQ_Assessments(
+  region = 3,
+  use_group = "ECOLOGICAL_USE",
+  param_status = "Cause",
+  api_key = testkey
+)
 ```
 
 ```{r r3.ecological.table}
-
 R3_ecological_subset <- R3_ecological %>%
   dplyr::slice_sample(n = 20)
 
 DT::datatable(R3_ecological_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
 ```
 ## EQ_AssessmentUnits
 
