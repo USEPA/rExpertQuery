@@ -20,7 +20,6 @@ Imports:
   dplyr,
   httr2,
   jsonlite,
-  knitr,
   lubridate,
   magrittr,
   readr,
@@ -30,6 +29,7 @@ Imports:
   utils
 Suggests:
     devtools,
+    knitr,
     pkgdown,
     rmarkdown,
     roxygen2,
