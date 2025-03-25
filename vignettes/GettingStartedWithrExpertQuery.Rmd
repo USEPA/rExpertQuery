@@ -319,10 +319,10 @@ HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
                                api_key = testkey)
 ```
 
-```{r pathogens.r10, results = TRUE, message = FALSE, warning = FALSE}
+```{r unknown.r10, results = TRUE, message = FALSE, warning = FALSE}
 
-R10_pathogens <- rExpertQuery::EQ_TMDLs(region = 10,
-                             ad_param_group = "PATHOGENS",
+R10_unknown <- rExpertQuery::EQ_TMDLs(region = 10,
+                             ad_param_group = "CAUSE UNKNOWN",
                              api_key = testkey)
                
 ```
