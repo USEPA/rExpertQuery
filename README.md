@@ -41,11 +41,17 @@ An additional function allows users to download the Expert Query National Extrac
 should be used when national data are desired or when a query designed in one of the previous eight
 functions would exceed the Expert Query web services limit of one millions rows. This function is:
 
-9) EQ_NationalExtract()
+9) EQ_NationalExtract() - returns national extract for Actions, Assessments, Assessment Units, 
+Assessment Units with Monitoring Locations, Catchment Correspondence, Sources, or TMDLS based on 
+user selection
 
 The tenth function relies on ATTAINS web services 
 (https://www.epa.gov/waterdata/how-access-and-use-attains-web-services) to provide allowable domain
 values for some rExpertQuery parameters.
+
+10) EQ_DomainValues - returns domain values for some rExpertQuery function params
+
+For more information on query params and function examples see: 
 
 ## Open-Source Code Policy
 

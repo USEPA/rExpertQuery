@@ -154,7 +154,7 @@ Nutrient_docs <- rExpertQuery::EQ_ActionsDocuments(doc_query = "nutrient",
 
 ```
 
-This query yields `r formatC(nrow(Nutrients_docs), big.mark = ",")` results. As well as providing the Action and Document Name for all results, *EQ_Actions()* also returns the column "actionDocumentUrl"
+This query yields `r formatC(nrow(Nutrient_docs), big.mark = ",")` results. As well as providing the Action and Document Name for all results, *EQ_Actions()* also returns the column "actionDocumentUrl"
 containg the URL to link to the document. Becaue the query yields so many results, we'll take a look at a smaller subset of them in a data table to understand the structure of the results.
 
 ```{r nutrients.url.prep, include = FALSE}
