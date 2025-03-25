@@ -305,7 +305,7 @@ WI_habalt_sources <- rExpertQuery::EQ_Sources(statecode = "WI",
 ```
 
 ```{r source.legacy}
-legacy_sources <- EQ_Sources(source = "LEGACY/HISTORICAL POLLUTANTS",
+legacy_sources <- rExpertQuery::EQ_Sources(source = "LEGACY/HISTORICAL POLLUTANTS",
                              api_key = testkey)
 ```
 
