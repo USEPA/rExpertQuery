@@ -23,6 +23,8 @@ editor_options:
 
 ```{r setup, include = FALSE}
 library(knitr)
+library(dplyr)
+library(DT)
 ```
 
 ```{css, echo = F, eval = FALSE}
