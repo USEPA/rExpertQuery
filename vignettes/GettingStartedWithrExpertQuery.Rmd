@@ -231,20 +231,69 @@ DT::datatable(R3_ecological_subset, options = list(pageLength = 5, scrollX = TRU
 ```
 ## EQ_AssessmentUnits
 
-Content in development
+*EQ_AssessmentUnits()* queries ATTAINS Assessment Units data. The default is to only return "Active"
+assessment units, but input params can be adjusted to query for "Retired" or "Historical"
+assessment units in addition to or instead of "Active". The example below shows a simple example for
+querying for Active assessment units for a single state.
+
+```{r ri.aus}
+
+RI_aus <- rExpertQuery::EQ_AssessmentUnits(statecode = "RI",
+                                           api_key = testkey)
+
+```
+
+```{r ar.retired}
+
+AR_retired <- rExpertQuery::EQ_AssessmentUnits(statecode = "AR",
+                                           au_status = "Retired",
+                                           api_key = testkey)
+
+```
 
 ## EQ_AUsMLs
 
 Content in development
+```{r}
+AK_ausmls <- rExpertQuery::EQ_AssessmentUnits(statecode = "AK",
+                                              api_key = testkey)
+```
+
+```{r}
+WA_ausmls <- rExpertQuery::EQ_AssessmentUnits(statecode = "WA",
+                                              api_key = testkey)
+```
 
 ## EQ_CatchCorr
 
 Content in development
+```{r dc.catchcorr}
+
+DC_catch <- rExpertQuery::EQ_CatchCorr(statecode = "DC")
+
+```
+
+```{r il.au.catch}
+
+IL_dj12_catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
+                          auid = "IL_DJ-12",
+                          api_key = testkey)
+
+```
 
 ## EQ_NationalExtract
 
-Content in development
+```{r nat.tmdls}
 
+Nat_tmdls <- rExpertQuery::EQ_NationalExtract("tmdls")
+
+```
+
+```{r nat.tmdls}
+
+Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
+
+```
 ## EQ_Sources
 
 Content in development
