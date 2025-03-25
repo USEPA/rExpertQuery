@@ -38,6 +38,7 @@ Suggests:
     testthat (>= 3.0.0),
     usethis,
     yaml
+VignetteBuilder: knitr, rmarkdown
 LazyData: true
 LazyDataCompression: xz
 Config/testthat/edition: 3
