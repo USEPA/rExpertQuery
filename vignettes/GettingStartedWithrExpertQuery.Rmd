@@ -183,7 +183,7 @@ PA_4B <- rExpertQuery::EQ_ActionsDocuments(statecode = "PA", act_type = "4B Rest
 PA_4B$actionDocumentUrl <- paste0('<a href="',PA_4B$actionDocumentUrl,'" target="_blank">',PA_4B$actionDocumentUrl, '</a>')
 ```
  
- As there are only `r formatC(nrows(PA_4B), big.mark = ",")` 4B Restoration Approach documents from Pennsylvania, we can review them all in the table below. As in the other Actions Document Example,
+ As there are only `r formatC(nrow(PA_4B), big.mark = ",")` 4B Restoration Approach documents from Pennsylvania, we can review them all in the table below. As in the other Actions Document Example,
  the actionDocumentUrl column contains a link to the document.
 
 ## EQ_Assessments
