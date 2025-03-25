@@ -297,10 +297,35 @@ Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
 ## EQ_Sources
 
 Content in development
+```{r wi.source.hab}
+WI_habalt_sources <- rExpertQuery::EQ_Sources(statecode = "WI",
+                                 param_group = "HABITAT ALTERATIONS",
+                                 api_key = testkey)
+```
+
+```{r source.legacy}
+legacy_sources <- EQ_Sources(source = "LEGACY/HISTORICAL POLLUTANTS",
+                             api_key = testkey)
+```
 
 ## EQ_TMDLs
 
 Content in development
+```{r hi.tmdl.both}
+
+HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
+                               source_type = "Both",
+                               api_key = testkey)
+```
+
+```{r}
+
+ R10_pathogens <- rExpertQuery::EQ_TMDLs(region = 10,
+                             ad_param_group = "PATHOGENS",
+                             api_key = testkey)
+               
+```
+
 
 ## EQ_DomainValues
 

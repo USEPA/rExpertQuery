@@ -158,7 +158,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     ) %>%
     dplyr::mutate(value = dplyr::case_when(
       .data$param == "report_cycle" & value == "any" ~ "-1",
-      .data$param == "region" & !is.null(value) ~ paste0("0", value),
+      .data$param == "region" & !is.null(value) & value != "10" ~ paste0("0", value),
       .data$param %in% c(
         "au_status", "delisted",
         "pollutant_ind", "vis",
