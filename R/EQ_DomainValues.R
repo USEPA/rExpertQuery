@@ -63,9 +63,11 @@ EQ_DomainValues <- function(domain = NULL) {
         dplyr::select("param", "attains_ws_name", "attains_ws_field") %>%
         dplyr::distinct()
 
-      raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter$attains_ws_name)) %>%
-        dplyr::select(dplyr::all_of(param.cw$attains_ws_field)) %>%
-        dplyr::rename(domainValue = 1)
+      raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter$attains_ws_name))
+
+      print(paste0("EQ_DomainValues: For ", domain, " the values in the ",
+                   param.filter$attains_ws_field, " column of the function output are the ",
+                   "allowable values for rExpert Query functions."))
 
       rm(param.filter, base.url, param.cw)
 
