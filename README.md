@@ -23,6 +23,30 @@ install.packages("remotes")
 remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
 ```
 
+## Functions and Webservices
+There are ten exported functions in rExpertQuery. The first eight allow users to query ATTAINS data
+via Expert Query web services (https://owapps.epa.gov/expertquery/api-documentation). These are:
+
+1) EQ_Actions() - queries and returns ATTAINS actions data
+2) EQ_ActionsDocuments() - queries and returns ATTAINS Actions Documents, including a keyword search
+3) EQ_Assessments() - queries and returns ATTAINS Assessments
+4) EQ_AssessmentUnits() - queries and returns ATTAINS Assessment Units (default is for Active AUs)
+5) EQ_AUsMLs() - queries and returns ATTAINS Assessment Units with Monitoring Location data
+6) EQ_CatchCorr() - queries and returns ATTAINS Catchment Correspondence data (memory intensive)
+7) EQ_Sources() - queries and returns ATTAINS Sources data
+8) EQ_TMDLs() - queries and returns ATTAINS TMDL data
+
+An additional function allows users to download the Expert Query National Extracts of ATTAINS data
+(https://owapps.epa.gov/expertquery/national-downloads) which are updated weekly. This function
+should be used when national data are desired or when a query designed in one of the previous eight
+functions would exceed the Expert Query web services limit of one millions rows. This function is:
+
+9) EQ_NationalExtract()
+
+The tenth function relies on ATTAINS web services 
+(https://www.epa.gov/waterdata/how-access-and-use-attains-web-services) to provide allowable domain
+values for some rExpertQuery parameters.
+
 ## Open-Source Code Policy
 
 Effective August 8, 2016, the [OMB Mandate: M-16-21; Federal Source Code Policy: Achieving Efficiency, Transparency, and Innovation through Reusable and Open Source Software](https://obamawhitehouse.archives.gov/sites/default/files/omb/memoranda/2016/m_16_21.pdf) applies to new custom-developed code created or procured by EPA consistent with the scope and applicability requirements of Office of Management and Budget's (OMB's) Federal Source Code Policy. In general, it states that all new custom-developed code by Federal Agencies should be made available and reusable as open-source code.

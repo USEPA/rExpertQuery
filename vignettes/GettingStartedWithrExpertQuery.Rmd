@@ -149,7 +149,7 @@ example, you might want to find all Actions Documents which contained the keywor
 
 ```{r nutrients}
 # Actions Documents containing "nutrient"
-Nutrients_docs <- rExpertQuery::EQ_ActionsDocuments(doc_query = "nutrients",
+Nutrient_docs <- rExpertQuery::EQ_ActionsDocuments(doc_query = "nutrient",
                                         api_key = testkey)
 
 ```
@@ -159,15 +159,15 @@ containg the URL to link to the document. Becaue the query yields so many result
 
 ```{r nutrients.url.prep, include = FALSE}
 # Actions Documents containing "nutrient"
-Nutrients_docs$actionDocumentUrl <- paste0('<a href="',Nutrients_docs$actionDocumentUrl, '" target="_blank">', Nutrients_docs$actionDocumentUrl, '</a>')
+Nutrient_docs$actionDocumentUrl <- paste0('<a href="',Nutrient_docs$actionDocumentUrl, '" target="_blank">', Nutrient_docs$actionDocumentUrl, '</a>')
 ```
 
 ```{r nutrients.data.table}
 
-Nutrients_docs_subset <- Nutrients_docs %>%
+Nutrient_docs_subset <- Nutrient_docs %>%
   dplyr::slice_sample(n = 20)
 
-DT::datatable(Nutrients_docs_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+DT::datatable(Nutrient_docs_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
 You can also query by more typical parameters like organization name (org_name), EPA region (region)
