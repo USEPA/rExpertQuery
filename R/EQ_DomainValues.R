@@ -6,7 +6,8 @@
 #' @param domain Character string. Running this function without entering a value for domain
 #' will return a list of all allowable domain values.
 #'
-#' @return A df allowable values for the selected query_param.
+#' @return A df allowable values for the selected domain if a domain is provided. If no
+#' domain is provided, the function returns a list of domains.
 #'
 #' @importFrom rlang .data
 #'
