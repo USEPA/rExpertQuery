@@ -210,11 +210,17 @@ EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL,
     EQ_FormatParams()
 
   # create df of user entered params
-  user.params <- as.list(match.call()[-1]) %>%
-    tibble::enframe(name = "param", value = "value") %>%
-    as.data.frame() %>%
-    # format for building body
-    EQ_FormatParams()
+  # user.params <- as.list(match.call()[-1]) %>%
+  #   tibble::enframe(name = "param", value = "value") %>%
+  #   as.data.frame() %>%
+  #   # format for building body
+  #   EQ_FormatParams()
+
+  user.params <- as.list(match.call()[-1])
+
+  return(user.params)
+
+  stop()
 
   # compare default and user params to build df of all params and values for body
   params.df <- EQ_CompareParams(default = default.params, user = user.params)
