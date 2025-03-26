@@ -1,14 +1,14 @@
 #' Provides allowable values for a param by leveraging ATTAINS web services.
 #'
-#' HRM Note 3/10/25 - Crosswalk between ATTAINS and EQ domains not yet complete. This function
-#' does not yet work for all EQ params as a result.
-#'
 #' @param domain Character string. Running this function without entering a value for domain
 #' will return a list of all allowable domain values.
 #'
-#' @return A df allowable values for the selected query_param.
+#' @return A df allowable values for the selected domain if a domain is provided. If no
+#' domain is provided, the function returns a list of domains.
 #'
-#'@importFrom rlang .data
+#' @export
+#'
+#' @importFrom rlang .data
 #'
 EQ_DomainValues <- function(domain = NULL) {
   # base URL to query ATTAINS web services
@@ -31,7 +31,8 @@ EQ_DomainValues <- function(domain = NULL) {
   if (!is.null(domain)) {
     # read in parameter crosswalk
     param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
-                                            package = "rExpertQuery"))
+      package = "rExpertQuery"
+    ))
 
     # check to make sure user supplied domain value is valid
     if (!domain %in% param.cw$param) {
@@ -57,12 +58,14 @@ EQ_DomainValues <- function(domain = NULL) {
       # filter crosswalk by user supplied domain value
       param.filter <- param.cw %>%
         dplyr::filter(.data$param %in% domain) %>%
-        dplyr::select('param', 'attains_ws_name', 'attains_ws_field') %>%
+        dplyr::select("param", "attains_ws_name", "attains_ws_field") %>%
         dplyr::distinct()
 
-      raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter$attains_ws_name)) %>%
-        dplyr::select(dplyr::all_of(param.cw$attains_ws_field)) %>%
-        dplyr::rename(domainValue = 1)
+      raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter$attains_ws_name))
+
+      print(paste0("EQ_DomainValues: For ", domain, " the values in the ",
+                   param.filter$attains_ws_field, " column of the function output are the ",
+                   "allowable values for rExpert Query functions."))
 
       rm(param.filter, base.url, param.cw)
 

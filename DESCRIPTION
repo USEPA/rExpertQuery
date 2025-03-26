@@ -20,7 +20,6 @@ Imports:
   dplyr,
   httr2,
   jsonlite,
-  knitr,
   lubridate,
   magrittr,
   readr,
@@ -30,6 +29,8 @@ Imports:
   utils
 Suggests:
     devtools,
+    DT,
+    knitr,
     pkgdown,
     rmarkdown,
     roxygen2,
@@ -38,6 +39,7 @@ Suggests:
     testthat (>= 3.0.0),
     usethis,
     yaml
+VignetteBuilder: knitr, rmarkdown
 LazyData: true
 LazyDataCompression: xz
 Config/testthat/edition: 3

@@ -115,13 +115,17 @@ Query and return ATTAINS Actions data via Expert Query web services
 testkey <- "YOURAPIKEY"
 
 # actions from OR established between fiscal years 2018 and 2020
-OR_actions_ex <- EQ_Actions(statecode = "OR", fisc_year_start = 2018, fisc_year_end = 2020,
-                            api_key = testkey)
+OR_actions_ex <- EQ_Actions(
+  statecode = "OR", fisc_year_start = 2018, fisc_year_end = 2020,
+  api_key = testkey
+)
 
 # 4B Restoration Approach Actions from Region 5
-Region5_4B<- EQ_Actions(region = 5,
-              act_type = "4B Restoration Approach",
-              api_key = testkey)
-              }
+Region5_4B <- EQ_Actions(
+  region = 5,
+  act_type = "4B Restoration Approach",
+  api_key = testkey
+)
+}
 
 }

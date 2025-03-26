@@ -155,7 +155,7 @@ Query and return ATTAINS TMDL data via Expert Query web services
 # to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
 testkey <- "YOURAPIKEY"
 
-# Indiana query for source equal to "AGRICULTURE"
+# South Dakota query for source type equal to "Nonpoint source"
  SD_nonpoint_tmdls <- EQ_TMDLs(statecode = "SD",
                                source_type = "Nonpoint source",
                                api_key = testkey)

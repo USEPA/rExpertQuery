@@ -7,9 +7,6 @@ rExpertQuery.Rproj
 test.txt
 
 # to ignore temporarily (for dev purposes)
-GettingStartedWithrExpertQuery.Rmd
 
 # git
-vignettes/
-inst/doc
-docs
+

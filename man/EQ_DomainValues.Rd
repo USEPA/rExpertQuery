@@ -11,9 +11,9 @@ EQ_DomainValues(domain = NULL)
 will return a list of all allowable domain values.}
 }
 \value{
-A df allowable values for the selected query_param.
+A df allowable values for the selected domain if a domain is provided. If no
+domain is provided, the function returns a list of domains.
 }
 \description{
-HRM Note 3/10/25 - Crosswalk between ATTAINS and EQ domains not yet complete. This function
-does not yet work for all EQ params as a result.
+Provides allowable values for a param by leveraging ATTAINS web services.
 }

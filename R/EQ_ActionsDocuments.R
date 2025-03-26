@@ -51,24 +51,27 @@
 #' testkey <- "YOURAPIKEY"
 #'
 #' # Actions Documents from California established between fiscal years 2018 and 2020
-#' CA_actions_docs <- EQ_ActionsDocuments(statecode = "CA",
-#'                               comp_date_start = "2000-01-01",
-#'                               comp_date_end = "2010-12-31",
-#'                               api_key = testkey)
+#' CA_actions_docs <- EQ_ActionsDocuments(
+#'   statecode = "CA",
+#'   comp_date_start = "2000-01-01",
+#'   comp_date_end = "2010-12-31",
+#'   api_key = testkey
+#' )
 #'
 #' # Actions Documents from Minnesota and Wisconsin containing "nutrient"
-#' R4_nutrient_actions_docs <- EQ_ActionsDocuments(region = 4,
-#'                                        doc_query = "nutrient",
-#'                                        api_key = testkey)
-#'               }
+#' R4_nutrient_actions_docs <- EQ_ActionsDocuments(
+#'   region = 4,
+#'   doc_query = "nutrient",
+#'   api_key = testkey
+#' )
+#' }
 EQ_ActionsDocuments <- function(api_key = NULL, act_id = NULL, act_name = NULL, act_type = NULL,
                                 comp_date_end = NULL, comp_date_start = NULL, doc_file_name = NULL,
                                 doc_name = NULL, doc_type = NULL, doc_query = NULL, org_id = NULL,
                                 org_name = NULL, region = NULL, statecode = NULL,
                                 tmdl_date_end = NULL, tmdl_date_start = NULL) {
-
   # check for api key
-  if(is.null(api_key)) {
+  if (is.null(api_key)) {
     stop("EQ_ActionsDocuments: An api key is required to access EQ web services.")
   }
 
@@ -100,9 +103,11 @@ EQ_ActionsDocuments <- function(api_key = NULL, act_id = NULL, act_name = NULL, 
   post.headers <- EQ_CreateHeader(key = api_key)
 
   # query EQ (check number of rows before download, stop if it exceeds max rows)
-  query.df <- EQ_PostAndContent(headers = post.headers,
-                                body.list = post.bodies,
-                                extract = "act_docs")
+  query.df <- EQ_PostAndContent(
+    headers = post.headers,
+    body.list = post.bodies,
+    extract = "act_docs"
+  )
 
   rm(params.cw, params.df, post.bodies, post.headers)
 
