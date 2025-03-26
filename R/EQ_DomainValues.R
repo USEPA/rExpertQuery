@@ -1,17 +1,14 @@
 #' Provides allowable values for a param by leveraging ATTAINS web services.
 #'
-#' HRM Note 3/10/25 - Crosswalk between ATTAINS and EQ domains not yet complete. This function
-#' does not yet work for all EQ params as a result.
-#'
 #' @param domain Character string. Running this function without entering a value for domain
 #' will return a list of all allowable domain values.
 #'
 #' @return A df allowable values for the selected domain if a domain is provided. If no
 #' domain is provided, the function returns a list of domains.
 #'
-#' @importFrom rlang .data
-#'
 #' @export
+#'
+#' @importFrom rlang .data
 #'
 EQ_DomainValues <- function(domain = NULL) {
   # base URL to query ATTAINS web services
