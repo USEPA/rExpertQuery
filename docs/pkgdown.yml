@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   GettingStartedWithrExpertQuery: GettingStartedWithrExpertQuery.html
-last_built: 2025-03-26T16:30Z
+last_built: 2025-03-26T16:53Z
 urls:
   reference: https://usepa.github.io/rExpertQuery/reference
   article: https://usepa.github.io/rExpertQuery/articles
