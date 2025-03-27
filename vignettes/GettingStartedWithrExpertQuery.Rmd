@@ -40,38 +40,45 @@ pre[class] {
 
 ## About Expert Query and rExpertQuery
 
-Expery Query (https://owapps.epa.gov/expertquery/attains/tmdl) empowers users to access surface 
-water quality data from the Assessment and TMDL Tracking and Implementation System (ATTAINS), 
-encompassing Assessment decisions (under Clean Water Act Sections 303(d), 305(b), and 106) and 
-Action data like Total Maximum Daily Loads (TMDLs), Advance Restoration Plans (ARPs), and 
-Protection Approaches.
+Expery Query (<https://owapps.epa.gov/expertquery/attains/tmdl>)
+empowers users to access surface water quality data from the Assessment
+and TMDL Tracking and Implementation System (ATTAINS), encompassing
+Assessment decisions (under Clean Water Act Sections 303(d), 305(b), and
+106) and Action data like Total Maximum Daily Loads (TMDLs), Advance
+Restoration Plans (ARPs), and Protection Approaches.
 
-The tool supports querying and downloading data within and across organizations (states or tribes), 
-such as querying all the data within an EPA region or all nutrient TMDLs nationally. It also allows 
-users to download national ATTAINS data extracts.
+The tool supports querying and downloading data within and across
+organizations (states or tribes), such as querying all the data within
+an EPA region or all nutrient TMDLs nationally. It also allows users to
+download national ATTAINS data extracts.
 
-rExpertQuery takes this a step further as its functions facilitate querying the Expert Query web
-services from R functions which allow the user to import the resulting data sets directly in to
-R for more detailed review and analysis.
+rExpertQuery takes this a step further as its functions facilitate
+querying the Expert Query web services from R functions which allow the
+user to import the resulting data sets directly in to R for more
+detailed review and analysis.
 
-It is crucial to be aware of certain complexities inherent in the data and querying process. Users 
-are cautioned against direct comparisons between states due to differences in water quality standards 
-and assessment methodologies. 
+It is crucial to be aware of certain complexities inherent in the data
+and querying process. Users are cautioned against direct comparisons
+between states due to differences in water quality standards and
+assessment methodologies.
 
-While Expert Query facilitates data querying, it lacks built-in summary capabilities. Users are 
-encouraged to download and summarize data, but use caution when relying on row counts, as duplicate 
-entries may occur. This complexity arises from multiple tables that have many-to-many relationships.
-Future vignettes and functions may provide examples of how to summarize Expert Query data.
-
+While Expert Query facilitates data querying, it lacks built-in summary
+capabilities. Users are encouraged to download and summarize data, but
+use caution when relying on row counts, as duplicate entries may occur.
+This complexity arises from multiple tables that have many-to-many
+relationships. Future vignettes and functions may provide examples of
+how to summarize Expert Query data.
 
 ## Installation
 
-You must first have R and R Studio installed to use the rExpert Query (see instructions below if 
-needed). rExpert Query is in active development, therefore we highly recommend that you update it
-and all of its dependency libraries each time you use the package. 
+You must first have R and R Studio installed to use the rExpert Query
+(see instructions below if needed). rExpert Query is in active
+development, therefore we highly recommend that you update it and all of
+its dependency libraries each time you use the package.
 
-You can install and/or update the [rExpertQuery Package](https://github.com/USEPA/rExpertQuery) and 
-all dependencies by running:
+You can install and/or update the [rExpertQuery
+Package](https://github.com/USEPA/rExpertQuery) and all dependencies by
+running:
 
 ```{r install, eval = TRUE, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE}
 if (!"remotes" %in% installed.packages()) {
@@ -88,11 +95,11 @@ library(data.table)
 testkey <- "53BVce47MQ3KXKibjx35g4ojaDQGh8qWfbdO8cE0"
 ```
 
-
 ## EQ_Actions
 
-*EQ_Actions()* queries ATTAINS Actions data by a variety of user supplied parameters. For example,
-you might like to run a relatively simple query  return data for all Region 4 Actions that should be
+*EQ_Actions()* queries ATTAINS Actions data by a variety of user
+supplied parameters. For example, you might like to run a relatively
+simple query return data for all Region 4 Actions that should be
 included in Measures.
 
 ```{r eq.actions.r4, echo = TRUE, results = FALSE, message = FALSE, warning = FALSE}
@@ -100,7 +107,8 @@ included in Measures.
 R4_actions_in_meas <- rExpertQuery::EQ_Actions(api_key = testkey, region = 4, in_meas = "Yes")
 ```
 
-This query returns `r formatC(nrow(R4_actions_in_meas), big.mark = ",")` results, so we'll review only a small random subset of them in a data 
+This query returns `r formatC(nrow(R4_actions_in_meas), big.mark = ",")`
+results, so we'll review only a small random subset of them in a data
 table just to get an idea of what those results look like:
 
 ```{r r4.url.prep, include = FALSE}
@@ -117,9 +125,10 @@ R4_subset <- R4_actions_in_meas %>%
 DT::datatable(R4_subset, options = list(pageLength = 2, scrollX = TRUE))
 ```
 
-You might also want to create a more specific query. For example, you might want to find all 
-Actions from Missouri that were issued by EPA with completion dates between 2000-01-01 and 
-2020-12-31. As this more detailed query returns a smaller data set, the data table shows all
+You might also want to create a more specific query. For example, you
+might want to find all Actions from Missouri that were issued by EPA
+with completion dates between 2000-01-01 and 2020-12-31. As this more
+detailed query returns a smaller data set, the data table shows all
 results of the query
 
 ```{r eq.actions.ex2, results = TRUE, message = FALSE, warning = FALSE}
@@ -142,11 +151,13 @@ MO_epa$planSummaryLink <- paste0('<a href="', MO_epa$planSummaryLink, '" target=
 # view MO results
 DT::datatable(MO_epa, options = list(pageLength = 10, scrollX = TRUE))
 ```
+
 ## EQ_ActionsDocuments
 
-*EQ_Actions()* queries ATTAINS Actions Documents data with user supplied parameters. One
-of its unique features is that you can search the documents themselves by keyword or phrase. For
-example, you might want to find all Actions Documents which contained the keyword "nutrients".
+*EQ_Actions()* queries ATTAINS Actions Documents data with user supplied
+parameters. One of its unique features is that you can search the
+documents themselves by keyword or phrase. For example, you might want
+to find all Actions Documents which contained the keyword "nutrients".
 
 ```{r nutrients, results = TRUE, message = FALSE, warning = FALSE}
 # Actions Documents containing "nutrient"
@@ -156,8 +167,12 @@ Nutrient_docs <- rExpertQuery::EQ_ActionsDocuments(
 )
 ```
 
-This query yields `r formatC(nrow(Nutrient_docs), big.mark = ",")` results. As well as providing the Action and Document Name for all results, *EQ_Actions()* also returns the column "actionDocumentUrl"
-containg the URL to link to the document. Becaue the query yields so many results, we'll take a look at a smaller subset of them in a data table to understand the structure of the results.
+This query yields `r formatC(nrow(Nutrient_docs), big.mark = ",")`
+results. As well as providing the Action and Document Name for all
+results, *EQ_Actions()* also returns the column "actionDocumentUrl"
+containg the URL to link to the document. Becaue the query yields so
+many results, we'll take a look at a smaller subset of them in a data
+table to understand the structure of the results.
 
 ```{r nutrients.url.prep, include = FALSE}
 # Actions Documents containing "nutrient"
@@ -171,8 +186,10 @@ Nutrient_docs_subset <- Nutrient_docs %>%
 DT::datatable(Nutrient_docs_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
-You can also query by more typical parameters like organization name (org_name), EPA region (region)
-, or action type (act_type). The example below demonstrates using the function to search for 4B Restoration Approach documents from Pennsylvania.
+You can also query by more typical parameters like organization name
+(org_name), EPA region (region) , or action type (act_type). The example
+below demonstrates using the function to search for 4B Restoration
+Approach documents from Pennsylvania.
 
 ```{r pa.4b.ex, results = TRUE, message = FALSE, warning = FALSE}
 PA_4B <- rExpertQuery::EQ_ActionsDocuments(
@@ -185,21 +202,26 @@ PA_4B <- rExpertQuery::EQ_ActionsDocuments(
 # Actions Documents containing "nutrient"
 PA_4B$actionDocumentUrl <- paste0('<a href="', PA_4B$actionDocumentUrl, '" target="_blank">', PA_4B$actionDocumentUrl, "</a>")
 ```
- 
+
 ```{r pa.4b.table}
 PA_4B_subset <- PA_4B %>%
   dplyr::slice_sample(n = 20)
 
 DT::datatable(PA_4B_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
- 
- 
- As there are only `r formatC(nrow(PA_4B), big.mark = ",")` 4B Restoration Approach documents from Pennsylvania, we can review them all in the table below. As in the other Actions Document Example,
- the actionDocumentUrl column contains a link to the document.
+
+As there are only `r formatC(nrow(PA_4B), big.mark = ",")` 4B
+Restoration Approach documents from Pennsylvania, we can review them all
+in the table below. As in the other Actions Document Example, the
+actionDocumentUrl column contains a link to the document.
 
 ## EQ_Assessments
-*EQ_Assessments()* queries ATTAINS Assessments data. For many use cases, querying Assessments for
-a single organization or state is desirable. The next example shows how to query by a single state and use class for the latest cycle.
+
+*EQ_Assessments()* queries ATTAINS Assessments data. For many use cases,
+querying Assessments for a single organization or state is desirable.
+The next example shows how to query by a single state and use class for
+the latest cycle.
+
 ```{r ky.assess, results = TRUE, message = FALSE, warning = FALSE}
 KY_assessments <- rExpertQuery::EQ_Assessments(
   statecode = "KY",
@@ -207,11 +229,14 @@ KY_assessments <- rExpertQuery::EQ_Assessments(
 )
 ```
 
-There are `r formatC(nrow(KY_assessments), big.mark = ",")` results for the basic latest cycle Kentucky query. It is also possible to design more specific assessment queries. 
+There are `r formatC(nrow(KY_assessments), big.mark = ",")` results for
+the basic latest cycle Kentucky query. It is also possible to design
+more specific assessment queries.
 
-For example, you might want to narrow down the results to show causes for a use class in one 
-region. The code below demonstrates querying for EPA Region 3 Assessments in the ECOLOGICAL_USE 
-group with at least one parameter with the status "Cause". The data table below shows a random 
+For example, you might want to narrow down the results to show causes
+for a use class in one region. The code below demonstrates querying for
+EPA Region 3 Assessments in the ECOLOGICAL_USE group with at least one
+parameter with the status "Cause". The data table below shows a random
 sample of the results from this Region 3 Query.
 
 ```{r R3.ecological, results = TRUE, message = FALSE, warning = FALSE}
@@ -229,12 +254,14 @@ R3_ecological_subset <- R3_ecological %>%
 
 DT::datatable(R3_ecological_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
+
 ## EQ_AssessmentUnits
 
-*EQ_AssessmentUnits()* queries ATTAINS Assessment Units data. The default is to only return "Active"
-assessment units, but input params can be adjusted to query for "Retired" or "Historical"
-assessment units in addition to or instead of "Active". The example below shows a simple example for
-querying for Active assessment units for a single state.
+*EQ_AssessmentUnits()* queries ATTAINS Assessment Units data. The
+default is to only return "Active" assessment units, but input params
+can be adjusted to query for "Retired" or "Historical" assessment units
+in addition to or instead of "Active". The example below shows a simple
+example for querying for Active assessment units for a single state.
 
 ```{r ri.aus, results = TRUE, message = FALSE, warning = FALSE}
 
@@ -243,7 +270,7 @@ RI_aus <- rExpertQuery::EQ_AssessmentUnits(statecode = "RI",
 
 ```
 
-We can take a look at a random selection of 20 of the `r `
+We can take a look at a random selection of 20 of the `r`
 
 ```{r fl.retired, results = TRUE, message = FALSE, warning = FALSE}
 
@@ -256,6 +283,7 @@ FL_retired <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
 ## EQ_AUsMLs
 
 Content in development
+
 ```{r akausmls, results = TRUE, message = FALSE, warning = FALSE}
 AK_ausmls <- rExpertQuery::EQ_AssessmentUnits(statecode = "AK",
                                               api_key = testkey)
@@ -269,6 +297,7 @@ WA_ausmls <- rExpertQuery::EQ_AssessmentUnits(statecode = "WA",
 ## EQ_CatchCorr
 
 Content in development
+
 ```{r dc.catchcorr, results = TRUE, message = FALSE, warning = FALSE}
 
 DC_catch <- rExpertQuery::EQ_CatchCorr(statecode = "DC",
@@ -297,9 +326,11 @@ Nat_tmdls <- rExpertQuery::EQ_NationalExtract("tmdl")
 Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
 
 ```
+
 ## EQ_Sources
 
 Content in development
+
 ```{r wi.source.hab, results = TRUE, message = FALSE, warning = FALSE}
 WI_habalt_sources <- rExpertQuery::EQ_Sources(statecode = "WI",
                                  param_group = "HABITAT ALTERATIONS",
@@ -314,6 +345,7 @@ legacy_sources <- rExpertQuery::EQ_Sources(source = "LEGACY/HISTORICAL POLLUTANT
 ## EQ_TMDLs
 
 Content in development
+
 ```{r hi.tmdl.both, results = TRUE, message = FALSE, warning = FALSE}
 
 HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
@@ -329,10 +361,10 @@ HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
 #                
 ```
 
-
 ## EQ_DomainValues
 
 Content in development
+
 ```{r see.dom.vals, results = TRUE, message = FALSE, warning = FALSE}
 
 # Dom_vals <- rExpertQuery::EQ_DomainValues()
@@ -345,5 +377,3 @@ Content in development
 # Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
 
 ```
-
-

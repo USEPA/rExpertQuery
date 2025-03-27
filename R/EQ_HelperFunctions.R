@@ -25,7 +25,7 @@ EQ_ExtractParams <- function(extract = NULL) {
   # import crosswalk ref file
   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
     package = "rExpertQuery"
-  )) %>%
+  ), show_col_types = FALSE) %>%
     dplyr::filter(.data[[extract.filter]] == "yes") %>%
     dplyr::select("param", "eq_name")
 
@@ -50,25 +50,6 @@ EQ_DefaultParams <- function(func) {
     as.data.frame()
 
   return(params.df)
-}
-
-#' Evaluate user supplied params within exported rExpertQuery function (internal function)
-#'
-#' @param matchcall The match.call()[-1] result from within the function.
-#'
-#' @return A data frame of user params with all values evaluated.
-#'
-#' @keywords internal
-#'
-EQ_EvalUserParams <- function(matchcall) {
-user.evals <- lapply(matchcall, eval, envir = parent.frame())
-
-user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) %>%
-  tidyr::pivot_longer(everything(), names_to = "param")
-
-rm(user.evals)
-
-return(user.params)
 }
 
 #' Format user-supplied or default params from rExpertQuery functions to transform all
@@ -238,7 +219,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
   # create string of column names base on extract selection
   columns.string <- readr::read_csv(system.file("extdata", "EQColumnsForPOST.csv",
     package = "rExpertQuery"
-  )) %>%
+  ), show_col_types = FALSE) %>%
     dplyr::select("col.name", dplyr::all_of(extract.filter)) %>%
     dplyr::filter(!is.na(get(extract.filter))) %>%
     dplyr::arrange(get(extract.filter)) %>%
