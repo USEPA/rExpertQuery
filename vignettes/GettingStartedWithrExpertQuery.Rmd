@@ -304,7 +304,7 @@ FL_retired <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
 
 ```
 
-```{r ri.table}
+```{r fl.table}
 
 FL_ret_subset <- FL_retired %>%
   dplyr::slice_sample(n = 20)
