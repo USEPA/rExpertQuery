@@ -98,12 +98,19 @@ EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_nam
     # format for building body
     EQ_FormatParams()
 
-  # create data frame of user supplied params
-  user.params <- as.list(match.call()[-1]) %>%
-    tibble::enframe(name = "param", value = "value") %>%
-    as.data.frame() %>%
-    # format for building body
+  #create df of user entered params
+  get.user <- as.list(match.call()[-1])
+
+  # evaluate user params
+  user.evals <- lapply(get.user, eval, envir = parent.frame())
+
+  # create df and format params
+  user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) %>%
+    tidyr::pivot_longer(everything(), names_to = "param") %>%
     EQ_FormatParams()
+
+  # remove intermediate objects
+  rm(get.user, user.evals)
 
   # compare default and user params to build data frame of all params and values for body
   params.df <- EQ_CompareParams(default = default.params, user = user.params)

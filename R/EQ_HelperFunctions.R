@@ -25,7 +25,7 @@ EQ_ExtractParams <- function(extract = NULL) {
   # import crosswalk ref file
   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
     package = "rExpertQuery"
-  )) %>%
+  ), show_col_types = FALSE) %>%
     dplyr::filter(.data[[extract.filter]] == "yes") %>%
     dplyr::select("param", "eq_name")
 
@@ -51,7 +51,6 @@ EQ_DefaultParams <- function(func) {
 
   return(params.df)
 }
-
 
 #' Format user-supplied or default params from rExpertQuery functions to transform all
 #' param values to character strings (internal function)
@@ -220,7 +219,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
   # create string of column names base on extract selection
   columns.string <- readr::read_csv(system.file("extdata", "EQColumnsForPOST.csv",
     package = "rExpertQuery"
-  )) %>%
+  ), show_col_types = FALSE) %>%
     dplyr::select("col.name", dplyr::all_of(extract.filter)) %>%
     dplyr::filter(!is.na(get(extract.filter))) %>%
     dplyr::arrange(get(extract.filter)) %>%
@@ -318,6 +317,7 @@ EQ_PostAndContent <- function(headers, body.list, extract) {
 
   # request to find number of results
   row.res <- httr2::request(paste0(query.url, "/count")) %>%
+    httr2::req_timeout(30) %>%
     httr2::req_method("POST") %>%
     httr2::req_headers(!!!headers) %>%
     httr2::req_body_raw(body.list[[1]],
