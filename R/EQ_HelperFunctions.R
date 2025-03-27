@@ -317,6 +317,7 @@ EQ_PostAndContent <- function(headers, body.list, extract) {
 
   # request to find number of results
   row.res <- httr2::request(paste0(query.url, "/count")) %>%
+    httr2::req_timeout(30) %>%
     httr2::req_method("POST") %>%
     httr2::req_headers(!!!headers) %>%
     httr2::req_body_raw(body.list[[1]],
