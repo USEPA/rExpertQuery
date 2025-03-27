@@ -449,15 +449,14 @@ HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
 
 Additional content in development
 
-```{r see.dom.vals, results = TRUE, message = FALSE, warning = FALSE}
+```{r see.dom.vals, results = TRUE, message = TRUE, warning = FALSE}
 
-# Dom_vals <- rExpertQuery::EQ_DomainValues()
-
+ rExpertQuery::EQ_DomainValues()
 
 ```
 
-```{r dom.vals.org, results = TRUE, message = FALSE, warning = FALSE}
+```{r dom.vals.org, results = TRUE, message = TRUE, warning = FALSE}
 
-# Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
+ Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
 
 ```
