@@ -99,26 +99,27 @@ testkey <- "53BVce47MQ3KXKibjx35g4ojaDQGh8qWfbdO8cE0"
 
 *EQ_Actions()* queries ATTAINS Actions data by a variety of user
 supplied parameters. For example, you might like to run a relatively
-simple query return data for all Region 4 Actions that should be
+simple query return data for all Region 4 Actions that should not be
 included in Measures.
 
 ```{r eq.actions.r4, echo = TRUE, results = FALSE, message = FALSE, warning = FALSE}
-# query Actions from Region 4 that are included in Measures
-R4_actions_in_meas <- rExpertQuery::EQ_Actions(api_key = testkey, region = 4, in_meas = "Yes")
+# query Actions from Region 4 that are not included in Measures
+R4_actions_not_meas <- rExpertQuery::EQ_Actions(api_key = testkey, region = 4, in_meas = "No")
 ```
 
-This query returns `r formatC(nrow(R4_actions_in_meas), big.mark = ",")`
-results, so we'll review only a small random subset of them in a data
-table just to get an idea of what those results look like:
+This query returns
+`r formatC(nrow(R4_actions_not_meas), big.mark = ",")` results, so we'll
+review only a small random subset of them in a data table just to get an
+idea of what those results look like:
 
 ```{r r4.url.prep, include = FALSE}
 # Actions Documents containing "nutrient"
-R4_actions_in_meas$planSummaryLink <- paste0('<a href="', R4_actions_in_meas$planSummaryLink, '" target="_blank">', R4_actions_in_meas$planSummaryLink, "</a>")
+R4_actions_not_meas$planSummaryLink <- paste0('<a href="', R4_actions_not_meas$planSummaryLink, '" target="_blank">', R4_actions_not_meas$planSummaryLink, "</a>")
 ```
 
 ```{r r4.datatable}
 # create random subset of R4 query results
-R4_subset <- R4_actions_in_meas %>%
+R4_subset <- R4_actions_not_meas %>%
   dplyr::slice_sample(n = 20)
 
 # create data tab;e
