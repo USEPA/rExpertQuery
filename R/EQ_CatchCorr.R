@@ -64,12 +64,19 @@ EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL,
     # format for building body
     EQ_FormatParams()
 
-  # create df of user entered params
-  user.params <- as.list(match.call()[-1]) %>%
-    tibble::enframe(name = "param", value = "value") %>%
-    as.data.frame() %>%
-    # format for building body
+  #create df of user entered params
+  get.user <- as.list(match.call()[-1])
+
+  # evaluate user params
+  user.evals <- lapply(get.user, eval, envir = parent.frame())
+
+  # create df and format params
+  user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) %>%
+    tidyr::pivot_longer(everything(), names_to = "param") %>%
     EQ_FormatParams()
+
+  # remove intermediate objects
+  rm(get.user, user.evals)
 
   # compare default and user params to build df of all params and values for body
   params.df <- EQ_CompareParams(default = default.params, user = user.params)

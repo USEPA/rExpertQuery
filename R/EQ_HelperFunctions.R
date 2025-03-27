@@ -52,6 +52,24 @@ EQ_DefaultParams <- function(func) {
   return(params.df)
 }
 
+#' Evaluate user supplied params within exported rExpertQuery function (internal function)
+#'
+#' @param matchcall The match.call()[-1] result from within the function.
+#'
+#' @return A data frame of user params with all values evaluated.
+#'
+#' @keywords internal
+#'
+EQ_EvalUserParams <- function(matchcall) {
+user.evals <- lapply(matchcall, eval, envir = parent.frame())
+
+user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) %>%
+  tidyr::pivot_longer(everything(), names_to = "param")
+
+rm(user.evals)
+
+return(user.params)
+}
 
 #' Format user-supplied or default params from rExpertQuery functions to transform all
 #' param values to character strings (internal function)
