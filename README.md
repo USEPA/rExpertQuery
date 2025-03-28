@@ -27,29 +27,28 @@ remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TR
 There are ten exported functions in rExpertQuery. The first eight allow users to query ATTAINS data
 via Expert Query web services (https://owapps.epa.gov/expertquery/api-documentation). These are:
 
-1) EQ_Actions() - queries and returns ATTAINS actions data
-2) EQ_ActionsDocuments() - queries and returns ATTAINS Actions Documents, including a keyword search
-3) EQ_Assessments() - queries and returns ATTAINS Assessments
-4) EQ_AssessmentUnits() - queries and returns ATTAINS Assessment Units (default is for Active AUs)
-5) EQ_AUsMLs() - queries and returns ATTAINS Assessment Units with Monitoring Location data
-6) EQ_CatchCorr() - queries and returns ATTAINS Catchment Correspondence data (memory intensive)
-7) EQ_Sources() - queries and returns ATTAINS Sources data
-8) EQ_TMDLs() - queries and returns ATTAINS TMDL data
+1) [EQ_Actions()](https://usepa.github.io/rExpertQuery/reference/EQ_Actions.html) - queries and returns ATTAINS actions data
+2) [EQ_ActionsDocuments()](https://usepa.github.io/rExpertQuery/reference/EQ_ActionsDocuments.html) - queries and returns ATTAINS Actions Documents, including a keyword search
+3) [EQ_Assessments()](https://usepa.github.io/rExpertQuery/reference/EQ_Assessments.html) - queries and returns ATTAINS Assessments
+4) [EQ_AssessmentUnits()](https://usepa.github.io/rExpertQuery/reference/EQ_AssessmentUnits.html) - queries and returns ATTAINS Assessment Units (default is for Active AUs)
+5) [EQ_AUsMLs()](https://usepa.github.io/rExpertQuery/reference/EQ_AUsMLs.html) - queries and returns ATTAINS Assessment Units with Monitoring Location data
+6) [EQ_CatchCorr()](https://usepa.github.io/rExpertQuery/reference/EQ_CatchCorr.html) - queries and returns ATTAINS Catchment Correspondence data (memory intensive)
+7) [EQ_Sources()](https://usepa.github.io/rExpertQuery/reference/EQ_Sources.html) - queries and returns ATTAINS Sources data
+8) [EQ_TMDLs()](https://usepa.github.io/rExpertQuery/reference/EQ_TMDLs.html) - queries and returns ATTAINS TMDL data
 
 An additional function allows users to download the Expert Query National Extracts of ATTAINS data
 (https://owapps.epa.gov/expertquery/national-downloads) which are updated weekly. This function
 should be used when national data are desired or when a query designed in one of the previous eight
 functions would exceed the Expert Query web services limit of one millions rows. This function is:
 
-9) EQ_NationalExtract() - returns national extract for Actions, Assessments, Assessment Units, 
+9) [EQ_NationalExtract()](https://usepa.github.io/rExpertQuery/reference/EQ_NationalExtract.html) - returns national extract for Actions, Assessments, Assessment Units, 
 Assessment Units with Monitoring Locations, Catchment Correspondence, Sources, or TMDLS based on 
 user selection
 
-The tenth function relies on ATTAINS web services 
-(https://www.epa.gov/waterdata/how-access-and-use-attains-web-services) to provide allowable domain
+The tenth function relies on [ATTAINS web services](https://www.epa.gov/waterdata/how-access-and-use-attains-web-services) to provide allowable domain
 values for some rExpertQuery parameters:
 
-10) EQ_DomainValues - returns domain values for some rExpertQuery function params
+10) [EQ_DomainValues](https://usepa.github.io/rExpertQuery/reference/EQ_DomainValues.html) - returns domain values for some rExpertQuery function params
 
 For more information on query params and function examples see: 
 
