@@ -48,7 +48,7 @@ user selection
 The tenth function relies on [ATTAINS web services](https://www.epa.gov/waterdata/how-access-and-use-attains-web-services) to provide allowable domain
 values for some rExpertQuery parameters:
 
-10) [EQ_DomainValues](https://usepa.github.io/rExpertQuery/reference/EQ_DomainValues.html) - returns domain values for some rExpertQuery function params
+10) [EQ_DomainValues()](https://usepa.github.io/rExpertQuery/reference/EQ_DomainValues.html) - returns domain values for some rExpertQuery function params
 
 For more information on query params and function examples see: 
 
