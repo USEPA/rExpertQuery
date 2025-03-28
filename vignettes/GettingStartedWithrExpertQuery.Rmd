@@ -335,11 +335,11 @@ recorded leads to a data set with
 
 ## EQ_CatchCorr
 
-[**EQ_CatchCorr()**](https://usepa.github.io/rExpertQuery/reference/EQ_CatchCorr.html)queries
-ATTAINS Catchment Correspondance data. These queries return large files,
-particularly if a large geospatial area is defined, so best practice is
-to make your query as specific as possible. Many machines may not have
-enough memory to load an entire state's worth of catchment
+[**EQ_CatchCorr()**](https://usepa.github.io/rExpertQuery/reference/EQ_CatchCorr.html)
+queries ATTAINS Catchment Correspondance data. These queries return
+large files, particularly if a large geospatial area is defined, so best
+practice is to make your query as specific as possible. Many machines
+may not have enough memory to load an entire state's worth of catchment
 correspondence data in an R session.
 
 ```{r dc.catchcorr, results = TRUE, message = TRUE, warning = FALSE}
@@ -407,9 +407,15 @@ Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
 
 ## EQ_Sources
 
-[**EQ_Sources()**](https://usepa.github.io/rExpertQuery/reference/EQ_Sources.html)
+[**EQ_Sources()**](https://usepa.github.io/rExpertQuery/reference/EQ_Sources.html)queries
+ATTAINS Sources data. Not all organizations report sources in their
+assessments,
 
-Additional content in development
+but for those that do, querying by source can be another useful option
+for querying ATTAINS data. The next code chunk shows how to query
+sources for one state by a parameter group, for example searching for
+sources related to the parameter group "HABITAT ALTERATIONS" in
+Wisconsin.
 
 ```{r wi.source.hab, results = TRUE, message = FALSE, warning = FALSE}
 WI_habalt_sources <- rExpertQuery::EQ_Sources(statecode = "WI",
@@ -417,16 +423,42 @@ WI_habalt_sources <- rExpertQuery::EQ_Sources(statecode = "WI",
                                  api_key = testkey)
 ```
 
+There were `r formatC(nrow(WI_habalt_sources), big.mark = ",")` for this
+query, which can be reviewed in the data table below.
+
+```{r wi.table}
+
+DT::datatable(WI_habalt_sources, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+
+```
+
+It is also possible to query directly be the name of the source. The
+example below queries all organizations for the source
+"LEGACY/HISTORICAL POLLUTANTS".
+
 ```{r source.legacy, results = TRUE, message = FALSE, warning = FALSE}
 legacy_sources <- rExpertQuery::EQ_Sources(source = "LEGACY/HISTORICAL POLLUTANTS",
                              api_key = testkey)
 ```
 
+There were `r formatC(nrow(WI_habalt_sources), big.mark = ",")` records
+for the source "LEGACY/HISTORICAL POLLUTANTS". These results can be
+reviewed in the table below to see which states, regions, etc. are
+associated with this source.
+
+```{r legacy.table}
+
+DT::datatable(legacy_sources, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+
+```
+
 ## EQ_TMDLs
 
 [**EQ_TMDLs()**](https://usepa.github.io/rExpertQuery/reference/EQ_TMDLs.html)
-
-Additional content in development
+queries ATTAINS TMDL data and can utilize many search parameters. The
+example below shows querying Hawaii for TMDLs with a source_type of
+"Both", which means that both point and non point sources were part of
+the TMDL.
 
 ```{r hi.tmdl.both, results = TRUE, message = FALSE, warning = FALSE}
 
@@ -435,25 +467,50 @@ HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
                                api_key = testkey)
 ```
 
-```{r unknown.r10, results = TRUE, message = FALSE, warning = FALSE}
+There `r formatC(nrow(HI_both_tmdls), big.mark = ",")` can be reviewed
+in the data table below.
 
-# R10_unknown <- rExpertQuery::EQ_TMDLs(region = 10,
-#                              ad_param_group = "CAUSE UNKNOWN",
-#                              api_key = testkey)
-#                
+```{r hi.table}
+
+DT::datatable(HI_both_tmdls, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
-## EQ_DomainValues
+This example demonstrates using another combination of arguments in the
+query, searching for records from EPA Region 10 that pertain to the
+addressed parameter group "CAUSE UNKNOWN".
+
+```{r unknown.r10, results = TRUE, message = FALSE, warning = FALSE}
+
+ R10_unknown <- rExpertQuery::EQ_TMDLs(region = 10,
+                              ad_param_group = "CAUSE UNKNOWN",
+                              api_key = testkey)
+                
+```
+
+There `r formatC(nrow(R10_unknown), big.mark = ",")` are displayed in
+the table below.
+
+```{r r10.uk.table}
+
+DT::datatable(R10_unknown, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+
+```
+
+## EQ_DomainValues (in active development)
 
 [**EQ_DomainValues()**](https://usepa.github.io/rExpertQuery/reference/EQ_DomainValues.html)
-
-Additional content in development
+is a function to help users understand the available domain values can
+be used in the other rExpertQuery functions. If run with no argument
+supplied, it will return a list of all available domains that can be
+used as an argument in **EQ_DomainValues()**.
 
 ```{r see.dom.vals, results = TRUE, message = TRUE, warning = FALSE}
 
  rExpertQuery::EQ_DomainValues()
 
 ```
+
+The example below shows how to return allowable values for "org_id".
 
 ```{r dom.vals.org, results = TRUE, message = TRUE, warning = FALSE}
 
