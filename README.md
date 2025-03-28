@@ -25,7 +25,7 @@ remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TR
 
 ## Functions and Webservices
 There are ten exported functions in rExpertQuery. The first eight allow users to query ATTAINS data
-via Expert Query web services (https://owapps.epa.gov/expertquery/api-documentation). These are:
+via [Expert Query web services](https://owapps.epa.gov/expertquery/api-documentation). These are:
 
 1) [EQ_Actions()](https://usepa.github.io/rExpertQuery/reference/EQ_Actions.html) - queries and returns ATTAINS actions data
 2) [EQ_ActionsDocuments()](https://usepa.github.io/rExpertQuery/reference/EQ_ActionsDocuments.html) - queries and returns ATTAINS Actions Documents, including a keyword search
