@@ -496,7 +496,7 @@ DT::datatable(R10_unknown, options = list(pageLength = 5, scrollX = TRUE), escap
 
 ```
 
-## EQ_DomainValues (in active development)
+## EQ_DomainValues
 
 [**EQ_DomainValues()**](https://usepa.github.io/rExpertQuery/reference/EQ_DomainValues.html)
 is a function to help users understand the available domain values can
@@ -515,5 +515,11 @@ The example below shows how to return allowable values for "org_id".
 ```{r dom.vals.org, results = TRUE, message = TRUE, warning = FALSE}
 
  Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
+
+```
+
+```{r org.id.table}
+
+DT::datatable(Org_vals, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 
 ```

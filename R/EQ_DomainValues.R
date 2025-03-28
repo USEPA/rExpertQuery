@@ -14,6 +14,11 @@ EQ_DomainValues <- function(domain = NULL) {
   # base URL to query ATTAINS web services
   base.url <- "https://attains.epa.gov/attains-public/api/domains"
 
+  # read in parameter crosswalk
+  param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
+                                          package = "rExpertQuery"
+  ))
+
   # return list of all allowable domain values if no domain value is supplied
   if (is.null(domain)) {
     print(paste0(
@@ -21,18 +26,22 @@ EQ_DomainValues <- function(domain = NULL) {
     ))
 
     raw.data <- jsonlite::fromJSON(base.url) %>%
-      dplyr::select(domain)
+      dplyr::select(domain) %>%
+      dplyr::rename(attains_ws_name = domain)
 
-    rm(base.url)
+    eq.params <- raw.data %>%
+      dplyr::left_join(param.cw, by = dplyr::join_by(attains_ws_name)) %>%
+      dplyr::filter(!is.na(eq_name)) %>%
+      dplyr::select(eq_name) %>%
+      dplyr::rename(domain = eq_name) %>%
+      dplyr::arrange()
 
-    return(raw.data)
+    rm(base.url, raw.data)
+
+    return(eq.params)
   }
 
   if (!is.null(domain)) {
-    # read in parameter crosswalk
-    param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
-      package = "rExpertQuery"
-    ))
 
     # check to make sure user supplied domain value is valid
     if (!domain %in% param.cw$param) {
