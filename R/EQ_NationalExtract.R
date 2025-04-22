@@ -159,9 +159,9 @@ EQ_NationalExtract <- function(extract = NULL) {
     dplyr::filter(name == paste0("attains_app.profile_", file)) %>%
     dplyr::select(last_refresh_end_time) %>%
     dplyr::pull() %>%
-    as.Date() %>%
+    lubridate::as_datetime() %>%
     lubridate::with_tz(tx = "US/Eastern") %>%
-    format("%B %d, %Y at %I:%M %Z")
+    format("%B %d, %Y at %I:%M %p %Z")
 
   print(paste0(
     "EQ_NationalExtract: downloading ", label, " (Expert Query National Extract).",
@@ -238,7 +238,7 @@ EQ_NationalExtract <- function(extract = NULL) {
 
   # remove intermediate objects
   rm(
-    url, latest.json, base.url, nat.url, folder.num, date.print, label, file, temp,
+    url, latest.json, base.url, nat.url, folder.num, update.date, update.dates, label, file, temp,
     unzipped.file, csv.file, col.cw
   )
 
