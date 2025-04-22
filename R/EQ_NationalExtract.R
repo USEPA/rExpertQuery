@@ -107,62 +107,68 @@ EQ_NationalExtract <- function(extract = NULL) {
 
   folder.num <- latest.json$julian
 
-  date.print <- format(lubridate::as_datetime(folder.num), "%B %d, %Y")
-
   # select profile based on user selection
   # when json is updated, date.print will be determined for each profile below label
   if (extract == "actions") {
-    file <- "actions.csv"
+    file <- "actions"
 
     label <- "Actions Profile"
   }
 
   if (extract == "assessments") {
-    file <- "assessments.csv"
+    file <- "assessments"
 
     label <- "Assessments Profile"
   }
 
   if (extract == "aus") {
-    file <- "assessment_units.csv"
+    file <- "assessment_units"
 
     label <- "Assessment Units Profile"
-
-    extract <- "assessment_units"
   }
 
   if (extract == "au_mls") {
-    file <- "assessment_units_monitoring_locations.csv"
+    file <- "assessment_units_monitoring_locations"
 
     label <- "Assessment Units with Monitoring Locations Profile"
-
-    extract <- "assessment_units_mls"
   }
 
   if (extract == "catch_corr") {
-    file <- "catchment_correspondence.csv"
+    file <- "catchment_correspondence"
 
     label <- "Catchment Correspondance Profile"
   }
 
   if (extract == "sources") {
-    file <- "sources.csv"
+    file <- "sources"
 
     label <- "Sources Profile"
   }
 
   if (extract == "tmdl") {
-    file <- "tmdl.csv"
+    file <- "tmdl"
 
     label <- "Total Maximum Daily Load Profile"
   }
 
+  update.dates <- jsonlite::fromJSON(paste0(base.url, nat.url, folder.num, "/ready.json"))
+
+  update.dates <- update.dates$details
+
+  update.date <- update.dates %>%
+    dplyr::filter(name == paste0("attains_app.profile_", file)) %>%
+    dplyr::select(last_refresh_end_time) %>%
+    dplyr::pull() %>%
+    as.Date() %>%
+    lubridate::with_tz(tx = "US/Eastern") %>%
+    format("%B %d, %Y at %I:%M %Z")
+
   print(paste0(
     "EQ_NationalExtract: downloading ", label, " (Expert Query National Extract).",
-    " It was last updated on ", date.print, "."
+    " It was last updated on ", update.date, "."
   ))
 
-  url <- paste0(base.url, nat.url, folder.num, "/", file, ".zip")
+  url <- paste0(base.url, nat.url, folder.num, "/", file, ".csv", ".zip")
 
   # set up tempfile
   temp <- tempfile(fileext = ".zip")
