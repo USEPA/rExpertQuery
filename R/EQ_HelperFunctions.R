@@ -365,3 +365,25 @@ EQ_PostAndContent <- function(headers, body.list, extract) {
 
   return(query.res)
 }
+
+#' Format Plan Summary Links as URLs
+#'
+#' @param .data Data frame to convert planSummaryLink to functional URL links for use in data tables.
+#' @param url.col Column name containing string for formatting. Default is "planSummaryLink".
+#'
+#' @return The .data data frame with planSummaryLink entries formatted as URL links.
+#'
+#' @export
+#'
+
+EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
+
+  .data <- .data %>%
+    dplyr::mutate(!!url.col := paste0("<a href='",
+                                           !!sym(url.col),
+                                            "' target='_blank'>",
+                                      !!sym(url.col),
+                                            "</a>"))
+  return(.data)
+}
+
