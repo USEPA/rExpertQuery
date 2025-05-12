@@ -94,6 +94,9 @@ library(data.table)
 library(dplyr)
 library(DT)
 library(plotly)
+
+# turn off scientific notation
+scipen = 999
 ```
 
 ## API Key
@@ -177,10 +180,10 @@ answer them.
 2.  Which waters are impaired for PARMETER GROUP nationally?
     (EQ_NationalExtract)
 
-3.   Which waters have a TMDL and are fully supporting nationally?
+3.  Which waters have a TMDL and are fully supporting nationally?
     (EQ_NationalExtract)
 
-4.   What are the impaired waters (cat 4 and 5
+4.  What are the impaired waters (cat 4 and 5
     nationally)?(EQ_NationalExtract)
 
 5.  Which states have included information about monitoringLocations in
@@ -213,7 +216,7 @@ answer them.
 
 ### EQ_ActionsDocuments
 
-1.   What are all the actions documents that contain the keyword
+1.  What are all the actions documents that contain the keyword
     "nutrient"? (EQ_ActionsDocuments)
 
 2.  How many actions documents that contain the keyword "nutrient" are
@@ -239,6 +242,135 @@ answer them.
 1.  Which catchment corresponds to ASSESSMENTUNITID?
 
 2.  How large of a catchment area corresponds to ASSESSMENTUNITID?
+
+## EQ_NationalExtract
+
+[**EQ_NationalExtract()**](https://usepa.github.io/rExpertQuery/reference/EQ_NationalExtract.html)provides
+an efficient method for importing the [Expert Query National
+Extracts](https://owapps.epa.gov/expertquery/national-downloads). This
+function requires one argument, "extract" to specify which of the
+National Extracts to download. The following examples show how to
+download the TMDL and Actions extracts. The extracts are all large files
+and some may not open in R if there is not enough memory available.
+
+![](images/nat.downloads.png)
+
+1.  What is the most commonly reported impairment nationally?
+    (EQ_NationalExtract)
+
+    ```{r common.impairment}
+
+    # talk to Wendy about this one
+
+    # import assessments profile
+    assessments.nat <- rExpertQuery::EQ_NationalExtract("assessments")
+
+    # filter for latest assessments
+    assessments.nat <- assessments.nat %>%
+       dplyr::group_by(organizationId) %>%
+        dplyr::slice_max(reportingCycle) %>%
+        dplyr::select(-objectId) %>%
+        dplyr::distinct()
+
+    # count impairments
+    count.impair <- assessments.nat %>%
+      dplyr::filter(parameterStatus == "Cause") %>%
+      dplyr::group_by(parameterName) %>%
+      dplyr::summarise(n = length(assessmentUnitId))
+    ```
+
+2.  Which waters are impaired for PARMETER GROUP nationally?
+    (EQ_NationalExtract)
+
+    ```{r param.nat}
+
+    param.nat <- assessments.nat %>% 
+      dplyr::filter(parameterGroup == "PH/ACIDITY/CAUSTIC CONDITIONS")
+
+    ```
+
+3.  Which waters have a TMDL and are fully supporting nationally?
+    (EQ_NationalExtract)
+
+    ```{r tmdl.fs}
+
+    # talk to Wendy about this one
+    tmdl.fs <- assessments.nat %>%
+      dplyr::filter(overallStatus == "Fully Supporting",
+                    )
+    ```
+
+4.  What are the impaired waters (cat 4 and 5
+    nationally)?(EQ_NationalExtract)
+
+    ```{r impaired.waters}
+
+    imp.waters <- assessments.nat %>%
+      dplyr::select(organizationId, organizationName, organizationType, assessmentUnitId, assessmentUnitName, assessmentDate, epaIrCategory, waterType, waterSize, waterSizeUnits) %>%
+      dplyr::distinct() %>%
+      dplyr::filter(epaIrCategory %in% c("4", "5"))
+
+    ```
+
+5.  Which states have included any information about monitoringLocations
+    in ATTAINS? (EQ_NationalExtract)
+
+    ```{r}
+    # import national extract for assessment units/monitoring locations
+    # this is not working currently
+    nat.ausmls <- rExpertQuery::EQ_NationalExtract("au_mls")
+
+    ```
+
+## EQ_AssessmentUnits
+
+[**EQ_AssessmentUnits()**](https://usepa.github.io/rExpertQuery/reference/EQ_AssessmentUnits.html)queries
+ATTAINS Assessment Units data. The default is to only return "Active"
+assessment units, but input params can be adjusted to query for
+"Retired" or "Historical" assessment units in addition to or instead of
+"Active". The example below shows a simple example for querying for
+Active assessment units for a single state.
+
+1.  How many stream miles in Kandsas are impaired for primary contact
+    recreation in the latest cycle? (EQ_Assessments)
+
+    ```{r stream.ks}
+
+    # set up query to search assessments for KS, primary contact recreation use, and stream
+    ks.imp.streams <- rExpertQuery::EQ_Assessments(statecode = "KS",
+                                                   use_name = "Primary Contact Recreation", 
+                                                   api_key = testkey,
+                                                   water_type = "STREAM")
+
+    # calculate total water size
+    ks.miles <- ks.imp.streams %>%
+      dplyr::select(assessmentUnitId, assessmentUnitName, waterSize, waterSizeUnits) %>%
+      dplyr::distinct() %>%
+      dplyr::summarize(totalWaterSize = sum(waterSize)) %>%
+      dplyr::pull()
+
+    ```
+
+    There are
+    `r formatC(ks.miles, big.mark = ",", digits = 2, format = "f` stream
+    miles in Kansas impaired for primary contract reacreation use.
+
+2.  What waters in STATE are impaired for USE due to PARAMETER?
+    (EQ_Assessments)
+
+    ```{r MT.impair}
+
+    MT.impair <- rExpertQuery::EQ_Assessments(statecode = "MT",
+                                              use_name = "Aquatic Life",
+                                              api_key = testkey
+                                              )
+
+    ```
+
+3.  Which waters are new to CAT# in this cycle in STATE? \#
+    (EQ_Assessments)
+
+## EQ_Sources
 
 ## EQ_Actions
 
@@ -449,54 +581,6 @@ R3_ecological_subset <- R3_ecological %>%
 DT::datatable(R3_ecological_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
-## EQ_AssessmentUnits
-
-[**EQ_AssessmentUnits()**](https://usepa.github.io/rExpertQuery/reference/EQ_AssessmentUnits.html)queries
-ATTAINS Assessment Units data. The default is to only return "Active"
-assessment units, but input params can be adjusted to query for
-"Retired" or "Historical" assessment units in addition to or instead of
-"Active". The example below shows a simple example for querying for
-Active assessment units for a single state.
-
-```{r ri.aus, results = TRUE, message = FALSE, warning = FALSE}
-
-RI.aus <- rExpertQuery::EQ_AssessmentUnits(statecode = "RI",
-                                           api_key = testkey)
-
-```
-
-We can use the results for some basic data visualization and
-exploration.
-
-```{r ri.table}
-
-RI_aus_subset <- RI_aus %>%
-  dplyr::slice_sample(n = 20)
-
-DT::datatable(RI_aus_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-```
-
-It is is also possible to search fo retired assessment units, as show in
-the example from Florida below.
-
-```{r fl.retired, results = TRUE, message = FALSE, warning = FALSE}
-
-FL_retired <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
-                                           au_status = "Retired",
-                                           api_key = testkey)
-
-```
-
-```{r fl.table}
-
-FL_ret_subset <- FL_retired %>%
-  dplyr::slice_sample(n = 20)
-
-DT::datatable(FL_ret_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-```
-
-## EQ_AUsMLs
-
 [**EQ_AUsMLs()**](https://usepa.github.io/rExpertQuery/reference/EQ_AUsMLs.html)returns
 information on the monitoring locations used to make assessment
 determinations at specific assessment units. Not all organizations
@@ -565,30 +649,6 @@ IL_N99_subset <- IL_N99_catch %>%
 DT::datatable(IL_N99_catch, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 
 ```
-
-## EQ_NationalExtract
-
-[**EQ_NationalExtract()**](https://usepa.github.io/rExpertQuery/reference/EQ_NationalExtract.html)provides
-an efficient method for importing the [Expert Query National
-Extracts](https://owapps.epa.gov/expertquery/national-downloads). This
-function requires one argument, "extract" to specify which of the
-National Extracts to download. The following examples show how to
-download the TMDL and Actions extracts. The extracts are all large files
-and some may not open in R if there is not enough memory available.
-
-```{r nat.tmdls, results = TRUE, message = FALSE, warning = FALSE}
-
-Nat_tmdls <- rExpertQuery::EQ_NationalExtract("tmdl")
-
-```
-
-```{r nat.actions, results = TRUE, message = FALSE, warning = FALSE}
-
-Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
-
-```
-
-## EQ_Sources
 
 [**EQ_Sources()**](https://usepa.github.io/rExpertQuery/reference/EQ_Sources.html)queries
 ATTAINS Sources data. Not all organizations report sources in their
