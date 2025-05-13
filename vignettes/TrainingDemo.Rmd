@@ -212,7 +212,7 @@ answer them.
 
 ### EQ_Actions
 
-1.   How many actions (by actionId) in Deleware?
+1.  How many actions (by actionId) in Deleware?
 
 2.  How many actions( (by actionId) were established in FY 2024?
 
