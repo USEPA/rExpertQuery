@@ -212,10 +212,9 @@ answer them.
 
 ### EQ_Actions
 
-1.  How many actions (by actionId) in STATE?
+1.   How many actions (by actionId) in Deleware?
 
-2.  How many actions( (by actionId) were approved so far in FY 2025 in
-    REGION?
+2.  How many actions( (by actionId) were established in FY 2024?
 
 ### EQ_ActionsDocuments
 
@@ -357,7 +356,7 @@ the desired cycle year in YYYY format.
 
     There are
     `r formatC(ks.miles, big.mark = ",", digits = 2, format = "f` stream
-    miles in Kansas impaired for primary contract reacreation use.
+    miles in Kansas impaired for primary contract recreation use.
 
 2.  What waters in Montana are impaired for Aquatic Life due to Zinc?
 
@@ -399,7 +398,8 @@ the desired cycle year in YYYY format.
     IL.combine <- IL.latest %>%
       dplyr::select(assessmentUnitId, assessmentUnitName, epaIrCategory) %>%
       dplyr::mutate(epaIrCategory = as.character(epaIrCategory)) %>%
-      dplyr::left_join(IL.previous)
+      dplyr::left_join(IL.previous, dplyr::join_by(assessmentUnitId),
+                       relationship = "many-to-many")
 
     # create df of the auids that changed to cat 5 in 2024
     IL.changes <- IL.combine %>%
@@ -407,7 +407,6 @@ the desired cycle year in YYYY format.
       dplyr::distinct()
 
     # you may want to summarize and visualize what categories the new cat 5s were in previously
-
     IL.change.sum <- IL.changes %>%
       dplyr::group_by(epaIrCategory.previous) %>%
       dplyr::summarise(count = dplyr::n_distinct(assessmentUnitId))
@@ -502,13 +501,32 @@ plotly::plot_ly( data = HI.sum,
 
 There are `r formatC(nrow(HI.count), big.mark = ",")` TMDLs in Hawaii.
 
-2.  **How many TMDL projects were approved so far in FY 2024 in R10?**
+2.  **How many TMDL projects (by actionId) were approved so far in FY
+    2025 in R10?**
 
-```{r}
+```{r TMDL.proj}
 tmdl.proj <- rExpertQuery::EQ_TMDLs(region = 10,
                                     tmdl_date_start = "2024-10-01",
-                                    tmdl_date_end = "2025-09-30",
                                     api_key = testkey)
+
+tmdl.proj.count <- dplyr::n_distinct(tmdl.proj$actionId)
+
+
+
+tmdl.sum <- tmdl.proj %>%
+  dplyr::select(region, state, organizationId, organizationName, organizationId, 
+                actionId, actionName, assessmentUnitId, pollutant,
+                addressedParameter, tmdlDate, planSummaryLink) %>%
+  dplyr::distinct() %>%
+  dplyr::group_by(actionId) %>%
+  dplyr::mutate(assessmentUnitIds = paste(unique(assessmentUnitId), collapse = ", "
+                                          ),
+                pollutants = paste(unique(pollutant), collapse = ", "),
+                addressedParameters = paste(addressedParameter, collapse = ", ")) %>% dplyr::select(-assessmentUnitId, -pollutant, -addressedParameter) %>%
+  dplyr::distinct()
+
+DT::datatable(tmdl.sum %>%
+                rExpertQuery::EQ_FormatPlanLinks(), escape = FALSE)
 ```
 
 ## EQ_Actions
@@ -516,47 +534,55 @@ tmdl.proj <- rExpertQuery::EQ_TMDLs(region = 10,
 [**EQ_Actions()**](https://usepa.github.io/rExpertQuery/reference/EQ_Actions.htmlhttps://usepa.github.io/rExpertQuery/reference/EQ_Actions.html)queries
 ATTAINS Actions data by a variety of user supplied parameters. For
 example, you might like to run a simple query to return data for all
-Actions from Hawaii that should not be included in Measures.
+Actions from Delaware that should be included in Measures and count how
+many unique actionIds there are in the data set.
 
-```{r HI.actions, echo = TRUE, results = FALSE, message = FALSE, warning = FALSE} # query Actions from Hawaii that are included in Measures HI.meas <- rExpertQuery::EQ_Actions(api_key = testkey, statecode = "HI", in_meas = "Yes")}
+1.  How many actions (by actionId) in Delaware should be included in
+    measures?
+
+```{r DE.actions, echo=TRUE, message=FALSE, warning=FALSE, FALSE}
+
+# query Actions from Delaware that are included in Measures 
+DE.meas <- rExpertQuery::EQ_Actions(statecode = "DE",
+                                    in_meas = "Yes",
+                                    api_key = testkey)
+
+# count unique actionIds
+DE.count <- dplyr::n_distinct(DE.meas$actionId)
+
+# determine unique actionIds
+DE.actids <- DE.meas %>%
+  dplyr::select(actionType, actionId, actionName, actionAgency, parameter,
+                completionDate, assessmentUnitId, fiscalYearEstablished,
+                planSummaryLink) %>%
+  dplyr::distinct() %>%
+  dplyr::group_by(actionId) %>%
+  dplyr::mutate(parameters = paste(unique(parameter), collapse = ", "),
+                assessmentUnitIds = paste(unique(assessmentUnitId), collapse = ", ")) %>%
+  dplyr::select(-parameter, -assessmentUnitId) %>%
+  dplyr::distinct()
+
 ```
 
-This query returns
-`r formatC(nrow(R4_actions_not_meas), big.mark = ",")` results. We can
-create a data table to view and sort the results. It is also possible to
-format the planSummaryLink entries as functional URL links by using a
-combination of rExpertQuery::EQ_FormatPlanLinks() and the escape = FALSE
-option in DT::datatable.
+There are `r formatC(nrow(DE.actids), big.mark = ",")` actionIds that
+should be included when calculating measures for Delaware.
 
-```{r HI.actions.dt, include = TRUE} # create data table DT::datatable(HI.meas %>%   rExpertQuery::EQ_FormatPlanLinks(),   escape = FALSE)}
+```{r de.table}
+
+DT::datatable(DE.actids %>%
+                rExpertQuery::EQ_FormatPlanLinks(),
+              escape = FALSE)
+
 ```
 
-We can also create some basic data visualizations using the plotly
-package For example, we could use a pie chart to see which
-parameterGroups are most frequently associated with Hawaii's Actions
-that are included in measures. To avoid double counting Actions, we will
-count the number of unique actionIds associated with each
-parameterGroup.
+2.  How many actions were established in FY 2024?
 
-```{r hi.actions.fig}  HI.meas.sum <- HI.meas %>%   dplyr::select(parameterGroup, actionId) %>%   dplyr::group_by(parameterGroup) %>%   dplyr::summarize(count = dplyr::n_distinct(actionId))  plotly::plot_ly(HI.meas.sum, labels = ~parameterGroup, values = ~count, type = 'pie')}
+```{r act.fy24}
+
+act.fy.24 <- rExpertQuery::EQ_Actions(fisc_year_start = 2024, 
+                                      fisc_year_end = 2024,
+                                      api_key = testkey)
 ```
-
-You might also want to create a more specific query. For example, you
-might want to find all Actions from Missouri that were issued by the
-state with completion dates between 2000-01-01 and 2020-12-31.
-
-```{r mo.data, results = TRUE, message = FALSE, warning = FALSE} # query Actions for Missouri Actions with action agency "EPA" and parameter group "PATHOGENS" MO.state.act <- rExpertQuery::EQ_Actions(   api_key = testkey, statecode = "MO",   act_agency = "State",   param_group = "PATHOGENS",   comp_date_start = "2000-01-01",   comp_date_end = "2020-12-31" )  DT::datatable(MO.state.act %>%   rExpertQuery::EQ_FormatPlanLinks(),    options = list(pageLength = 10, scrollX = TRUE), escape = FALSE)}
-```
-
-We could visualize these results in a different way, such as a stacked
-bar graph to compare the different actionTypes and the parameters
-associated with them. Again, we will count the unique actionIds to avoid
-any double counting.
-
-```{r mo.data.vis} MO.state.sum <- MO.state.act %>%   dplyr::select(parameter, actionId, actionType) %>%   dplyr::group_by(parameter, actionType) %>%   dplyr::summarize(count = dplyr::n_distinct(actionId))  plotly::plot_ly(data =MO.state.sum,           x = ~actionType, y = ~count, type = 'bar', color = ~parameter) %>%     plotly::layout(barmode = 'stack')}
-```
-
-## 
 
 ## EQ_Sources
 
