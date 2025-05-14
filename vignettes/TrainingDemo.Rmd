@@ -180,52 +180,52 @@ answer them.
 
 1.  What is the most commonly reported impairment nationally?
 
-2.  Which waters are impaired for PARMETER GROUP nationally?
-    (EQ_NationalExtract)
+2.  Which waters are impaired for selenium nationally?
 
 3.  Which waters have a TMDL and are fully supporting nationally?
-    (EQ_NationalExtract)
 
-4.  What are the impaired waters (cat 4 and 5
-    nationally)?(EQ_NationalExtract)
+4.  What are the impaired waters (cat 4 and 5)?
 
 5.  Which states have included information about monitoringLocations in
-    ATTAINS? (EQ_NationalExtract)
+    ATTAINS?
 
 ### EQ_Assessments
 
-1.  How many stream miles in STATE are impaired for USE?
-    (EQ_Assessments)
+1.  How many stream miles in Kansas are impaired for USE?
 
-2.  What waters in STATE are impaired for USE due to PARAMETER?
-    (EQ_Assessments)
+2.  What waters in Montana are impaired for Aquatic Life due to Zinc?
 
-3.  Which waters are new to CAT# in this cycle in STATE? \#
-    (EQ_Assessments)
+3.  Which waters are new to category 5 in the latest cycle for Illinois?
+    Which categories did they move from?
 
 ### EQ_AssessmentUnits
 
-1.  What are the retired and historic assessment units for STATE?
+1.  What are the retired assessment units for Florida?
 
 ### EQ_TMDLs
 
-1.  What are all the TMDLs in STATE?
+1.  What are all the TMDLs in HI? How many are there (counted as unique
+    combinations of actionID/pollutant/assessmentUnitId)?
 
-2.  How many TMDL projects were approved so far in FY 2025 in REGION?
+2.  How many TMDL projects (by actionId) were approved so far in FY 2025
+    in R10?
 
 ### EQ_Actions
 
-1.  How many actions (by actionId) in Deleware?
+1.  Which actions in Delaware should be included in measures? How many
+    actions (by actionID) are in this group?
 
-2.  How many actions( (by actionId) were established in FY 2024?
+2.  How many actions (by actionId) were established in R3 in FY 2024?
+    What was the most common type of action established in R3 in FY
+    2024?
 
 ### EQ_ActionsDocuments
 
-1.  What are all the actions documents that contain the keyword
-    "nutrient"? (EQ_ActionsDocuments)
+1.  **What are all the actions documents that contain the keyword
+    "nutrient"?**
 
-2.  How many actions documents that contain the keyword "nutrient" are
-    from each REGION? (EQ_ActionsDocuments)?
+2.  **How many actions documents that contain the keyword "nutrient" are
+    from each REGION?**
 
 ### EQ_AUsMLs
 
@@ -236,17 +236,17 @@ answer them.
 
 ### EQ_Sources
 
-1.  Which states in REGION have listed sources in the latest report
-    cycle?
+1.  **Which states in Region 6 have listed sources in their latest
+    report cycle?**
 
-2.  What are the most commonly listed sources in the latest report cycle
-    in STATE?
+2.  **What are the most commonly listed sources in the latest report
+    cycle in each Region 6 state?**
 
 ### EQ_CatchCorr
 
-1.  Which catchment corresponds to ASSESSMENTUNITID?
+1.  **Which catchment corresponds to assessmentUnitId"IL_N-99" ?**
 
-2.  How large of a catchment area corresponds to ASSESSMENTUNITID?
+2.  **How large of a catchment area corresponds to ""IL_N-99"?**
 
 ## EQ_NationalExtract
 
@@ -410,7 +410,7 @@ the desired cycle year in YYYY format.
     ```
 
 3.  **Which waters are new to category 5 in the latest cycle for
-    Illinois?**
+    Illinois? Which categories did they move from?**
 
     ```{r il.5.comp}
 
@@ -500,7 +500,8 @@ example below shows querying Hawaii for TMDLs with a source_type of
 "Both", which means that both point and non point sources were part of
 the TMDL.
 
-1.  **What are all the TMDLs in HI? How many are there?**
+1.  **What are all the TMDLs in HI? How many are there (counted as
+    unique combinations of actionID/pollutant/assessmentUnitId)?**
 
 ```{r hi.tmdl, results = TRUE, message = FALSE, warning = FALSE}
 
@@ -577,8 +578,8 @@ example, you might like to run a simple query to return data for all
 Actions from Delaware that should be included in Measures and count how
 many unique actionIds there are in the data set.
 
-1.  **How many actions (by actionId) in Delaware should be included in
-    measures?**
+1.  **Which actions in Delaware should be included in measures? How many
+    actions (by actionID) are in this group?**
 
 ```{r DE.actions, echo=TRUE, message=FALSE, warning=FALSE, FALSE}
 
@@ -615,7 +616,8 @@ DT::datatable(DE.actids %>%
 
 ```
 
-2.  **How many actions (by actionId) were established in R3 in FY
+2.  **How many actions (by actionId) were established in R3 in FY 2024?
+    What was the most common type of action established in R3 in FY
     2024?**
 
 ```{r act.fy24}
@@ -628,73 +630,110 @@ act.fy.24 <- rExpertQuery::EQ_Actions(region = 3,
 n_act.fy.24 <- n_distinct(act.fy.24$actionId)
 
 act.fy.24.subset <- act.fy.24 %>%
-  dplyr::group_by(state, organizationId, organizationName, actionId) %>%
+  dplyr::group_by(state, organizationId, organizationName, 
+                  actionId, actionName, actionType) %>%
   dplyr::mutate(waterTypes = paste(unique(waterType), collapse = ", "),
                 parameterGroups = paste(unique(parameterGroup), collapse = ", "),
                 parameters = paste(unique(parameter), collapse = ", "),
                 assessmentUnitIds = paste(unique(assessmentUnitId), 
-                                          collapse = ", "))
-```
+                                          collapse = ", ")) %>%
+  dplyr::select(state, organizationId, organizationName,
+                actionId, actionName, actionType, waterTypes,
+                parameterGroups, parameters, assessmentUnitIds) %>%
+  dplyr::distinct()
 
-## EQ_Sources
+act.fy.24.counts <- act.fy.24.subset %>%
+  dplyr::group_by(actionType) %>%
+  dplyr::summarize(count = length(actionId))
+```
 
 ## EQ_ActionsDocuments
 
 [**EQ_ActionsDocuments()**](https://usepa.github.io/rExpertQuery/reference/EQ_ActionsDocuments.html)queries
 ATTAINS Actions Documents data with user supplied parameters. One of its
 unique features is the ability to search the documents themselves by
-keyword or phrase. For example, you might want to find all Actions
-Documents with the keyword "nutrient".
+keyword or phrase.
+
+1.  **What are all the actions documents that contain the keyword
+    "nutrient"?**
 
 ```{r nutrients, results = TRUE, message = FALSE, warning = FALSE}
-# Actions Documents containing "nutrient"
-nutrient.doc <- rExpertQuery::EQ_ActionsDocuments(
-  doc_query = "nutrient",
-  api_key = testkey
-)
+# Actions Documents containing "nutrient" 
+nutrient.doc <- rExpertQuery::EQ_ActionsDocuments(doc_query = "nutrient",
+                                                  api_key = testkey )
 ```
 
 This query yields `r formatC(nrow(nutrient.doc), big.mark = ",")`
-results. As well as providing the Action and Document Name for all
+results. As well as providing the actionId and documentName for all
 results, *EQ_Actions()* also returns the column "actionDocumentUrl"
-containg the URL to link to the document. Because the query yields so
+containing the URL to link to the document. Because the query yields so
 many results, we'll take a look at a smaller random subset of them in a
 data table to understand the structure of the results.
 
 ```{r nutrients.data.table}
-
-test <- nutrient.doc %>%
-  rExpertQuery::EQ_FormatPlanLinks(url.col = "actionDocumentUrl")
-
-DT::datatable(nutrient.doc %>%
-                dplyr::slice_sample(n = 50) %>%
-                rExpertQuery::EQ_FormatPlanLinks(url.col = "actionDocumentUrl"), 
-                options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+# create data table
+DT::datatable(nutrient.doc %>% dplyr::slice_sample(n = 50) %>%          rExpertQuery::EQ_FormatPlanLinks(url.col = "actionDocumentUrl"),                  options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
-You can also query by more typical parameters like organization name
-(org_name), EPA region (region) , or action type (act_type). The example
-below demonstrates using the function to search for 4B Restoration
-Approach documents from Pennsylvania.
+2.  **How many actions documents that contain the keyword "nutrient" are
+    from each region?**
 
-```{r pa.4b.ex, results = TRUE, message = FALSE, warning = FALSE}
-PA_4B <- rExpertQuery::EQ_ActionsDocuments(
-  statecode = "PA", act_type = "4B Restoration Approach",
-  api = testkey
+```{r nutrients.summary}
+nutrient.doc.regions <- nutrient.doc %>%
+  dplyr::select(actionId, actionDocumentType, documentName, region) %>%
+  dplyr::distinct() %>%
+  dplyr::group_by(region) %>%
+  dplyr::summarize(count = length(actionId))
+
+plotly::plot_ly(data = nutrient.doc.regions,
+  x = ~region,
+  y = ~count,
+  type = "bar"
 )
 ```
 
-```{r pa.4b.table}
-PA_4B_subset <- PA_4B %>%
-  dplyr::slice_sample(n = 20)
+## EQ_Sources
 
-DT::datatable(PA_4B_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-```
+1.  **Which states in Region 6 have listed Sources in their latest
+    report cycle?**
 
-As there are only `r formatC(nrow(PA_4B), big.mark = ",")` 4B
-Restoration Approach documents from Pennsylvania, we can review them all
-in the table below. As in the other Actions Document Example, the
-actionDocumentUrl column contains a link to the document.
+    ```{r r6.sources}
+
+    r6.sources <- rExpertQuery::EQ_Sources(region = 6,
+                                           api_key = testkey)
+
+    r6.sources.filter <- r6.sources %>%
+      dplyr::filter(!is.na(sourceName)) %>%
+      dplyr::select(state) %>%
+      dplyr::distinct() %>%
+      dplyr::pull() %>%
+      usdata::abbr2state() %>%
+      sort()
+    ```
+
+    `r stringi::stri_replace_last(paste(r6.sources.filter, collapse = ",  "), " and ", fixed = ", ")`
+    all listed sources in their latest report cycles.
+
+2.  **What are the most commonly listed sources in the latest report
+    cycle in each Region 6 state?**
+
+    ```{r}
+
+    r6.sources.summarize <- r6.sources %>%
+      dplyr::select(state, organizationId, assessmentUnitId, sourceName) %>%
+      dplyr::distinct() %>%
+      dplyr::group_by(state, organizationId, sourceName) %>%
+      dplyr::summarize(count = length(assessmentUnitId))
+
+    DT::datatable(r6.sources.summarize)
+
+    r6.top.sources <- r6.sources.summarize %>%
+      dplyr::ungroup() %>%
+      dplyr::group_by(state) %>%
+      dplyr::slice_max(count)
+
+    DT::datatable(r6.top.sources)
+    ```
 
 ```{r ky.assess, results = TRUE, message = FALSE, warning = FALSE}
 KY.assessments <- rExpertQuery::EQ_Assessments(
@@ -768,29 +807,8 @@ queries ATTAINS Catchment Correspondance data. These queries return
 large files, particularly if a large geospatial area is defined, so best
 practice is to make your query as specific as possible. Many machines
 may not have enough memory to load an entire state's worth of catchment
-correspondence data in an R session.
-
-```{r dc.catchcorr, results = TRUE, message = TRUE, warning = FALSE}
-
-DC_catch <- rExpertQuery::EQ_CatchCorr(statecode = "DC",
-                                       api_key = testkey)
-
-```
-
-The table below shows 20 random results from the DC catchment
-correspondence query.
-
-```{r dc.table}
-
-DC_subset <- DC_catch %>%
-  dplyr::slice_sample(n = 20)
-
-DT::datatable(DC_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-```
-
-It is also possible to focus on a specific assessment unit in catchment
-correspondence queries. The next example queries for a single Illinois
-assessment unit by its id.
+correspondence data in an R session. It is also possible to focus on a
+specific assessment unit in catchment correspondence queries.
 
 ```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
 
@@ -810,77 +828,3 @@ IL_N99_subset <- IL_N99_catch %>%
 DT::datatable(IL_N99_catch, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 
 ```
-
-[**EQ_Sources()**](https://usepa.github.io/rExpertQuery/reference/EQ_Sources.html)queries
-ATTAINS Sources data. Not all organizations report sources in their
-assessments,
-
-but for those that do, querying by source can be another useful option
-for querying ATTAINS data. The next code chunk shows how to query
-sources for one state by a parameter group, for example searching for
-sources related to the parameter group "HABITAT ALTERATIONS" in
-Wisconsin.
-
-```{r wi.source.hab, results = TRUE, message = FALSE, warning = FALSE}
-WI_habalt_sources <- rExpertQuery::EQ_Sources(statecode = "WI",
-                                 param_group = "HABITAT ALTERATIONS",
-                                 api_key = testkey)
-```
-
-There were `r formatC(nrow(WI_habalt_sources), big.mark = ",")` for this
-query, which can be reviewed in the data table below.
-
-```{r wi.table}
-
-DT::datatable(WI_habalt_sources, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
-```
-
-It is also possible to query directly be the name of the source. The
-example below queries all organizations for the source
-"LEGACY/HISTORICAL POLLUTANTS".
-
-```{r source.legacy, results = TRUE, message = FALSE, warning = FALSE}
-legacy_sources <- rExpertQuery::EQ_Sources(source = "LEGACY/HISTORICAL POLLUTANTS",
-                             api_key = testkey)
-```
-
-There were `r formatC(nrow(WI_habalt_sources), big.mark = ",")` records
-for the source "LEGACY/HISTORICAL POLLUTANTS". These results can be
-reviewed in the table below to see which states, regions, etc. are
-associated with this source.
-
-```{r legacy.table}
-
-DT::datatable(legacy_sources, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
-```
-
-## EQ_TMDLs
-
-[**EQ_DomainValues()**](https://usepa.github.io/rExpertQuery/reference/EQ_DomainValues.html)
-is a function to help users understand the available domain values can
-be used in the other rExpertQuery functions. If run with no argument
-supplied, it will return a list of all available domains that can be
-used as an argument in **EQ_DomainValues()**.
-
-```{r see.dom.vals, results = TRUE, message = TRUE, warning = FALSE}
-
- rExpertQuery::EQ_DomainValues()
-
-```
-
-The example below shows how to return allowable values for "org_id".
-
-```{r dom.vals.org, results = TRUE, message = TRUE, warning = FALSE}
-
- Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
-
-```
-
-```{r org.id.table}
-
-DT::datatable(Org_vals, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
-```
-
