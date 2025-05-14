@@ -93,7 +93,11 @@ remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TR
 library(data.table)
 library(dplyr)
 library(DT)
+library(ggplot2)
+library(maps)
 library(plotly)
+library(usdata)
+library(usmap)
 
 # turn off scientific notation
 scipen = 999
@@ -144,13 +148,13 @@ are:
 8)  [EQ_TMDLs()](https://usepa.github.io/rExpertQuery/reference/EQ_TMDLs.html) -
     queries and returns ATTAINS TMDL data
 
-An additional function allows users to download the Expert Query
-National Extracts of ATTAINS data
-(<https://owapps.epa.gov/expertquery/national-downloads>) which are
-updated weekly. This function should be used when national data are
-desired or when a query designed in one of the previous eight functions
-would exceed the Expert Query web services limit of one millions rows.
-This function is:
+An additional function allows users to download the [Expert Query
+National
+Extracts](https://owapps.epa.gov/expertquery/national-downloads){.uri}
+of ATTAINS data which are updated weekly. This function should be used
+when national data are desired or when a query designed in one of the
+previous eight functions would exceed the Expert Query web services
+limit of one millions rows. This function is:
 
 9)  [EQ_NationalExtract()](https://usepa.github.io/rExpertQuery/reference/EQ_NationalExtract.html) -
     returns national extract for Actions, Assessments, Assessment Units,
@@ -175,7 +179,6 @@ answer them.
 ### EQ_NationalExtract
 
 1.  What is the most commonly reported impairment nationally?
-    (EQ_NationalExtract)
 
 2.  Which waters are impaired for PARMETER GROUP nationally?
     (EQ_NationalExtract)
@@ -257,14 +260,10 @@ and some may not open in R if there is not enough memory available.
 
 ![](images/nat.downloads.png)
 
-1.  What is the most commonly reported impairment nationally?
-    (EQ_NationalExtract)
+1.  **What is the most commonly reported impairment nationally?**
 
     ```{r common.impairment}
-
-    # talk to Wendy about this one
-
-    # import assessments profile
+    # import natioanl assessments profile
     assessments.nat <- rExpertQuery::EQ_NationalExtract("assessments")
 
     # filter for latest assessments
@@ -276,23 +275,61 @@ and some may not open in R if there is not enough memory available.
 
     # count impairments
     count.impair <- assessments.nat %>%
+      # filter to retain only parameter causes
       dplyr::filter(parameterStatus == "Cause") %>%
+      # subset data to find unique combinations
+      dplyr::select(organizationId, assessmentUnitId, parameterName) %>%
+      # remove duplicates
+      dplyr::distinct() %>%
+      # group by parameterName
       dplyr::group_by(parameterName) %>%
-      dplyr::summarise(n = length(assessmentUnitId))
+      # count listings for each parameterName
+      dplyr::summarise(count = length(assessmentUnitId)) %>%
+      # arrane in descending order
+      dplyr::arrange(desc(count))
+
+    # create data table of impairment count results
+    DT::datatable(count.impair)
     ```
 
-2.  Which waters are impaired for PARMETER GROUP nationally?
-    (EQ_NationalExtract)
+2.  **Which waters are impaired for SELENIUM nationally? Which states
+    contain waters impaired for SELENIUM?**
 
     ```{r param.nat}
 
+    # filter assessments data set for 
     param.nat <- assessments.nat %>% 
-      dplyr::filter(parameterGroup == "PH/ACIDITY/CAUSTIC CONDITIONS")
+      dplyr::filter(parameterName == "SELENIUM" &
+                      parameterStatus == "Cause") 
+
+    # filter to create df of states that have at least one selenium impairment
+    state.names.sel <- param.nat %>%
+      dplyr::ungroup() %>%
+      dplyr::select(state) %>%
+      dplyr::distinct() %>%
+      dplyr::mutate(state = usdata::abbr2state(state))
+
+    # read in a list of all 50 state  names
+    state.names <- datasets::state.name
+
+    # create df with a column indicating "yes" or "no" to signify if a state has at least one selenium impairment
+    sel.map.data <- as.data.frame(state.names) %>%
+      dplyr::mutate(SeleniumImpairment = factor(ifelse(state %in% state.names.sel$state,
+                                                "yes", "no")))
+
+    # create map, states with at least one selenium impairment are show in blue
+    usmap::plot_usmap(
+      regions = "state", data = sel.map.data,
+      values = "SeleniumImpairment", color = "black"
+    ) +
+    scale_fill_manual(
+        values = c(`no` = "white", `yes` = "blue")
+      ) +
+    theme(legend.position = "none")
 
     ```
 
-3.  Which waters have a TMDL and are fully supporting nationally?
-    (EQ_NationalExtract)
+3.  **Which waters have a TMDL and are fully supporting nationally?**
 
     ```{r tmdl.fs}
 
@@ -302,8 +339,7 @@ and some may not open in R if there is not enough memory available.
                     )
     ```
 
-4.  What are the impaired waters (cat 4 and 5
-    nationally)?(EQ_NationalExtract)
+4.  **What are the impaired waters (cat 4 and 5 nationally)?**
 
     ```{r impaired.waters}
 
@@ -314,12 +350,13 @@ and some may not open in R if there is not enough memory available.
 
     ```
 
-5.  Which states have included any information about monitoringLocations
-    in ATTAINS? (EQ_NationalExtract)
+5.  **Which states have included any information about
+    monitoringLocations in ATTAINS?**
 
     ```{r}
     # import national extract for assessment units/monitoring locations
     # this is not working currently
+
     nat.ausmls <- rExpertQuery::EQ_NationalExtract("au_mls")
 
     ```
@@ -334,8 +371,8 @@ function is to query for the latest cycle. If you would like to search
 for an older cycle, you can set the "report_cycle" parameter equal to
 the desired cycle year in YYYY format.
 
-1.  How many stream miles in Kansas are impaired for primary contact
-    recreation in the latest cycle? (EQ_Assessments)
+1.  **How many stream miles in Kansas are impaired for primary contact
+    recreation in the latest cycle?**
 
     ```{r stream.ks}
 
@@ -358,7 +395,8 @@ the desired cycle year in YYYY format.
     `r formatC(ks.miles, big.mark = ",", digits = 2, format = "f` stream
     miles in Kansas impaired for primary contract recreation use.
 
-2.  What waters in Montana are impaired for Aquatic Life due to Zinc?
+2.  **What waters in Montana are impaired for Aquatic Life due to
+    Zinc?**
 
     ```{r MT.impair}
 
@@ -371,7 +409,8 @@ the desired cycle year in YYYY format.
 
     ```
 
-3.  Which waters are new to category 5 in the latest cycle for Illinois?
+3.  **Which waters are new to category 5 in the latest cycle for
+    Illinois?**
 
     ```{r il.5.comp}
 
@@ -443,13 +482,14 @@ Active assessment units for a single state.
 
 1.  What are the retired assessment units for Florida?
 
-```{r FL.rh.auids}
+```{r FL.ret.auids}
 
 # search for retired assessment units in Florida
-FL.rh.auids <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
+FL.ret.auids <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
                                                 au_status = "Retired",
                                                 api_key = testkey)
-## add a figure? bar graph?
+
+DT::datatable(FL.ret.auids)
 ```
 
 ## EQ_TMDLs
@@ -485,7 +525,7 @@ HI.count <- HI.tmdls %>%
   dplyr::select(assessmentUnitId, assessmentUnitName, actionId, actionName, pollutant, pollutantGroup, fiscalYearEstablished, actionAgency, planSummaryLink) %>%
   dplyr::distinct()
 
-# determine number per group per year
+# determine number per group
 HI.sum <- HI.count %>%
   dplyr::group_by(pollutantGroup,) %>%
   dplyr::summarize(count = dplyr::n_distinct(assessmentUnitId)) %>%
@@ -537,8 +577,8 @@ example, you might like to run a simple query to return data for all
 Actions from Delaware that should be included in Measures and count how
 many unique actionIds there are in the data set.
 
-1.  How many actions (by actionId) in Delaware should be included in
-    measures?
+1.  **How many actions (by actionId) in Delaware should be included in
+    measures?**
 
 ```{r DE.actions, echo=TRUE, message=FALSE, warning=FALSE, FALSE}
 
@@ -575,13 +615,25 @@ DT::datatable(DE.actids %>%
 
 ```
 
-2.  How many actions were established in FY 2024?
+2.  **How many actions (by actionId) were established in R3 in FY
+    2024?**
 
 ```{r act.fy24}
 
-act.fy.24 <- rExpertQuery::EQ_Actions(fisc_year_start = 2024, 
+act.fy.24 <- rExpertQuery::EQ_Actions(region = 3,
+                                      fisc_year_start = 2024, 
                                       fisc_year_end = 2024,
                                       api_key = testkey)
+
+n_act.fy.24 <- n_distinct(act.fy.24$actionId)
+
+act.fy.24.subset <- act.fy.24 %>%
+  dplyr::group_by(state, organizationId, organizationName, actionId) %>%
+  dplyr::mutate(waterTypes = paste(unique(waterType), collapse = ", "),
+                parameterGroups = paste(unique(parameterGroup), collapse = ", "),
+                parameters = paste(unique(parameter), collapse = ", "),
+                assessmentUnitIds = paste(unique(assessmentUnitId), 
+                                          collapse = ", "))
 ```
 
 ## EQ_Sources
@@ -831,3 +883,4 @@ The example below shows how to return allowable values for "org_id".
 DT::datatable(Org_vals, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 
 ```
+
