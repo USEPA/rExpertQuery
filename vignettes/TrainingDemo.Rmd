@@ -221,32 +221,32 @@ answer them.
 
 ### EQ_ActionsDocuments
 
-1.  **What are all the actions documents that contain the keyword
-    "nutrient"?**
+1.  What are all the actions documents that contain the keyword
+    "nutrient"?
 
-2.  **How many actions documents that contain the keyword "nutrient" are
-    from each REGION?**
+2.  How many actions documents that contain the keyword "nutrient" are
+    from each region?
 
 ### EQ_AUsMLs
 
-1.  Which monitoringLocations corresponds to assessmentUnits in STATE?
+1.  Which monitoringLocations corresponds to assessmentUnits in Alaska?
 
 2.  Are there active assessmentUnits without listed monitoringLocations
-    in STATE?
+    in Alaska?
 
 ### EQ_Sources
 
-1.  **Which states in Region 6 have listed sources in their latest
-    report cycle?**
+1.  Which states in Region 6 have listed sources in their latest report
+    cycle?
 
-2.  **What are the most commonly listed sources in the latest report
-    cycle in each Region 6 state?**
+2.  What are the most commonly listed sources in the latest report cycle
+    in each Region 6 state?
 
 ### EQ_CatchCorr
 
-1.  **Which catchment corresponds to assessmentUnitId"IL_N-99" ?**
+1.  Which catchment corresponds to assessmentUnitId"IL_N-99" ?
 
-2.  **How large of a catchment area corresponds to ""IL_N-99"?**
+2.  How large of a catchment area corresponds to ""IL_N-99"?
 
 ## EQ_NationalExtract
 
@@ -357,7 +357,7 @@ and some may not open in R if there is not enough memory available.
     # import national extract for assessment units/monitoring locations
     # this is not working currently
 
-    nat.ausmls <- rExpertQuery::EQ_NationalExtract("au_mls")
+    #nat.ausmls <- rExpertQuery::EQ_NationalExtract("au_mls")
 
     ```
 
@@ -581,7 +581,7 @@ many unique actionIds there are in the data set.
 1.  **Which actions in Delaware should be included in measures? How many
     actions (by actionID) are in this group?**
 
-```{r DE.actions, echo=TRUE, message=FALSE, warning=FALSE, FALSE}
+```{r DE.actions, echo=TRUE, message=FALSE, warning=FALSE}
 
 # query Actions from Delaware that are included in Measures 
 DE.meas <- rExpertQuery::EQ_Actions(statecode = "DE",
@@ -691,6 +691,14 @@ plotly::plot_ly(data = nutrient.doc.regions,
   type = "bar"
 )
 ```
+
+## EQ_AUsMLs
+
+1.  **Which monitoringLocations corresponds to assessmentUnits in
+    Alaska?**
+
+2.  **Are there active assessmentUnits without listed
+    monitoringLocations in Alaska?**
 
 ## EQ_Sources
 
