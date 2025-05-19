@@ -82,12 +82,14 @@ running:
 
 ```{r install, eval = TRUE, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE}
 
-# install rExpertQuery
+# install and load rExpertQuery
 if (!"remotes" %in% installed.packages()) {
   install.packages("remotes")
 }
 
 remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
+
+library(rExpertQuery)
 
 # load additional packages
 library(data.table)
@@ -271,7 +273,8 @@ and some may not open in R if there is not enough memory available.
        dplyr::group_by(organizationId) %>%
         dplyr::slice_max(reportingCycle) %>%
         dplyr::select(-objectId) %>%
-        dplyr::distinct()
+        dplyr::distinct() %>%
+        dplyr::ungroup()
 
     # count impairments
     count.impair <- assessments.nat %>%
@@ -307,14 +310,16 @@ and some may not open in R if there is not enough memory available.
       dplyr::ungroup() %>%
       dplyr::select(state) %>%
       dplyr::distinct() %>%
-      dplyr::mutate(state = usdata::abbr2state(state))
+      dplyr::mutate(state = usdata::abbr2state(state)) %>%
+      dplyr::pull()
 
     # read in a list of all 50 state  names
     state.names <- datasets::state.name
 
     # create df with a column indicating "yes" or "no" to signify if a state has at least one selenium impairment
     sel.map.data <- as.data.frame(state.names) %>%
-      dplyr::mutate(SeleniumImpairment = factor(ifelse(state %in% state.names.sel$state,
+      dplyr::rename(state = state.names) %>%
+      dplyr::mutate(SeleniumImpairment = factor(ifelse(state %in% state.names.sel,
                                                 "yes", "no")))
 
     # create map, states with at least one selenium impairment are show in blue
@@ -333,19 +338,35 @@ and some may not open in R if there is not enough memory available.
 
     ```{r tmdl.fs}
 
-    # talk to Wendy about this one
+    # filter national assessments to includ only Fully Supporting w/ TMDL
     tmdl.fs <- assessments.nat %>%
       dplyr::filter(overallStatus == "Fully Supporting",
-                    )
+                    associatedActionType == "TMDL"
+                    ) %>%
+      # select columns to review
+      dplyr::select(organizationId, state, assessmentUnitId, assessmentUnitName, 
+                    associatedActionId) %>%
+      # group by state and assessmentUnit
+      dplyr::group_by(state, assessmentUnitId, assessmentUnitName) %>%
+      # create column continaing all actionIds associated with the assessmentUnit
+      dplyr::mutate(associatedActionIds = paste(unique(associatedActionId), 
+                                                collapse = ", ")) %>%
+      # remove original associatedActionId column
+      dplyr::select(-associatedActionId) %>%
+      # retain only distinct rows
+      dplyr::distinct()
     ```
 
 4.  **What are the impaired waters (cat 4 and 5 nationally)?**
 
     ```{r impaired.waters}
 
+    # select subset of columns to include
     imp.waters <- assessments.nat %>%
       dplyr::select(organizationId, organizationName, organizationType, assessmentUnitId, assessmentUnitName, assessmentDate, epaIrCategory, waterType, waterSize, waterSizeUnits) %>%
+      # retain only distinct rows
       dplyr::distinct() %>%
+      # filter for category 4 and 5 waters
       dplyr::filter(epaIrCategory %in% c("4", "5"))
 
     ```
@@ -353,11 +374,12 @@ and some may not open in R if there is not enough memory available.
 5.  **Which states have included any information about
     monitoringLocations in ATTAINS?**
 
-    ```{r}
+    ```{r nat.ausmls}
     # import national extract for assessment units/monitoring locations
-    # this is not working currently
 
-    #nat.ausmls <- rExpertQuery::EQ_NationalExtract("au_mls")
+    nat.ausmls <- rExpertQuery::EQ_NationalExtract("au_mls")
+
+    states.mls <- 
 
     ```
 
