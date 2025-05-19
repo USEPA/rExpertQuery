@@ -96,13 +96,14 @@ library(data.table)
 library(dplyr)
 library(DT)
 library(ggplot2)
+library(nhdplusTools)
 library(maps)
 library(plotly)
 library(usdata)
 library(usmap)
 
 # turn off scientific notation
-scipen = 999
+options(scipen = 999)
 ```
 
 ## API Key
@@ -188,14 +189,17 @@ answer them.
 
 4.  What are the impaired waters (cat 4 and 5)?
 
-5.  Which states have included information about monitoringLocations in
-    ATTAINS?
+5.  Which organizations have included any information about
+    monitoringLocations in ATTAINS? Which of these organizations have
+    included any monitoringLocationDataLinks?
 
 ### EQ_Assessments
 
-1.  How many stream miles in Kansas are impaired for USE?
+1.  How many stream miles in Kansas are impaired for Primary Contact
+    Recreation?
 
-2.  What waters in Montana are impaired for Aquatic Life due to Zinc?
+2.  What waters in Montana are impaired due to Zinc? How many different
+    uses are zinc impairments associated with in Montana?
 
 3.  Which waters are new to category 5 in the latest cycle for Illinois?
     Which categories did they move from?
@@ -231,7 +235,9 @@ answer them.
 
 ### EQ_AUsMLs
 
-1.  Which monitoringLocations corresponds to assessmentUnits in Alaska?
+1.  Which monitoringLocations correspond to assessmentUnits in Alaska?
+    How many monitoringLocations are associated with assessmentUnits?
+    Which organizations are the monitoringLocations from?
 
 2.  Are there active assessmentUnits without listed monitoringLocations
     in Alaska?
@@ -371,17 +377,70 @@ and some may not open in R if there is not enough memory available.
 
     ```
 
-5.  **Which states have included any information about
-    monitoringLocations in ATTAINS?**
+5.  **Which organizations have included any information about
+    monitoringLocations in ATTAINS? Which of these organizations have
+    included any monitoringLocationDataLinks?**
 
     ```{r nat.ausmls}
     # import national extract for assessment units/monitoring locations
-
     nat.ausmls <- rExpertQuery::EQ_NationalExtract("au_mls")
 
-    states.mls <- 
+    # filter for rows that contain monitoringLocationIds
+    filtered.mls <- nat.ausmls %>%
+      dplyr::filter(monitoringLocationId != "",
+                    !is.na(monitoringLocationId))
 
+    # start with data set filtered to include only rows with MonitoringLocationIds
+    orgs.mls <- filtered.mls %>%
+      # select columns to describe orgs
+      dplyr::select(organizationId, organizationName, organizationType) %>%
+      dplyr::distinct()
+
+
+    # start with data set filtered to include only rows with MonitoringLocationIds
+    links.mls <- filtered.mls %>%
+      # filter for orgs with monitoringLocationDataLinks
+      dplyr::filter(monitoringLocationDataLink != "",
+                    !is.na(monitoringLocationDataLink)) %>%
+      # select columns to describe orgs
+      dplyr::select(organizationId, organizationName, organizationType) %>%
+      # retain distinct rows
+      dplyr::distinct()
+      
     ```
+
+There are `r nrow(orgs.mls)` with monitoringLocationId data in ATTAINS.
+Of these organizations, `r nrow(links.mls)` also contain
+monitoringLocationDataLinks. We can create a data table to display this
+information.
+
+```{r ml.map}
+
+# create data frame summarizing which organizations have monitoringLocationIds and monitoringLocationDataLinks in ATTAINS
+ml.table <- nat.ausmls %>%
+  # create df of all orgs
+  dplyr::select(organizationId, organizationName, organizationType) %>%
+  # retain only distinct rows
+  dplyr::distinct() %>%
+  # add columns indicating whether the org has any data in ATTAINS for monitoringLocationId and monitoringLocationDataLink
+  dplyr::mutate(monitoringLocationId = ifelse(organizationId %in% 
+                                                orgs.mls$organizationId,
+                                              "yes", "no"),
+                monitoringLocationDataLink = ifelse(organizationId %in%
+                                                      links.mls$organizationId,
+                                                    "yes", "no"))
+# create data table 
+DT::datatable(ml.table) %>% 
+  # highlight rows for orgs that have monitoringLocationId in blue
+  DT::formatStyle(
+  "monitoringLocationId", target = "row", 
+  backgroundColor = styleEqual(c("yes"), c("#66c3c5"))) %>%
+  # highlight rows for orgs that also have data for data links in organge
+  DT::formatStyle(
+  "monitoringLocationDataLink", target = "row", 
+  backgroundColor = styleEqual(c("yes"), c("#f9b97d")))
+
+```
 
 ## EQ_Assessments
 
@@ -406,30 +465,51 @@ the desired cycle year in YYYY format.
 
     # calculate total water size
     ks.miles <- ks.imp.streams %>%
-      dplyr::select(assessmentUnitId, assessmentUnitName, waterSize, waterSizeUnits) %>%
+      # select required columns
+      dplyr::select(assessmentUnitId, assessmentUnitName, 
+                    waterSize, waterSizeUnits) %>%
+      # retain distinct rows
       dplyr::distinct() %>%
+      # sum water size
       dplyr::summarize(totalWaterSize = sum(waterSize)) %>%
       dplyr::pull()
 
     ```
 
     There are
-    `r formatC(ks.miles, big.mark = ",", digits = 2, format = "f` stream
-    miles in Kansas impaired for primary contract recreation use.
+    `r formatC(ks.miles, big.mark = ",", digits = 2, format = "f")`
+    stream miles in Kansas impaired for primary contract recreation use.
 
-2.  **What waters in Montana are impaired for Aquatic Life due to
-    Zinc?**
+2.  **What waters in Montana are impaired due to Zinc? How many
+    different uses are zinc impairments associated with in Montana?**
 
     ```{r MT.impair}
 
+    # query MT's latest assessments for zinc as a cause
     MT.impair <- rExpertQuery::EQ_Assessments(statecode = "MT",
-                                              use_name = "Aquatic Life",
                                               api_key = testkey,
                                               param_name = "ZINC",
                                               param_status = "Cause"
                                               )
 
+    # summarize by useName
+    MT.impair.use <- MT.impair %>% 
+      dplyr::group_by(useName) %>%
+      dplyr::summarize(count = length(assessmentUnitId))
+
+
+    plotly::plot_ly(data = MT.impair.use,
+      x = ~useName,
+      y = ~count,
+      type = "bar"
+    )
+
     ```
+
+    There are `r nrow(MT.impair.use)` uses with zinc as a cause in
+    Montana:
+    `r stringi::stri_replace_last(paste(MT.impair.use$useName, collapse = ", "), ", and ", fixed = ", ")`
+    .
 
 3.  **Which waters are new to category 5 in the latest cycle for
     Illinois? Which categories did they move from?**
@@ -716,11 +796,52 @@ plotly::plot_ly(data = nutrient.doc.regions,
 
 ## EQ_AUsMLs
 
-1.  **Which monitoringLocations corresponds to assessmentUnits in
-    Alaska?**
+1.  **Which monitoringLocations correspond to assessmentUnits in Alaska?
+    How many monitoringLocations are associated with assessmentUnits?
+    Which organizations are the monitoringLocations from?**
 
-2.  **Are there active assessmentUnits without listed
+    ```{r ak.mls}
+
+    # query for assessment units and monitoring locations from Alaska
+    ak.mls <- rExpertQuery::EQ_AUsMLs(statecode = "AK",
+                                      api_key = testkey)
+
+    # filter for assessment units with monitoring locations from Alaska
+    filt.ak.mls <- ak.mls %>%
+      dplyr::filter(!is.na(monitoringLocationId),
+                    monitoringLocationId != "") %>%
+      dplyr::select(assessmentUnitId, assessmentUnitName, monitoringLocationId,
+                    monitoringLocationOrgId)
+
+    # list of orgs inlcuded in monitoringLocationOrgId
+    ak.orgs <- filt.ak.mls %>%
+      dplyr::select(monitoringLocationOrgId) %>%
+      dplyr::distinct() %>%
+      dplyr::pull() %>%
+      sort()
+
+    DT::datatable(filt.ak.mls)
+
+    ```
+
+    There are `r nrow(filt.ak.mls)` monitoringLocationIds associated
+    with assessmentUnits in Alaska. The monitoringLocationIds come from
+    `r length(ak.orgs)` different organizations:
+    \``r stringi::stri_replace_last(paste(ak.orgs, collapse = ", "), ", and ", fixed = ", ")`
+    .
+
+2.  **Are there active assessmentUnits without any listed
     monitoringLocations in Alaska?**
+
+    ```{r no.ml.ak}
+    # filter Alaska data set for assessmentUnitIds without listed monitoringLocationIds
+    no.ml.ak <- ak.mls %>%
+      dplyr::filter(!assessmentUnitId %in% filt.ak.mls$assessmentUnitId)
+
+    ```
+
+There are `r nrow(no.ml.ak)` active assessmentUnits in Alaska without
+monitoringLocations listed in ATTAINS.
 
 ## EQ_Sources
 
@@ -729,14 +850,17 @@ plotly::plot_ly(data = nutrient.doc.regions,
 
     ```{r r6.sources}
 
+    # query for sources in the latest assessment cycle in R6
     r6.sources <- rExpertQuery::EQ_Sources(region = 6,
                                            api_key = testkey)
 
+    # filter for states with listed sources
     r6.sources.filter <- r6.sources %>%
       dplyr::filter(!is.na(sourceName)) %>%
       dplyr::select(state) %>%
       dplyr::distinct() %>%
       dplyr::pull() %>%
+      # convert abbreviation to state name
       usdata::abbr2state() %>%
       sort()
     ```
@@ -747,88 +871,27 @@ plotly::plot_ly(data = nutrient.doc.regions,
 2.  **What are the most commonly listed sources in the latest report
     cycle in each Region 6 state?**
 
-    ```{r}
+    ```{r source.sum}
 
+    # count the number of times a source is listed for each state
     r6.sources.summarize <- r6.sources %>%
       dplyr::select(state, organizationId, assessmentUnitId, sourceName) %>%
       dplyr::distinct() %>%
       dplyr::group_by(state, organizationId, sourceName) %>%
       dplyr::summarize(count = length(assessmentUnitId))
 
+    # create data table of counts per state
     DT::datatable(r6.sources.summarize)
 
+    # slice to include only the max count from each state
     r6.top.sources <- r6.sources.summarize %>%
       dplyr::ungroup() %>%
       dplyr::group_by(state) %>%
       dplyr::slice_max(count)
 
+    # data table for max count
     DT::datatable(r6.top.sources)
     ```
-
-```{r ky.assess, results = TRUE, message = FALSE, warning = FALSE}
-KY.assessments <- rExpertQuery::EQ_Assessments(
-  statecode = "KY",
-  api_key = testkey
-)
-```
-
-There are `r formatC(nrow(KY_assessments), big.mark = ",")` results for
-the basic latest cycle query for Kentucky. There are many different ways
-to summarize or visualize this data set. One option would be to look at
-the number of assessment units in each epaIrCategory.
-
-```{r ky.table}
-# summarize by epaIrCategory
-KY.sum <- KY.assessments %>%
-    dplyr::group_by(epaIrCategory) %>%
-    dplyr::summarize(count = dplyr::n_distinct(assessmentUnitId)) %>%
-    dplyr::arrange(epaIrCategory)
-
-
-
-```
-
-It is also possible to design more specific assessment queries. For
-example, you might want to narrow down the results to show causes for a
-use class in one region. The code below demonstrates querying for EPA
-Region 3 Assessments in the ECOLOGICAL_USE group with at least one
-parameter with the status "Cause". The data table below shows a random
-sample of the results from this Region 3 Query.
-
-```{r R3.ecological, results = TRUE, message = FALSE, warning = FALSE}
-R3_ecological <- rExpertQuery::EQ_Assessments(
-  region = 3,
-  use_group = "ECOLOGICAL_USE",
-  param_status = "Cause",
-  api_key = testkey
-)
-```
-
-```{r r3.ecological.table}
-R3_ecological_subset <- R3_ecological %>%
-  dplyr::slice_sample(n = 20)
-
-DT::datatable(R3_ecological_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-```
-
-[**EQ_AUsMLs()**](https://usepa.github.io/rExpertQuery/reference/EQ_AUsMLs.html)returns
-information on the monitoring locations used to make assessment
-determinations at specific assessment units. Not all organizations
-provide monitoring location data in ATTAINS. The first example uses a
-state that does supply some monitoring location data.
-
-```{r akausmls, results = TRUE, message = FALSE, warning = FALSE}
-AK_ausmls <- rExpertQuery::EQ_AUsMLs(statecode = "AK",
-                                              api_key = testkey)
-
-AK_filt <- AK_ausmls %>% dplyr::filter(!is.na(monitoringLocationId))
-```
-
-While the resulting data set from the query has
-`r formatC(nrow(AK_ausmls), big.mark = ",")` results, filtering the data
-set to retain only records where a monitoring location id has been
-recorded leads to a data set with
-`r formatC(nrow(AK_filt), big.mark = ",")` results.
 
 ## EQ_CatchCorr
 
@@ -840,12 +903,35 @@ may not have enough memory to load an entire state's worth of catchment
 correspondence data in an R session. It is also possible to focus on a
 specific assessment unit in catchment correspondence queries.
 
+1.  **Which catchments correspond to assessmentUnitId"IL_N-99" ?**
+
+    ```{r il.99.catch}
+
+    il.n99.catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
+                              auid = "IL_N-99",
+                              api_key = testkey)
+
+    il.n99.catch <- il.n99.catch %>%
+      dplyr::select(-objectId) %>%
+      dplyr::distinct()
+
+    ```
+
+2.  **How large of a catchment area corresponds to ""IL_N-99"?**
+
 ```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
 
-IL_N99_catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
-                          auid = "IL_N-99",
-                          api_key = testkey)
 
+
+catch.ids <- il.n99.catch %>%
+  dplyr::select(catchmentNhdPlusId) %>%
+  dplyr::distinct() %>%
+  dplyr::pull()
+
+nhd.catch <- nhdplusTools::get_nhdphr(
+     ids = catch.ids,
+     type = "nhdpluscatchment")
+ 
 ```
 
 The resulting table shows all results from this much smaller query.
