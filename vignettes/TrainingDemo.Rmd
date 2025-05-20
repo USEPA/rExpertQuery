@@ -922,7 +922,6 @@ specific assessment unit in catchment correspondence queries.
 ```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
 
 
-
 catch.ids <- il.n99.catch %>%
   dplyr::select(catchmentNhdPlusId) %>%
   dplyr::distinct() %>%
@@ -931,6 +930,9 @@ catch.ids <- il.n99.catch %>%
 nhd.catch <- nhdplusTools::get_nhdphr(
      ids = catch.ids,
      type = "nhdpluscatchment")
+
+leaflet::leaflet() %>%
+  leaflet::addPolygons(data = nhd.catch, color = "#636060")
  
 ```
 
