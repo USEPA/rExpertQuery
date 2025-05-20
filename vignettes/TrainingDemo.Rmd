@@ -1,5 +1,5 @@
 ---
-title: "rExpertQuery Shepherdstown Training"
+title: "rExpertQuery Cybertown Training"
 format: html
 editor: visual
 author: "ATTAINS Team"
@@ -12,7 +12,7 @@ output:
     fig_width: 8
 vignette: >
   %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{Getting Started With rExpertQuery}
+  %\VignetteIndexEntry{rExpertQuery Cybertown Training}
   %\VignetteEngine{knitr::rmarkdown}
 description: rExpertQuery is a new R package which allows users to query and download ATTAINS data via Expert Query web services. This vignette demonstrates the use of rExpertQuery functions to import common data profiles. Some examples of how to summarize or create visualizations of these data using other R packages are also be provided.
 editor_options:
@@ -66,8 +66,10 @@ capabilities. Users are encouraged to download and summarize data, but
 use caution when relying on row counts, as duplicate entries may occur.
 This complexity arises from multiple tables that have many-to-many
 relationships. Several examples of summarizing Expert Query data are
-included in this vignette. Future vignettes and functions may provide
-additional examples of how to summarize Expert Query data.
+included in this vignette. These examples use additional packages for
+data wrangling, mapping, visualizing and other tasks. Future
+rExpertQuery vignettes and functions may provide additional examples of
+how to summarize Expert Query data.
 
 ## Installation
 
@@ -87,7 +89,7 @@ if (!"remotes" %in% installed.packages()) {
   install.packages("remotes")
 }
 
-remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
+remotes::install_github("USEPA/rExpertQuery", ref = "training", dependencies = TRUE, force = TRUE)
 
 library(rExpertQuery)
 
@@ -298,7 +300,7 @@ and some may not open in R if there is not enough memory available.
       dplyr::arrange(desc(count))
 
     # create data table of impairment count results
-    DT::datatable(count.impair)
+    DT::datatable(count.impair, options = list(pageLength = 2, scrollX = TRUE))
     ```
 
 2.  **Which waters are impaired for SELENIUM nationally? Which states
@@ -915,34 +917,55 @@ specific assessment unit in catchment correspondence queries.
       dplyr::select(-objectId) %>%
       dplyr::distinct()
 
+    DT::datatable(il.n99.catch)
     ```
 
 2.  **How large of a catchment area corresponds to ""IL_N-99"?**
 
+We will need some additional information in order to answer this
+question. We could get catchment areas from the nhdplusTools package or
+from ATTAINS geospatial web services. We will use ATTAINS geospatial web
+services as this will also allow us to easily map the catchments and
+assessment unit.
+
 ```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
 
+# set up query params for ATTAINS geospatial web services
+query.params <- list(
+    where = "assessmentunitidentifier IN ('IL_N-99')",
+    outFields = "*",
+    f = "geojson"
+  )
 
-catch.ids <- il.n99.catch %>%
-  dplyr::select(catchmentNhdPlusId) %>%
-  dplyr::distinct() %>%
+# query ATTAINS geospatial assessments lines layer
+lines.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/1/query?",
+                        query = query.params)
+
+lines.geojson <- httr::content(lines.response, as = "text", encoding = "UTF-8")
+lines.sf <- sf::st_read(lines.geojson, quiet = TRUE)
+
+# query ATTAINS geospatial catchment association layer
+catch.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/3/query?",
+                        query = query.params)
+
+catch.geojson <- httr::content(catch.response, as = "text", encoding = "UTF-8")
+catch.sf <- sf::st_read(catch.geojson, quiet = TRUE)
+
+# sum the catchment areas that correspond to IL_N-99
+sum.catch <- catch.sf %>%
+  dplyr::summarise(total = sum(areasqkm)) %>%
+  sf::st_drop_geometry() %>%
   dplyr::pull()
-
-nhd.catch <- nhdplusTools::get_nhdphr(
-     ids = catch.ids,
-     type = "nhdpluscatchment")
-
-leaflet::leaflet() %>%
-  leaflet::addPolygons(data = nhd.catch, color = "#636060")
- 
 ```
 
-The resulting table shows all results from this much smaller query.
+The total catchment area associated with IL_N-99 is `r sum.catch`.\
 
-```{r il.table}
-
-IL_N99_subset <- IL_N99_catch %>%
-  dplyr::slice_sample(n = 20)
-
-DT::datatable(IL_N99_catch, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
+```{r catch.map}
+# create map of catchments and assessment unit
+leaflet::leaflet() %>%
+  leaflet::addTiles() %>%
+  leaflet::addPolygons(data = catch.sf, color = "darkorange",
+                       popup = paste0(catch.sf$nhdplusid, "<br>",
+                                      catch.sf$areasqkm, " sq km")) %>%
+    leaflet::addPolylines(data = lines.sf, color = "blue")
 ```
