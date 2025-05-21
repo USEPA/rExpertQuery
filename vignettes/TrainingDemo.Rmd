@@ -262,7 +262,8 @@ answer them.
 
 1.   Which parameters can EQ_DomainValues provide values for?
 
-2.  
+2.  How many different values for "water_type" can be used in
+    rExpertQuery functions?
 
 ## EQ_NationalExtract
 
@@ -980,3 +981,47 @@ leaflet::leaflet() %>%
 
 ## EQ_DomainValues
 
+EQ_DomainValues is unique in the rExpertQuery packages as it relies on
+ATTAINS web services, rather than Expert Query web services in order to
+provide allowable domain values. It was created to provide guidance for
+users on allowable values for queries. The function returns all
+information available from ATTAINS web services about the selected
+domain and prints a message informing the user which column contains the
+value that should be used in queries.
+
+1.   **Which parameters can EQ_DomainValues provide values for?**
+
+    Running the EQ_DomainValues function with no value provided for the
+    "domain" argument will return a list of the parameter names that it
+    can return domain values for.
+
+```{r dom.vals}
+# run EQ_DomainValues with no value provided for "domain" to return list of params
+domain.vals <- EQ_DomainValues()
+```
+
+EQ_DomainValues can provide values for the following query parameters:
+`r stringi::stri_replace_last(paste(sort(unique(domain.vals$domain)), collapse = ", "), " and ", fixed = ", ")`
+.
+
+**How many different values for "water_type" can be used in rExpertQuery
+functions?**
+
+```{r wat.type}
+
+water.types <- rExpertQuery::EQ_DomainValues("water_type")
+
+```
+
+The printed message informs us that the "name" column contains the
+values for use in water_type queries for rExpertQuery functions. For
+water_type there are `r length(unique(water.types$name))` unique values.
+They are: r
+`stringi::stri_replace_last(paste(sort(unique(water.types$name)), collapse = "; "), "; and ", fixed = "; ")`
+.
+
+## Questions?
+
+rExpertQuery is in development, so additional changes to existing
+functions to improve usability and documentation may occur. If you have
+any
