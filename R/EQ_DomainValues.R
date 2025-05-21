@@ -32,8 +32,8 @@ EQ_DomainValues <- function(domain = NULL) {
     eq.params <- raw.data %>%
       dplyr::left_join(param.cw, by = dplyr::join_by(attains_ws_name)) %>%
       dplyr::filter(!is.na(eq_name)) %>%
-      dplyr::select(eq_name) %>%
-      dplyr::rename(domain = eq_name) %>%
+      dplyr::select(param) %>%
+      dplyr::rename(domain = param) %>%
       dplyr::arrange()
 
     rm(base.url, raw.data)

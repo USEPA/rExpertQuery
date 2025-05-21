@@ -98,11 +98,11 @@ library(data.table)
 library(dplyr)
 library(DT)
 library(ggplot2)
-library(nhdplusTools)
 library(maps)
 library(plotly)
 library(usdata)
 library(usmap)
+library(stringi)
 
 # turn off scientific notation
 options(scipen = 999)
@@ -258,6 +258,12 @@ answer them.
 
 2.  How large of a catchment area corresponds to ""IL_N-99"?
 
+## EQ_DomainValues
+
+1.   Which parameters can EQ_DomainValues provide values for?
+
+2.  
+
 ## EQ_NationalExtract
 
 [**EQ_NationalExtract()**](https://usepa.github.io/rExpertQuery/reference/EQ_NationalExtract.html)provides
@@ -300,7 +306,7 @@ and some may not open in R if there is not enough memory available.
       dplyr::arrange(desc(count))
 
     # create data table of impairment count results
-    DT::datatable(count.impair, options = list(pageLength = 2, scrollX = TRUE))
+    DT::datatable(count.impair, options = list(pageLength = 10, scrollX = TRUE))
     ```
 
 2.  **Which waters are impaired for SELENIUM nationally? Which states
@@ -432,7 +438,7 @@ ml.table <- nat.ausmls %>%
                                                       links.mls$organizationId,
                                                     "yes", "no"))
 # create data table 
-DT::datatable(ml.table) %>% 
+DT::datatable(ml.table, options = list(pageLength = 10, scrollX = TRUE)) %>% 
   # highlight rows for orgs that have monitoringLocationId in blue
   DT::formatStyle(
   "monitoringLocationId", target = "row", 
@@ -593,7 +599,7 @@ FL.ret.auids <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
                                                 au_status = "Retired",
                                                 api_key = testkey)
 
-DT::datatable(FL.ret.auids)
+DT::datatable(FL.ret.auids, options = list(pageLength = 10, scrollX = TRUE))
 ```
 
 ## EQ_TMDLs
@@ -671,7 +677,8 @@ tmdl.sum <- tmdl.proj %>%
   dplyr::distinct()
 
 DT::datatable(tmdl.sum %>%
-                rExpertQuery::EQ_FormatPlanLinks(), escape = FALSE)
+                rExpertQuery::EQ_FormatPlanLinks(), escape = FALSE,
+              options = list(pageLength = 10, scrollX = TRUE))
 ```
 
 ## EQ_Actions
@@ -716,7 +723,8 @@ should be included when calculating measures for Delaware.
 
 DT::datatable(DE.actids %>%
                 rExpertQuery::EQ_FormatPlanLinks(),
-              escape = FALSE)
+              escape = FALSE,
+              options = list(pageLength = 10, scrollX = TRUE))
 
 ```
 
@@ -776,7 +784,7 @@ data table to understand the structure of the results.
 
 ```{r nutrients.data.table}
 # create data table
-DT::datatable(nutrient.doc %>% dplyr::slice_sample(n = 50) %>%          rExpertQuery::EQ_FormatPlanLinks(url.col = "actionDocumentUrl"),                  options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+DT::datatable(nutrient.doc %>% dplyr::slice_sample(n = 50) %>%          rExpertQuery::EQ_FormatPlanLinks(url.col = "actionDocumentUrl"),                  options = list(pageLength = 10, scrollX = TRUE), escape = FALSE)
 ```
 
 2.  **How many actions documents that contain the keyword "nutrient" are
@@ -822,7 +830,7 @@ plotly::plot_ly(data = nutrient.doc.regions,
       dplyr::pull() %>%
       sort()
 
-    DT::datatable(filt.ak.mls)
+    DT::datatable(filt.ak.mls, options = list(pageLength = 10, scrollX = TRUE))
 
     ```
 
@@ -917,7 +925,7 @@ specific assessment unit in catchment correspondence queries.
       dplyr::select(-objectId) %>%
       dplyr::distinct()
 
-    DT::datatable(il.n99.catch)
+    DT::datatable(il.n99.catch, options = list(pageLength = 10, scrollX = TRUE))
     ```
 
 2.  **How large of a catchment area corresponds to ""IL_N-99"?**
@@ -969,3 +977,6 @@ leaflet::leaflet() %>%
                                       catch.sf$areasqkm, " sq km")) %>%
     leaflet::addPolylines(data = lines.sf, color = "blue")
 ```
+
+## EQ_DomainValues
+
