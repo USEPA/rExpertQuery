@@ -260,7 +260,7 @@ answer them.
 
 ## EQ_DomainValues
 
-1.   Which parameters can EQ_DomainValues provide values for?
+1.  Which parameters can EQ_DomainValues provide values for?
 
 2.  How many different values for "water_type" can be used in
     rExpertQuery functions?
@@ -989,11 +989,13 @@ information available from ATTAINS web services about the selected
 domain and prints a message informing the user which column contains the
 value that should be used in queries.
 
-1.   **Which parameters can EQ_DomainValues provide values for?**
+1.  **Which parameters can EQ_DomainValues provide values for?**
 
-    Running the EQ_DomainValues function with no value provided for the
-    "domain" argument will return a list of the parameter names that it
-    can return domain values for.
+```         
+Running the EQ_DomainValues function with no value provided for the
+"domain" argument will return a list of the parameter names that it
+can return domain values for.
+```
 
 ```{r dom.vals}
 # run EQ_DomainValues with no value provided for "domain" to return list of params
