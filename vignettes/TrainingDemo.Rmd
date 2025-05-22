@@ -91,7 +91,12 @@ if (!"remotes" %in% installed.packages()) {
 remotes::install_github("USEPA/rExpertQuery", ref = "training", dependencies = TRUE, force = TRUE)
 
 library(rExpertQuery)
+```
 
+This vignette also requires additional packages which can be installed
+using the code chunk below:
+
+```{r add.pkgs}
 # list of additional required packages
 demo.pkgs <- c("data.table", "dplyr", "DT", "ggplot2", "maps", "plotly", "usdata", "usmap", "stringi")
 
@@ -111,7 +116,12 @@ library(plotly)
 library(usdata)
 library(usmap)
 library(stringi)
+```
 
+As a final setup step, we will turn off scientific notation so that any
+catchment id numbers from our queries are displayed correctly.
+
+```{r sci.not}
 # turn off scientific notation (for catchment ids)
 options(scipen = 999)
 ```
@@ -161,7 +171,11 @@ are:
 8)  [EQ_TMDLs()](https://usepa.github.io/rExpertQuery/reference/EQ_TMDLs.html) -
     queries and returns ATTAINS TMDL data
 
-These first eight functions
+These first eight functions are analogous to the data profiles that can
+be queries through the [Expert Query User
+Interface](https://owapps.epa.gov/expertquery/attains/).
+
+![](images/EQprofiles.png)
 
 An additional function allows users to download the [Expert Query
 National
@@ -263,11 +277,12 @@ and some may not open in R if there is not enough memory available.
 
     # filter assessments data set for 
     param.nat <- assessments.nat %>% 
+      # filter for selenium and cause
       dplyr::filter(parameterName == "SELENIUM" &
                       parameterStatus == "Cause")
 
     # data table of selenium impairments
-    DT::data.table(param.nat, options = list(pageLength = 10, scrollX = TRUE))
+    DT::datatable(param.nat, options = list(pageLength = 10, scrollX = TRUE))
 
     ```
 
@@ -290,37 +305,49 @@ and some may not open in R if there is not enough memory available.
     ```{r param.map}
     # filter to create df of states that have at least one selenium impairment}
     state.names.sel <- param.nat %>%
-      dplyr::ungroup() %>%
+      # select state column from filtered df
       dplyr::select(state) %>%
+      # retain only distinct values for state
       dplyr::distinct() %>%
+      # change state abbreviation to full state name
       dplyr::mutate(state = usdata::abbr2state(state)) %>%
+      # create a list from the df
       dplyr::pull()
 
     # read in a list of all 50 state  names
     state.names <- datasets::state.name
 
-    # create df with a column indicating "yes" or "no" to signify if a state has at least one selenium impairment
+    # create df with of all 50 state names
     sel.map.data <- as.data.frame(state.names) %>%
+      # rename state.name column to state
       dplyr::rename(state = state.names) %>%
+      # create additional column to indicate if state has recorded selenium impairments ("yes") or not ("no")
       dplyr::mutate(SeleniumImpairment = factor(ifelse(state %in% state.names.sel,
                                                 "yes", "no")))
 
-    # create map, states with at least one selenium impairment are show in blue
+    # create map, specifying data and values
     usmap::plot_usmap(
       regions = "state", data = sel.map.data,
       values = "SeleniumImpairment", color = "black"
     ) +
-    ggplot2::scale_fill_manual(
+    # fill states with selenium impairments with blue
+      ggplot2::scale_fill_manual(
         values = c(`no` = "white", `yes` = "blue")
       ) +
-    ggplot2::theme(legend.position = "none")
+    # remove legend
+      ggplot2::theme(legend.position = "none")
     ```
+
+    In the map above, the stats with selenium impairments are blue.
 
 3.  **Which waters have a TMDL and are fully supporting nationally?**
 
     Starting with the filtered data frame of latest cycle assessments,
     we can filter for Fully Supporting waters with an
-    asssociatedActionType of "TMDL".
+    asssociatedActionType of "TMDL". Again, we can use a combination of
+    [dplyr](https://dplyr.tidyverse.org/) and
+    [DT](https://rstudio.github.io/DT/), for data manipulation and
+    creating a data table, respectively.
 
     ```{r tmdl.fs}
 
@@ -343,10 +370,16 @@ and some may not open in R if there is not enough memory available.
       dplyr::distinct()
 
     # fully supporting waters with tmdls data table
-    DT::data.table(tmdls.fs, options = list(pageLength = 10, scrollX = TRUE))
+    DT::datatable(tmdl.fs, options = list(pageLength = 10, scrollX = TRUE))
     ```
 
 4.  **What are the impaired waters (cat 4 and 5 nationally)?**
+
+    The workflow here is similar to the previous question, relying on
+    [dplyr](https://dplyr.tidyverse.org/) and
+    [DT](https://rstudio.github.io/DT/). This time we are retaining a
+    few more columns for inclusion in the data table and are filtering
+    by epaIRCategory for category 4 and 5 waters.
 
     ```{r impaired.waters}
 
@@ -357,6 +390,19 @@ and some may not open in R if there is not enough memory available.
       dplyr::distinct() %>%
       # filter for category 4 and 5 waters
       dplyr::filter(epaIrCategory %in% c("4", "5"))
+    ```
+
+    The resulting data frame is large, with `r nrow(imp.waters)` unique
+    impaired waters nationally. Due to its size, we'll include a random
+    subset of 250 results in a data table to review during the demo. You
+    can view the full results by viewing the imp.waters df.
+
+    ```{r imp.dt}
+
+    # data table with random 250 impaired waters
+    DT::datatable(imp.waters %>%
+                    dplyr::slice_sample(n = 250), 
+                  options = list(pageLength = 10, scrollX = TRUE))
 
     ```
 
@@ -364,38 +410,69 @@ and some may not open in R if there is not enough memory available.
     monitoringLocations in ATTAINS? Which of these organizations have
     included any monitoringLocationDataLinks?**
 
+    To answer this question, we'll need to import a new national
+    extract. As we are curious about monitoringLocations and
+    monitoringLocationDataLinks, we will want to start with the
+    Assessment Units with Monitoring Locations data set. The param value
+    for this in EQ_NationalExtract is "au_mls". Additional packages
+    needed are [dplyr](https://dplyr.tidyverse.org/) and
+    [DT](https://rstudio.github.io/DT/). We'll use some additional
+    options in [DT](https://rstudio.github.io/DT/) to highlight useful
+    rows in the final data table.
+
     ```{r nat.ausmls}
     # import national extract for assessment units/monitoring locations
     nat.ausmls <- rExpertQuery::EQ_NationalExtract("au_mls")
-
-    # filter for rows that contain monitoringLocationIds
-    filtered.mls <- nat.ausmls %>%
-      dplyr::filter(monitoringLocationId != "",
-                    !is.na(monitoringLocationId))
-
-    # start with data set filtered to include only rows with MonitoringLocationIds
-    orgs.mls <- filtered.mls %>%
-      # select columns to describe orgs
-      dplyr::select(organizationId, organizationName, organizationType) %>%
-      dplyr::distinct()
-
-
-    # start with data set filtered to include only rows with MonitoringLocationIds
-    links.mls <- filtered.mls %>%
-      # filter for orgs with monitoringLocationDataLinks
-      dplyr::filter(monitoringLocationDataLink != "",
-                    !is.na(monitoringLocationDataLink)) %>%
-      # select columns to describe orgs
-      dplyr::select(organizationId, organizationName, organizationType) %>%
-      # retain distinct rows
-      dplyr::distinct()
-      
     ```
+
+The next step is to filter the data frame and retain only rows that
+contain a value for monitoringLocationId. The resulting data frame,
+called "filtered.mls" will allow us to determine (1) which organizations
+have included monitoringLocationIdentifiers and (2) which organizations
+have included monitoringLocationDataLinks.
+
+To find the organizations with monitoringLocationIdentifiers, we will
+select only the rows organizationId, organizationName, and
+organizationType and retain the unique rows.
+
+To find the organizations with monitoringLocationIdentifiers, we will
+apply an additional filter and keep only rows that have a value in the
+monitoringLocationDataLink column. Then select only the rows
+organizationId, organizationName, and organizationType and retain the
+unique rows.
+
+```{r filt.ausmls}
+# filter for rows that contain monitoringLocationIds
+filtered.mls <- nat.ausmls %>%
+  dplyr::filter(monitoringLocationId != "",
+                !is.na(monitoringLocationId))
+
+# start with data set filtered to include only rows with MonitoringLocationIds
+orgs.mls <- filtered.mls %>%
+  # select columns to describe orgs
+  dplyr::select(organizationId, organizationName, organizationType) %>%
+  dplyr::distinct()
+
+
+# start with data set filtered to include only rows with MonitoringLocationIds
+links.mls <- filtered.mls %>%
+  # filter for orgs with monitoringLocationDataLinks
+  dplyr::filter(monitoringLocationDataLink != "",
+                !is.na(monitoringLocationDataLink)) %>%
+  # select columns to describe orgs
+  dplyr::select(organizationId, organizationName, organizationType) %>%
+  # retain distinct rows
+  dplyr::distinct()
+  
+
+```
 
 There are `r nrow(orgs.mls)` with monitoringLocationId data in ATTAINS.
 Of these organizations, `r nrow(links.mls)` also contain
 monitoringLocationDataLinks. We can create a data table to display this
-information.
+information and apply some conditional formatting to highlight the
+organizations with monitoringLocationIdentifiers in blue and those with
+monitoringLocationIdentifiers and monitoringLocationDataLinks in orange.
 
 ```{r ml.map}
 
@@ -1001,3 +1078,4 @@ They are: r
 rExpertQuery is in development, so additional changes to existing
 functions to improve usability and documentation may occur. If you have
 any
+
