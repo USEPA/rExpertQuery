@@ -152,6 +152,8 @@ are:
 8)  [EQ_TMDLs()](https://usepa.github.io/rExpertQuery/reference/EQ_TMDLs.html) -
     queries and returns ATTAINS TMDL data
 
+These first eight functions
+
 An additional function allows users to download the [Expert Query
 National
 Extracts](https://owapps.epa.gov/expertquery/national-downloads){.uri}
@@ -172,97 +174,16 @@ to provide allowable domain values for some rExpertQuery parameters:
 10) [EQ_DomainValues()](https://usepa.github.io/rExpertQuery/reference/EQ_DomainValues.html) -
     returns domain values for some rExpertQuery function params
 
-## Session Outline
+## Demo Structure
 
 In this session, we will use rExpertQuery functions, along with some
 common R packages for data wrangling and visualization to answer some
-commonly asked questions with Expert Query data. The questions are
-listed below, grouped by the rExpertQuery function that will be used to
-answer them.
-
-### EQ_NationalExtract {.unlisted .unumbered}
-
-1.  What is the most commonly reported impairment nationally?
-
-2.  Which waters are impaired for selenium nationally?
-
-3.  Which waters have a TMDL and are fully supporting nationally?
-
-4.  What are the impaired waters (cat 4 and 5)?
-
-5.  Which organizations have included any information about
-    monitoringLocations in ATTAINS? Which of these organizations have
-    included any monitoringLocationDataLinks?
-
-### EQ_Assessments {.unlisted .unumbered}
-
-1.  How many stream miles in Kansas are impaired for Primary Contact
-    Recreation?
-
-2.  What waters in Montana are impaired due to Zinc? How many different
-    uses are zinc impairments associated with in Montana?
-
-3.  Which waters are new to category 5 in the latest cycle for Illinois?
-    Which categories did they move from?
-
-### EQ_AssessmentUnits {.unlisted .unumbered}
-
-1.  What are the retired assessment units for Florida?
-
-### EQ_TMDLs {.unlisted .unumbered}
-
-1.  What are all the TMDLs in HI? How many are there (counted as unique
-    combinations of actionID/pollutant/assessmentUnitId)?
-
-2.  How many TMDL projects (by actionId) were approved so far in FY 2025
-    in R10?
-
-### EQ_Actions {.unlisted .unumbered}
-
-1.  Which actions in Delaware should be included in measures? How many
-    actions (by actionID) are in this group?
-
-2.  How many actions (by actionId) were established in R3 in FY 2024?
-    What was the most common type of action established in R3 in FY
-    2024?
-
-### EQ_ActionsDocuments {.unlisted .unumbered}
-
-1.  What are all the actions documents that contain the keyword
-    "nutrient"?
-
-2.  How many actions documents that contain the keyword "nutrient" are
-    from each region?
-
-### EQ_AUsMLs {.unlisted .unumbered}
-
-1.  Which monitoringLocations correspond to assessmentUnits in Alaska?
-    How many monitoringLocations are associated with assessmentUnits?
-    Which organizations are the monitoringLocations from?
-
-2.  Are there active assessmentUnits without listed monitoringLocations
-    in Alaska?
-
-### EQ_Sources {.unlisted .unumbered}
-
-1.  Which states in Region 6 have listed sources in their latest report
-    cycle?
-
-2.  What are the most commonly listed sources in the latest report cycle
-    in each Region 6 state?
-
-### EQ_CatchCorr {.unlisted .unumbered}
-
-1.  Which catchment corresponds to assessmentUnitId"IL_N-99" ?
-
-2.  How large of a catchment area corresponds to ""IL_N-99"?
-
-### EQ_DomainValues {.unlisted .unumbered}
-
-1.  Which parameters can EQ_DomainValues provide values for?
-
-2.  How many different values for "water_type" can be used in
-    rExpertQuery functions?
+commonly asked questions with Expert Query data. Members of the ATTAINS
+team will be monitoring the chat for questions. If there are many
+questions regarding a particular function, we may pause at the end of
+that function's material to review. Otherwise, questions are welcome at
+the end of the demo as time permits or via e-mailing the ATTAINS team at
+attains\@epa.gov.
 
 ## EQ_NationalExtract
 
