@@ -98,7 +98,7 @@ using the code chunk below:
 
 ```{r add.pkgs}
 # list of additional required packages
-demo.pkgs <- c("data.table", "dplyr", "DT", "ggplot2", "maps", "plotly", "usdata", "usmap", "stringi")
+demo.pkgs <- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", "leaflet", "maps", "plotly", "sf", "usdata", "usmap", "stringi")
 
 # install additional packages not yet installed
 installed_packages <- demo.pkgs %in% rownames(installed.packages())
@@ -107,12 +107,16 @@ if (any(installed_packages == FALSE)) {
 }
 
 # load additional packages for this vignette
+library(datasets)
 library(data.table)
 library(dplyr)
 library(DT)
 library(ggplot2)
+library(httr)
+library(leaflet)
 library(maps)
 library(plotly)
+library(sf)
 library(usdata)
 library(usmap)
 library(stringi)
@@ -1041,13 +1045,19 @@ plotly::plot_ly(data = nutrient.doc.regions,
 
     ```
 
-There are `r nrow(no.ml.ak)` active assessmentUnits in Alaska without
-monitoringLocations listed in ATTAINS.
+    There are `r nrow(no.ml.ak)` active assessmentUnits in Alaska
+    without monitoringLocations listed in ATTAINS.
 
 ## EQ_Sources
 
 1.  **Which states in Region 6 have listed Sources in their latest
     report cycle?**
+
+    We will start be querying for EQ_Source for region 6. Then use
+    [dplyr](https://dplyr.tidyverse.org/) and
+    [usdata](https://openintrostat.github.io/usdata/index.html) to
+    manipulate the data and create a list of the region 6 states that
+    list sources for any assessments in their latest report cycle.
 
     ```{r r6.sources}
 
@@ -1057,12 +1067,17 @@ monitoringLocations listed in ATTAINS.
 
     # filter for states with listed sources
     r6.sources.filter <- r6.sources %>%
+      # remove all rows without a listed source
       dplyr::filter(!is.na(sourceName)) %>%
+      # select state
       dplyr::select(state) %>%
+      # retain distinct state
       dplyr::distinct() %>%
+      # create list
       dplyr::pull() %>%
       # convert abbreviation to state name
       usdata::abbr2state() %>%
+      # sort alphabetically
       sort()
     ```
 
@@ -1072,6 +1087,12 @@ monitoringLocations listed in ATTAINS.
 2.  **What are the most commonly listed sources in the latest report
     cycle in each Region 6 state?**
 
+    Using the same initial query results from the previous question, we
+    can use [dplyr](https://dplyr.tidyverse.org/) functions to count the
+    number of times a source is listed by each state, select the most
+    common source from each state and make a a
+    [DT](https://rstudio.github.io/DT/) data table of the results.
+
     ```{r source.sum}
 
     # count the number of times a source is listed for each state
@@ -1079,13 +1100,7 @@ monitoringLocations listed in ATTAINS.
       dplyr::select(state, organizationId, assessmentUnitId, sourceName) %>%
       dplyr::distinct() %>%
       dplyr::group_by(state, organizationId, sourceName) %>%
-      dplyr::summarize(count = length(assessmentUnitId))
-
-    # create data table of counts per state
-    DT::datatable(r6.sources.summarize)
-
-    # slice to include only the max count from each state
-    r6.top.sources <- r6.sources.summarize %>%
+      dplyr::summarize(count = length(assessmentUnitId))%>%
       dplyr::ungroup() %>%
       dplyr::group_by(state) %>%
       dplyr::slice_max(count)
@@ -1106,68 +1121,98 @@ specific assessment unit in catchment correspondence queries.
 
 1.  **Which catchments correspond to assessmentUnitId"IL_N-99" ?**
 
+    We can start with a very focused query to retrieve information for
+    the Illinios assessment unit "IL_N-99". Then we'll use
+    [dplyr](https://dplyr.tidyverse.org/) functions to retain the unique
+    rows make a a [DT](https://rstudio.github.io/DT/) data table.
+
     ```{r il.99.catch}
 
+    # query for IL_N-99 catchment data
     il.n99.catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
                               auid = "IL_N-99",
                               api_key = testkey)
 
     il.n99.catch <- il.n99.catch %>%
+      # remove objectId
       dplyr::select(-objectId) %>%
+      # retain unique rows
       dplyr::distinct()
 
+    # create data table
     DT::datatable(il.n99.catch, options = list(pageLength = 10, scrollX = TRUE))
     ```
 
-2.  **How large of a catchment area corresponds to ""IL_N-99"?**
+    1.  **How large of a catchment area corresponds to ""IL_N-99"?**
 
-We will need some additional information in order to answer this
-question. We could get catchment areas from the nhdplusTools package or
-from ATTAINS geospatial web services. We will use ATTAINS geospatial web
-services as this will also allow us to easily map the catchments and
-assessment unit.
+        We will need some additional information in order to answer this
+        question. We could get catchment areas from the nhdplusTools
+        package or from ATTAINS geospatial web services. For this
+        example, we will use ATTAINS geospatial web services as this
+        will also allow us to create a map of the catchments and
+        assessment unit. This example utlizes a few new R packages,
+        [httr](https://httr.r-lib.org/) (wrapper for curl packge),
+        [leaflet](https://cran.r-project.org/web/packages/leaflet/index.html)
+        (interactive maps), and
+        [sf](https://cran.r-project.org/web/packages/sf/index.html)
+        (spatial vector data).
 
-```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
+        The first step is to set up query parameters for ATTAINS
+        geospatial webservices. Then query the assessment lines and
+        catchment associations layers to retrieve the geospatial data
+        for the assessment unit and its associated catchments. The data
+        from the catchment association layer allows us to
 
-# set up query params for ATTAINS geospatial web services
-query.params <- list(
-    where = "assessmentunitidentifier IN ('IL_N-99')",
-    outFields = "*",
-    f = "geojson"
-  )
+        ```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
 
-# query ATTAINS geospatial assessments lines layer
-lines.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/1/query?",
-                        query = query.params)
+        # set up query params for ATTAINS geospatial web services
+        query.params <- list(
+            where = "assessmentunitidentifier IN ('IL_N-99')",
+            outFields = "*",
+            f = "geojson"
+          )
 
-lines.geojson <- httr::content(lines.response, as = "text", encoding = "UTF-8")
-lines.sf <- sf::st_read(lines.geojson, quiet = TRUE)
+        # query ATTAINS geospatial assessments lines layer
+        lines.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/1/query?",
+                                query = query.params)
 
-# query ATTAINS geospatial catchment association layer
-catch.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/3/query?",
-                        query = query.params)
+        # read content from ATTAINS geospatial assessments lines layer 
+        lines.geojson <- httr::content(lines.response, as = "text", encoding = "UTF-8")
 
-catch.geojson <- httr::content(catch.response, as = "text", encoding = "UTF-8")
-catch.sf <- sf::st_read(catch.geojson, quiet = TRUE)
+        # get sf from ATTAINS geospatial assessments lines layer
+        lines.sf <- sf::st_read(lines.geojson, quiet = TRUE)
 
-# sum the catchment areas that correspond to IL_N-99
-sum.catch <- catch.sf %>%
-  dplyr::summarise(total = sum(areasqkm)) %>%
-  sf::st_drop_geometry() %>%
-  dplyr::pull()
-```
+        # query ATTAINS geospatial catchment association layer
+        catch.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/3/query?",
+                                query = query.params)
 
-The total catchment area associated with IL_N-99 is `r sum.catch`.\
+        # read content from ATTAINS geospatial catchment association layer 
+        catch.geojson <- httr::content(catch.response, as = "text", encoding = "UTF-8")
 
-```{r catch.map}
-# create map of catchments and assessment unit
-leaflet::leaflet() %>%
-  leaflet::addTiles() %>%
-  leaflet::addPolygons(data = catch.sf, color = "darkorange",
-                       popup = paste0(catch.sf$nhdplusid, "<br>",
-                                      catch.sf$areasqkm, " sq km")) %>%
-    leaflet::addPolylines(data = lines.sf, color = "blue")
-```
+        # # get sf from ATTAINS geospatial assessments lines layer
+        catch.sf <- sf::st_read(catch.geojson, quiet = TRUE)
+
+        # sum the catchment areas that correspond to IL_N-99
+        sum.catch <- catch.sf %>%
+          dplyr::summarise(total = sum(areasqkm)) %>%
+          sf::st_drop_geometry() %>%
+          dplyr::pull()
+
+        ```
+
+        The total catchment area associated with IL_N-99 is
+        `r sum.catch`.
+
+        ```{r catch.map}
+        # create map of catchments and assessment unit
+        leaflet::leaflet() %>%
+          leaflet::addTiles() %>%
+          leaflet::addPolygons(data = catch.sf, color = "darkorange",
+                               popup = paste0(catch.sf$nhdplusid, "<br>",
+                                              catch.sf$areasqkm, " sq km")) %>%
+            leaflet::addPolylines(data = lines.sf, color = "blue")
+
+        ```
 
 ## EQ_DomainValues
 
@@ -1181,10 +1226,11 @@ value that should be used in queries.
 
 1.  **Which parameters can EQ_DomainValues provide values for?**
 
+    Running the EQ_DomainValues function with no value provided for the
+    "domain" argument will return a list of the parameter names that it
+    can return domain values for.
+
 ```         
-Running the EQ_DomainValues function with no value provided for the
-"domain" argument will return a list of the parameter names that it
-can return domain values for.
 ```
 
 ```{r dom.vals}
@@ -1217,4 +1263,3 @@ They are: r
 rExpertQuery is in development, so additional changes to existing
 functions to improve usability and documentation may occur. If you have
 any
-
