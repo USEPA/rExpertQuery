@@ -342,7 +342,7 @@ and some may not open in R if there is not enough memory available.
       ggplot2::theme(legend.position = "none")
     ```
 
-    In the map above, the stats with selenium impairments are blue.
+    In the map above, the states with selenium impairments are blue.
 
 3.  **Which waters have a TMDL and are fully supporting nationally?**
 
@@ -1106,7 +1106,7 @@ plotly::plot_ly(data = nutrient.doc.regions,
       dplyr::slice_max(count)
 
     # data table for max count
-    DT::datatable(r6.top.sources)
+    DT::datatable(r6.sources.summarize)
     ```
 
 ## EQ_CatchCorr
