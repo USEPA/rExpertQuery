@@ -859,10 +859,10 @@ DE.meas <- rExpertQuery::EQ_Actions(statecode = "DE",
 DE.count <- dplyr::n_distinct(DE.meas$actionId)
 ```
 
-There are `r formatC(nrow(DE.actids), big.mark = ",")` actionIds that
-should be included when calculating measures for Delaware. In a similar
-process to the final TMDL example, we can create a data table with one
-row per actionId.
+There are `r formatC(DE.count, big.mark = ",")` actionIds that should be
+included when calculating measures for Delaware. In a similar process to
+the final TMDL example, we can create a data table with one row per
+actionId.
 
 ```{r de.table}
 # determine unique actionIds
@@ -1127,7 +1127,6 @@ specific assessment unit in catchment correspondence queries.
     rows make a a [DT](https://rstudio.github.io/DT/) data table.
 
     ```{r il.99.catch}
-
     # query for IL_N-99 catchment data
     il.n99.catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
                               auid = "IL_N-99",
@@ -1161,7 +1160,8 @@ specific assessment unit in catchment correspondence queries.
         geospatial webservices. Then query the assessment lines and
         catchment associations layers to retrieve the geospatial data
         for the assessment unit and its associated catchments. The data
-        from the catchment association layer allows us to
+        from the catchment association layer allows us to sum the total
+        area for all the catchments associated with IL_N-99.
 
         ```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
 
@@ -1197,19 +1197,29 @@ specific assessment unit in catchment correspondence queries.
           dplyr::summarise(total = sum(areasqkm)) %>%
           sf::st_drop_geometry() %>%
           dplyr::pull()
+
         ```
 
         The total catchment area associated with IL_N-99 is
         `r sum.catch`.
 
+        To create map of IL_N-99 and and its associated catchments, we
+        can create a leaflet map with the defaul Open Street Map tile
+        then add the catchment polygons with a popup contain the
+        nhdplusid and area in sq km. The final step is to add the
+        assessment unit line.
+
         ```{r catch.map}
-        # create map of catchments and assessment unit
+        # create leaflet map
         leaflet::leaflet() %>%
+          # add open street map layer
           leaflet::addTiles() %>%
+          # add catchments, include popups with nhdplus id and area in sq km
           leaflet::addPolygons(data = catch.sf, color = "darkorange",
                                popup = paste0(catch.sf$nhdplusid, "<br>",
                                               catch.sf$areasqkm, " sq km")) %>%
-            leaflet::addPolylines(data = lines.sf, color = "blue")
+          # added assessment id  
+          leaflet::addPolylines(data = lines.sf, color = "blue")
 
         ```
 
@@ -1229,20 +1239,22 @@ value that should be used in queries.
     "domain" argument will return a list of the parameter names that it
     can return domain values for.
 
-```         
-```
+    ```{r dom.vals}
+    # run EQ_DomainValues with no value provided for "domain" to return list of params
+    domain.vals <- EQ_DomainValues()
+    ```
 
-```{r dom.vals}
-# run EQ_DomainValues with no value provided for "domain" to return list of params
-domain.vals <- EQ_DomainValues()
-```
+    EQ_DomainValues can provide values for the following query
+    parameters:
+    `r stringi::stri_replace_last(paste(sort(unique(domain.vals$domain)), collapse = ", "), " and ", fixed = ", ")`
+    .
 
-EQ_DomainValues can provide values for the following query parameters:
-`r stringi::stri_replace_last(paste(sort(unique(domain.vals$domain)), collapse = ", "), " and ", fixed = ", ")`
-.
+2.  **How many different values for "water_type" can be used in
+    rExpertQuery functions?**
 
-**How many different values for "water_type" can be used in rExpertQuery
-functions?**
+    To find the allowable values for "water_type" in rExpertQuery
+    function, we can run EQ_DomainValues again, this time specifying
+    "water_type".
 
 ```{r wat.type}
 
@@ -1261,4 +1273,4 @@ They are: r
 
 rExpertQuery is in development, so additional changes to existing
 functions to improve usability and documentation may occur. If you have
-any
+any additional questions, contact the ATTAINS team at attains\@epa.gov.
