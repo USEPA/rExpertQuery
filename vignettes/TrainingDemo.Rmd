@@ -515,9 +515,17 @@ the desired cycle year in YYYY format.
 1.  **How many stream miles in Kansas are impaired for primary contact
     recreation in the latest cycle?**
 
+    First, we can construct our query to return only Primary Contact
+    Recreation Assessments from the latest cycle from Kansas for
+    streams. The remaining steps can be accomplished with
+    [dplyr](https://dplyr.tidyverse.org/) functions to retain unique
+    combinations of assessmentUnitId, assessmentUnitName, waterSize and
+    waterSizeUnits, then summing the waterSize column to find the number
+    of stream miles.
+
     ```{r stream.ks}
 
-    # set up query to search assessments for KS, primary contact recreation use, and stream
+    # set up query to search assessments for KS, primary contact recreation use, and stream, default behavior is to query latest report cycle
     ks.imp.streams <- rExpertQuery::EQ_Assessments(statecode = "KS",
                                                    use_name = "Primary Contact Recreation", 
                                                    api_key = testkey,
@@ -543,6 +551,11 @@ the desired cycle year in YYYY format.
 2.  **What waters in Montana are impaired due to Zinc? How many
     different uses are zinc impairments associated with in Montana?**
 
+    We start by querying for Montana assessments with zinc as a cause
+    and can use [dplyr](https://dplyr.tidyverse.org/) and
+    [plotly](https://plotly.com/r/) (graphing library) to summarize the
+    results by useName and create a bar plot of the results.
+
     ```{r MT.impair}
 
     # query MT's latest assessments for zinc as a cause
@@ -551,13 +564,26 @@ the desired cycle year in YYYY format.
                                               param_name = "ZINC",
                                               param_status = "Cause"
                                               )
+    ```
 
+    Next we summarize the uses associated with zinc impairments and
+    count the number of unique assessmentUnitIdentifiers for each use to
+    facilitate creating a bar plot.
+
+    ```{r MT.sum}
     # summarize by useName
     MT.impair.use <- MT.impair %>% 
       dplyr::group_by(useName) %>%
-      dplyr::summarize(count = length(assessmentUnitId))
+      # count AUIDs by use
+      dplyr::summarize(count = length(unique(assessmentUnitId)))
+    ```
 
+    There are `r nrow(MT.impair.use)` uses with zinc as a cause in
+    Montana:
+    `r stringi::stri_replace_last(paste(MT.impair.use$useName, collapse = ", "), ", and ", fixed = ", ")`
+    . As our last step, we'll create the bar plot.
 
+    ```{r MT.plot}
     plotly::plot_ly(data = MT.impair.use,
       x = ~useName,
       y = ~count,
@@ -566,13 +592,17 @@ the desired cycle year in YYYY format.
 
     ```
 
-    There are `r nrow(MT.impair.use)` uses with zinc as a cause in
-    Montana:
-    `r stringi::stri_replace_last(paste(MT.impair.use$useName, collapse = ", "), ", and ", fixed = ", ")`
-    .
-
 3.  **Which waters are new to category 5 in the latest cycle for
     Illinois? Which categories did they move from?**
+
+    This is another question that is well suited to using
+    [dplyr](https://dplyr.tidyverse.org/) and
+    [plotly](https://plotly.com/r/) in addition to EQ_Assessments. The
+    query is for category 5 waters from Illinois from the latest
+    reporting cycle. In order to compare reporting cycles, we'll also
+    need to provide a value for the previous cycle and run the query
+    again, this time for the previous reporting cycle and without
+    specifying the category.
 
     ```{r il.5.comp}
 
@@ -588,50 +618,74 @@ the desired cycle year in YYYY format.
     IL.previous <- rExpertQuery::EQ_Assessments(statecode = "IL",
                                                 report_cycle = previous.cycle,
                                                 api_key = testkey)
-
-    # filter previous cycle to include only cat 5 waters from 2024
-    IL.previous <- IL.previous %>%
-      dplyr::filter(assessmentUnitId %in% IL.latest$assessmentUnitId) %>%
-      dplyr::select(assessmentUnitId, epaIrCategory) %>%
-      dplyr::rename(epaIrCategory.previous = epaIrCategory)
-      
-    # combine latest and previous cycle dfs
-    IL.combine <- IL.latest %>%
-      dplyr::select(assessmentUnitId, assessmentUnitName, epaIrCategory) %>%
-      dplyr::mutate(epaIrCategory = as.character(epaIrCategory)) %>%
-      dplyr::left_join(IL.previous, dplyr::join_by(assessmentUnitId),
-                       relationship = "many-to-many")
-
-    # create df of the auids that changed to cat 5 in 2024
-    IL.changes <- IL.combine %>%
-      dplyr::filter(epaIrCategory != epaIrCategory.previous) %>%
-      dplyr::distinct()
-
-    # you may want to summarize and visualize what categories the new cat 5s were in previously
-    IL.change.sum <- IL.changes %>%
-      dplyr::group_by(epaIrCategory.previous) %>%
-      dplyr::summarise(count = dplyr::n_distinct(assessmentUnitId))
-
-
-    # set color palette for categories
-    cat.pal <- c("#9dd49d", "#bee3be", "#c5c5c5", "#f6ce95", "#f9deb8", "#f0bab9",   "#e89895","#4be367","#17b644", "#c5a577")
-    cat.pal <-  setNames(cat.pal, c("1", "2", "3", "4A", "4B", "4C", "5", "5A", "5R", "4"))
-
-
-    plotly::plot_ly() %>%
-        plotly::add_pie(data = IL.change.sum, ~count, labels = ~epaIrCategory.previous,
-                        marker = list(
-                          colors = cat.pal,
-                          line = list(color = "white", width = 2)
-                        ), type = "pie",
-                        hoverinfo = "value", outsidetextfont = list(color = "black"),
-                        sort = FALSE
-        ) %>%
-        plotly::layout(legend = list(orientation = "h",
-                                     xanchor = "center",
-                                     x = 0.5))
-
     ```
+
+Next we'll need to filter the previous cycle results to retain only the
+assessment units that are category 5 waters in the latest cycle. This
+allows us to combine the latest and previous cycle data frames and
+filter them to create a data frame which contains only the assessment
+units that changed from some other category to category 5 from the
+previous cycle to the latest cycle.
+
+```{r filt.previous}
+# filter previous cycle to include only cat 5 waters from 2024
+IL.previous <- IL.previous %>%
+  # retain only cat 5 waters from latest cycle
+  dplyr::filter(assessmentUnitId %in% IL.latest$assessmentUnitId) %>%
+  # select auid and category
+  dplyr::select(assessmentUnitId, epaIrCategory) %>%
+  # rename to indicate previous cycle
+  dplyr::rename(epaIrCategory.previous = epaIrCategory)
+  
+# combine latest and previous cycle dfs
+IL.combine <- IL.latest %>%
+  dplyr::select(assessmentUnitId, assessmentUnitName, epaIrCategory) %>%
+  dplyr::mutate(epaIrCategory = as.character(epaIrCategory)) %>%
+  dplyr::left_join(IL.previous, dplyr::join_by(assessmentUnitId),
+                   relationship = "many-to-many")
+
+# create df of the auids that changed to cat 5 in 2024
+IL.changes <- IL.combine %>%
+  dplyr::filter(epaIrCategory != epaIrCategory.previous) %>%
+  dplyr::distinct()
+
+
+```
+
+Finally, we can summarize by counting the categories the new category 5s
+were previously in and create a pie chart to visualize. This example
+sets up a color palette that mimics the one used in the ATTAINS report
+module.
+
+```{r cat5.viz}
+# summarize what cats the new cat 5s were in previously
+IL.change.sum <- IL.changes %>%
+  dplyr::group_by(epaIrCategory.previous) %>%
+  dplyr::summarise(count = dplyr::n_distinct(assessmentUnitId))
+
+# set color palette for categories
+cat.pal <- c("#9dd49d", "#bee3be", "#c5c5c5", "#f6ce95", "#f9deb8", "#f0bab9",   "#e89895","#4be367","#17b644", "#c5a577")
+# set category names for palette
+cat.pal <-  setNames(cat.pal, c("1", "2", "3", "4A", "4B", "4C", "5", "5A", "5R", "4"))
+
+
+# create plotly plot
+plotly::plot_ly() %>%
+  # add pipe based IL.change.sum  
+  plotly::add_pie(data = IL.change.sum, ~count, labels = ~epaIrCategory.previous,
+                    marker = list(
+                      colors = cat.pal,
+                      line = list(color = "white", width = 2)
+                    ), type = "pie",
+                    hoverinfo = "value", outsidetextfont = list(color = "black"),
+                    sort = FALSE
+    ) %>%
+  # add legend  
+  plotly::layout(legend = list(orientation = "h",
+                                 xanchor = "center",
+                                 x = 0.5))
+
+```
 
 ## EQ_AssessmentUnits
 
@@ -639,37 +693,44 @@ the desired cycle year in YYYY format.
 ATTAINS Assessment Units data. The default is to only return "Active"
 assessment units, but input params can be adjusted to query for
 "Retired" or "Historical" assessment units in addition to or instead of
-"Active". The example below shows a simple example for querying for
-Active assessment units for a single state.
+"Active".
 
-1.  What are the retired assessment units for Florida?
+1.  **What are the retired assessment units for Florida?**
 
-```{r FL.ret.auids}
+    This can be answered with a simple EQ_AssessmentUnits query
+    specifying Florida with an assesment unit status of "Retired"
+    without using functions from any additional packages. For easier
+    review, we'll create a datatable with
+    [DT](https://rstudio.github.io/DT/).
 
-# search for retired assessment units in Florida
-FL.ret.auids <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
-                                                au_status = "Retired",
-                                                api_key = testkey)
+    ```{r FL.ret.auids}
 
-DT::datatable(FL.ret.auids, options = list(pageLength = 10, scrollX = TRUE))
+    # search for retired assessment units in Florida
+    FL.ret.auids <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
+                                                    au_status = "Retired",
+                                                    api_key = testkey)
+
+    # create data table
+    DT::datatable(FL.ret.auids, options = list(pageLength = 10, scrollX = TRUE))
+
+    ```
+
+```{}
 ```
 
 ## EQ_TMDLs
 
 [**EQ_TMDLs()**](https://usepa.github.io/rExpertQuery/reference/EQ_TMDLs.html)
-queries ATTAINS TMDL data and can utilize many search parameters. The
-example below shows querying Hawaii for TMDLs with a source_type of
-"Both", which means that both point and non point sources were part of
-the TMDL.
+queries ATTAINS TMDL data and can utilize many search parameters. T
 
 1.  **What are all the TMDLs in HI? How many are there (counted as
     unique combinations of actionID/pollutant/assessmentUnitId)?**
 
-```{r hi.tmdl, results = TRUE, message = FALSE, warning = FALSE}
+    ```{r hi.tmdl, results = TRUE, message = FALSE, warning = FALSE}
 
-HI.tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI", 
-                                   api_key = testkey)
-```
+    HI.tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI", 
+                                       api_key = testkey)
+    ```
 
 There `r formatC(nrow(HI.tmdls), big.mark = ",")` can be reviewed in the
 data frame. Keep in mind that if we want to count one TMDL as one unique
@@ -1078,4 +1139,3 @@ They are: r
 rExpertQuery is in development, so additional changes to existing
 functions to improve usability and documentation may occur. If you have
 any
-
