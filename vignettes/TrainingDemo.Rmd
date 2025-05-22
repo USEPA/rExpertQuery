@@ -1197,7 +1197,6 @@ specific assessment unit in catchment correspondence queries.
           dplyr::summarise(total = sum(areasqkm)) %>%
           sf::st_drop_geometry() %>%
           dplyr::pull()
-
         ```
 
         The total catchment area associated with IL_N-99 is
