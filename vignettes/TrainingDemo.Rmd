@@ -92,6 +92,15 @@ remotes::install_github("USEPA/rExpertQuery", ref = "training", dependencies = T
 
 library(rExpertQuery)
 
+# list of additional required packages
+demo.pkgs <- c("data.table", "dplyr", "DT", "ggplot2", "maps", "plotly", "usdata", "usmap", "stringi")
+
+# install additional packages not yet installed
+installed_packages <- demo.pkgs %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
 # load additional packages for this vignette
 library(data.table)
 library(dplyr)
