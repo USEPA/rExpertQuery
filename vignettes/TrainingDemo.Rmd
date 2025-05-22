@@ -52,9 +52,8 @@ an EPA region or all nutrient TMDLs nationally. It also allows users to
 download national ATTAINS data extracts.
 
 rExpertQuery takes this a step further as its functions facilitate
-querying the Expert Query web services from R functions which allow the
-user to import the resulting data sets directly in to R for more
-detailed review and analysis.
+querying the Expert Query web services and importing the resulting data
+sets directly in to R for more detailed review and analysis.
 
 It is crucial to be aware of certain complexities inherent in the data
 and querying process. Users are cautioned against direct comparisons
@@ -93,7 +92,7 @@ remotes::install_github("USEPA/rExpertQuery", ref = "training", dependencies = T
 
 library(rExpertQuery)
 
-# load additional packages
+# load additional packages for this vignette
 library(data.table)
 library(dplyr)
 library(DT)
@@ -104,7 +103,7 @@ library(usdata)
 library(usmap)
 library(stringi)
 
-# turn off scientific notation
+# turn off scientific notation (for catchment ids)
 options(scipen = 999)
 ```
 
@@ -178,10 +177,10 @@ to provide allowable domain values for some rExpertQuery parameters:
 In this session, we will use rExpertQuery functions, along with some
 common R packages for data wrangling and visualization to answer some
 commonly asked questions with Expert Query data. The questions are
-listed below, groubed by the rExpertQuery function that will be used to
+listed below, grouped by the rExpertQuery function that will be used to
 answer them.
 
-### EQ_NationalExtract
+### EQ_NationalExtract {.unlisted .unumbered}
 
 1.  What is the most commonly reported impairment nationally?
 
@@ -195,7 +194,7 @@ answer them.
     monitoringLocations in ATTAINS? Which of these organizations have
     included any monitoringLocationDataLinks?
 
-### EQ_Assessments
+### EQ_Assessments {.unlisted .unumbered}
 
 1.  How many stream miles in Kansas are impaired for Primary Contact
     Recreation?
@@ -206,11 +205,11 @@ answer them.
 3.  Which waters are new to category 5 in the latest cycle for Illinois?
     Which categories did they move from?
 
-### EQ_AssessmentUnits
+### EQ_AssessmentUnits {.unlisted .unumbered}
 
 1.  What are the retired assessment units for Florida?
 
-### EQ_TMDLs
+### EQ_TMDLs {.unlisted .unumbered}
 
 1.  What are all the TMDLs in HI? How many are there (counted as unique
     combinations of actionID/pollutant/assessmentUnitId)?
@@ -218,7 +217,7 @@ answer them.
 2.  How many TMDL projects (by actionId) were approved so far in FY 2025
     in R10?
 
-### EQ_Actions
+### EQ_Actions {.unlisted .unumbered}
 
 1.  Which actions in Delaware should be included in measures? How many
     actions (by actionID) are in this group?
@@ -227,7 +226,7 @@ answer them.
     What was the most common type of action established in R3 in FY
     2024?
 
-### EQ_ActionsDocuments
+### EQ_ActionsDocuments {.unlisted .unumbered}
 
 1.  What are all the actions documents that contain the keyword
     "nutrient"?
@@ -235,7 +234,7 @@ answer them.
 2.  How many actions documents that contain the keyword "nutrient" are
     from each region?
 
-### EQ_AUsMLs
+### EQ_AUsMLs {.unlisted .unumbered}
 
 1.  Which monitoringLocations correspond to assessmentUnits in Alaska?
     How many monitoringLocations are associated with assessmentUnits?
@@ -244,7 +243,7 @@ answer them.
 2.  Are there active assessmentUnits without listed monitoringLocations
     in Alaska?
 
-### EQ_Sources
+### EQ_Sources {.unlisted .unumbered}
 
 1.  Which states in Region 6 have listed sources in their latest report
     cycle?
@@ -252,13 +251,13 @@ answer them.
 2.  What are the most commonly listed sources in the latest report cycle
     in each Region 6 state?
 
-### EQ_CatchCorr
+### EQ_CatchCorr {.unlisted .unumbered}
 
 1.  Which catchment corresponds to assessmentUnitId"IL_N-99" ?
 
 2.  How large of a catchment area corresponds to ""IL_N-99"?
 
-## EQ_DomainValues
+### EQ_DomainValues {.unlisted .unumbered}
 
 1.  Which parameters can EQ_DomainValues provide values for?
 
@@ -278,6 +277,15 @@ and some may not open in R if there is not enough memory available.
 ![](images/nat.downloads.png)
 
 1.  **What is the most commonly reported impairment nationally?**
+
+    After downloading the national assessments data, we'll need to
+    filter to include only the latest cycle. Next, we can filter for
+    rows containing parameter causes, and summarize how many times each
+    parameter was listed as a cause of impairment. The additional
+    packages used to answer this question are
+    [dplyr](https://dplyr.tidyverse.org/) (data manipulation) and
+    [DT](https://rstudio.github.io/DT/) (interface to DataTables
+    library).
 
     ```{r common.impairment}
     # import natioanl assessments profile
@@ -310,17 +318,47 @@ and some may not open in R if there is not enough memory available.
     DT::datatable(count.impair, options = list(pageLength = 10, scrollX = TRUE))
     ```
 
+<!-- -->
+
 2.  **Which waters are impaired for SELENIUM nationally? Which states
     contain waters impaired for SELENIUM?**
+
+    Again, we'll use the national assessments data filtered to the
+    latest cycle. We we will then filter for rows where the parameter is
+    both selenium and listed as a cause. The additional packages used in
+    this step are [dplyr](https://dplyr.tidyverse.org/) and
+    [DT](https://rstudio.github.io/DT/).
 
     ```{r param.nat}
 
     # filter assessments data set for 
     param.nat <- assessments.nat %>% 
       dplyr::filter(parameterName == "SELENIUM" &
-                      parameterStatus == "Cause") 
+                      parameterStatus == "Cause")
 
-    # filter to create df of states that have at least one selenium impairment
+    # data table of selenium impairments
+    DT::data.table(param.nat, options = list(pageLength = 10, scrollX = TRUE))
+
+    ```
+
+    Then we can create a list of states that have at least one selenium
+    impairment listed. We can also visualize this information on a map,
+    with states containing selenium impairments filled in blue. To build
+    this map, we first create a data frame with all 50 states and a
+    "SeleniumImpairment" column populated with "yes" or "no" to indicate
+    whether it has any listed selenium impairments.
+
+    In addition to [dplyr](https://dplyr.tidyverse.org/), this code
+    chunk also uses
+    [usdata](https://openintrostat.github.io/usdata/index.html) (US
+    demographic data),
+    [datasets](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html)
+    (collection of data sets for use in R), [usmap](https://usmap.dev/)
+    (US choropleth plotting) and
+    [ggplot2](https://ggplot2.tidyverse.org/) (creating graphics).
+
+    ```{r param.map}
+    # filter to create df of states that have at least one selenium impairment}
     state.names.sel <- param.nat %>%
       dplyr::ungroup() %>%
       dplyr::select(state) %>%
@@ -342,14 +380,17 @@ and some may not open in R if there is not enough memory available.
       regions = "state", data = sel.map.data,
       values = "SeleniumImpairment", color = "black"
     ) +
-    scale_fill_manual(
+    ggplot2::scale_fill_manual(
         values = c(`no` = "white", `yes` = "blue")
       ) +
-    theme(legend.position = "none")
-
+    ggplot2::theme(legend.position = "none")
     ```
 
 3.  **Which waters have a TMDL and are fully supporting nationally?**
+
+    Starting with the filtered data frame of latest cycle assessments,
+    we can filter for Fully Supporting waters with an
+    asssociatedActionType of "TMDL".
 
     ```{r tmdl.fs}
 
@@ -370,6 +411,9 @@ and some may not open in R if there is not enough memory available.
       dplyr::select(-associatedActionId) %>%
       # retain only distinct rows
       dplyr::distinct()
+
+    # fully supporting waters with tmdls data table
+    DT::data.table(tmdls.fs, options = list(pageLength = 10, scrollX = TRUE))
     ```
 
 4.  **What are the impaired waters (cat 4 and 5 nationally)?**
