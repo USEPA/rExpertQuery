@@ -98,13 +98,13 @@ using the code chunk below:
 
 ```{r add.pkgs, results = FALSE, message = FALSE}
 # list of additional required packages
-demo.pkgs <- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", "leaflet", "maps", "plotly", "sf", "usdata", "usmap", "stringi")
+# demo.pkgs <- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", #"leaflet", "maps", "plotly", "sf", "usdata", "usmap", "stringi")
 
 # install additional packages not yet installed
-installed_packages <- demo.pkgs %in% rownames(installed.packages())
-if (any(installed_packages == FALSE)) {
-  install.packages(demo.pkgs[!installed_packages])
-}
+# installed_packages <- demo.pkgs %in% rownames(installed.packages())
+# if (any(installed_packages == FALSE)) {
+#   install.packages(demo.pkgs[!installed_packages])
+# }
 
 # load additional packages for this vignette
 library(datasets)
