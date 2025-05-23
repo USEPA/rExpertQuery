@@ -96,7 +96,7 @@ library(rExpertQuery)
 This vignette also requires additional packages which can be installed
 using the code chunk below:
 
-```{r add.pkgs}
+```{r add.pkgs, results = FALSE, message = FALSE}
 # list of additional required packages
 demo.pkgs <- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", "leaflet", "maps", "plotly", "sf", "usdata", "usmap", "stringi")
 
@@ -136,13 +136,14 @@ Most of the rExpertQuery functions require an API key. Users can obtain
 their own by using Expert Query's [API Key Signup
 Form](https://owapps.epa.gov/expertquery/api-key-signup){.uri}.
 
-![](images/Screenshot%202025-05-09%20092513.png)
+![](images/Screenshot%202025-05-09%20092513.png){width="6.5in"}
 
-To run this vignette, we can use the following test key. However, users
-should obtain their own API key if they will be using rExpertQuery to
-develop their own workflows.
+To run this vignette, we can use the following test key. Users should
+obtain their own API key if they will be using rExpertQuery to develop
+their own workflows.
 
-```{r testkey, include=FALSE}
+```{r testkey, include=TRUE}
+# load test api  key
 testkey <- "53BVce47MQ3KXKibjx35g4ojaDQGh8qWfbdO8cE0"
 ```
 
@@ -179,7 +180,7 @@ These first eight functions are analogous to the data profiles that can
 be queries through the [Expert Query User
 Interface](https://owapps.epa.gov/expertquery/attains/).
 
-![](images/EQprofiles.png)
+![](images/EQprofiles.png){width="6.5in"}
 
 An additional function allows users to download the [Expert Query
 National
@@ -222,7 +223,7 @@ National Extracts to download. The following examples show how to
 download the TMDL and Actions extracts. The extracts are all large files
 and some may not open in R if there is not enough memory available.
 
-![](images/nat.downloads.png)
+![](images/nat.downloads.png){width="6.5in"}
 
 1.  **What is the most commonly reported impairment nationally?**
 
@@ -235,7 +236,7 @@ and some may not open in R if there is not enough memory available.
     [DT](https://rstudio.github.io/DT/) (interface to DataTables
     library).
 
-    ```{r common.impairment}
+    ```{r common.impairment, message = FALSE}
     # import natioanl assessments profile
     assessments.nat <- rExpertQuery::EQ_NationalExtract("assessments")
 
@@ -266,13 +267,11 @@ and some may not open in R if there is not enough memory available.
     DT::datatable(count.impair, options = list(pageLength = 10, scrollX = TRUE))
     ```
 
-<!-- -->
-
 2.  **Which waters are impaired for SELENIUM nationally? Which states
     contain waters impaired for SELENIUM?**
 
     Again, we'll use the national assessments data filtered to the
-    latest cycle. We we will then filter for rows where the parameter is
+    latest cycle. Then we will filter for rows where the parameter is
     both selenium and listed as a cause. The additional packages used in
     this step are [dplyr](https://dplyr.tidyverse.org/) and
     [DT](https://rstudio.github.io/DT/).
@@ -286,7 +285,7 @@ and some may not open in R if there is not enough memory available.
                       parameterStatus == "Cause")
 
     # data table of selenium impairments
-    DT::datatable(param.nat, options = list(pageLength = 10, scrollX = TRUE))
+    DT::datatable(param.nat, options = list(pageLength = 5, scrollX = TRUE))
 
     ```
 
@@ -306,7 +305,7 @@ and some may not open in R if there is not enough memory available.
     (US choropleth plotting) and
     [ggplot2](https://ggplot2.tidyverse.org/) (creating graphics).
 
-    ```{r param.map}
+    ```{r param.map, fig.width = 6.5}
     # filter to create df of states that have at least one selenium impairment}
     state.names.sel <- param.nat %>%
       # select state column from filtered df
@@ -374,7 +373,7 @@ and some may not open in R if there is not enough memory available.
       dplyr::distinct()
 
     # fully supporting waters with tmdls data table
-    DT::datatable(tmdl.fs, options = list(pageLength = 10, scrollX = TRUE))
+    DT::datatable(tmdl.fs, options = list(pageLength = 5, scrollX = TRUE))
     ```
 
 4.  **What are the impaired waters (cat 4 and 5 nationally)?**
@@ -389,24 +388,27 @@ and some may not open in R if there is not enough memory available.
 
     # select subset of columns to include
     imp.waters <- assessments.nat %>%
-      dplyr::select(organizationId, organizationName, organizationType, assessmentUnitId, assessmentUnitName, assessmentDate, epaIrCategory, waterType, waterSize, waterSizeUnits) %>%
+      dplyr::select(organizationId, organizationName, organizationType,
+                    assessmentUnitId, assessmentUnitName, assessmentDate, 
+                    epaIrCategory, waterType, waterSize, waterSizeUnits) %>%
       # retain only distinct rows
       dplyr::distinct() %>%
       # filter for category 4 and 5 waters
       dplyr::filter(epaIrCategory %in% c("4", "5"))
     ```
 
-    The resulting data frame is large, with `r nrow(imp.waters)` unique
-    impaired waters nationally. Due to its size, we'll include a random
-    subset of 250 results in a data table to review during the demo. You
-    can view the full results by viewing the imp.waters df.
+    The resulting data frame is large, with
+    `r formatC(nrow(imp.waters), big.mark = ",")` unique impaired waters
+    nationally. Due to its size, we'll include a random subset of 250
+    results in a data table to review during the demo. You can view the
+    full results by viewing the imp.waters df.
 
     ```{r imp.dt}
 
     # data table with random 250 impaired waters
     DT::datatable(imp.waters %>%
                     dplyr::slice_sample(n = 250), 
-                  options = list(pageLength = 10, scrollX = TRUE))
+                  options = list(pageLength = 5, scrollX = TRUE))
 
     ```
 
@@ -424,7 +426,7 @@ and some may not open in R if there is not enough memory available.
     options in [DT](https://rstudio.github.io/DT/) to highlight useful
     rows in the final data table.
 
-    ```{r nat.ausmls}
+    ```{r nat.ausmls, results = FALSE, message = FALSE}
     # import national extract for assessment units/monitoring locations
     nat.ausmls <- rExpertQuery::EQ_NationalExtract("au_mls")
     ```
@@ -527,7 +529,7 @@ the desired cycle year in YYYY format.
     waterSizeUnits, then summing the waterSize column to find the number
     of stream miles.
 
-    ```{r stream.ks}
+    ```{r stream.ks, results = FALSE, message = FALSE}
 
     # set up query to search assessments for KS, primary contact recreation use, and stream, default behavior is to query latest report cycle
     ks.imp.streams <- rExpertQuery::EQ_Assessments(statecode = "KS",
@@ -560,7 +562,7 @@ the desired cycle year in YYYY format.
     [plotly](https://plotly.com/r/) (graphing library) to summarize the
     results by useName and create a bar plot of the results.
 
-    ```{r MT.impair}
+    ```{r MT.impair, result = FALSE, message = FALSE}
 
     # query MT's latest assessments for zinc as a cause
     MT.impair <- rExpertQuery::EQ_Assessments(statecode = "MT",
@@ -587,7 +589,7 @@ the desired cycle year in YYYY format.
     `r stringi::stri_replace_last(paste(MT.impair.use$useName, collapse = ", "), ", and ", fixed = ", ")`
     . As our last step, we'll create the bar plot.
 
-    ```{r MT.plot}
+    ```{r MT.plot, fig.with = 4.5, fig.height = 4}
     plotly::plot_ly(data = MT.impair.use,
       x = ~useName,
       y = ~count,
@@ -608,12 +610,18 @@ the desired cycle year in YYYY format.
     again, this time for the previous reporting cycle and without
     specifying the category.
 
-    ```{r il.5.comp}
+    ```{r il.5.comp, results = FALSE, message = FALSE}
 
     # get cat 5 waters from latest assessment cycle
     IL.latest <- rExpertQuery::EQ_Assessments(statecode = "IL",
                                 epa_ir_cat = "5",
                                  api_key = testkey)
+
+    # select required columns from latest cycle data
+    IL.latest <- IL.latest %>%
+      dplyr::select(assessmentUnitId, epaIrCategory) %>%
+      # retain unique rows
+      dplyr::distinct()
 
     # calculate previous cycle
     previous.cycle <- IL.latest$reportingCycle[1] - 2
@@ -643,10 +651,7 @@ IL.previous <- IL.previous %>%
   
 # combine latest and previous cycle dfs
 IL.combine <- IL.latest %>%
-  dplyr::select(assessmentUnitId, assessmentUnitName, epaIrCategory) %>%
-  dplyr::mutate(epaIrCategory = as.character(epaIrCategory)) %>%
-  dplyr::left_join(IL.previous, dplyr::join_by(assessmentUnitId),
-                   relationship = "many-to-many")
+  dplyr::left_join(IL.previous, dplyr::join_by(assessmentUnitId))
 
 # create df of the auids that changed to cat 5 in 2024
 IL.changes <- IL.combine %>%
@@ -661,7 +666,7 @@ were previously in and create a pie chart to visualize. This example
 sets up a color palette that mimics the one used in the ATTAINS report
 module.
 
-```{r cat5.viz}
+```{r cat5.viz, fig.height = 3.5}
 # summarize what cats the new cat 5s were in previously
 IL.change.sum <- IL.changes %>%
   dplyr::group_by(epaIrCategory.previous) %>%
@@ -693,9 +698,9 @@ plotly::plot_ly() %>%
 
 ## EQ_AssessmentUnits
 
-[**EQ_AssessmentUnits()**](https://usepa.github.io/rExpertQuery/reference/EQ_AssessmentUnits.html)queries
-ATTAINS Assessment Units data. The default is to only return "Active"
-assessment units, but input params can be adjusted to query for
+[**EQ_AssessmentUnits()**](https://usepa.github.io/rExpertQuery/reference/EQ_AssessmentUnits.html)
+queries ATTAINS Assessment Units data. The default is to only return
+"Active" assessment units, but input params can be adjusted to query for
 "Retired" or "Historical" assessment units in addition to or instead of
 "Active".
 
@@ -707,7 +712,7 @@ assessment units, but input params can be adjusted to query for
     review, we'll create a datatable with
     [DT](https://rstudio.github.io/DT/).
 
-    ```{r FL.ret.auids}
+    ```{r FL.ret.auids, results = FALSE, message = FALSE}
 
     # search for retired assessment units in Florida
     FL.ret.auids <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
@@ -715,7 +720,7 @@ assessment units, but input params can be adjusted to query for
                                                     api_key = testkey)
 
     # create data table
-    DT::datatable(FL.ret.auids, options = list(pageLength = 10, scrollX = TRUE))
+    DT::datatable(FL.ret.auids, options = list(pageLength = 5, scrollX = TRUE))
 
     ```
 
@@ -734,17 +739,17 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     specifying only the state of Hawaii since we want to return all of
     Hawaii's TMDLs.
 
-    ```{r hi.tmdl, results = TRUE, message = FALSE, warning = FALSE}
+    ```{r hi.tmdl, results = FALSE, message = FALSE, warning = FALSE}
 
     HI.tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI", 
                                        api_key = testkey)
     ```
 
-    There `r formatC(nrow(HI.tmdls), big.mark = ",")` rows can be
-    reviewed in the data frame. Keep in mind that if we want to count
-    one TMDL as one unique combination of assessmentUnitIdentifier,
-    pollutant and actionId, we can't simply count the number of rows as
-    this would lead to double counting as each
+    The`r formatC(nrow(HI.tmdls), big.mark = ",")` rows can be reviewed
+    in the data frame. Keep in mind that if we want to count one TMDL as
+    one unique combination of assessmentUnitIdentifier, pollutant and
+    actionId, we can't simply count the number of rows as this would
+    lead to double counting as each
     assessmentUnitIdentifier/pollutant/actionId may be associated with
     multiple parameters, which means it will be listed more than once.
     The code chunk below demonstrates one way to determine the number of
@@ -752,7 +757,7 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     than visualize TMDLs related to each pollutantGroup with a simple
     bar graph.
 
-    ```{r hi.tmdl.counts}
+    ```{r hi.tmdl.counts, fig.height= 3.5}
 
     # determine the number of tmdls
     HI.count <- HI.tmdls %>%
@@ -789,7 +794,7 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     fiscal year began on October 1, 2024, so that will be set as the
     tmdl_start_date parameter along with specifying 10 for the region.
 
-    ```{r TMDL.proj}
+    ```{r TMDL.proj, results = FALSE, message = FALSE}
     # r10 query for FY 2025 TMDLs
     tmdl.proj <- rExpertQuery::EQ_TMDLs(region = 10,
                                         tmdl_date_start = "2024-10-01",
@@ -799,9 +804,10 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     tmdl.proj.count <- dplyr::n_distinct(tmdl.proj$actionId)
     ```
 
-    In order to create a user-friendly
-    [DT](https://rstudio.github.io/DT/) datatable, we will have to take
-    a few more steps. We select the columns. The columns,
+    There are `r formatC(nrow(tmdl.proj.count), big.mark = ",")` TMDL
+    projects (by actionID) approved so far in FY 2025. In order to
+    create a user-friendly [DT](https://rstudio.github.io/DT/)
+    datatable, we will have to take a few more steps. The columns,
     assessmentUnitId, pollutant, and addressedParameter are likely to
     have more than one value per actionId. In order to create a readable
     table with only one row per actionId, we will use
@@ -830,7 +836,7 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     # create data table
     DT::datatable(tmdl.sum %>%
                     rExpertQuery::EQ_FormatPlanLinks(), escape = FALSE,
-                  options = list(pageLength = 10, scrollX = TRUE))
+                  options = list(pageLength = 2, scrollX = TRUE))
 
     ```
 
@@ -848,7 +854,7 @@ ATTAINS Actions data by a variety of user supplied parameters.
     EQ_Actions to search for Deleware actions with the "in_meas"
     parameter set to "Yes". Then we count the distinct actionIds.
 
-```{r DE.actions, echo=TRUE, message=FALSE, warning=FALSE}
+```{r DE.actions, result=FALSE, message=FALSE, warning=FALSE}
 
 # query Actions from Delaware that are included in Measures 
 DE.meas <- rExpertQuery::EQ_Actions(statecode = "DE",
@@ -885,7 +891,7 @@ DE.actids <- DE.meas %>%
 DT::datatable(DE.actids %>%
                 rExpertQuery::EQ_FormatPlanLinks(),
               escape = FALSE,
-              options = list(pageLength = 10, scrollX = TRUE))
+              options = list(pageLength = 5, scrollX = TRUE))
 
 ```
 
@@ -899,7 +905,7 @@ DT::datatable(DE.actids %>%
     [DT](https://rstudio.github.io/DT/) to summarize and display results
     as in the first EQ_Actions example.
 
-    ```{r act.fy24}
+    ```{r act.fy24, results=FALSE, message=FALSE}
 
     # query for R3 FY2024 actions
     act.fy.24 <- rExpertQuery::EQ_Actions(region = 3,
@@ -913,8 +919,8 @@ DT::datatable(DE.actids %>%
     ```
 
     There were `r formatC(n_act.fy.24, big.mark = ",")` unique actions
-    by actionId established in R3 in FY 2024. Next we can create data
-    table with counts for each actionType.
+    by actionId established in R3 in FY 2024. We can create data table
+    with counts for each actionType.
 
     ```{r acttype.24}
 
@@ -934,17 +940,17 @@ DT::datatable(DE.actids %>%
 
 ## EQ_ActionsDocuments
 
-[**EQ_ActionsDocuments()**](https://usepa.github.io/rExpertQuery/reference/EQ_ActionsDocuments.html)queries
-ATTAINS Actions Documents data with user supplied parameters. One of its
-unique features is the ability to search the documents themselves by
-keyword or phrase.
+[**EQ_ActionsDocuments()**](https://usepa.github.io/rExpertQuery/reference/EQ_ActionsDocuments.html)
+queries ATTAINS Actions Documents data with user supplied parameters.
+One of its unique features is the ability to search the documents
+themselves by keyword or phrase.
 
 1.  **What are all the actions documents that contain the keyword
     "nutrient"?**
 
     The only query parameter we will provide is the keyword "nutrient".
 
-    ```{r nutrients, results = TRUE, message = FALSE, warning = FALSE}
+    ```{r nutrients, results = FALSE, message = FALSE, warning = FALSE}
     # Actions Documents containing "nutrient" 
     nutrient.doc <- rExpertQuery::EQ_ActionsDocuments(doc_query = "nutrient",
                                                       api_key = testkey )
@@ -961,10 +967,11 @@ keyword or phrase.
 
     ```{r nutrients.data.table}
     # create data table
-    DT::datatable(nutrient.doc %>% dplyr::slice_sample(n = 50) %>%          rExpertQuery::EQ_FormatPlanLinks(url.col = "actionDocumentUrl"),                  options = list(pageLength = 10, scrollX = TRUE), escape = FALSE)
+    DT::datatable(nutrient.doc %>% 
+                    dplyr::slice_sample(n = 50) %>%          
+                    rExpertQuery::EQ_FormatPlanLinks(url.col = "actionDocumentUrl"),                  options = list(pageLength = 10, scrollX = TRUE), 
+                     escape = FALSE)
     ```
-
-<!-- -->
 
 2.  **How many actions documents that contain the keyword "nutrient" are
     from each region?**
@@ -973,7 +980,7 @@ keyword or phrase.
     region from the initial "nutrients" keyword query. We can display
     the results in a [plotly](https://plotly.com/r/) bar plot.
 
-```{r nutrients.summary}
+```{r nutrients.summary, fig.height = 3.5}
 nutrient.doc.regions <- nutrient.doc %>%
   # group by region
   dplyr::group_by(region) %>%
@@ -1002,7 +1009,7 @@ plotly::plot_ly(data = nutrient.doc.regions,
     make a list of the organizations represented in the
     monitoringLocationOrgId column and organize them alphabetically.
 
-    ```{r ak.mls}
+    ```{r ak.mls, results=FALSE, message=FALSE}
 
     # query for assessment units and monitoring locations from Alaska
     ak.mls <- rExpertQuery::EQ_AUsMLs(statecode = "AK",
@@ -1043,9 +1050,12 @@ plotly::plot_ly(data = nutrient.doc.regions,
     no.ml.ak <- ak.mls %>%
       dplyr::filter(!assessmentUnitId %in% filt.ak.mls$assessmentUnitId)
 
+    # count number of unique asessment units without listed monitoringLocationIds
+    n_no.ml.ak <- dplyr::n_distinct(assessmentUnitId %In% no.ml.ak)
+
     ```
 
-    There are `r nrow(no.ml.ak)` active assessmentUnits in Alaska
+    There are `r nrow(n_no.ml.ak)` active assessmentUnits in Alaska
     without monitoringLocations listed in ATTAINS.
 
 ## EQ_Sources
@@ -1053,13 +1063,13 @@ plotly::plot_ly(data = nutrient.doc.regions,
 1.  **Which states in Region 6 have listed Sources in their latest
     report cycle?**
 
-    We will start be querying for EQ_Source for region 6. Then use
+    Start by querying for EQ_Source for region 6. Then use
     [dplyr](https://dplyr.tidyverse.org/) and
     [usdata](https://openintrostat.github.io/usdata/index.html) to
     manipulate the data and create a list of the region 6 states that
     list sources for any assessments in their latest report cycle.
 
-    ```{r r6.sources}
+    ```{r r6.sources, results=FALSE, message=TRUE}
 
     # query for sources in the latest assessment cycle in R6
     r6.sources <- rExpertQuery::EQ_Sources(region = 6,
@@ -1093,7 +1103,7 @@ plotly::plot_ly(data = nutrient.doc.regions,
     common source from each state and make a a
     [DT](https://rstudio.github.io/DT/) data table of the results.
 
-    ```{r source.sum}
+    ```{r source.sum, results=FALSE, message=FALSE}
 
     # count the number of times a source is listed for each state
     r6.sources.summarize <- r6.sources %>%
@@ -1126,7 +1136,7 @@ specific assessment unit in catchment correspondence queries.
     [dplyr](https://dplyr.tidyverse.org/) functions to retain the unique
     rows make a a [DT](https://rstudio.github.io/DT/) data table.
 
-    ```{r il.99.catch}
+    ```{r il.99.catch, results=FALSE, message=FALSE}
     # query for IL_N-99 catchment data
     il.n99.catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
                               auid = "IL_N-99",
@@ -1265,9 +1275,8 @@ water.types <- rExpertQuery::EQ_DomainValues("water_type")
 The printed message informs us that the "name" column contains the
 values for use in water_type queries for rExpertQuery functions. For
 water_type there are `r length(unique(water.types$name))` unique values.
-They are: r
-`stringi::stri_replace_last(paste(sort(unique(water.types$name)), collapse = "; "), "; and ", fixed = "; ")`
-.
+They are:
+`r stringi::stri_replace_last(paste(sort(unique(water.types$name)), collapse = "; "), "; and ", fixed = "; "`.
 
 ## Questions?
 
