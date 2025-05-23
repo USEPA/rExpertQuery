@@ -632,69 +632,66 @@ the desired cycle year in YYYY format.
                                                 api_key = testkey)
     ```
 
-Next we'll need to filter the previous cycle results to retain only the
-assessment units that are category 5 waters in the latest cycle. This
-allows us to combine the latest and previous cycle data frames and
-filter them to create a data frame which contains only the assessment
-units that changed from some other category to category 5 from the
-previous cycle to the latest cycle.
+    Next we'll need to filter the previous cycle results to retain only
+    the assessment units that are category 5 waters in the latest cycle.
+    This allows us to combine the latest and previous cycle data frames
+    and filter them to create a data frame which contains only the
+    assessment units that changed from some other category to category 5
+    from the previous cycle to the latest cycle.
 
-```{r filt.previous}
-# filter previous cycle to include only cat 5 waters from 2024
-IL.previous <- IL.previous %>%
-  # retain only cat 5 waters from latest cycle
-  dplyr::filter(assessmentUnitId %in% IL.latest$assessmentUnitId) %>%
-  # select auid and category
-  dplyr::select(assessmentUnitId, epaIrCategory) %>%
-  # rename to indicate previous cycle
-  dplyr::rename(epaIrCategory.previous = epaIrCategory)
-  
-# combine latest and previous cycle dfs
-IL.combine <- IL.latest %>%
-  dplyr::left_join(IL.previous, dplyr::join_by(assessmentUnitId))
+    ```{r filt.previous}
+    # filter previous cycle to include only cat 5 waters from 2024
+    IL.previous <- IL.previous %>%
+      # retain only cat 5 waters from latest cycle
+      dplyr::filter(assessmentUnitId %in% IL.latest$assessmentUnitId) %>%
+      # select auid and category
+      dplyr::select(assessmentUnitId, epaIrCategory) %>%
+      # rename to indicate previous cycle
+      dplyr::rename(epaIrCategory.previous = epaIrCategory)
+      
+    # combine latest and previous cycle dfs
+    IL.combine <- IL.latest %>%
+      dplyr::left_join(IL.previous, dplyr::join_by(assessmentUnitId))
 
-# create df of the auids that changed to cat 5 in 2024
-IL.changes <- IL.combine %>%
-  dplyr::filter(epaIrCategory != epaIrCategory.previous) %>%
-  dplyr::distinct()
+    # create df of the auids that changed to cat 5 in 2024
+    IL.changes <- IL.combine %>%
+      dplyr::filter(epaIrCategory != epaIrCategory.previous) %>%
+      dplyr::distinct()
+    ```
 
+    Finally, we can summarize by counting the categories the new
+    category 5s were previously in and create a pie chart to visualize.
+    This example sets up a color palette that mimics the one used in the
+    ATTAINS report module.
 
-```
+    ```{r cat5.viz, fig.height = 3.5}
+    # summarize what cats the new cat 5s were in previously
+    IL.change.sum <- IL.changes %>%
+      dplyr::group_by(epaIrCategory.previous) %>%
+      dplyr::summarise(count = dplyr::n_distinct(assessmentUnitId))
 
-Finally, we can summarize by counting the categories the new category 5s
-were previously in and create a pie chart to visualize. This example
-sets up a color palette that mimics the one used in the ATTAINS report
-module.
-
-```{r cat5.viz, fig.height = 3.5}
-# summarize what cats the new cat 5s were in previously
-IL.change.sum <- IL.changes %>%
-  dplyr::group_by(epaIrCategory.previous) %>%
-  dplyr::summarise(count = dplyr::n_distinct(assessmentUnitId))
-
-# set color palette for categories
-cat.pal <- c("#9dd49d", "#bee3be", "#c5c5c5", "#f6ce95", "#f9deb8", "#f0bab9",   "#e89895","#4be367","#17b644", "#c5a577")
-# set category names for palette
-cat.pal <-  setNames(cat.pal, c("1", "2", "3", "4A", "4B", "4C", "5", "5A", "5R", "4"))
+    # set color palette for categories
+    cat.pal <- c("#9dd49d", "#bee3be", "#c5c5c5", "#f6ce95", "#f9deb8", "#f0bab9",   "#e89895","#4be367","#17b644", "#c5a577")
+    # set category names for palette
+    cat.pal <-  setNames(cat.pal, c("1", "2", "3", "4A", "4B", "4C", "5", "5A", "5R", "4"))
 
 
-# create plotly plot
-plotly::plot_ly() %>%
-  # add pipe based IL.change.sum  
-  plotly::add_pie(data = IL.change.sum, ~count, labels = ~epaIrCategory.previous,
-                    marker = list(
-                      colors = cat.pal,
-                      line = list(color = "white", width = 2)
-                    ), type = "pie",
-                    hoverinfo = "value", outsidetextfont = list(color = "black"),
-                    sort = FALSE
-    ) %>%
-  # add legend  
-  plotly::layout(legend = list(orientation = "h",
-                                 xanchor = "center",
-                                 x = 0.5))
-
-```
+    # create plotly plot
+    plotly::plot_ly() %>%
+      # add pipe based IL.change.sum  
+      plotly::add_pie(data = IL.change.sum, ~count, labels = ~epaIrCategory.previous,
+                        marker = list(
+                          colors = cat.pal,
+                          line = list(color = "white", width = 2)
+                        ), type = "pie",
+                        hoverinfo = "value", outsidetextfont = list(color = "black"),
+                        sort = FALSE
+        ) %>%
+      # add legend  
+      plotly::layout(legend = list(orientation = "h",
+                                     xanchor = "center",
+                                     x = 0.5))
+    ```
 
 ## EQ_AssessmentUnits
 
@@ -854,46 +851,48 @@ ATTAINS Actions data by a variety of user supplied parameters.
     EQ_Actions to search for Deleware actions with the "in_meas"
     parameter set to "Yes". Then we count the distinct actionIds.
 
-```{r DE.actions, result=FALSE, message=FALSE, warning=FALSE}
+    ```{r DE.actions, result=FALSE, message=FALSE, warning=FALSE}
 
-# query Actions from Delaware that are included in Measures 
-DE.meas <- rExpertQuery::EQ_Actions(statecode = "DE",
-                                    in_meas = "Yes",
-                                    api_key = testkey)
+    # query Actions from Delaware that are included in Measures 
+    DE.meas <- rExpertQuery::EQ_Actions(statecode = "DE",
+                                        in_meas = "Yes",
+                                        api_key = testkey)
 
-# count unique actionIds
-DE.count <- dplyr::n_distinct(DE.meas$actionId)
-```
+    # count unique actionIds
+    DE.count <- dplyr::n_distinct(DE.meas$actionId)
 
-There are `r formatC(DE.count, big.mark = ",")` actionIds that should be
-included when calculating measures for Delaware. In a similar process to
-the final TMDL example, we can create a data table with one row per
-actionId.
+    ```
 
-```{r de.table}
-# determine unique actionIds
-DE.actids <- DE.meas %>%
-  # select columns
-  dplyr::select(actionType, actionId, actionName, actionAgency, parameter,
-                completionDate, assessmentUnitId, fiscalYearEstablished,
-                planSummaryLink) %>%
-  # retain unique rows
-  dplyr::distinct() %>%
-  # group by actionId
-  dplyr::group_by(actionId) %>%
-  # create new columns to address issues with mulitple rows
-  dplyr::mutate(parameters = paste(unique(parameter), collapse = ", "),
-                assessmentUnitIds = paste(unique(assessmentUnitId), collapse = ", ")) %>%
-  dplyr::select(-parameter, -assessmentUnitId) %>%
-  # retain unique rows
-  dplyr::distinct()
+    There are `r formatC(DE.count, big.mark = ",")` actionIds that
+    should be included when calculating measures for Delaware. In a
+    similar process to the final TMDL example, we can create a data
+    table with one row per actionId.
 
-DT::datatable(DE.actids %>%
-                rExpertQuery::EQ_FormatPlanLinks(),
-              escape = FALSE,
-              options = list(pageLength = 5, scrollX = TRUE))
+    ```{r de.table}
+    # determine unique actionIds
+    DE.actids <- DE.meas %>%
+      # select columns
+      dplyr::select(actionType, actionId, actionName, actionAgency, parameter,
+                    completionDate, assessmentUnitId, fiscalYearEstablished,
+                    planSummaryLink) %>%
+      # retain unique rows
+      dplyr::distinct() %>%
+      # group by actionId
+      dplyr::group_by(actionId) %>%
+      # create new columns to address issues with mulitple rows
+      dplyr::mutate(parameters = paste(unique(parameter), collapse = ", "),
+                    assessmentUnitIds = paste(unique(assessmentUnitId), collapse = ", ")) %>%
+      dplyr::select(-parameter, -assessmentUnitId) %>%
+      # retain unique rows
+      dplyr::distinct()
 
-```
+    DT::datatable(DE.actids %>%
+                    rExpertQuery::EQ_FormatPlanLinks(),
+                  escape = FALSE,
+                  options = list(pageLength = 5, scrollX = TRUE))
+    ```
+
+<!-- -->
 
 2.  **How many actions (by actionId) were established in R3 in FY 2024?
     What was the most common type of action established in R3 in FY
@@ -980,20 +979,20 @@ themselves by keyword or phrase.
     region from the initial "nutrients" keyword query. We can display
     the results in a [plotly](https://plotly.com/r/) bar plot.
 
-```{r nutrients.summary, fig.height = 3.5}
-nutrient.doc.regions <- nutrient.doc %>%
-  # group by region
-  dplyr::group_by(region) %>%
-  # count action ids by region
-  dplyr::summarize(count = length(unique(actionId)))
+    ```{r nutrients.summary, fig.height = 3.5}
+    nutrient.doc.regions <- nutrient.doc %>%
+      # group by region
+      dplyr::group_by(region) %>%
+      # count action ids by region
+      dplyr::summarize(count = length(unique(actionId)))
 
-# create bar plot
-plotly::plot_ly(data = nutrient.doc.regions,
-  x = ~region,
-  y = ~count,
-  type = "bar"
-)
-```
+    # create bar plot
+    plotly::plot_ly(data = nutrient.doc.regions,
+      x = ~region,
+      y = ~count,
+      type = "bar"
+    )
+    ```
 
 ## EQ_AUsMLs
 
@@ -1152,86 +1151,84 @@ specific assessment unit in catchment correspondence queries.
     DT::datatable(il.n99.catch, options = list(pageLength = 10, scrollX = TRUE))
     ```
 
-    1.  **How large of a catchment area corresponds to ""IL_N-99"?**
+2.  **How large of a catchment area corresponds to ""IL_N-99"?**
 
-        We will need some additional information in order to answer this
-        question. We could get catchment areas from the nhdplusTools
-        package or from ATTAINS geospatial web services. For this
-        example, we will use ATTAINS geospatial web services as this
-        will also allow us to create a map of the catchments and
-        assessment unit. This example utlizes a few new R packages,
-        [httr](https://httr.r-lib.org/) (wrapper for curl packge),
-        [leaflet](https://cran.r-project.org/web/packages/leaflet/index.html)
-        (interactive maps), and
-        [sf](https://cran.r-project.org/web/packages/sf/index.html)
-        (spatial vector data).
+    We will need some additional information in order to answer this
+    question. We could get catchment areas from the nhdplusTools package
+    or from ATTAINS geospatial web services. For this example, we will
+    use ATTAINS geospatial web services as this will also allow us to
+    create a map of the catchments and assessment unit. This example
+    utlizes a few new R packages, [httr](https://httr.r-lib.org/)
+    (wrapper for curl packge),
+    [leaflet](https://cran.r-project.org/web/packages/leaflet/index.html)
+    (interactive maps), and
+    [sf](https://cran.r-project.org/web/packages/sf/index.html) (spatial
+    vector data).
 
-        The first step is to set up query parameters for ATTAINS
-        geospatial webservices. Then query the assessment lines and
-        catchment associations layers to retrieve the geospatial data
-        for the assessment unit and its associated catchments. The data
-        from the catchment association layer allows us to sum the total
-        area for all the catchments associated with IL_N-99.
+    The first step is to set up query parameters for ATTAINS geospatial
+    webservices. Then query the assessment lines and catchment
+    associations layers to retrieve the geospatial data for the
+    assessment unit and its associated catchments. The data from the
+    catchment association layer allows us to sum the total area for all
+    the catchments associated with IL_N-99.
 
-        ```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
+    ```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
 
-        # set up query params for ATTAINS geospatial web services
-        query.params <- list(
-            where = "assessmentunitidentifier IN ('IL_N-99')",
-            outFields = "*",
-            f = "geojson"
-          )
+    # set up query params for ATTAINS geospatial web services
+    query.params <- list(
+        where = "assessmentunitidentifier IN ('IL_N-99')",
+        outFields = "*",
+        f = "geojson"
+      )
 
-        # query ATTAINS geospatial assessments lines layer
-        lines.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/1/query?",
-                                query = query.params)
+    # query ATTAINS geospatial assessments lines layer
+    lines.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/1/query?",
+                            query = query.params)
 
-        # read content from ATTAINS geospatial assessments lines layer 
-        lines.geojson <- httr::content(lines.response, as = "text", encoding = "UTF-8")
+    # read content from ATTAINS geospatial assessments lines layer 
+    lines.geojson <- httr::content(lines.response, as = "text", encoding = "UTF-8")
 
-        # get sf from ATTAINS geospatial assessments lines layer
-        lines.sf <- sf::st_read(lines.geojson, quiet = TRUE)
+    # get sf from ATTAINS geospatial assessments lines layer
+    lines.sf <- sf::st_read(lines.geojson, quiet = TRUE)
 
-        # query ATTAINS geospatial catchment association layer
-        catch.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/3/query?",
-                                query = query.params)
+    # query ATTAINS geospatial catchment association layer
+    catch.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/3/query?",
+                            query = query.params)
 
-        # read content from ATTAINS geospatial catchment association layer 
-        catch.geojson <- httr::content(catch.response, as = "text", encoding = "UTF-8")
+    # read content from ATTAINS geospatial catchment association layer 
+    catch.geojson <- httr::content(catch.response, as = "text", encoding = "UTF-8")
 
-        # # get sf from ATTAINS geospatial assessments lines layer
-        catch.sf <- sf::st_read(catch.geojson, quiet = TRUE)
+    # # get sf from ATTAINS geospatial assessments lines layer
+    catch.sf <- sf::st_read(catch.geojson, quiet = TRUE)
 
-        # sum the catchment areas that correspond to IL_N-99
-        sum.catch <- catch.sf %>%
-          dplyr::summarise(total = sum(areasqkm)) %>%
-          sf::st_drop_geometry() %>%
-          dplyr::pull()
+    # sum the catchment areas that correspond to IL_N-99
+    sum.catch <- catch.sf %>%
+      dplyr::summarise(total = sum(areasqkm)) %>%
+      sf::st_drop_geometry() %>%
+      dplyr::pull()
 
-        ```
+    ```
 
-        The total catchment area associated with IL_N-99 is
-        `r sum.catch`.
+    The total catchment area associated with IL_N-99 is `r sum.catch`.
 
-        To create map of IL_N-99 and and its associated catchments, we
-        can create a leaflet map with the defaul Open Street Map tile
-        then add the catchment polygons with a popup contain the
-        nhdplusid and area in sq km. The final step is to add the
-        assessment unit line.
+    To create map of IL_N-99 and and its associated catchments, we can
+    create a leaflet map with the defaul Open Street Map tile then add
+    the catchment polygons with a popup contain the nhdplusid and area
+    in sq km. The final step is to add the assessment unit line.
 
-        ```{r catch.map}
-        # create leaflet map
-        leaflet::leaflet() %>%
-          # add open street map layer
-          leaflet::addTiles() %>%
-          # add catchments, include popups with nhdplus id and area in sq km
-          leaflet::addPolygons(data = catch.sf, color = "darkorange",
-                               popup = paste0(catch.sf$nhdplusid, "<br>",
-                                              catch.sf$areasqkm, " sq km")) %>%
-          # added assessment id  
-          leaflet::addPolylines(data = lines.sf, color = "blue")
+    ```{r catch.map}
+    # create leaflet map
+    leaflet::leaflet() %>%
+      # add open street map layer
+      leaflet::addTiles() %>%
+      # add catchments, include popups with nhdplus id and area in sq km
+      leaflet::addPolygons(data = catch.sf, color = "darkorange",
+                           popup = paste0(catch.sf$nhdplusid, "<br>",
+                                          catch.sf$areasqkm, " sq km")) %>%
+      # added assessment id  
+      leaflet::addPolylines(data = lines.sf, color = "blue")
 
-        ```
+    ```
 
 ## EQ_DomainValues
 
@@ -1266,17 +1263,16 @@ value that should be used in queries.
     function, we can run EQ_DomainValues again, this time specifying
     "water_type".
 
-```{r wat.type}
+    ```{r wat.type}
 
-water.types <- rExpertQuery::EQ_DomainValues("water_type")
+    water.types <- rExpertQuery::EQ_DomainValues("water_type")
+    ```
 
-```
-
-The printed message informs us that the "name" column contains the
-values for use in water_type queries for rExpertQuery functions. For
-water_type there are `r length(unique(water.types$name))` unique values.
-They are:
-`r stringi::stri_replace_last(paste(sort(unique(water.types$name)), collapse = "; "), "; and ", fixed = "; "`.
+    The printed message informs us that the "name" column contains the
+    values for use in water_type queries for rExpertQuery functions. For
+    water_type there are `r length(unique(water.types$name))` unique
+    values. They are:
+    `r stringi::stri_replace_last(paste(sort(unique(water.types$name)), collapse = "; "), "; and ", fixed = "; "`.
 
 ## Questions?
 
