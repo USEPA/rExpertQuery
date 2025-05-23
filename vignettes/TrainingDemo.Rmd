@@ -103,7 +103,7 @@ demo.pkgs <- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", "leaf
 # install additional packages not yet installed
 installed_packages <- demo.pkgs %in% rownames(installed.packages())
 if (any(installed_packages == FALSE)) {
-  install.packages(packages[!installed_packages])
+  install.packages(demo.pkgs[!installed_packages])
 }
 
 # load additional packages for this vignette
