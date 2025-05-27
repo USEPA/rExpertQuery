@@ -1049,7 +1049,7 @@ themselves by keyword or phrase.
       dplyr::filter(!assessmentUnitId %in% filt.ak.mls$assessmentUnitId)
 
     # count number of unique asessment units without listed monitoringLocationIds
-    n_no.ml.ak <- dplyr::n_distinct(assessmentUnitId %In% no.ml.ak)
+    n_no.ml.ak <- dplyr::n_distinct(assessmentUnitId %in% no.ml.ak)
 
     ```
 
