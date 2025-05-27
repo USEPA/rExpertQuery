@@ -13,7 +13,7 @@ output:
 vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{rExpertQuery Cybertown Training}
-  %\VignetteEngine{rmarkdown::render}
+  %\VignetteEngine{knitr::rmarkdown}
 description: rExpertQuery is a new R package which allows users to query and download ATTAINS data via Expert Query web services. This vignette demonstrates the use of rExpertQuery functions to import common data profiles. Some examples of how to summarize or create visualizations of these data using other R packages are also be provided.
 editor_options:
   chunk_output_type: console
