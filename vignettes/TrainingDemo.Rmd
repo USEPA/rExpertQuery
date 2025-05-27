@@ -81,7 +81,7 @@ You can install and/or update the [rExpertQuery
 Package](https://github.com/USEPA/rExpertQuery) and all dependencies by
 running:
 
-```{r install, eval = TRUE, echo = TRUE, results = 'hide', message = FALSE, warning = FALSE}
+```{r install, eval = TRUE}
 
 # install and load rExpertQuery
 if (!"remotes" %in% installed.packages()) {
@@ -96,15 +96,16 @@ library(rExpertQuery)
 This vignette also requires additional packages which can be installed
 using the code chunk below:
 
-```{r add.pkgs, results = FALSE, message = FALSE}
+```{r add.pkgs, results='hide', message = FALSE}
 # list of additional required packages
-# demo.pkgs <- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", #"leaflet", "maps", "plotly", "sf", "usdata", "usmap", "stringi")
+ demo.pkgs <- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", "leaflet", "maps", "plotly", "sf", "usdata", "usmap", "stringi")
 
 # install additional packages not yet installed
-# installed_packages <- demo.pkgs %in% rownames(installed.packages())
-# if (any(installed_packages == FALSE)) {
-#   install.packages(demo.pkgs[!installed_packages])
-# }
+ installed_packages <- demo.pkgs %in% rownames(installed.packages())
+ 
+if (any(installed_packages == FALSE)) {
+   install.packages(demo.pkgs[!installed_packages])
+ }
 
 # load additional packages for this vignette
 library(datasets)
@@ -598,8 +599,8 @@ the desired cycle year in YYYY format.
 
     ```
 
-3.  **Which waters are new to category 5 in the latest cycle for
-    Illinois? Which categories did they move from?**
+3.  **Which waters are new to category 5 in the 2024 cycle for Illinois?
+    Which categories did they move from?**
 
     This is another question that is well suited to using
     [dplyr](https://dplyr.tidyverse.org/) and
@@ -612,7 +613,7 @@ the desired cycle year in YYYY format.
 
     ```{r il.5.comp, results = FALSE, message = FALSE}
 
-    # get cat 5 waters from latest assessment cycle
+    # get cat 5 waters from 2024 assessment cycle
     IL.latest <- rExpertQuery::EQ_Assessments(statecode = "IL",
                                 epa_ir_cat = "5",
                                  api_key = testkey)
@@ -623,12 +624,10 @@ the desired cycle year in YYYY format.
       # retain unique rows
       dplyr::distinct()
 
-    # calculate previous cycle
-    previous.cycle <- IL.latest$reportingCycle[1] - 2
 
     # get all assessments from previous cycle
     IL.previous <- rExpertQuery::EQ_Assessments(statecode = "IL",
-                                                report_cycle = previous.cycle,
+                                                report_cycle = 2022,
                                                 api_key = testkey)
     ```
 
