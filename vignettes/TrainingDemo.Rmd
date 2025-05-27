@@ -1270,7 +1270,7 @@ value that should be used in queries.
     values for use in water_type queries for rExpertQuery functions. For
     water_type there are `r length(unique(water.types$name))` unique
     values. They are:
-    `r stringi::stri_replace_last(paste(sort(unique(water.types$name)), collapse = "; "), "; and ", fixed = "; "`.
+    `r stringi::stri_replace_last(paste(sort(unique(water.types$name)), collapse = "; "), "; and ", fixed = "; ")`.
 
 ## Questions?
 
