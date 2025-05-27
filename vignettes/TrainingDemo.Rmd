@@ -1050,7 +1050,6 @@ themselves by keyword or phrase.
 
     # count number of unique asessment units without listed monitoringLocationIds
     n_no.ml.ak <- dplyr::n_distinct(no.ml.ak$assessmentUnitId)
-
     ```
 
     There are `r nrow(n_no.ml.ak)` active assessmentUnits in Alaska
