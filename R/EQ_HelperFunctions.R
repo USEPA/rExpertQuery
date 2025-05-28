@@ -15,7 +15,7 @@ EQ_ExtractParams <- function(extract = NULL) {
     extract == "act_docs" ~ "action_documents",
     extract == "assessments" ~ extract,
     extract == "aus" ~ "assessment_units",
-    extract == "au_mls" ~ "assessment_units_mls",
+    extract == "au_mls" ~ "au_mls",
     extract == "catch_corr" ~ "catchment_correspondence",
     extract == "sources" ~ extract,
     extract == "tmdl" ~ extract
@@ -24,7 +24,7 @@ EQ_ExtractParams <- function(extract = NULL) {
 
   # import crosswalk ref file
   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
-    package = "rExpertQuery"
+                                           package = "rExpertQuery"
   ), show_col_types = FALSE) %>%
     dplyr::filter(.data[[extract.filter]] == "yes") %>%
     dplyr::select("param", "eq_name")
@@ -209,7 +209,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     extract == "act_docs" ~ "action_documents",
     extract == "assessments" ~ extract,
     extract == "aus" ~ "assessment_units",
-    extract == "au_mls" ~ "assessment_units_mls",
+    extract == "au_mls" ~ "au_mls",
     extract == "catch_corr" ~ "catchment_correspondence",
     extract == "sources" ~ extract,
     extract == "tmdl" ~ extract
@@ -218,7 +218,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
 
   # create string of column names base on extract selection
   columns.string <- readr::read_csv(system.file("extdata", "EQColumnsForPOST.csv",
-    package = "rExpertQuery"
+                                                package = "rExpertQuery"
   ), show_col_types = FALSE) %>%
     dplyr::select("col.name", dplyr::all_of(extract.filter)) %>%
     dplyr::filter(!is.na(get(extract.filter))) %>%
@@ -321,7 +321,7 @@ EQ_PostAndContent <- function(headers, body.list, extract) {
     httr2::req_method("POST") %>%
     httr2::req_headers(!!!headers) %>%
     httr2::req_body_raw(body.list[[1]],
-      type = "application/json"
+                        type = "application/json"
     ) %>%
     httr2::req_perform() %>%
     httr2::resp_body_json()
@@ -354,7 +354,7 @@ EQ_PostAndContent <- function(headers, body.list, extract) {
     httr2::req_method("POST") %>%
     httr2::req_headers(!!!headers) %>%
     httr2::req_body_raw(body.list[[2]],
-      type = "application/json"
+                        type = "application/json"
     ) %>%
     httr2::req_perform() %>%
     httr2::resp_body_string() %>%
@@ -364,4 +364,25 @@ EQ_PostAndContent <- function(headers, body.list, extract) {
   rm(headers, base.url, extract.url.name, function.url.name, query.url, body.list)
 
   return(query.res)
+}
+
+#' Format Plan Summary Links as URLs
+#'
+#' @param .data Data frame to convert planSummaryLink to functional URL links for use in data tables.
+#' @param url.col Column name containing string for formatting. Default is "planSummaryLink".
+#'
+#' @return The .data data frame with planSummaryLink entries formatted as URL links.
+#'
+#' @export
+#'
+
+EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
+
+  .data <- .data %>%
+    dplyr::mutate(!!url.col := paste0("<a href='",
+                                      !!sym(url.col),
+                                      "' target='_blank'>",
+                                      !!sym(url.col),
+                                      "</a>"))
+  return(.data)
 }
