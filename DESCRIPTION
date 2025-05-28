@@ -28,17 +28,27 @@ Imports:
   tidyr,
   utils
 Suggests:
+    datasets,
+    data.table,
     devtools,
     DT,
     ggplot2,
+    httr,
     knitr,
+    leaflet,
+    maps,
     pkgdown,
+    plotly,
     rmarkdown,
     roxygen2,
+    sf,
     spelling,
+    stringi,
     testthis,
     testthat (>= 3.0.0),
+    usdata,
     usethis,
+    usmap,
     yaml
 VignetteBuilder: knitr, rmarkdown
 LazyData: true
