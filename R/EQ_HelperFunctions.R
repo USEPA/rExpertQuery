@@ -10,12 +10,13 @@
 #'
 EQ_ExtractParams <- function(extract = NULL) {
   # select filter column
+  if(extract != "au_mls") {
   extract.filter <- dplyr::case_when(
     extract == "actions" ~ extract,
     extract == "act_docs" ~ "action_documents",
     extract == "assessments" ~ extract,
     extract == "aus" ~ "assessment_units",
-    extract == "au_mls" ~ extract,
+    #extract == "au_mls" ~ extract,
     extract == "catch_corr" ~ "catchment_correspondence",
     extract == "sources" ~ extract,
     extract == "tmdl" ~ extract
@@ -28,6 +29,18 @@ EQ_ExtractParams <- function(extract = NULL) {
   ), show_col_types = FALSE) %>%
     dplyr::filter(.data[[extract.filter]] == "yes") %>%
     dplyr::select("param", "eq_name")
+  }
+
+  # need to find a better solution for this - for some reason au_mls is not working in the case_when
+  if(extract == "au_mls") {
+    params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
+                                             package = "rExpertQuery"
+    ), show_col_types = FALSE) %>%
+      dplyr::filter(au_mls == "yes") %>%
+      dplyr::select("param", "eq_name")
+
+
+  }
 
   # return the crosswalk
   return(params.cw)
