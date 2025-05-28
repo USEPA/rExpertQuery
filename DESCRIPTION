@@ -30,6 +30,7 @@ Imports:
 Suggests:
     devtools,
     DT,
+    ggplot2,
     knitr,
     pkgdown,
     rmarkdown,
