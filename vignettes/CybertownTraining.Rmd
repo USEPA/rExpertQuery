@@ -96,7 +96,7 @@ library(rExpertQuery)
 This vignette also requires additional packages which can be installed
 using the code chunk below:
 
-```{r add.pkgs, results='hide', message=FALSE}
+```{r add.pkgs, message=FALSE, results='hide', eval=FALSE}
 # # list of additional required packages
 #  demo.pkgs <- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", "leaflet", "maps", "plotly", "sf", "usdata", "usmap", "stringi")
 # 
