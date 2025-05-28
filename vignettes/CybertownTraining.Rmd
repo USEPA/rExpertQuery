@@ -1059,22 +1059,23 @@ themselves by keyword or phrase.
 
 ## EQ_Sources
 
-1.  **Which states in Region 6 have listed Sources in their latest
-    report cycle?**
+1.  **Which states in Region 6 have listed probable Sources in their
+    latest report cycle?**
 
     Start by querying for EQ_Source for region 6. Then use
     [dplyr](https://dplyr.tidyverse.org/) and
     [usdata](https://openintrostat.github.io/usdata/index.html) to
     manipulate the data and create a list of the region 6 states that
-    list sources for any assessments in their latest report cycle.
+    list probable sources for any assessments in their latest report
+    cycle.
 
     ```{r r6.sources, results=FALSE, message=TRUE}
 
-    # query for sources in the latest assessment cycle in R6
+    # query for probable sources in the latest assessment cycle in R6
     r6.sources <- rExpertQuery::EQ_Sources(region = 6,
                                            api_key = testkey)
 
-    # filter for states with listed sources
+    # filter for states with listed probable sources
     r6.sources.filter <- r6.sources %>%
       # remove all rows without a listed source
       dplyr::filter(!is.na(sourceName)) %>%
@@ -1098,13 +1099,13 @@ themselves by keyword or phrase.
 
     Using the same initial query results from the previous question, we
     can use [dplyr](https://dplyr.tidyverse.org/) functions to count the
-    number of times a source is listed by each state, select the most
-    common source from each state and make a a
+    number of times a probable source is listed by each state, select
+    the most one from each state and make a a
     [DT](https://rstudio.github.io/DT/) data table of the results.
 
     ```{r source.sum, results=FALSE, message=FALSE}
 
-    # count the number of times a source is listed for each state
+    # count the number of times a probable source is listed for each state
     r6.sources.summarize <- r6.sources %>%
       dplyr::select(state, organizationId, assessmentUnitId, sourceName) %>%
       dplyr::distinct() %>%
