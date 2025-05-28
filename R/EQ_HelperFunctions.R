@@ -15,7 +15,7 @@ EQ_ExtractParams <- function(extract = NULL) {
     extract == "act_docs" ~ "action_documents",
     extract == "assessments" ~ extract,
     extract == "aus" ~ "assessment_units",
-    extract == "au_mls" ~ "au_mls",
+    extract == "au_mls" ~ extract,
     extract == "catch_corr" ~ "catchment_correspondence",
     extract == "sources" ~ extract,
     extract == "tmdl" ~ extract
@@ -26,7 +26,7 @@ EQ_ExtractParams <- function(extract = NULL) {
   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
                                            package = "rExpertQuery"
   ), show_col_types = FALSE) %>%
-    dplyr::filter(.data[[extract.filter]] == "yes") %>%
+    dplyr::filter(!!as.symbol(extract.filter) == "yes") %>%
     dplyr::select("param", "eq_name")
 
   # return the crosswalk
