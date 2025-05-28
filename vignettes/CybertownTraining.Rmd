@@ -96,7 +96,7 @@ library(rExpertQuery)
 This vignette also requires additional packages which can be installed
 using the code chunk below:
 
-```{r add.pkgs, results='hide', message = FALSE}
+```{r add.pkgs, results='hide', message=FALSE}
 # # list of additional required packages
 #  demo.pkgs <- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", "leaflet", "maps", "plotly", "sf", "usdata", "usmap", "stringi")
 # 
@@ -178,7 +178,7 @@ are:
     queries and returns ATTAINS TMDL data
 
 These first eight functions are analogous to the data profiles that can
-be queries through the [Expert Query User
+be queried through the [Expert Query User
 Interface](https://owapps.epa.gov/expertquery/attains/).
 
 ![](images/EQprofiles.png){width="6.5in"}
@@ -216,13 +216,14 @@ attains\@epa.gov.
 
 ## EQ_NationalExtract
 
-[**EQ_NationalExtract()**](https://usepa.github.io/rExpertQuery/reference/EQ_NationalExtract.html)provides
-an efficient method for importing the [Expert Query National
+[**EQ_NationalExtract()**](https://usepa.github.io/rExpertQuery/reference/EQ_NationalExtract.html)
+provides an efficient method for importing the [Expert Query National
 Extracts](https://owapps.epa.gov/expertquery/national-downloads). This
 function requires one argument, "extract" to specify which of the
 National Extracts to download. The following examples show how to
-download the TMDL and Actions extracts. The extracts are all large files
-and some may not open in R if there is not enough memory available.
+download the Assessments and Assessments with Monitoring Locations
+extracts. The extracts are all large files and some may not open in R if
+there is not enough memory available.
 
 ![](images/nat.downloads.png){width="6.5in"}
 
