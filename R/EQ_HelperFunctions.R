@@ -223,7 +223,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     dplyr::select("col.name", dplyr::all_of(extract.filter)) %>%
     dplyr::filter(!is.na(get(extract.filter))) %>%
     dplyr::arrange(get(extract.filter)) %>%
-    dplyr::select(.data$col.name) %>%
+    dplyr::select("col.name") %>%
     dplyr::mutate(
       col.name = paste0('"', .data$col.name, '"'),
       col.name = paste0(.data$col.name, collapse = ",")
