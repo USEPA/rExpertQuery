@@ -88,7 +88,7 @@ if (!"remotes" %in% installed.packages()) {
   install.packages("remotes")
 }
 
-remotes::install_github("USEPA/rExpertQuery", ref = "training", dependencies = TRUE, force = TRUE)
+remotes::install_github("USEPA/rExpertQuery", ref = "cybertown_update", dependencies = TRUE, force = TRUE)
 
 library(rExpertQuery)
 ```
