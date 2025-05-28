@@ -92,10 +92,10 @@ EQ_NationalExtract <- function(extract = NULL) {
   }
 
   if (is.null(extract) &
-    !extract %in% c(
-      "actions", "assessments", "aus", "au_mls",
-      "catch_corr", "sources", "tmdl"
-    )) {
+      !extract %in% c(
+        "actions", "assessments", "aus", "au_mls",
+        "catch_corr", "sources", "tmdl"
+      )) {
     stop("EQ_NationalExtract: Function requires user to select Expert Query Profile to return.")
   }
 
@@ -198,14 +198,14 @@ EQ_NationalExtract <- function(extract = NULL) {
 
   # open large csv file
   # can add verbose = FALSE, if we want to remove the progress bar here
-  df <- data.table::fread(csv.file)
+  df <- data.table::fread(csv.file, check.names = FALSE)
 
   # import cross walk to convert column names to match other rExpertQuery function output
   # import crosswalk ref file
-  col.cw <- utils::read.csv(system.file("extdata", "EQColumnsForPOST.csv",
-    package = "rExpertQuery"
-  )) %>%
-    dplyr::select("col.name", "nat_extract", dplyr::all_of(extract)) %>%
+  col.cw <- data.table::fread(system.file("extdata", "EQColumnsForPOST.csv",
+                                          package = "rExpertQuery"
+  ), check.names = TRUE) %>%
+    dplyr::select(col.name, nat_extract, dplyr::all_of(extract)) %>%
     dplyr::filter(!is.na(.data[[extract]])) %>%
     dplyr::arrange((.data[[extract]]))
 
@@ -226,7 +226,7 @@ EQ_NationalExtract <- function(extract = NULL) {
 
   # change column names
   data.table::setnames(df, as.character(col.cw$nat_extract), as.character(col.cw$col.name),
-    skip_absent = TRUE
+                       skip_absent = TRUE
   )
 
   # change order of columns
