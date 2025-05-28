@@ -16,7 +16,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 description: rExpertQuery is a new R package which allows users to query and download ATTAINS data via Expert Query web services. This vignette demonstrates the use of rExpertQuery functions to import common data profiles. Some examples of how to summarize or create visualizations of these data using other R packages are also be provided.
 editor_options:
-  chunk_output_type: console
+  chunk_output_type: inline
   markdown:
     wrap: 72
 ---
@@ -737,6 +737,7 @@ queries ATTAINS TMDL data and can utilize many search parameters.
 
     ```{r hi.tmdl, results = FALSE, message = FALSE, warning = FALSE}
 
+    # query for Hawaii TMDLs
     HI.tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI", 
                                        api_key = testkey)
     ```
