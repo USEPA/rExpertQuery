@@ -131,6 +131,8 @@ EQ_NationalExtract <- function(extract = NULL) {
     file <- "assessment_units_monitoring_locations"
 
     label <- "Assessment Units with Monitoring Locations Profile"
+
+    extract <- "assessment_units_mls"
   }
 
   if (extract == "catch_corr") {
