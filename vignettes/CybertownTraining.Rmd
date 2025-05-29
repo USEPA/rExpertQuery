@@ -137,7 +137,7 @@ Most of the rExpertQuery functions require an API key. Users can obtain
 their own by using Expert Query's [API Key Signup
 Form](https://owapps.epa.gov/expertquery/api-key-signup){.uri}.
 
-![](images/Screenshot%202025-05-09%20092513.png){width="6.5in"}
+![](images/apikey.png){width="6.5in" height="4.64in"}
 
 To run this vignette, we can use the following test key. Users should
 obtain their own API key if they will be using rExpertQuery to develop
@@ -1289,4 +1289,3 @@ value that should be used in queries.
 rExpertQuery is in development, so additional changes to existing
 functions to improve usability and documentation may occur. If you have
 any additional questions, contact the ATTAINS team at attains\@epa.gov.
-
