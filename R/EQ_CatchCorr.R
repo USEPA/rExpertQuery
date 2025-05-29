@@ -96,7 +96,6 @@ EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL,
     body.list = post.bodies,
     extract = "catch_corr"
   )
-  # should rows where ml is NA be filtered out?
 
   rm(params.cw, params.df, post.bodies, post.headers)
 
