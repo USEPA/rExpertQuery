@@ -944,7 +944,9 @@ ATTAINS Actions data by a variety of user supplied parameters.
 [**EQ_ActionsDocuments()**](https://usepa.github.io/rExpertQuery/reference/EQ_ActionsDocuments.html)
 queries ATTAINS Actions Documents data with user supplied parameters.
 One of its unique features is the ability to search the documents
-themselves by keyword or phrase.
+themselves by keyword or phrase. The results are ranked by percentage
+match, with higher percentages indicating a better match with the
+keyword.
 
 1.  **What are all the actions documents that contain the keyword
     "nutrient"?**
@@ -962,14 +964,14 @@ themselves by keyword or phrase.
     results. As well as providing the actionId and documentName for all
     results, *EQ_Actions()* also returns the column "actionDocumentUrl"
     containing the URL to link to the document. Because the query yields
-    so many results, we'll take a look at a random subset of 50 in a
-    [DT](https://rstudio.github.io/DT/) data table to understand the
-    structure of the results.
+    so many results, we'll take a look at the highest ranking 50 matches
+    in a [DT](https://rstudio.github.io/DT/) data table to understand
+    the structure of the results.
 
     ```{r nutrients.data.table}
     # create data table
     DT::datatable(nutrient.doc %>% 
-                    dplyr::slice_sample(n = 50) %>%          
+                    dplyr::slice_max(rankPercent, n = 50) %>%          
                     rExpertQuery::EQ_FormatPlanLinks(url.col = "actionDocumentUrl"),                  options = list(pageLength = 10, scrollX = TRUE), 
                      escape = FALSE)
     ```
@@ -1287,3 +1289,4 @@ value that should be used in queries.
 rExpertQuery is in development, so additional changes to existing
 functions to improve usability and documentation may occur. If you have
 any additional questions, contact the ATTAINS team at attains\@epa.gov.
+

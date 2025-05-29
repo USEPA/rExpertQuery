@@ -10,7 +10,6 @@
 #'
 EQ_ExtractParams <- function(extract = NULL) {
   # select filter column
-  if(extract != "au_mls") {
   extract.filter <- dplyr::case_when(
     extract == "actions" ~ extract,
     extract == "act_docs" ~ "action_documents",
@@ -30,18 +29,6 @@ EQ_ExtractParams <- function(extract = NULL) {
     dplyr::filter(get(extract.filter) == "yes") %>%
     # dplyr::filter(.data[[extract.filter]] == "yes") %>%
     dplyr::select("param", "eq_name")
-  }
-
-  # # need to find a better solution for this - for some reason au_mls is not working in the case_when
-  # if(extract == "au_mls") {
-  #   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
-  #                                            package = "rExpertQuery"
-  #   ), show_col_types = FALSE) %>%
-  #     dplyr::filter(.data$au_mls == "yes") %>%
-  #     dplyr::select("param", "eq_name")
-  #
-  #
-  # }
 
   # return the crosswalk
   return(params.cw)
@@ -394,9 +381,9 @@ EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
 
   .data <- .data %>%
     dplyr::mutate(!!url.col := paste0("<a href='",
-                                      !!sym(url.col),
+                                      !!rlang::sym(url.col),
                                       "' target='_blank'>",
-                                      !!sym(url.col),
+                                      !!rlang::sym(url.col),
                                       "</a>"))
   return(.data)
 }
