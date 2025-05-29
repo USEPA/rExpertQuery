@@ -343,7 +343,8 @@ there is not enough memory available.
       ggplot2::theme(legend.position = "none")
     ```
 
-    In the map above, the states with selenium impairments are blue.
+    *Fig 1. States with selenium listed as a cause of impairment for any
+    waters are shown in blue.*
 
 3.  **Which waters have a TMDL and are fully supporting nationally?**
 
@@ -450,10 +451,11 @@ organizationId, organizationName, and organizationType and retain the
 unique rows.
 
 ```{r filt.ausmls}
-# filter for rows that contain monitoringLocationIds
+# filter for rows that contain monitoringLocationIds and are from State orgs
 filtered.mls <- nat.ausmls %>%
   dplyr::filter(monitoringLocationId != "",
-                !is.na(monitoringLocationId))
+                !is.na(monitoringLocationId),
+                organizationType == "State")
 
 # start with data set filtered to include only rows with MonitoringLocationIds
 orgs.mls <- filtered.mls %>%
@@ -476,15 +478,15 @@ links.mls <- filtered.mls %>%
 ```
 
 There are `r nrow(orgs.mls)` with monitoringLocationId data in ATTAINS.
-Of these organizations, `r nrow(links.mls)` also contain
+Of these states, `r nrow(links.mls)` also contain
 monitoringLocationDataLinks. We can create a data table to display this
 information and apply some conditional formatting to highlight the
-organizations with monitoringLocationIdentifiers in blue and those with
+states with monitoringLocationIdentifiers in blue and those with
 monitoringLocationIdentifiers and monitoringLocationDataLinks in orange.
 
 ```{r ml.map}
 
-# create data frame summarizing which organizations have monitoringLocationIds and monitoringLocationDataLinks in ATTAINS
+# create data frame summarizing which states have monitoringLocationIds and monitoringLocationDataLinks in ATTAINS
 ml.table <- nat.ausmls %>%
   # create df of all orgs
   dplyr::select(organizationId, organizationName, organizationType) %>%
@@ -600,6 +602,9 @@ the desired cycle year in YYYY format.
 
     ```
 
+    *Fig 2. Zinc impairments by useName for Montana's latest assessment
+    cycle.*
+
 3.  **Which waters are new to category 5 in the 2024 cycle for Illinois?
     Which categories did they move from?**
 
@@ -670,18 +675,11 @@ the desired cycle year in YYYY format.
       dplyr::group_by(epaIrCategory.previous) %>%
       dplyr::summarise(count = dplyr::n_distinct(assessmentUnitId))
 
-    # set color palette for categories
-    cat.pal <- c("#9dd49d", "#bee3be", "#c5c5c5", "#f6ce95", "#f9deb8", "#f0bab9",   "#e89895","#4be367","#17b644", "#c5a577")
-    # set category names for palette
-    cat.pal <-  setNames(cat.pal, c("1", "2", "3", "4A", "4B", "4C", "5", "5A", "5R", "4"))
-
-
     # create plotly plot
     plotly::plot_ly() %>%
       # add pipe based IL.change.sum  
       plotly::add_pie(data = IL.change.sum, ~count, labels = ~epaIrCategory.previous,
                         marker = list(
-                          colors = cat.pal,
                           line = list(color = "white", width = 2)
                         ), type = "pie",
                         hoverinfo = "value", outsidetextfont = list(color = "black"),
@@ -692,6 +690,9 @@ the desired cycle year in YYYY format.
                                      xanchor = "center",
                                      x = 0.5))
     ```
+
+*Fig 3. New category 5 waters in 2024, summarized by their 2022
+categories.*
 
 ## EQ_AssessmentUnits
 
@@ -780,6 +781,8 @@ queries ATTAINS TMDL data and can utilize many search parameters.
       type = "bar"
     )
     ```
+
+    *Fig 4. Number of TMDLs per pollutantGroup in Hawaii.*
 
     There are `r formatC(nrow(HI.count), big.mark = ",")` TMDLs in
     Hawaii.
@@ -893,8 +896,6 @@ ATTAINS Actions data by a variety of user supplied parameters.
                   options = list(pageLength = 5, scrollX = TRUE))
     ```
 
-<!-- -->
-
 2.  **How many actions (by actionId) were established in R3 in FY 2024?
     What was the most common type of action established in R3 in FY
     2024?**
@@ -976,9 +977,9 @@ themselves by keyword or phrase.
 2.  **How many actions documents that contain the keyword "nutrient" are
     from each region?**
 
-    To answer this question, wcount the number of unique actionIds per
-    region from the initial "nutrients" keyword query. We can display
-    the results in a [plotly](https://plotly.com/r/) bar plot.
+    To answer this question, we can count the number of unique actionIds
+    per region from the initial "nutrients" keyword query. We can
+    display the results in a [plotly](https://plotly.com/r/) bar plot.
 
     ```{r nutrients.summary, fig.height = 3.5}
     nutrient.doc.regions <- nutrient.doc %>%
@@ -994,6 +995,9 @@ themselves by keyword or phrase.
       type = "bar"
     )
     ```
+
+*Fig 5. Number of documents containing the keyword "nutrient" by EPA
+Region.*
 
 ## EQ_AUsMLs
 
@@ -1213,7 +1217,7 @@ specific assessment unit in catchment correspondence queries.
     The total catchment area associated with IL_N-99 is `r sum.catch`.
 
     To create map of IL_N-99 and and its associated catchments, we can
-    create a leaflet map with the defaul Open Street Map tile then add
+    create a leaflet map with the default Open Street Map tile then add
     the catchment polygons with a popup contain the nhdplusid and area
     in sq km. The final step is to add the assessment unit line.
 
@@ -1230,6 +1234,9 @@ specific assessment unit in catchment correspondence queries.
       leaflet::addPolylines(data = lines.sf, color = "blue")
 
     ```
+
+    *Fig. 6 Map of assessment unit IL_N-99 (blue) and its associated
+    catchments (orange).*
 
 ## EQ_DomainValues
 
