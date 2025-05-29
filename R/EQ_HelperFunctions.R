@@ -16,7 +16,7 @@ EQ_ExtractParams <- function(extract = NULL) {
     extract == "act_docs" ~ "action_documents",
     extract == "assessments" ~ extract,
     extract == "aus" ~ "assessment_units",
-    #extract == "au_mls" ~ extract,
+    extract == "au_mls" ~ "mls",
     extract == "catch_corr" ~ "catchment_correspondence",
     extract == "sources" ~ extract,
     extract == "tmdl" ~ extract
@@ -27,20 +27,21 @@ EQ_ExtractParams <- function(extract = NULL) {
   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
                                            package = "rExpertQuery"
   ), show_col_types = FALSE) %>%
-    dplyr::filter(.data[[extract.filter]] == "yes") %>%
+    dplyr::filter(get(extract.filter) == "yes") %>%
+    # dplyr::filter(.data[[extract.filter]] == "yes") %>%
     dplyr::select("param", "eq_name")
   }
 
-  # need to find a better solution for this - for some reason au_mls is not working in the case_when
-  if(extract == "au_mls") {
-    params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
-                                             package = "rExpertQuery"
-    ), show_col_types = FALSE) %>%
-      dplyr::filter(.data$au_mls == "yes") %>%
-      dplyr::select("param", "eq_name")
-
-
-  }
+  # # need to find a better solution for this - for some reason au_mls is not working in the case_when
+  # if(extract == "au_mls") {
+  #   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
+  #                                            package = "rExpertQuery"
+  #   ), show_col_types = FALSE) %>%
+  #     dplyr::filter(.data$au_mls == "yes") %>%
+  #     dplyr::select("param", "eq_name")
+  #
+  #
+  # }
 
   # return the crosswalk
   return(params.cw)
@@ -222,7 +223,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     extract == "act_docs" ~ "action_documents",
     extract == "assessments" ~ extract,
     extract == "aus" ~ "assessment_units",
-    extract == "au_mls" ~ "au_mls",
+    extract == "au_mls" ~ "mls",
     extract == "catch_corr" ~ "catchment_correspondence",
     extract == "sources" ~ extract,
     extract == "tmdl" ~ extract
