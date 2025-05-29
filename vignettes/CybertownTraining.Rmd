@@ -137,8 +137,8 @@ Most of the rExpertQuery functions require an API key. Users can obtain
 their own by using Expert Query's [API Key Signup
 Form](https://owapps.epa.gov/expertquery/api-key-signup){.uri}.
 
-![A screenshot of the web page to sign up for your uniruq Expert Query
-API Key](images/apikey.png){width="6.5in" height="4.64in"}
+![A screenshot of the web page to sign up for your unique Expert Query
+API Key](images/apikey.png){width="3.25in" height="2.32in"}
 
 To run this vignette, we can use the following test key. Users should
 obtain their own API key if they will be using rExpertQuery to develop
@@ -184,7 +184,7 @@ Interface](https://owapps.epa.gov/expertquery/attains/).
 
 ![A screenshot of the Expert Query user interface with the dropdown menu
 open to dipslay the profile
-options.](images/EQprofiles.png){width="6.5in"}
+options.](images/EQprofiles.png){width="3in"}
 
 An additional function allows users to download the [Expert Query
 National
@@ -229,7 +229,7 @@ extracts. The extracts are all large files and some may not open in R if
 there is not enough memory available.
 
 ![A screenshot of the Expert Query National Downloads web
-page](images/nat.downloads.png){width="6.5in"}
+page](images/nat.downloads.png){width="3in"}
 
 1.  **What is the most commonly reported impairment nationally?**
 
@@ -311,7 +311,7 @@ page](images/nat.downloads.png){width="6.5in"}
     (US choropleth plotting) and
     [ggplot2](https://ggplot2.tidyverse.org/) (creating graphics).
 
-    ```{r param.map, fig.width = 6.5}
+    ```{r param.map}
     # filter to create df of states that have at least one selenium impairment}
     state.names.sel <- param.nat %>%
       # select state column from filtered df
@@ -333,7 +333,9 @@ page](images/nat.downloads.png){width="6.5in"}
       # create additional column to indicate if state has recorded selenium impairments ("yes") or not ("no")
       dplyr::mutate(SeleniumImpairment = factor(ifelse(state %in% state.names.sel,
                                                 "yes", "no")))
+    ```
 
+    ```{r sel.map, fig.cap="Fig 1. States with selenium listed as a cause of impairment for any waters are shown in blue.", fig.alt = "Fig 1. A map of the United States, including Alaska and Hawaii. Any state with selenium listed as a cause of impairment for any waters is filled in blue.", fig.width = 3}
     # create map, specifying data and values
     usmap::plot_usmap(
       regions = "state", data = sel.map.data,
@@ -346,9 +348,6 @@ page](images/nat.downloads.png){width="6.5in"}
     # remove legend
       ggplot2::theme(legend.position = "none")
     ```
-
-    *Fig 1. States with selenium listed as a cause of impairment for any
-    waters are shown in blue.*
 
 3.  **Which waters have a TMDL and are fully supporting nationally?**
 
@@ -438,83 +437,82 @@ page](images/nat.downloads.png){width="6.5in"}
     nat.ausmls <- rExpertQuery::EQ_NationalExtract("au_mls")
     ```
 
-The next step is to filter the data frame and retain only rows that
-contain a value for monitoringLocationId and are relevant to states. The
-resulting data frame, called "filtered.mls" will allow us to determine
-(1) which organizations have included monitoringLocationIdentifiers and
-(2) which organizations have included monitoringLocationDataLinks.
+    The next step is to filter the data frame and retain only rows that
+    contain a value for monitoringLocationId and are relevant to states.
+    The resulting data frame, called "filtered.mls" will allow us to
+    determine (1) which organizations have included
+    monitoringLocationIdentifiers and (2) which organizations have
+    included monitoringLocationDataLinks.
 
-To find the organizations with monitoringLocationIdentifiers, we will
-select only the rows organizationId, organizationName, and
-organizationType and retain the unique rows.
+    To find the organizations with monitoringLocationIdentifiers, we
+    will select only the rows organizationId, organizationName, and
+    organizationType and retain the unique rows.
 
-To find the organizations with monitoringLocationIdentifiers, we will
-apply an additional filter and keep only rows that have a value in the
-monitoringLocationDataLink column. Then select only the rows
-organizationId, organizationName, and organizationType and retain the
-unique rows.
+    To find the organizations with monitoringLocationIdentifiers, we
+    will apply an additional filter and keep only rows that have a value
+    in the monitoringLocationDataLink column. Then select only the rows
+    organizationId, organizationName, and organizationType and retain
+    the unique rows.
 
-```{r filt.ausmls}
-# filter for rows that contain monitoringLocationIds and are from State orgs
-filtered.mls <- nat.ausmls %>%
-  dplyr::filter(monitoringLocationId != "",
-                !is.na(monitoringLocationId),
-                organizationType == "State")
+    ```{r filt.ausmls}
+    # filter for rows that contain monitoringLocationIds and are from State orgs
+    filtered.mls <- nat.ausmls %>%
+      dplyr::filter(monitoringLocationId != "",
+                    !is.na(monitoringLocationId),
+                    organizationType == "State")
 
-# start with data set filtered to include only rows with MonitoringLocationIds
-orgs.mls <- filtered.mls %>%
-  # select columns to describe orgs
-  dplyr::select(organizationId, organizationName, organizationType) %>%
-  dplyr::distinct()
+    # start with data set filtered to include only rows with MonitoringLocationIds
+    orgs.mls <- filtered.mls %>%
+      # select columns to describe orgs
+      dplyr::select(organizationId, organizationName, organizationType) %>%
+      dplyr::distinct()
 
 
-# start with data set filtered to include only rows with MonitoringLocationIds
-links.mls <- filtered.mls %>%
-  # filter for orgs with monitoringLocationDataLinks
-  dplyr::filter(monitoringLocationDataLink != "",
-                !is.na(monitoringLocationDataLink)) %>%
-  # select columns to describe orgs
-  dplyr::select(organizationId, organizationName, organizationType) %>%
-  # retain distinct rows
-  dplyr::distinct()
-  
+    # start with data set filtered to include only rows with MonitoringLocationIds
+    links.mls <- filtered.mls %>%
+      # filter for orgs with monitoringLocationDataLinks
+      dplyr::filter(monitoringLocationDataLink != "",
+                    !is.na(monitoringLocationDataLink)) %>%
+      # select columns to describe orgs
+      dplyr::select(organizationId, organizationName, organizationType) %>%
+      # retain distinct rows
+      dplyr::distinct()
+    ```
 
-```
+    There are `r nrow(orgs.mls)` with monitoringLocationId data in
+    ATTAINS. Of these states, `r nrow(links.mls)` also contain
+    monitoringLocationDataLinks. We can create a data table to display
+    this information and apply some conditional formatting to highlight
+    the states with monitoringLocationIdentifiers in blue and those with
+    monitoringLocationIdentifiers and monitoringLocationDataLinks in
+    orange.
 
-There are `r nrow(orgs.mls)` with monitoringLocationId data in ATTAINS.
-Of these states, `r nrow(links.mls)` also contain
-monitoringLocationDataLinks. We can create a data table to display this
-information and apply some conditional formatting to highlight the
-states with monitoringLocationIdentifiers in blue and those with
-monitoringLocationIdentifiers and monitoringLocationDataLinks in orange.
+    ```{r ml.dt}
 
-```{r ml.map}
-
-# create data frame summarizing which states have monitoringLocationIds and monitoringLocationDataLinks in ATTAINS
-ml.table <- nat.ausmls %>%
-  # create df of all orgs
-  dplyr::select(organizationId, organizationName, organizationType) %>%
-  # retain only distinct rows
-  dplyr::distinct() %>%
-  # add columns indicating whether the org has any data in ATTAINS for monitoringLocationId and monitoringLocationDataLink
-  dplyr::mutate(monitoringLocationId = ifelse(organizationId %in% 
-                                                orgs.mls$organizationId,
-                                              "yes", "no"),
-                monitoringLocationDataLink = ifelse(organizationId %in%
-                                                      links.mls$organizationId,
-                                                    "yes", "no"))
-# create data table 
-DT::datatable(ml.table, options = list(pageLength = 10, scrollX = TRUE)) %>% 
-  # highlight rows for orgs that have monitoringLocationId in blue
-  DT::formatStyle(
-  "monitoringLocationId", target = "row", 
-  backgroundColor = styleEqual(c("yes"), c("#66c3c5"))) %>%
-  # highlight rows for orgs that also have data for data links in organge
-  DT::formatStyle(
-  "monitoringLocationDataLink", target = "row", 
-  backgroundColor = styleEqual(c("yes"), c("#f9b97d")))
-
-```
+    # create data frame summarizing which states have monitoringLocationIds and monitoringLocationDataLinks in ATTAINS
+    ml.table <- nat.ausmls %>%
+      # create df of all orgs
+      dplyr::select(organizationId, organizationName, organizationType) %>%
+      # retain only distinct rows
+      dplyr::distinct() %>%
+      # add columns indicating whether the org has any data in ATTAINS for monitoringLocationId and monitoringLocationDataLink
+      dplyr::mutate(monitoringLocationId = ifelse(organizationId %in% 
+                                                    orgs.mls$organizationId,
+                                                  "yes", "no"),
+                    monitoringLocationDataLink = ifelse(organizationId %in%
+                                                          links.mls$organizationId,
+                                                        "yes", "no"))
+    # create data table 
+    DT::datatable(ml.table, options = list(pageLength = 10, scrollX = TRUE)) %>% 
+      # highlight rows for orgs that have monitoringLocationId in blue
+      DT::formatStyle(
+      "monitoringLocationId", target = "row", 
+      backgroundColor = styleEqual(c("yes"), c("#66c3c5"))) %>%
+      # highlight rows for orgs that also have data for data links in organge
+      DT::formatStyle(
+      "monitoringLocationDataLink", target = "row", 
+      backgroundColor = styleEqual(c("yes"), c("#f9b97d")))
+    ```
 
 ## EQ_Assessments
 
@@ -597,17 +595,13 @@ the desired cycle year in YYYY format.
     `r stringi::stri_replace_last(paste(MT.impair.use$useName, collapse = ", "), ", and ", fixed = ", ")`
     . As our last step, we'll create the bar plot.
 
-    ```{r MT.plot, fig.with = 4.5, fig.height = 4}
+    ```{r MT.plot, fig.with = 2.5, fig.height = 2, fig.cap="Fig 2. Zinc impairments by useName for Montana's latest assessment cycle.", fig.alt = "Fig 2. A bar graph showing then number of Zinc impairments by useName for Montana's latest cycle."}
     plotly::plot_ly(data = MT.impair.use,
       x = ~useName,
       y = ~count,
       type = "bar"
     )
-
     ```
-
-    *Fig 2. Zinc impairments by useName for Montana's latest assessment
-    cycle.*
 
 3.  **Which waters are new to category 5 in the 2024 cycle for Illinois?
     Which categories did they move from?**
@@ -673,12 +667,14 @@ the desired cycle year in YYYY format.
     This example sets up a color palette that mimics the one used in the
     ATTAINS report module.
 
-    ```{r cat5.viz, fig.height = 3.5}
+    ```{r cat5.sum}
     # summarize what cats the new cat 5s were in previously
     IL.change.sum <- IL.changes %>%
       dplyr::group_by(epaIrCategory.previous) %>%
       dplyr::summarise(count = dplyr::n_distinct(assessmentUnitId))
+    ```
 
+    ```{r cat5.viz, fig.height = 2, fig.cap="Fig 3. New category 5 waters in Illinois in the 2024 cycle, summarized by their 2022 categories.", fig.alt = "Fig 3. A pie chart showing new category 5 waters in Illinois in the 2024, cycle summarized by their 2022 categories."}
     # create plotly plot
     plotly::plot_ly() %>%
       # add pipe based IL.change.sum  
@@ -694,9 +690,6 @@ the desired cycle year in YYYY format.
                                      xanchor = "center",
                                      x = 0.5))
     ```
-
-*Fig 3. New category 5 waters in 2024, summarized by their 2022
-categories.*
 
 ## EQ_AssessmentUnits
 
@@ -777,6 +770,9 @@ queries ATTAINS TMDL data and can utilize many search parameters.
       dplyr::summarize(count = dplyr::n_distinct(assessmentUnitId)) %>%
       # if pollutantGroup is missing, assing to group named "NULL"
       dplyr::mutate(pollutantGroup = ifelse(is.na(pollutantGroup), "NULL", pollutantGroup))
+    ```
+
+    ```{r hi.tmdl.plot, fig.cap="Fig 4. Number of TMDLs per pollutantGroup in Hawaii.", fig.alt="Fig 4. a bar graph showing Number of TMDLs per pollutantGroup in Hawaii."}
 
     # create bar plot
     plotly::plot_ly( data = HI.sum,
@@ -785,8 +781,6 @@ queries ATTAINS TMDL data and can utilize many search parameters.
       type = "bar"
     )
     ```
-
-    *Fig 4. Number of TMDLs per pollutantGroup in Hawaii.*
 
     There are `r formatC(nrow(HI.count), big.mark = ",")` TMDLs in
     Hawaii.
@@ -987,13 +981,15 @@ keyword.
     per region from the initial "nutrients" keyword query. We can
     display the results in a [plotly](https://plotly.com/r/) bar plot.
 
-    ```{r nutrients.summary, fig.height = 3.5}
+    ```{r nutrients.summary}
     nutrient.doc.regions <- nutrient.doc %>%
       # group by region
       dplyr::group_by(region) %>%
       # count action ids by region
       dplyr::summarize(count = length(unique(actionId)))
+    ```
 
+    ```{r nutrients.plot, fig.height=2, fig.cap="Fig 5. Number of documents containing the keyword "nutrient" by EPA Region.", fig.alt="Fig 5. A bar plot of the number of documents containing the keyword "nutrient" by EPA Region."}
     # create bar plot
     plotly::plot_ly(data = nutrient.doc.regions,
       x = ~region,
@@ -1001,9 +997,6 @@ keyword.
       type = "bar"
     )
     ```
-
-*Fig 5. Number of documents containing the keyword "nutrient" by EPA
-Region.*
 
 ## EQ_AUsMLs
 
