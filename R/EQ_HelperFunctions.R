@@ -16,7 +16,7 @@ EQ_ExtractParams <- function(extract = NULL) {
     extract == "act_docs" ~ "action_documents",
     extract == "assessments" ~ extract,
     extract == "aus" ~ "assessment_units",
-    extract == "au_mls" ~ "mls",
+    extract == "au_mls" ~ extract,
     extract == "catch_corr" ~ "catchment_correspondence",
     extract == "sources" ~ extract,
     extract == "tmdl" ~ extract
@@ -223,7 +223,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     extract == "act_docs" ~ "action_documents",
     extract == "assessments" ~ extract,
     extract == "aus" ~ "assessment_units",
-    extract == "au_mls" ~ "mls",
+    extract == "au_mls" ~ extract,
     extract == "catch_corr" ~ "catchment_correspondence",
     extract == "sources" ~ extract,
     extract == "tmdl" ~ extract

@@ -414,9 +414,9 @@ there is not enough memory available.
 
     ```
 
-5.  **Which organizations have included any information about
-    monitoringLocations in ATTAINS? Which of these organizations have
-    included any monitoringLocationDataLinks?**
+5.  **Which states have included any information about
+    monitoringLocations in ATTAINS? Which states have included any
+    monitoringLocationDataLinks?**
 
     To answer this question, we'll need to import a new national
     extract. As we are curious about monitoringLocations and
@@ -434,10 +434,10 @@ there is not enough memory available.
     ```
 
 The next step is to filter the data frame and retain only rows that
-contain a value for monitoringLocationId. The resulting data frame,
-called "filtered.mls" will allow us to determine (1) which organizations
-have included monitoringLocationIdentifiers and (2) which organizations
-have included monitoringLocationDataLinks.
+contain a value for monitoringLocationId and are relevant to states. The
+resulting data frame, called "filtered.mls" will allow us to determine
+(1) which organizations have included monitoringLocationIdentifiers and
+(2) which organizations have included monitoringLocationDataLinks.
 
 To find the organizations with monitoringLocationIdentifiers, we will
 select only the rows organizationId, organizationName, and
