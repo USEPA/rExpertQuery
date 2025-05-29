@@ -1057,7 +1057,7 @@ keyword.
     n_no.ml.ak <- dplyr::n_distinct(no.ml.ak$assessmentUnitId)
     ```
 
-    There are `r nrow(n_no.ml.ak)` active assessmentUnits in Alaska
+    There are `r length(n_no.ml.ak)` active assessmentUnits in Alaska
     without monitoringLocations listed in ATTAINS.
 
 ## EQ_Sources
@@ -1220,7 +1220,7 @@ specific assessment unit in catchment correspondence queries.
     the catchment polygons with a popup contain the nhdplusid and area
     in sq km. The final step is to add the assessment unit line.
 
-    ```{r catch.map}
+    ```{r catch.map, fig.cap="Fig. 6 Map of assessment unit IL_N-99 (blue) and its associated catchments (orange)."}
     # create leaflet map
     leaflet::leaflet() %>%
       # add open street map layer
@@ -1233,9 +1233,6 @@ specific assessment unit in catchment correspondence queries.
       leaflet::addPolylines(data = lines.sf, color = "blue")
 
     ```
-
-    *Fig. 6 Map of assessment unit IL_N-99 (blue) and its associated
-    catchments (orange).*
 
 ## EQ_DomainValues
 
