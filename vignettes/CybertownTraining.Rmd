@@ -137,7 +137,7 @@ Most of the rExpertQuery functions require an API key. Users can obtain
 their own by using Expert Query's [API Key Signup
 Form](https://owapps.epa.gov/expertquery/api-key-signup){.uri}.
 
-![](images/apikey.png){width="6.5in" height="4.64in"}
+![A screenshot of the web page to sign up for your uniruq Expert Query API Key](images/apikey.png){width="6.5in" height="4.64in"}
 
 To run this vignette, we can use the following test key. Users should
 obtain their own API key if they will be using rExpertQuery to develop
@@ -181,7 +181,7 @@ These first eight functions are analogous to the data profiles that can
 be queried through the [Expert Query User
 Interface](https://owapps.epa.gov/expertquery/attains/).
 
-![](images/EQprofiles.png){width="6.5in"}
+![A screenshot of the Expert Query user interface with the dropdown menu open to dipslay the profile options.](images/EQprofiles.png){width="6.5in"}
 
 An additional function allows users to download the [Expert Query
 National
@@ -225,7 +225,7 @@ download the Assessments and Assessments with Monitoring Locations
 extracts. The extracts are all large files and some may not open in R if
 there is not enough memory available.
 
-![](images/nat.downloads.png){width="6.5in"}
+![A screenshot of the Expert Query National Downloads web page](images/nat.downloads.png){width="6.5in"}
 
 1.  **What is the most commonly reported impairment nationally?**
 
