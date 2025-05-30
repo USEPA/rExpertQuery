@@ -58,7 +58,10 @@ sets directly in to R for more detailed review and analysis.
 It is crucial to be aware of certain complexities inherent in the data
 and querying process. Users are cautioned against direct comparisons
 between states due to differences in water quality standards and
-assessment methodologies.
+assessment methodologies. **The summary and count examples provided here
+are intended to demonstrate potential uses of rExpertQuery and
+complementary R packages, but do not imply EPA's endorsement of any
+specific summary or count method.**
 
 While Expert Query facilitates data querying, it lacks built-in summary
 capabilities. Users are encouraged to download and summarize data, but
@@ -663,9 +666,8 @@ the desired cycle year in YYYY format.
     ```
 
     Finally, we can summarize by counting the categories the new
-    category 5s were previously in and create a pie chart to visualize.
-    This example sets up a color palette that mimics the one used in the
-    ATTAINS report module.
+    category 5s were previously in and create a pie chart with a default
+    color scheme to visualize.
 
     ```{r cat5.sum}
     # summarize what cats the new cat 5s were in previously
@@ -744,11 +746,10 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     The`r formatC(nrow(HI.tmdls), big.mark = ",")` rows can be reviewed
     in the data frame. Keep in mind that if we want to count one TMDL as
     one unique combination of assessmentUnitIdentifier, pollutant and
-    actionId, we can't simply count the number of rows as this would
-    lead to double counting as each
+    actionId, we can't simply count the number of rows as as each
     assessmentUnitIdentifier/pollutant/actionId may be associated with
-    multiple parameters, which means it will be listed more than once.
-    The code chunk below demonstrates one way to determine the number of
+    multiple parameters, meaning it will be listed more than once. The
+    code chunk below demonstrates one way to determine the number of
     TMDLs by unique assessmentUnitIdentifier/pollutant/actionId. We can
     than visualize TMDLs related to each pollutantGroup with a simple
     bar graph.
@@ -1132,7 +1133,7 @@ may not have enough memory to load an entire state's worth of catchment
 correspondence data in an R session. It is also possible to focus on a
 specific assessment unit in catchment correspondence queries.
 
-1.  **Which catchments correspond to assessmentUnitId"IL_N-99" ?**
+1.  **Which catchments correspond to assessmentUnitId "IL_N-99" ?**
 
     We can start with a very focused query to retrieve information for
     the Illinios assessment unit "IL_N-99". Then we'll use
@@ -1155,7 +1156,7 @@ specific assessment unit in catchment correspondence queries.
     DT::datatable(il.n99.catch, options = list(pageLength = 10, scrollX = TRUE))
     ```
 
-2.  **How large of a catchment area corresponds to ""IL_N-99"?**
+2.  **How large of a catchment area corresponds to "IL_N-99"?**
 
     We will need some additional information in order to answer this
     question. We could get catchment areas from the nhdplusTools package
