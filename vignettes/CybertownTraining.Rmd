@@ -990,7 +990,7 @@ keyword.
       dplyr::summarize(count = length(unique(actionId)))
     ```
 
-    ```{r nutrients.plot, fig.height=2, fig.cap="Fig 5. Number of documents containing the keyword 'nutrient' by EPA Region.", fig.alt="Fig 5. A bar plot of the number of documents containing the keyword "nutrient" by EPA Region."}
+    ```{r nutrients.plot, fig.height=2, fig.cap="Fig 5. Number of documents containing the keyword 'nutrient' by EPA Region.", fig.alt="Fig 5. A bar plot of the number of documents containing the keyword 'nutrient' by EPA Region."}
     # create bar plot
     plotly::plot_ly(data = nutrient.doc.regions,
       x = ~region,
