@@ -91,7 +91,7 @@ if (!"remotes" %in% installed.packages()) {
   install.packages("remotes")
 }
 
-remotes::install_github("USEPA/rExpertQuery", ref = "formatupdates", dependencies = TRUE, force = TRUE)
+remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
 
 library(rExpertQuery)
 ```
@@ -769,7 +769,7 @@ queries ATTAINS TMDL data and can utilize many search parameters.
       dplyr::group_by(pollutantGroup,) %>%
       # count unique auids per pollutantGroup
       dplyr::summarize(count = dplyr::n_distinct(assessmentUnitId)) %>%
-      # if pollutantGroup is missing, assing to group named "NULL"
+      # if pollutantGroup is missing, assign to group named "NULL"
       dplyr::mutate(pollutantGroup = ifelse(is.na(pollutantGroup), "NULL", pollutantGroup))
     ```
 
