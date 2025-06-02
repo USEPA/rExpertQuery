@@ -91,7 +91,7 @@ if (!"remotes" %in% installed.packages()) {
   install.packages("remotes")
 }
 
-remotes::install_github("USEPA/rExpertQuery", ref = "cybertown_update", dependencies = TRUE, force = TRUE)
+remotes::install_github("USEPA/rExpertQuery", ref = "formatupdates", dependencies = TRUE, force = TRUE)
 
 library(rExpertQuery)
 ```
@@ -709,7 +709,7 @@ queries ATTAINS Assessment Units data. The default is to only return
     review, we'll create a datatable with
     [DT](https://rstudio.github.io/DT/).
 
-    ```{r FL.ret.auids, results = FALSE, message = FALSE}
+    ```{r FL.ret.auids, message = FALSE}
 
     # search for retired assessment units in Florida
     FL.ret.auids <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
@@ -743,7 +743,7 @@ queries ATTAINS TMDL data and can utilize many search parameters.
                                        api_key = testkey)
     ```
 
-    The`r formatC(nrow(HI.tmdls), big.mark = ",")` rows can be reviewed
+    The `r formatC(nrow(HI.tmdls), big.mark = ",")` rows can be reviewed
     in the data frame. Keep in mind that if we want to count one TMDL as
     one unique combination of assessmentUnitIdentifier, pollutant and
     actionId, we can't simply count the number of rows as as each
@@ -888,11 +888,14 @@ ATTAINS Actions data by a variety of user supplied parameters.
       dplyr::select(-parameter, -assessmentUnitId) %>%
       # retain unique rows
       dplyr::distinct()
+    ```
 
+    ```{r table.show}
     DT::datatable(DE.actids %>%
                     rExpertQuery::EQ_FormatPlanLinks(),
                   escape = FALSE,
                   options = list(pageLength = 5, scrollX = TRUE))
+
     ```
 
 2.  **How many actions (by actionId) were established in R3 in FY 2024?
@@ -1030,10 +1033,10 @@ keyword.
       # retain unique rows
       dplyr::distinct()
 
-    DT::datatable(filt.ak.mls, options = list(pageLength = 10, scrollX = TRUE))
-
     # list of orgs inlcuded in monitoringLocationOrgId
     ak.orgs <- sort(unique(filt.ak.mls$monitoringLocationOrgId))
+
+    DT::datatable(filt.ak.mls, options = list(pageLength = 10, scrollX = TRUE))
     ```
 
     There are `r nrow(filt.ak.mls)` monitoringLocationIds associated
@@ -1058,8 +1061,9 @@ keyword.
     n_no.ml.ak <- dplyr::n_distinct(no.ml.ak$assessmentUnitId)
     ```
 
-    There are `r length(n_no.ml.ak)` active assessmentUnits in Alaska
-    without monitoringLocations listed in ATTAINS.
+    There are `r dplyr::n_distinct(no.ml.ak$assessmentUnitId)` active
+    assessmentUnits in Alaska without monitoringLocations listed in
+    ATTAINS.
 
 ## EQ_Sources
 
@@ -1073,7 +1077,7 @@ keyword.
     list probable sources for any assessments in their latest report
     cycle.
 
-    ```{r r6.sources, results=FALSE, message=TRUE}
+    ```{r r6.sources, results=FALSE, message=FALSE}
 
     # query for probable sources in the latest assessment cycle in R6
     r6.sources <- rExpertQuery::EQ_Sources(region = 6,
@@ -1107,7 +1111,7 @@ keyword.
     the most one from each state and make a a
     [DT](https://rstudio.github.io/DT/) data table of the results.
 
-    ```{r source.sum, results=FALSE, message=FALSE}
+    ```{r source.sum, results=TRUE, message=FALSE}
 
     # count the number of times a probable source is listed for each state
     r6.sources.summarize <- r6.sources %>%
