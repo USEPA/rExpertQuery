@@ -24,7 +24,7 @@ EQ_ExtractParams <- function(extract = NULL) {
 
   # import crosswalk ref file
   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
-                                           package = "rExpertQuery"
+    package = "rExpertQuery"
   ), show_col_types = FALSE) %>%
     dplyr::filter(get(extract.filter) == "yes") %>%
     # dplyr::filter(.data[[extract.filter]] == "yes") %>%
@@ -219,7 +219,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
 
   # create string of column names base on extract selection
   columns.string <- readr::read_csv(system.file("extdata", "EQColumnsForPOST.csv",
-                                                package = "rExpertQuery"
+    package = "rExpertQuery"
   ), show_col_types = FALSE) %>%
     dplyr::select("col.name", dplyr::all_of(extract.filter)) %>%
     dplyr::filter(!is.na(get(extract.filter))) %>%
@@ -278,6 +278,7 @@ EQ_CreateHeader <- function(key) { # create headers for POST
 #' @param headers Character string. Header for POST request created in EQ_CreateHeader.
 #' @param body.list List of character strings for count and query POSTs created in EQ_CreateBody.
 #' @param extract Character string. The Expert Query Data profile type.
+#' @param max_retries Integer. The number of retry attempts.
 #'
 #' @return A data frame of the query result or a printed message if the query rows exceed one
 #' million.
@@ -285,7 +286,7 @@ EQ_CreateHeader <- function(key) { # create headers for POST
 #' @keywords internal
 #'
 
-EQ_PostAndContent <- function(headers, body.list, extract) {
+EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
   # base url to build requests
   base.url <- "https://api.epa.gov/expertquery/api/attains/"
 
@@ -316,15 +317,33 @@ EQ_PostAndContent <- function(headers, body.list, extract) {
   # create url for query
   query.url <- paste0(base.url, extract.url.name)
 
+  # function to perform the request with retries
+  request.retries <- function(url, body, headers, max_retries) {
+    for (attempt in seq_len(max_retries)) {
+      tryCatch(
+        {
+          response <- httr2::request(url) %>%
+            httr2::req_method("POST") %>%
+            httr2::req_headers(!!!headers) %>%
+            httr2::req_body_raw(body, type = "application/json") %>%
+            httr2::req_perform()
+
+          return(response)
+        },
+        error = function(e) {
+          if (i == max_retries) {
+            stop(paste0("Failed to perform request after ", max_retries, " attempts. Error: ", e$message))
+          } else {
+            message(paste0("Attempt ", attempt, " failed: ", e$message, ". Retrying..."))
+            Sys.sleep(1) # Optional: wait before retrying
+          }
+        }
+      )
+    }
+  }
+
   # request to find number of results
-  row.res <- httr2::request(paste0(query.url, "/count")) %>%
-    httr2::req_timeout(30) %>%
-    httr2::req_method("POST") %>%
-    httr2::req_headers(!!!headers) %>%
-    httr2::req_body_raw(body.list[[1]],
-                        type = "application/json"
-    ) %>%
-    httr2::req_perform() %>%
+  row.res <- request.retries(paste0(query.url, "/count"), body.list[[1]], headers, max_retries) %>%
     httr2::resp_body_json()
 
   # stop function if row count exceeds one million
@@ -351,13 +370,7 @@ EQ_PostAndContent <- function(headers, body.list, extract) {
   rm(row.res)
 
   # request to return query results
-  query.res <- httr2::request(query.url) %>%
-    httr2::req_method("POST") %>%
-    httr2::req_headers(!!!headers) %>%
-    httr2::req_body_raw(body.list[[2]],
-                        type = "application/json"
-    ) %>%
-    httr2::req_perform() %>%
+  query.res <- request.retries(query.url, body.list[[2]], headers, max_retries) %>%
     httr2::resp_body_string() %>%
     readr::read_csv()
 
@@ -378,12 +391,13 @@ EQ_PostAndContent <- function(headers, body.list, extract) {
 #'
 
 EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
-
   .data <- .data %>%
-    dplyr::mutate(!!url.col := paste0("<a href='",
-                                      !!rlang::sym(url.col),
-                                      "' target='_blank'>",
-                                      !!rlang::sym(url.col),
-                                      "</a>"))
+    dplyr::mutate(!!url.col := paste0(
+      "<a href='",
+      !!rlang::sym(url.col),
+      "' target='_blank'>",
+      !!rlang::sym(url.col),
+      "</a>"
+    ))
   return(.data)
 }

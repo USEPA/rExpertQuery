@@ -16,7 +16,7 @@ EQ_DomainValues <- function(domain = NULL) {
 
   # read in parameter crosswalk
   param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
-                                          package = "rExpertQuery"
+    package = "rExpertQuery"
   ))
 
   # return list of all allowable domain values if no domain value is supplied
@@ -42,7 +42,6 @@ EQ_DomainValues <- function(domain = NULL) {
   }
 
   if (!is.null(domain)) {
-
     # check to make sure user supplied domain value is valid
     if (!domain %in% param.cw$param) {
       stop("EQ_DomainValues: User supplied domain value is not valid. Check spelling and review
@@ -72,9 +71,11 @@ EQ_DomainValues <- function(domain = NULL) {
 
       raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter$attains_ws_name))
 
-      print(paste0("EQ_DomainValues: For ", domain, " the values in the ",
-                   param.filter$attains_ws_field, " column of the function output are the ",
-                   "allowable values for rExpert Query functions."))
+      print(paste0(
+        "EQ_DomainValues: For ", domain, " the values in the ",
+        param.filter$attains_ws_field, " column of the function output are the ",
+        "allowable values for rExpert Query functions."
+      ))
 
       rm(param.filter, base.url, param.cw)
 

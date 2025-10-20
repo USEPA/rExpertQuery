@@ -98,7 +98,7 @@ EQ_Actions <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_nam
     # format for building body
     EQ_FormatParams()
 
-  #create df of user entered params
+  # create df of user entered params
   get.user <- as.list(match.call()[-1])
 
   # evaluate user params
