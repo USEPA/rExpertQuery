@@ -31,7 +31,7 @@ EQ_DomainValues <- function(domain = NULL) {
 
     eq.params <- raw.data |>
       dplyr::left_join(param.cw, by = dplyr::join_by(attains_ws_name)) |>
-      dplyr::filter(!is.na(eq_name)) |>
+      dplyr::filter(!is.na(.data[[eq_name]])) |>
       dplyr::select(param) |>
       dplyr::rename(domain = param) |>
       dplyr::arrange()
@@ -55,7 +55,7 @@ EQ_DomainValues <- function(domain = NULL) {
         dplyr::filter(.data[["attains_ws_name"]] != "")
 
       # check to see if user supplied domain has values in web service
-      if (!domain %in% param.ws$param) {
+      if (!domain %in% param.ws[[param]]) {
         stop("EQ_DomainValues: User supplied domain value valid, but no list of allowable values is
               available. Review function documentation for more information on allowable values.")
       }
@@ -65,15 +65,15 @@ EQ_DomainValues <- function(domain = NULL) {
 
       # filter crosswalk by user supplied domain value
       param.filter <- param.cw |>
-        dplyr::filter(.data$param %in% domain) |>
+        dplyr::filter(.data[[param]] %in% domain) |>
         dplyr::select("param", "attains_ws_name", "attains_ws_field") |>
         dplyr::distinct()
 
-      raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter$attains_ws_name))
+      raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter[[attains_ws_name]]))
 
       print(paste0(
         "EQ_DomainValues: For ", domain, " the values in the ",
-        param.filter$attains_ws_field, " column of the function output are the ",
+        param.filter[[attains_ws_field]], " column of the function output are the ",
         "allowable values for rExpert Query functions."
       ))
 
