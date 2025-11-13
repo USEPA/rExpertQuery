@@ -334,7 +334,7 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
           if (i == max_retries) {
             stop(paste0("Failed to perform request after ", max_retries, " attempts. Error: ", e$message))
           } else {
-            message(paste0("Attempt ", attempt, " failed: ", e$message, ". Retrying..."))
+            message(paste0("Attempt ", i, " failed: ", e$message, ". Retrying..."))
             Sys.sleep(1) # Optional: wait before retrying
           }
         }
@@ -392,11 +392,11 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
 
 EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
   .data <- .data |>
-    dplyr::mutate(!!url.col := paste0(
+    dplyr::mutate(!!.data[[url.col]] := paste0(
       "<a href='",
-      !!rlang::sym(url.col),
+      !!rlang::sym(.data[[url.col]]),
       "' target='_blank'>",
-      !!rlang::sym(url.col),
+      !!rlang::sym(.data[[url.col]]),
       "</a>"
     ))
   return(.data)
