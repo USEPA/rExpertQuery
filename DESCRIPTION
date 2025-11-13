@@ -38,6 +38,7 @@ Suggests:
     pkgdown,
     plotly,
     rmarkdown,
+    remotes,
     roxygen2,
     sf,
     spelling,
