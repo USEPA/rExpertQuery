@@ -43,16 +43,16 @@ EQ_DomainValues <- function(domain = NULL) {
 
   if (!is.null(domain)) {
     # check to make sure user supplied domain value is valid
-    if (!domain %in% param.cw$param) {
+    if (!domain %in% param.cw[[param]]) {
       stop("EQ_DomainValues: User supplied domain value is not valid. Check spelling and review
            function documentation to ensure the domain value entered is correct.")
     }
 
     # check to make sure user supplied domain value is valid
-    if (domain %in% param.cw$param) {
+    if (domain %in% param.cw[[param]]) {
       # filter for domains which have values in web service
       param.ws <- param.cw %>%
-        dplyr::filter(.data$attains_ws_name != "")
+        dplyr::filter(.data[["attains_ws_name"]] != "")
 
       # check to see if user supplied domain has values in web service
       if (!domain %in% param.ws$param) {

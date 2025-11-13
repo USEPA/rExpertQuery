@@ -29,7 +29,6 @@ Imports:
   utils
 Suggests:
     datasets,
-    data.table,
     devtools,
     DT,
     ggplot2,

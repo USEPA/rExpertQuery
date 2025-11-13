@@ -131,7 +131,7 @@ EQ_TMDLs <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name 
 
   # create df and format params
   user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) %>%
-    tidyr::pivot_longer(everything(), names_to = "param") %>%
+    tidyr::pivot_longer(dplyr::everything(), names_to = "param") %>%
     EQ_FormatParams()
 
   # remove intermediate objects
