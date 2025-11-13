@@ -5,7 +5,7 @@
 \title{Returns user-specified Expert Query National Extracts of ATTAINS data for use cases
 where nationwide data is desired.}
 \usage{
-EQ_NationalExtract(extract = NULL)
+EQ_NationalExtract(extract = NULL, max_retries = 3)
 }
 \arguments{
 \item{extract}{Character argument. Specifies which Expert Query National Extract should be
@@ -13,6 +13,8 @@ imported. Options are "actions" (Actions), "assessments" (Assessments), "au" (As
 "au_mls" (Assessment Units with Monitoring Locations), "catch_corr" (Catchment Correspondence),
 "sources" (Sources), and "tmdl" (TMDLs). There is no national extract option available for
 Actions Documents. The default is NULL which means no extract will be returned.}
+
+\item{max_retries}{Integer. The number of retry attempts.}
 }
 \value{
 A data frame containing the user-specified national extract. The columns returned will
