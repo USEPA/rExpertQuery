@@ -319,7 +319,7 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
 
   # function to perform the request with retries
   request.retries <- function(url, body, headers, max_retries) {
-    for (attempt in seq_len(max_retries)) {
+    for (i in seq_len(max_retries)) {
       tryCatch(
         {
           response <- httr2::request(url) %>%

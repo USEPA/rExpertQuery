@@ -72,7 +72,7 @@ EQ_AssessmentUnits <- function(api_key = NULL, au_name = NULL, au_status = "Acti
 
   # create df and format params
   user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) %>%
-    tidyr::pivot_longer(everything(), names_to = "param") %>%
+    tidyr::pivot_longer(dplyr::everything(), names_to = "param") %>%
     EQ_FormatParams()
 
   # remove intermediate objects
