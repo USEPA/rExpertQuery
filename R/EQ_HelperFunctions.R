@@ -25,9 +25,9 @@ EQ_ExtractParams <- function(extract = NULL) {
   # import crosswalk ref file
   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
     package = "rExpertQuery"
-  ), show_col_types = FALSE) %>%
-    dplyr::filter(get(extract.filter) == "yes") %>%
-    # dplyr::filter(.data[[extract.filter]] == "yes") %>%
+  ), show_col_types = FALSE) |>
+    dplyr::filter(get(extract.filter) == "yes") |>
+    # dplyr::filter(.data[[extract.filter]] == "yes") |>
     dplyr::select("param", "eq_name")
 
   # return the crosswalk
@@ -45,9 +45,9 @@ EQ_ExtractParams <- function(extract = NULL) {
 
 EQ_DefaultParams <- function(func) {
   # create df of function formals
-  params.df <- formals(func) %>%
-    as.list() %>%
-    tibble::enframe(name = "param", value = "value") %>%
+  params.df <- formals(func) |>
+    as.list() |>
+    tibble::enframe(name = "param", value = "value") |>
     as.data.frame()
 
   return(params.df)
@@ -80,7 +80,7 @@ EQ_FormatParams <- function(.data) {
     }
   })
 
-  params.df <- params.df %>%
+  params.df <- params.df |>
     dplyr::mutate(value = as.character(.data$value))
 
   return(params.df)
@@ -103,11 +103,11 @@ EQ_FormatParams <- function(.data) {
 
 EQ_CompareParams <- function(default, user) {
   # filter out any default params that user entered a value for
-  default.params <- default %>%
+  default.params <- default |>
     dplyr::filter(!.data$param %in% user$param)
 
   # combine user supplied and default params
-  all.params <- user %>%
+  all.params <- user |>
     dplyr::full_join(default.params, by = names(user))
 
   # remove intermediate objects
@@ -151,11 +151,11 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
   query.params <- c("doc_query")
 
   # create param filters for POST
-  params.body <- comp.params %>%
+  params.body <- comp.params |>
     dplyr::filter(
       !.data$value %in% c("NULL", "latest"),
       .data$param != "api_key"
-    ) %>%
+    ) |>
     dplyr::mutate(value = dplyr::case_when(
       .data$param == "report_cycle" & value == "any" ~ "-1",
       .data$param == "region" & !is.null(value) & value != "10" ~ paste0("0", value),
@@ -176,14 +176,14 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
         "%m-%d-%Y"
       ),
       .default = as.character(.data$value)
-    )) %>%
-    dplyr::left_join(crosswalk, by = dplyr::join_by("param")) %>%
-    dplyr::mutate(value = gsub('c\\(|\\)|"', "", .data$value)) %>%
-    tidyr::separate_rows(.data$value, sep = ",\\s*") %>%
-    dplyr::mutate(value = paste0('"', .data$value, '"')) %>%
-    dplyr::group_by(.data$eq_name) %>%
-    dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
-    dplyr::distinct() %>%
+    )) |>
+    dplyr::left_join(crosswalk, by = dplyr::join_by("param")) |>
+    dplyr::mutate(value = gsub('c\\(|\\)|"', "", .data$value)) |>
+    tidyr::separate_rows(.data$value, sep = ",\\s*") |>
+    dplyr::mutate(value = paste0('"', .data$value, '"')) |>
+    dplyr::group_by(.data$eq_name) |>
+    dplyr::mutate(value = paste0(.data$value, collapse = ",")) |>
+    dplyr::distinct() |>
     dplyr::mutate(value = dplyr::case_when(
       !.data$param %in% date.params & !.data$param %in% query.params ~ paste0(
         '"', .data$eq_name,
@@ -191,11 +191,11 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
         .data$value, "]"
       ),
       .default = paste0('"', .data$eq_name, '":', .data$value)
-    )) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(value = paste0(.data$value, collapse = ",")) %>%
-    dplyr::select("value") %>%
-    dplyr::distinct() %>%
+    )) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(value = paste0(.data$value, collapse = ",")) |>
+    dplyr::select("value") |>
+    dplyr::distinct() |>
     dplyr::pull()
 
   # setup body for finding row count of query
@@ -220,16 +220,16 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
   # create string of column names base on extract selection
   columns.string <- readr::read_csv(system.file("extdata", "EQColumnsForPOST.csv",
     package = "rExpertQuery"
-  ), show_col_types = FALSE) %>%
-    dplyr::select("col.name", dplyr::all_of(extract.filter)) %>%
-    dplyr::filter(!is.na(get(extract.filter))) %>%
-    dplyr::arrange(get(extract.filter)) %>%
-    dplyr::select("col.name") %>%
+  ), show_col_types = FALSE) |>
+    dplyr::select("col.name", dplyr::all_of(extract.filter)) |>
+    dplyr::filter(!is.na(get(extract.filter))) |>
+    dplyr::arrange(get(extract.filter)) |>
+    dplyr::select("col.name") |>
     dplyr::mutate(
       col.name = paste0('"', .data$col.name, '"'),
       col.name = paste0(.data$col.name, collapse = ",")
-    ) %>%
-    dplyr::distinct() %>%
+    ) |>
+    dplyr::distinct() |>
     dplyr::pull()
 
   # create column string for POST
@@ -322,10 +322,10 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
     for (i in seq_len(max_retries)) {
       tryCatch(
         {
-          response <- httr2::request(url) %>%
-            httr2::req_method("POST") %>%
-            httr2::req_headers(!!!headers) %>%
-            httr2::req_body_raw(body, type = "application/json") %>%
+          response <- httr2::request(url) |>
+            httr2::req_method("POST") |>
+            httr2::req_headers(!!!headers) |>
+            httr2::req_body_raw(body, type = "application/json") |>
             httr2::req_perform()
 
           return(response)
@@ -343,7 +343,7 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
   }
 
   # request to find number of results
-  row.res <- request.retries(paste0(query.url, "/count"), body.list[[1]], headers, max_retries) %>%
+  row.res <- request.retries(paste0(query.url, "/count"), body.list[[1]], headers, max_retries) |>
     httr2::resp_body_json()
 
   # stop function if row count exceeds one million
@@ -370,8 +370,8 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
   rm(row.res)
 
   # request to return query results
-  query.res <- request.retries(query.url, body.list[[2]], headers, max_retries) %>%
-    httr2::resp_body_string() %>%
+  query.res <- request.retries(query.url, body.list[[2]], headers, max_retries) |>
+    httr2::resp_body_string() |>
     readr::read_csv()
 
   # remove intermediate objects
@@ -391,7 +391,7 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
 #'
 
 EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
-  .data <- .data %>%
+  .data <- .data |>
     dplyr::mutate(!!url.col := paste0(
       "<a href='",
       !!rlang::sym(url.col),

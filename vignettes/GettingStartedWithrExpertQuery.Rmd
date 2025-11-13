@@ -120,7 +120,7 @@ R4_actions_not_meas$planSummaryLink <- paste0('<a href="', R4_actions_not_meas$p
 
 ```{r r4.datatable}
 # create random subset of R4 query results
-R4_subset <- R4_actions_not_meas %>%
+R4_subset <- R4_actions_not_meas |>
   dplyr::slice_sample(n = 20)
 
 # create data tab;e
@@ -183,7 +183,7 @@ Nutrient_docs$actionDocumentUrl <- paste0('<a href="', Nutrient_docs$actionDocum
 ```
 
 ```{r nutrients.data.table}
-Nutrient_docs_subset <- Nutrient_docs %>%
+Nutrient_docs_subset <- Nutrient_docs |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(Nutrient_docs_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -207,7 +207,7 @@ PA_4B$actionDocumentUrl <- paste0('<a href="', PA_4B$actionDocumentUrl, '" targe
 ```
 
 ```{r pa.4b.table}
-PA_4B_subset <- PA_4B %>%
+PA_4B_subset <- PA_4B |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(PA_4B_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -236,7 +236,7 @@ There are `r formatC(nrow(KY_assessments), big.mark = ",")` results for
 the basic latest cycle Kentucky query.
 
 ```{r ky.table}
-KY_subset <- KY_assessments %>%
+KY_subset <- KY_assessments |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(KY_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -259,7 +259,7 @@ R3_ecological <- rExpertQuery::EQ_Assessments(
 ```
 
 ```{r r3.ecological.table}
-R3_ecological_subset <- R3_ecological %>%
+R3_ecological_subset <- R3_ecological |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(R3_ecological_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -285,7 +285,7 @@ We can take a look at a random selection of 20 of the active assessment
 units from Rhode Island.
 
 ```{r ri.table}
-RI_aus_subset <- RI_aus %>%
+RI_aus_subset <- RI_aus |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(RI_aus_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -303,7 +303,7 @@ FL_retired <- rExpertQuery::EQ_AssessmentUnits(
 ```
 
 ```{r fl.table}
-FL_ret_subset <- FL_retired %>%
+FL_ret_subset <- FL_retired |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(FL_ret_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -323,7 +323,7 @@ AK_ausmls <- rExpertQuery::EQ_AUsMLs(
   api_key = testkey
 )
 
-AK_filt <- AK_ausmls %>% dplyr::filter(!is.na(monitoringLocationId))
+AK_filt <- AK_ausmls |> dplyr::filter(!is.na(monitoringLocationId))
 ```
 
 While the resulting data set from the query has
@@ -352,7 +352,7 @@ The table below shows 20 random results from the DC catchment
 correspondence query.
 
 ```{r dc.table}
-DC_subset <- DC_catch %>%
+DC_subset <- DC_catch |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(DC_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -373,7 +373,7 @@ IL_N99_catch <- rExpertQuery::EQ_CatchCorr(
 The resulting table shows all results from this much smaller query.
 
 ```{r il.table}
-IL_N99_subset <- IL_N99_catch %>%
+IL_N99_subset <- IL_N99_catch |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(IL_N99_catch, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)

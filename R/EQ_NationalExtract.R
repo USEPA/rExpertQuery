@@ -134,12 +134,12 @@ EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
 
   update.dates <- update.dates$details
 
-  update.date <- update.dates %>%
-    dplyr::filter(name == paste0("attains_app.profile_", file)) %>%
-    dplyr::select(last_refresh_end_time) %>%
-    dplyr::pull() %>%
-    lubridate::as_datetime() %>%
-    lubridate::with_tz(tx = "US/Eastern") %>%
+  update.date <- update.dates |>
+    dplyr::filter(name == paste0("attains_app.profile_", file)) |>
+    dplyr::select(last_refresh_end_time) |>
+    dplyr::pull() |>
+    lubridate::as_datetime() |>
+    lubridate::with_tz(tx = "US/Eastern") |>
     format("%B %d, %Y at %I:%M %p %Z")
 
   print(paste0(
@@ -155,9 +155,9 @@ EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
     for (attempt in seq_len(max_retries)) {
       tryCatch(
         {
-          req <- httr2::request(url) %>%
-            httr2::req_timeout(1200) %>%
-            httr2::req_method("GET") %>%
+          req <- httr2::request(url) |>
+            httr2::req_timeout(1200) |>
+            httr2::req_method("GET") |>
             httr2::req_perform(path = temp)
 
           # If successful, return unzipped file
@@ -189,23 +189,23 @@ EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
   # import crosswalk ref file
   col.cw <- data.table::fread(system.file("extdata", "EQColumnsForPOST.csv",
     package = "rExpertQuery"
-  ), check.names = TRUE) %>%
-    dplyr::select(col.name, nat_extract, dplyr::all_of(extract)) %>%
-    dplyr::filter(!is.na(.data[[extract]])) %>%
+  ), check.names = TRUE) |>
+    dplyr::select(col.name, nat_extract, dplyr::all_of(extract)) |>
+    dplyr::filter(!is.na(.data[[extract]])) |>
     dplyr::arrange((.data[[extract]]))
 
   # combine the three TMDLENDPOINT columns to match output from EQ_TMDLs function
   if (extract == "tmdl") {
-    df <- df %>%
+    df <- df |>
       dplyr::mutate(
         TMDLENDPOINT1 = ifelse(is.na(.data$TMDLENDPOINT1), "", .data$TMDLENDPOINT1),
         TMDLENDPOINT2 = ifelse(is.na(.data$TMDLENDPOINT2), "", .data$TMDLENDPOINT2),
         TMDLENDPOINT3 = ifelse(is.na(.data$TMDLENDPOINT3), "", .data$TMDLENDPOINT3)
-      ) %>%
+      ) |>
       dplyr::mutate(TMDLENDPOINT = paste0(
         .data$TMDLENDPOINT1, .data$TMDLENDPOINT2,
         .data$TMDLENDPOINT3
-      )) %>%
+      )) |>
       dplyr::select(-"TMDLENDPOINT1", -"TMDLENDPOINT2", -"TMDLENDPOINT3")
   }
 

@@ -60,7 +60,7 @@ EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL,
   params.cw <- EQ_ExtractParams(extract = "catch_corr")
 
   # get default params from EQ_Assessments
-  default.params <- EQ_DefaultParams(EQ_CatchCorr) %>%
+  default.params <- EQ_DefaultParams(EQ_CatchCorr) |>
     # format for building body
     EQ_FormatParams()
 
@@ -71,8 +71,8 @@ EQ_CatchCorr <- function(api_key = NULL, au_name = NULL, auid = NULL,
   user.evals <- lapply(get.user, eval, envir = parent.frame())
 
   # create df and format params
-  user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) %>%
-    tidyr::pivot_longer(dplyr::everything(), names_to = "param") %>%
+  user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) |>
+    tidyr::pivot_longer(dplyr::everything(), names_to = "param") |>
     EQ_FormatParams()
 
   # remove intermediate objects
