@@ -86,7 +86,7 @@ if (!"remotes" %in% installed.packages()) {
   install.packages("remotes")
 }
 
-remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
+remotes::install_github("USEPA/rExpertQuery", ref = "format_url_fix", dependencies = TRUE, force = TRUE)
 
 library(dplyr)
 library(data.table)
