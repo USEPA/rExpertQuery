@@ -210,7 +210,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     extract == "act_docs" ~ "action_documents",
     extract == "assessments" ~ extract,
     extract == "aus" ~ "assessment_units",
-    extract == "au_mls" ~ "assessment_units_mls",
+    extract == "au_mls" ~ "assessment_units_monitoring_locations",
     extract == "catch_corr" ~ "catchment_correspondence",
     extract == "sources" ~ extract,
     extract == "tmdl" ~ extract
