@@ -120,7 +120,7 @@ R4_actions_not_meas$planSummaryLink <- paste0('<a href="', R4_actions_not_meas$p
 
 ```{r r4.datatable}
 # create random subset of R4 query results
-R4_subset <- R4_actions_not_meas %>%
+R4_subset <- R4_actions_not_meas |>
   dplyr::slice_sample(n = 20)
 
 # create data tab;e
@@ -183,7 +183,7 @@ Nutrient_docs$actionDocumentUrl <- paste0('<a href="', Nutrient_docs$actionDocum
 ```
 
 ```{r nutrients.data.table}
-Nutrient_docs_subset <- Nutrient_docs %>%
+Nutrient_docs_subset <- Nutrient_docs |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(Nutrient_docs_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -207,7 +207,7 @@ PA_4B$actionDocumentUrl <- paste0('<a href="', PA_4B$actionDocumentUrl, '" targe
 ```
 
 ```{r pa.4b.table}
-PA_4B_subset <- PA_4B %>%
+PA_4B_subset <- PA_4B |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(PA_4B_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -236,11 +236,10 @@ There are `r formatC(nrow(KY_assessments), big.mark = ",")` results for
 the basic latest cycle Kentucky query.
 
 ```{r ky.table}
-KY_subset <- KY_assessments %>%
+KY_subset <- KY_assessments |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(KY_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
 ```
 
 It is also possible to design more specific assessment queries. For
@@ -260,7 +259,7 @@ R3_ecological <- rExpertQuery::EQ_Assessments(
 ```
 
 ```{r r3.ecological.table}
-R3_ecological_subset <- R3_ecological %>%
+R3_ecological_subset <- R3_ecological |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(R3_ecological_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -276,18 +275,17 @@ assessment units, but input params can be adjusted to query for
 Active assessment units for a single state.
 
 ```{r ri.aus, results = TRUE, message = FALSE, warning = FALSE}
-
-RI_aus <- rExpertQuery::EQ_AssessmentUnits(statecode = "RI",
-                                           api_key = testkey)
-
+RI_aus <- rExpertQuery::EQ_AssessmentUnits(
+  statecode = "RI",
+  api_key = testkey
+)
 ```
 
 We can take a look at a random selection of 20 of the active assessment
 units from Rhode Island.
 
 ```{r ri.table}
-
-RI_aus_subset <- RI_aus %>%
+RI_aus_subset <- RI_aus |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(RI_aus_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -297,16 +295,15 @@ It is is also possible to search fo retired assessment units, as show in
 the example from Florida below.
 
 ```{r fl.retired, results = TRUE, message = FALSE, warning = FALSE}
-
-FL_retired <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
-                                           au_status = "Retired",
-                                           api_key = testkey)
-
+FL_retired <- rExpertQuery::EQ_AssessmentUnits(
+  statecode = "FL",
+  au_status = "Retired",
+  api_key = testkey
+)
 ```
 
 ```{r fl.table}
-
-FL_ret_subset <- FL_retired %>%
+FL_ret_subset <- FL_retired |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(FL_ret_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -321,10 +318,12 @@ provide monitoring location data in ATTAINS. The first example uses a
 state that does supply some monitoring location data.
 
 ```{r akausmls, results = TRUE, message = FALSE, warning = FALSE}
-AK_ausmls <- rExpertQuery::EQ_AUsMLs(statecode = "AK",
-                                              api_key = testkey)
+AK_ausmls <- rExpertQuery::EQ_AUsMLs(
+  statecode = "AK",
+  api_key = testkey
+)
 
-AK_filt <- AK_ausmls %>% dplyr::filter(!is.na(monitoringLocationId))
+AK_filt <- AK_ausmls |> dplyr::filter(!is.na(monitoringLocationId))
 ```
 
 While the resulting data set from the query has
@@ -343,18 +342,17 @@ may not have enough memory to load an entire state's worth of catchment
 correspondence data in an R session.
 
 ```{r dc.catchcorr, results = TRUE, message = TRUE, warning = FALSE}
-
-DC_catch <- rExpertQuery::EQ_CatchCorr(statecode = "DC",
-                                       api_key = testkey)
-
+DC_catch <- rExpertQuery::EQ_CatchCorr(
+  statecode = "DC",
+  api_key = testkey
+)
 ```
 
 The table below shows 20 random results from the DC catchment
 correspondence query.
 
 ```{r dc.table}
-
-DC_subset <- DC_catch %>%
+DC_subset <- DC_catch |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(DC_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
@@ -365,22 +363,20 @@ correspondence queries. The next example queries for a single Illinois
 assessment unit by its id.
 
 ```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
-
-IL_N99_catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
-                          auid = "IL_N-99",
-                          api_key = testkey)
-
+IL_N99_catch <- rExpertQuery::EQ_CatchCorr(
+  statecode = "IL",
+  auid = "IL_N-99",
+  api_key = testkey
+)
 ```
 
 The resulting table shows all results from this much smaller query.
 
 ```{r il.table}
-
-IL_N99_subset <- IL_N99_catch %>%
+IL_N99_subset <- IL_N99_catch |>
   dplyr::slice_sample(n = 20)
 
 DT::datatable(IL_N99_catch, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
 ```
 
 ## EQ_NationalExtract
@@ -394,15 +390,11 @@ download the TMDL and Actions extracts. The extracts are all large files
 and some may not open in R if there is not enough memory available.
 
 ```{r nat.tmdls, results = TRUE, message = FALSE, warning = FALSE}
-
 Nat_tmdls <- rExpertQuery::EQ_NationalExtract("tmdl")
-
 ```
 
 ```{r nat.actions, results = TRUE, message = FALSE, warning = FALSE}
-
 Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
-
 ```
 
 ## EQ_Sources
@@ -418,18 +410,18 @@ sources related to the parameter group "HABITAT ALTERATIONS" in
 Wisconsin.
 
 ```{r wi.source.hab, results = TRUE, message = FALSE, warning = FALSE}
-WI_habalt_sources <- rExpertQuery::EQ_Sources(statecode = "WI",
-                                 param_group = "HABITAT ALTERATIONS",
-                                 api_key = testkey)
+WI_habalt_sources <- rExpertQuery::EQ_Sources(
+  statecode = "WI",
+  param_group = "HABITAT ALTERATIONS",
+  api_key = testkey
+)
 ```
 
 There were `r formatC(nrow(WI_habalt_sources), big.mark = ",")` for this
 query, which can be reviewed in the data table below.
 
 ```{r wi.table}
-
 DT::datatable(WI_habalt_sources, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
 ```
 
 It is also possible to query directly be the name of the source. The
@@ -437,8 +429,10 @@ example below queries all organizations for the source
 "LEGACY/HISTORICAL POLLUTANTS".
 
 ```{r source.legacy, results = TRUE, message = FALSE, warning = FALSE}
-legacy_sources <- rExpertQuery::EQ_Sources(source = "LEGACY/HISTORICAL POLLUTANTS",
-                             api_key = testkey)
+legacy_sources <- rExpertQuery::EQ_Sources(
+  source = "LEGACY/HISTORICAL POLLUTANTS",
+  api_key = testkey
+)
 ```
 
 There were `r formatC(nrow(WI_habalt_sources), big.mark = ",")` records
@@ -447,9 +441,7 @@ reviewed in the table below to see which states, regions, etc. are
 associated with this source.
 
 ```{r legacy.table}
-
 DT::datatable(legacy_sources, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
 ```
 
 ## EQ_TMDLs
@@ -461,17 +453,17 @@ example below shows querying Hawaii for TMDLs with a source_type of
 the TMDL.
 
 ```{r hi.tmdl.both, results = TRUE, message = FALSE, warning = FALSE}
-
-HI_both_tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI",
-                               source_type = "Both",
-                               api_key = testkey)
+HI_both_tmdls <- rExpertQuery::EQ_TMDLs(
+  statecode = "HI",
+  source_type = "Both",
+  api_key = testkey
+)
 ```
 
 There `r formatC(nrow(HI_both_tmdls), big.mark = ",")` can be reviewed
 in the data table below.
 
 ```{r hi.table}
-
 DT::datatable(HI_both_tmdls, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
@@ -480,20 +472,18 @@ query, searching for records from EPA Region 10 that pertain to the
 addressed parameter group "CAUSE UNKNOWN".
 
 ```{r unknown.r10, results = TRUE, message = FALSE, warning = FALSE}
-
- R10_unknown <- rExpertQuery::EQ_TMDLs(region = 10,
-                              ad_param_group = "CAUSE UNKNOWN",
-                              api_key = testkey)
-                
+R10_unknown <- rExpertQuery::EQ_TMDLs(
+  region = 10,
+  ad_param_group = "CAUSE UNKNOWN",
+  api_key = testkey
+)
 ```
 
 There `r formatC(nrow(R10_unknown), big.mark = ",")` are displayed in
 the table below.
 
 ```{r r10.uk.table}
-
 DT::datatable(R10_unknown, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
 ```
 
 ## EQ_DomainValues
@@ -505,21 +495,15 @@ supplied, it will return a list of all available domains that can be
 used as an argument in **EQ_DomainValues()**.
 
 ```{r see.dom.vals, results = TRUE, message = TRUE, warning = FALSE}
-
- rExpertQuery::EQ_DomainValues()
-
+rExpertQuery::EQ_DomainValues()
 ```
 
 The example below shows how to return allowable values for "org_id".
 
 ```{r dom.vals.org, results = TRUE, message = TRUE, warning = FALSE}
-
- Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
-
+Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
 ```
 
 ```{r org.id.table}
-
 DT::datatable(Org_vals, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
-
 ```

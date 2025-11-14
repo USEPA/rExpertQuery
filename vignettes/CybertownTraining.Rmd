@@ -85,7 +85,6 @@ Package](https://github.com/USEPA/rExpertQuery) and all dependencies by
 running:
 
 ```{r install, eval = TRUE}
-
 # install and load rExpertQuery
 if (!"remotes" %in% installed.packages()) {
   install.packages("remotes")
@@ -102,10 +101,10 @@ using the code chunk below:
 ```{r add.pkgs, message=FALSE, results='hide'}
 # # list of additional required packages
 #  demo.pkgs <- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", "leaflet", "maps", "plotly", "sf", "usdata", "usmap", "stringi")
-# 
+#
 # # install additional packages not yet installed
 #  installed_packages <- demo.pkgs %in% rownames(installed.packages())
-#  
+#
 # if (any(installed_packages == FALSE)) {
 #    install.packages(demo.pkgs[!installed_packages])
 #  }
@@ -250,25 +249,25 @@ page](images/nat.downloads.png){width="3in"}
     assessments.nat <- rExpertQuery::EQ_NationalExtract("assessments")
 
     # filter for latest assessments
-    assessments.nat <- assessments.nat %>%
-       dplyr::group_by(organizationId) %>%
-        dplyr::slice_max(reportingCycle) %>%
-        dplyr::select(-objectId) %>%
-        dplyr::distinct() %>%
-        dplyr::ungroup()
+    assessments.nat <- assessments.nat |>
+      dplyr::group_by(organizationId) |>
+      dplyr::slice_max(reportingCycle) |>
+      dplyr::select(-objectId) |>
+      dplyr::distinct() |>
+      dplyr::ungroup()
 
     # count impairments
-    count.impair <- assessments.nat %>%
+    count.impair <- assessments.nat |>
       # filter to retain only parameter causes
-      dplyr::filter(parameterStatus == "Cause") %>%
+      dplyr::filter(parameterStatus == "Cause") |>
       # subset data to find unique combinations
-      dplyr::select(organizationId, assessmentUnitId, parameterName) %>%
+      dplyr::select(organizationId, assessmentUnitId, parameterName) |>
       # remove duplicates
-      dplyr::distinct() %>%
+      dplyr::distinct() |>
       # group by parameterName
-      dplyr::group_by(parameterName) %>%
+      dplyr::group_by(parameterName) |>
       # count listings for each parameterName
-      dplyr::summarise(count = length(assessmentUnitId)) %>%
+      dplyr::summarise(count = length(assessmentUnitId)) |>
       # arrane in descending order
       dplyr::arrange(desc(count))
 
@@ -286,16 +285,14 @@ page](images/nat.downloads.png){width="3in"}
     [DT](https://rstudio.github.io/DT/).
 
     ```{r param.nat}
-
-    # filter assessments data set for 
-    param.nat <- assessments.nat %>% 
+    # filter assessments data set for
+    param.nat <- assessments.nat |>
       # filter for selenium and cause
       dplyr::filter(parameterName == "SELENIUM" &
-                      parameterStatus == "Cause")
+    parameterStatus == "Cause")
 
     # data table of selenium impairments
     DT::datatable(param.nat, options = list(pageLength = 5, scrollX = TRUE))
-
     ```
 
     Then we can create a list of states that have at least one selenium
@@ -316,13 +313,13 @@ page](images/nat.downloads.png){width="3in"}
 
     ```{r param.map}
     # filter to create df of states that have at least one selenium impairment}
-    state.names.sel <- param.nat %>%
+    state.names.sel <- param.nat |>
       # select state column from filtered df
-      dplyr::select(state) %>%
+      dplyr::select(state) |>
       # retain only distinct values for state
-      dplyr::distinct() %>%
+      dplyr::distinct() |>
       # change state abbreviation to full state name
-      dplyr::mutate(state = usdata::abbr2state(state)) %>%
+      dplyr::mutate(state = usdata::abbr2state(state)) |>
       # create a list from the df
       dplyr::pull()
 
@@ -330,12 +327,13 @@ page](images/nat.downloads.png){width="3in"}
     state.names <- datasets::state.name
 
     # create df with of all 50 state names
-    sel.map.data <- as.data.frame(state.names) %>%
+    sel.map.data <- as.data.frame(state.names) |>
       # rename state.name column to state
-      dplyr::rename(state = state.names) %>%
+      dplyr::rename(state = state.names) |>
       # create additional column to indicate if state has recorded selenium impairments ("yes") or not ("no")
       dplyr::mutate(SeleniumImpairment = factor(ifelse(state %in% state.names.sel,
-                                                "yes", "no")))
+    "yes", "no"
+      )))
     ```
 
     ```{r sel.map, fig.cap="Fig 1. States with selenium listed as a cause of impairment for any waters are shown in blue.", fig.alt = "Fig 1. A map of the United States, including Alaska and Hawaii. Any state with selenium listed as a cause of impairment for any waters is filled in blue.", fig.width = 3}
@@ -344,11 +342,11 @@ page](images/nat.downloads.png){width="3in"}
       regions = "state", data = sel.map.data,
       values = "SeleniumImpairment", color = "black"
     ) +
-    # fill states with selenium impairments with blue
+      # fill states with selenium impairments with blue
       ggplot2::scale_fill_manual(
-        values = c(`no` = "white", `yes` = "blue")
+    values = c(`no` = "white", `yes` = "blue")
       ) +
-    # remove legend
+      # remove legend
       ggplot2::theme(legend.position = "none")
     ```
 
@@ -362,22 +360,25 @@ page](images/nat.downloads.png){width="3in"}
     creating a data table, respectively.
 
     ```{r tmdl.fs}
-
     # filter national assessments to includ only Fully Supporting w/ TMDL
-    tmdl.fs <- assessments.nat %>%
-      dplyr::filter(overallStatus == "Fully Supporting",
-                    associatedActionType == "TMDL"
-                    ) %>%
+    tmdl.fs <- assessments.nat |>
+      dplyr::filter(
+    overallStatus == "Fully Supporting",
+    associatedActionType == "TMDL"
+      ) |>
       # select columns to review
-      dplyr::select(organizationId, state, assessmentUnitId, assessmentUnitName, 
-                    associatedActionId) %>%
+      dplyr::select(
+    organizationId, state, assessmentUnitId, assessmentUnitName,
+    associatedActionId
+      ) |>
       # group by state and assessmentUnit
-      dplyr::group_by(state, assessmentUnitId, assessmentUnitName) %>%
+      dplyr::group_by(state, assessmentUnitId, assessmentUnitName) |>
       # create column continaing all actionIds associated with the assessmentUnit
-      dplyr::mutate(associatedActionIds = paste(unique(associatedActionId), 
-                                                collapse = ", ")) %>%
+      dplyr::mutate(associatedActionIds = paste(unique(associatedActionId),
+    collapse = ", "
+      )) |>
       # remove original associatedActionId column
-      dplyr::select(-associatedActionId) %>%
+      dplyr::select(-associatedActionId) |>
       # retain only distinct rows
       dplyr::distinct()
 
@@ -394,14 +395,15 @@ page](images/nat.downloads.png){width="3in"}
     by epaIRCategory for category 4 and 5 waters.
 
     ```{r impaired.waters}
-
     # select subset of columns to include
-    imp.waters <- assessments.nat %>%
-      dplyr::select(organizationId, organizationName, organizationType,
-                    assessmentUnitId, assessmentUnitName, assessmentDate, 
-                    epaIrCategory, waterType, waterSize, waterSizeUnits) %>%
+    imp.waters <- assessments.nat |>
+      dplyr::select(
+    organizationId, organizationName, organizationType,
+    assessmentUnitId, assessmentUnitName, assessmentDate,
+    epaIrCategory, waterType, waterSize, waterSizeUnits
+      ) |>
       # retain only distinct rows
-      dplyr::distinct() %>%
+      dplyr::distinct() |>
       # filter for category 4 and 5 waters
       dplyr::filter(epaIrCategory %in% c("4", "5"))
     ```
@@ -413,12 +415,12 @@ page](images/nat.downloads.png){width="3in"}
     full results by viewing the imp.waters df.
 
     ```{r imp.dt}
-
     # data table with random 250 impaired waters
-    DT::datatable(imp.waters %>%
-                    dplyr::slice_sample(n = 250), 
-                  options = list(pageLength = 5, scrollX = TRUE))
-
+    DT::datatable(
+      imp.waters |>
+    dplyr::slice_sample(n = 250),
+      options = list(pageLength = 5, scrollX = TRUE)
+    )
     ```
 
 5.  **Which states have included any information about
@@ -459,25 +461,29 @@ page](images/nat.downloads.png){width="3in"}
 
     ```{r filt.ausmls}
     # filter for rows that contain monitoringLocationIds and are from State orgs
-    filtered.mls <- nat.ausmls %>%
-      dplyr::filter(monitoringLocationId != "",
-                    !is.na(monitoringLocationId),
-                    organizationType == "State")
+    filtered.mls <- nat.ausmls |>
+      dplyr::filter(
+    monitoringLocationId != "",
+    !is.na(monitoringLocationId),
+    organizationType == "State"
+      )
 
     # start with data set filtered to include only rows with MonitoringLocationIds
-    orgs.mls <- filtered.mls %>%
+    orgs.mls <- filtered.mls |>
       # select columns to describe orgs
-      dplyr::select(organizationId, organizationName, organizationType) %>%
+      dplyr::select(organizationId, organizationName, organizationType) |>
       dplyr::distinct()
 
 
     # start with data set filtered to include only rows with MonitoringLocationIds
-    links.mls <- filtered.mls %>%
+    links.mls <- filtered.mls |>
       # filter for orgs with monitoringLocationDataLinks
-      dplyr::filter(monitoringLocationDataLink != "",
-                    !is.na(monitoringLocationDataLink)) %>%
+      dplyr::filter(
+    monitoringLocationDataLink != "",
+    !is.na(monitoringLocationDataLink)
+      ) |>
       # select columns to describe orgs
-      dplyr::select(organizationId, organizationName, organizationType) %>%
+      dplyr::select(organizationId, organizationName, organizationType) |>
       # retain distinct rows
       dplyr::distinct()
     ```
@@ -491,30 +497,37 @@ page](images/nat.downloads.png){width="3in"}
     orange.
 
     ```{r ml.dt}
-
     # create data frame summarizing which states have monitoringLocationIds and monitoringLocationDataLinks in ATTAINS
-    ml.table <- nat.ausmls %>%
+    ml.table <- nat.ausmls |>
       # create df of all orgs
-      dplyr::select(organizationId, organizationName, organizationType) %>%
+      dplyr::select(organizationId, organizationName, organizationType) |>
       # retain only distinct rows
-      dplyr::distinct() %>%
+      dplyr::distinct() |>
       # add columns indicating whether the org has any data in ATTAINS for monitoringLocationId and monitoringLocationDataLink
-      dplyr::mutate(monitoringLocationId = ifelse(organizationId %in% 
-                                                    orgs.mls$organizationId,
-                                                  "yes", "no"),
-                    monitoringLocationDataLink = ifelse(organizationId %in%
-                                                          links.mls$organizationId,
-                                                        "yes", "no"))
-    # create data table 
-    DT::datatable(ml.table, options = list(pageLength = 10, scrollX = TRUE)) %>% 
+      dplyr::mutate(
+    monitoringLocationId = ifelse(organizationId %in%
+      orgs.mls$organizationId,
+    "yes", "no"
+    ),
+    monitoringLocationDataLink = ifelse(organizationId %in%
+      links.mls$organizationId,
+    "yes", "no"
+    )
+      )
+    # create data table
+    DT::datatable(ml.table, options = list(pageLength = 10, scrollX = TRUE)) |>
       # highlight rows for orgs that have monitoringLocationId in blue
       DT::formatStyle(
-      "monitoringLocationId", target = "row", 
-      backgroundColor = styleEqual(c("yes"), c("#66c3c5"))) %>%
+    "monitoringLocationId",
+    target = "row",
+    backgroundColor = styleEqual(c("yes"), c("#66c3c5"))
+      ) |>
       # highlight rows for orgs that also have data for data links in organge
       DT::formatStyle(
-      "monitoringLocationDataLink", target = "row", 
-      backgroundColor = styleEqual(c("yes"), c("#f9b97d")))
+    "monitoringLocationDataLink",
+    target = "row",
+    backgroundColor = styleEqual(c("yes"), c("#f9b97d"))
+      )
     ```
 
 ## EQ_Assessments
@@ -539,24 +552,26 @@ the desired cycle year in YYYY format.
     of stream miles.
 
     ```{r stream.ks, results = FALSE, message = FALSE}
-
     # set up query to search assessments for KS, primary contact recreation use, and stream, default behavior is to query latest report cycle
-    ks.imp.streams <- rExpertQuery::EQ_Assessments(statecode = "KS",
-                                                   use_name = "Primary Contact Recreation", 
-                                                   api_key = testkey,
-                                                   water_type = "STREAM")
+    ks.imp.streams <- rExpertQuery::EQ_Assessments(
+      statecode = "KS",
+      use_name = "Primary Contact Recreation",
+      api_key = testkey,
+      water_type = "STREAM"
+    )
 
     # calculate total water size
-    ks.miles <- ks.imp.streams %>%
+    ks.miles <- ks.imp.streams |>
       # select required columns
-      dplyr::select(assessmentUnitId, assessmentUnitName, 
-                    waterSize, waterSizeUnits) %>%
+      dplyr::select(
+    assessmentUnitId, assessmentUnitName,
+    waterSize, waterSizeUnits
+      ) |>
       # retain distinct rows
-      dplyr::distinct() %>%
+      dplyr::distinct() |>
       # sum water size
-      dplyr::summarize(totalWaterSize = sum(waterSize)) %>%
+      dplyr::summarize(totalWaterSize = sum(waterSize)) |>
       dplyr::pull()
-
     ```
 
     There are
@@ -572,13 +587,13 @@ the desired cycle year in YYYY format.
     results by useName and create a bar plot of the results.
 
     ```{r MT.impair, result = FALSE, message = FALSE}
-
     # query MT's latest assessments for zinc as a cause
-    MT.impair <- rExpertQuery::EQ_Assessments(statecode = "MT",
-                                              api_key = testkey,
-                                              param_name = "ZINC",
-                                              param_status = "Cause"
-                                              )
+    MT.impair <- rExpertQuery::EQ_Assessments(
+      statecode = "MT",
+      api_key = testkey,
+      param_name = "ZINC",
+      param_status = "Cause"
+    )
     ```
 
     Next we summarize the uses associated with zinc impairments and
@@ -587,8 +602,8 @@ the desired cycle year in YYYY format.
 
     ```{r MT.sum}
     # summarize by useName
-    MT.impair.use <- MT.impair %>% 
-      dplyr::group_by(useName) %>%
+    MT.impair.use <- MT.impair |>
+      dplyr::group_by(useName) |>
       # count AUIDs by use
       dplyr::summarize(count = length(unique(assessmentUnitId)))
     ```
@@ -599,7 +614,8 @@ the desired cycle year in YYYY format.
     . As our last step, we'll create the bar plot.
 
     ```{r MT.plot, fig.with = 2.5, fig.height = 2, fig.cap="Fig 2. Zinc impairments by useName for Montana's latest assessment cycle.", fig.alt = "Fig 2. A bar graph showing then number of Zinc impairments by useName for Montana's latest cycle."}
-    plotly::plot_ly(data = MT.impair.use,
+    plotly::plot_ly(
+      data = MT.impair.use,
       x = ~useName,
       y = ~count,
       type = "bar"
@@ -619,23 +635,26 @@ the desired cycle year in YYYY format.
     specifying the category.
 
     ```{r il.5.comp, results = FALSE, message = FALSE}
-
     # get cat 5 waters from 2024 assessment cycle
-    IL.latest <- rExpertQuery::EQ_Assessments(statecode = "IL",
-                                epa_ir_cat = "5",
-                                 api_key = testkey)
+    IL.latest <- rExpertQuery::EQ_Assessments(
+      statecode = "IL",
+      epa_ir_cat = "5",
+      api_key = testkey
+    )
 
     # select required columns from latest cycle data
-    IL.latest <- IL.latest %>%
-      dplyr::select(assessmentUnitId, epaIrCategory) %>%
+    IL.latest <- IL.latest |>
+      dplyr::select(assessmentUnitId, epaIrCategory) |>
       # retain unique rows
       dplyr::distinct()
 
 
     # get all assessments from previous cycle
-    IL.previous <- rExpertQuery::EQ_Assessments(statecode = "IL",
-                                                report_cycle = 2022,
-                                                api_key = testkey)
+    IL.previous <- rExpertQuery::EQ_Assessments(
+      statecode = "IL",
+      report_cycle = 2022,
+      api_key = testkey
+    )
     ```
 
     Next we'll need to filter the previous cycle results to retain only
@@ -647,21 +666,21 @@ the desired cycle year in YYYY format.
 
     ```{r filt.previous}
     # filter previous cycle to include only cat 5 waters from 2024
-    IL.previous <- IL.previous %>%
+    IL.previous <- IL.previous |>
       # retain only cat 5 waters from latest cycle
-      dplyr::filter(assessmentUnitId %in% IL.latest$assessmentUnitId) %>%
+      dplyr::filter(assessmentUnitId %in% IL.latest$assessmentUnitId) |>
       # select auid and category
-      dplyr::select(assessmentUnitId, epaIrCategory) %>%
+      dplyr::select(assessmentUnitId, epaIrCategory) |>
       # rename to indicate previous cycle
       dplyr::rename(epaIrCategory.previous = epaIrCategory)
-      
+
     # combine latest and previous cycle dfs
-    IL.combine <- IL.latest %>%
+    IL.combine <- IL.latest |>
       dplyr::left_join(IL.previous, dplyr::join_by(assessmentUnitId))
 
     # create df of the auids that changed to cat 5 in 2024
-    IL.changes <- IL.combine %>%
-      dplyr::filter(epaIrCategory != epaIrCategory.previous) %>%
+    IL.changes <- IL.combine |>
+      dplyr::filter(epaIrCategory != epaIrCategory.previous) |>
       dplyr::distinct()
     ```
 
@@ -671,26 +690,29 @@ the desired cycle year in YYYY format.
 
     ```{r cat5.sum}
     # summarize what cats the new cat 5s were in previously
-    IL.change.sum <- IL.changes %>%
-      dplyr::group_by(epaIrCategory.previous) %>%
+    IL.change.sum <- IL.changes |>
+      dplyr::group_by(epaIrCategory.previous) |>
       dplyr::summarise(count = dplyr::n_distinct(assessmentUnitId))
     ```
 
     ```{r cat5.viz, fig.height = 2, fig.cap="Fig 3. New category 5 waters in Illinois in the 2024 cycle, summarized by their 2022 categories.", fig.alt = "Fig 3. A pie chart showing new category 5 waters in Illinois in the 2024, cycle summarized by their 2022 categories."}
     # create plotly plot
-    plotly::plot_ly() %>%
-      # add pipe based IL.change.sum  
-      plotly::add_pie(data = IL.change.sum, ~count, labels = ~epaIrCategory.previous,
-                        marker = list(
-                          line = list(color = "white", width = 2)
-                        ), type = "pie",
-                        hoverinfo = "value", outsidetextfont = list(color = "black"),
-                        sort = FALSE
-        ) %>%
-      # add legend  
-      plotly::layout(legend = list(orientation = "h",
-                                     xanchor = "center",
-                                     x = 0.5))
+    plotly::plot_ly() |>
+      # add pipe based IL.change.sum
+      plotly::add_pie(
+    data = IL.change.sum, ~count, labels = ~epaIrCategory.previous,
+    marker = list(
+      line = list(color = "white", width = 2)
+    ), type = "pie",
+    hoverinfo = "value", outsidetextfont = list(color = "black"),
+    sort = FALSE
+      ) |>
+      # add legend
+      plotly::layout(legend = list(
+    orientation = "h",
+    xanchor = "center",
+    x = 0.5
+      ))
     ```
 
 ## EQ_AssessmentUnits
@@ -710,15 +732,15 @@ queries ATTAINS Assessment Units data. The default is to only return
     [DT](https://rstudio.github.io/DT/).
 
     ```{r FL.ret.auids, message = FALSE}
-
     # search for retired assessment units in Florida
-    FL.ret.auids <- rExpertQuery::EQ_AssessmentUnits(statecode = "FL",
-                                                    au_status = "Retired",
-                                                    api_key = testkey)
+    FL.ret.auids <- rExpertQuery::EQ_AssessmentUnits(
+      statecode = "FL",
+      au_status = "Retired",
+      api_key = testkey
+    )
 
     # create data table
     DT::datatable(FL.ret.auids, options = list(pageLength = 5, scrollX = TRUE))
-
     ```
 
 ## EQ_TMDLs
@@ -737,10 +759,11 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     Hawaii's TMDLs.
 
     ```{r hi.tmdl, results = FALSE, message = FALSE, warning = FALSE}
-
     # query for Hawaii TMDLs
-    HI.tmdls <- rExpertQuery::EQ_TMDLs(statecode = "HI", 
-                                       api_key = testkey)
+    HI.tmdls <- rExpertQuery::EQ_TMDLs(
+      statecode = "HI",
+      api_key = testkey
+    )
     ```
 
     The `r formatC(nrow(HI.tmdls), big.mark = ",")` rows can be reviewed
@@ -755,28 +778,27 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     bar graph.
 
     ```{r hi.tmdl.counts, fig.height= 3.5}
-
     # determine the number of tmdls
-    HI.count <- HI.tmdls %>%
+    HI.count <- HI.tmdls |>
       # select required columns
-      dplyr::select(assessmentUnitId, assessmentUnitName, actionId, actionName, pollutant, pollutantGroup, fiscalYearEstablished, actionAgency, planSummaryLink) %>%
+      dplyr::select(assessmentUnitId, assessmentUnitName, actionId, actionName, pollutant, pollutantGroup, fiscalYearEstablished, actionAgency, planSummaryLink) |>
       # retain unique rows
       dplyr::distinct()
 
     # determine number per group
-    HI.sum <- HI.count %>%
+    HI.sum <- HI.count |>
       # groupy by pollutantGroup
-      dplyr::group_by(pollutantGroup,) %>%
+      dplyr::group_by(pollutantGroup, ) |>
       # count unique auids per pollutantGroup
-      dplyr::summarize(count = dplyr::n_distinct(assessmentUnitId)) %>%
+      dplyr::summarize(count = dplyr::n_distinct(assessmentUnitId)) |>
       # if pollutantGroup is missing, assign to group named "NULL"
       dplyr::mutate(pollutantGroup = ifelse(is.na(pollutantGroup), "NULL", pollutantGroup))
     ```
 
     ```{r hi.tmdl.plot, fig.cap="Fig 4. Number of TMDLs per pollutantGroup in Hawaii.", fig.alt="Fig 4. a bar graph showing Number of TMDLs per pollutantGroup in Hawaii."}
-
     # create bar plot
-    plotly::plot_ly( data = HI.sum,
+    plotly::plot_ly(
+      data = HI.sum,
       x = ~pollutantGroup,
       y = ~count,
       type = "bar"
@@ -796,9 +818,11 @@ queries ATTAINS TMDL data and can utilize many search parameters.
 
     ```{r TMDL.proj, results = FALSE, message = FALSE}
     # r10 query for FY 2025 TMDLs
-    tmdl.proj <- rExpertQuery::EQ_TMDLs(region = 10,
-                                        tmdl_date_start = "2024-10-01",
-                                        api_key = testkey)
+    tmdl.proj <- rExpertQuery::EQ_TMDLs(
+      region = 10,
+      tmdl_date_start = "2024-10-01",
+      api_key = testkey
+    )
 
     # count distinct actionIds
     tmdl.proj.count <- dplyr::n_distinct(tmdl.proj$actionId)
@@ -816,28 +840,33 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     together in the same row.
 
     ```{r tmdl.dt}
-    tmdl.sum <- tmdl.proj %>%
+    tmdl.sum <- tmdl.proj |>
       # select columns
-      dplyr::select(region, state, organizationId, organizationName, organizationId, 
-                    actionId, actionName, assessmentUnitId, pollutant,
-                    addressedParameter, tmdlDate, planSummaryLink) %>%
+      dplyr::select(
+    region, state, organizationId, organizationName, organizationId,
+    actionId, actionName, assessmentUnitId, pollutant,
+    addressedParameter, tmdlDate, planSummaryLink
+      ) |>
       # retain unique rows
-      dplyr::distinct() %>%
+      dplyr::distinct() |>
       # group by actionId
-      dplyr::group_by(actionId) %>%
+      dplyr::group_by(actionId) |>
       # create new columns to address issues with mulitple rows
-      dplyr::mutate(assessmentUnitIds = paste(sort(unique(assessmentUnitId)), collapse = ", "
-                                              ),
-                    pollutants = paste(sort(unique(pollutant)), collapse = ", "),
-                    addressedParameters = paste(sort(unique(addressedParameter)), collapse = ", ")) %>% dplyr::select(-assessmentUnitId, -pollutant, -addressedParameter) %>%
+      dplyr::mutate(
+    assessmentUnitIds = paste(sort(unique(assessmentUnitId)), collapse = ", "),
+    pollutants = paste(sort(unique(pollutant)), collapse = ", "),
+    addressedParameters = paste(sort(unique(addressedParameter)), collapse = ", ")
+      ) |> dplyr::select(-assessmentUnitId, -pollutant, -addressedParameter) |>
       # retain unique rows
       dplyr::distinct()
 
     # create data table
-    DT::datatable(tmdl.sum %>%
-                    rExpertQuery::EQ_FormatPlanLinks(), escape = FALSE,
-                  options = list(pageLength = 2, scrollX = TRUE))
-
+    DT::datatable(
+      tmdl.sum |>
+    rExpertQuery::EQ_FormatPlanLinks(),
+      escape = FALSE,
+      options = list(pageLength = 2, scrollX = TRUE)
+    )
     ```
 
 ## EQ_Actions
@@ -855,15 +884,15 @@ ATTAINS Actions data by a variety of user supplied parameters.
     parameter set to "Yes". Then we count the distinct actionIds.
 
     ```{r DE.actions, result=FALSE, message=FALSE, warning=FALSE}
-
-    # query Actions from Delaware that are included in Measures 
-    DE.meas <- rExpertQuery::EQ_Actions(statecode = "DE",
-                                        in_meas = "Yes",
-                                        api_key = testkey)
+    # query Actions from Delaware that are included in Measures
+    DE.meas <- rExpertQuery::EQ_Actions(
+      statecode = "DE",
+      in_meas = "Yes",
+      api_key = testkey
+    )
 
     # count unique actionIds
     DE.count <- dplyr::n_distinct(DE.meas$actionId)
-
     ```
 
     There are `r formatC(DE.count, big.mark = ",")` actionIds that
@@ -873,29 +902,34 @@ ATTAINS Actions data by a variety of user supplied parameters.
 
     ```{r de.table}
     # determine unique actionIds
-    DE.actids <- DE.meas %>%
+    DE.actids <- DE.meas |>
       # select columns
-      dplyr::select(actionType, actionId, actionName, actionAgency, parameter,
-                    completionDate, assessmentUnitId, fiscalYearEstablished,
-                    planSummaryLink) %>%
+      dplyr::select(
+    actionType, actionId, actionName, actionAgency, parameter,
+    completionDate, assessmentUnitId, fiscalYearEstablished,
+    planSummaryLink
+      ) |>
       # retain unique rows
-      dplyr::distinct() %>%
+      dplyr::distinct() |>
       # group by actionId
-      dplyr::group_by(actionId) %>%
+      dplyr::group_by(actionId) |>
       # create new columns to address issues with mulitple rows
-      dplyr::mutate(parameters = paste(unique(parameter), collapse = ", "),
-                    assessmentUnitIds = paste(unique(assessmentUnitId), collapse = ", ")) %>%
-      dplyr::select(-parameter, -assessmentUnitId) %>%
+      dplyr::mutate(
+    parameters = paste(unique(parameter), collapse = ", "),
+    assessmentUnitIds = paste(unique(assessmentUnitId), collapse = ", ")
+      ) |>
+      dplyr::select(-parameter, -assessmentUnitId) |>
       # retain unique rows
       dplyr::distinct()
     ```
 
     ```{r table.show}
-    DT::datatable(DE.actids %>%
-                    rExpertQuery::EQ_FormatPlanLinks(),
-                  escape = FALSE,
-                  options = list(pageLength = 5, scrollX = TRUE))
-
+    DT::datatable(
+      DE.actids |>
+    rExpertQuery::EQ_FormatPlanLinks(),
+      escape = FALSE,
+      options = list(pageLength = 5, scrollX = TRUE)
+    )
     ```
 
 2.  **How many actions (by actionId) were established in R3 in FY 2024?
@@ -909,16 +943,16 @@ ATTAINS Actions data by a variety of user supplied parameters.
     as in the first EQ_Actions example.
 
     ```{r act.fy24, results=FALSE, message=FALSE}
-
     # query for R3 FY2024 actions
-    act.fy.24 <- rExpertQuery::EQ_Actions(region = 3,
-                                          fisc_year_start = 2024, 
-                                          fisc_year_end = 2024,
-                                          api_key = testkey)
+    act.fy.24 <- rExpertQuery::EQ_Actions(
+      region = 3,
+      fisc_year_start = 2024,
+      fisc_year_end = 2024,
+      api_key = testkey
+    )
 
     # count unique actionIds
     n_act.fy.24 <- dplyr::n_distinct(act.fy.24$actionId)
-
     ```
 
     There were `r formatC(n_act.fy.24, big.mark = ",")` unique actions
@@ -926,15 +960,16 @@ ATTAINS Actions data by a variety of user supplied parameters.
     with counts for each actionType.
 
     ```{r acttype.24}
-
-    act.fy.24.counts <- act.fy.24 %>%
+    act.fy.24.counts <- act.fy.24 |>
       # select columns
-      dplyr::select(state, organizationId, organizationName, 
-                      actionId, actionName, actionType) %>%
+      dplyr::select(
+    state, organizationId, organizationName,
+    actionId, actionName, actionType
+      ) |>
       # retain unique rows
-      dplyr::distinct() %>%
+      dplyr::distinct() |>
       # group by action type
-      dplyr::group_by(actionType) %>%
+      dplyr::group_by(actionType) |>
       # count actionId per each action type
       dplyr::summarize(count = length(unique(actionId)))
 
@@ -956,10 +991,11 @@ keyword.
     The only query parameter we will provide is the keyword "nutrient".
 
     ```{r nutrients, results = FALSE, message = FALSE, warning = FALSE}
-    # Actions Documents containing "nutrient" 
-    nutrient.doc <- rExpertQuery::EQ_ActionsDocuments(doc_query = "nutrient",
-                                                      api_key = testkey )
-
+    # Actions Documents containing "nutrient"
+    nutrient.doc <- rExpertQuery::EQ_ActionsDocuments(
+      doc_query = "nutrient",
+      api_key = testkey
+    )
     ```
 
     This query yields `r formatC(nrow(nutrient.doc), big.mark = ",")`
@@ -972,10 +1008,13 @@ keyword.
 
     ```{r nutrients.data.table}
     # create data table
-    DT::datatable(nutrient.doc %>% 
-                    dplyr::slice_max(rankPercent, n = 50) %>%          
-                    rExpertQuery::EQ_FormatPlanLinks(url.col = "actionDocumentUrl"),                  options = list(pageLength = 10, scrollX = TRUE), 
-                     escape = FALSE)
+    DT::datatable(
+      nutrient.doc |>
+    dplyr::slice_max(rankPercent, n = 50) |>
+    rExpertQuery::EQ_FormatPlanLinks(url.col = "actionDocumentUrl"),
+      options = list(pageLength = 10, scrollX = TRUE),
+      escape = FALSE
+    )
     ```
 
 2.  **How many actions documents that contain the keyword "nutrient" are
@@ -986,16 +1025,17 @@ keyword.
     display the results in a [plotly](https://plotly.com/r/) bar plot.
 
     ```{r nutrients.summary}
-    nutrient.doc.regions <- nutrient.doc %>%
+    nutrient.doc.regions <- nutrient.doc |>
       # group by region
-      dplyr::group_by(region) %>%
+      dplyr::group_by(region) |>
       # count action ids by region
       dplyr::summarize(count = length(unique(actionId)))
     ```
 
     ```{r nutrients.plot, fig.height=2, fig.cap="Fig 5. Number of documents containing the keyword 'nutrient' by EPA Region.", fig.alt="Fig 5. A bar plot of the number of documents containing the keyword 'nutrient' by EPA Region."}
     # create bar plot
-    plotly::plot_ly(data = nutrient.doc.regions,
+    plotly::plot_ly(
+      data = nutrient.doc.regions,
       x = ~region,
       y = ~count,
       type = "bar"
@@ -1017,19 +1057,24 @@ keyword.
     monitoringLocationOrgId column and organize them alphabetically.
 
     ```{r ak.mls, results=FALSE, message=FALSE}
-
     # query for assessment units and monitoring locations from Alaska
-    ak.mls <- rExpertQuery::EQ_AUsMLs(statecode = "AK",
-                                      api_key = testkey)
+    ak.mls <- rExpertQuery::EQ_AUsMLs(
+      statecode = "AK",
+      api_key = testkey
+    )
 
     # filter for assessment units with monitoring locations from Alaska
-    filt.ak.mls <- ak.mls %>%
+    filt.ak.mls <- ak.mls |>
       # filter for rows with a valule for monitoring location id
-      dplyr::filter(!is.na(monitoringLocationId),
-                    monitoringLocationId != "") %>%
+      dplyr::filter(
+    !is.na(monitoringLocationId),
+    monitoringLocationId != ""
+      ) |>
       # select rows for review
-      dplyr::select(assessmentUnitId, assessmentUnitName, monitoringLocationId,
-                    monitoringLocationOrgId) %>%
+      dplyr::select(
+    assessmentUnitId, assessmentUnitName, monitoringLocationId,
+    monitoringLocationOrgId
+      ) |>
       # retain unique rows
       dplyr::distinct()
 
@@ -1054,7 +1099,7 @@ keyword.
 
     ```{r no.ml.ak}
     # filter Alaska data set for assessmentUnitIds without listed monitoringLocationIds
-    no.ml.ak <- ak.mls %>%
+    no.ml.ak <- ak.mls |>
       dplyr::filter(!assessmentUnitId %in% filt.ak.mls$assessmentUnitId)
 
     # count number of unique asessment units without listed monitoringLocationIds
@@ -1078,23 +1123,24 @@ keyword.
     cycle.
 
     ```{r r6.sources, results=FALSE, message=FALSE}
-
     # query for probable sources in the latest assessment cycle in R6
-    r6.sources <- rExpertQuery::EQ_Sources(region = 6,
-                                           api_key = testkey)
+    r6.sources <- rExpertQuery::EQ_Sources(
+      region = 6,
+      api_key = testkey
+    )
 
     # filter for states with listed probable sources
-    r6.sources.filter <- r6.sources %>%
+    r6.sources.filter <- r6.sources |>
       # remove all rows without a listed source
-      dplyr::filter(!is.na(sourceName)) %>%
+      dplyr::filter(!is.na(sourceName)) |>
       # select state
-      dplyr::select(state) %>%
+      dplyr::select(state) |>
       # retain distinct state
-      dplyr::distinct() %>%
+      dplyr::distinct() |>
       # create list
-      dplyr::pull() %>%
+      dplyr::pull() |>
       # convert abbreviation to state name
-      usdata::abbr2state() %>%
+      usdata::abbr2state() |>
       # sort alphabetically
       sort()
     ```
@@ -1112,15 +1158,14 @@ keyword.
     [DT](https://rstudio.github.io/DT/) data table of the results.
 
     ```{r source.sum, results=TRUE, message=FALSE}
-
     # count the number of times a probable source is listed for each state
-    r6.sources.summarize <- r6.sources %>%
-      dplyr::select(state, organizationId, assessmentUnitId, sourceName) %>%
-      dplyr::distinct() %>%
-      dplyr::group_by(state, organizationId, sourceName) %>%
-      dplyr::summarize(count = length(assessmentUnitId))%>%
-      dplyr::ungroup() %>%
-      dplyr::group_by(state) %>%
+    r6.sources.summarize <- r6.sources |>
+      dplyr::select(state, organizationId, assessmentUnitId, sourceName) |>
+      dplyr::distinct() |>
+      dplyr::group_by(state, organizationId, sourceName) |>
+      dplyr::summarize(count = length(assessmentUnitId)) |>
+      dplyr::ungroup() |>
+      dplyr::group_by(state) |>
       dplyr::slice_max(count)
 
     # data table for max count
@@ -1146,13 +1191,15 @@ specific assessment unit in catchment correspondence queries.
 
     ```{r il.99.catch, results=FALSE, message=FALSE}
     # query for IL_N-99 catchment data
-    il.n99.catch <- rExpertQuery::EQ_CatchCorr(statecode = "IL",
-                              auid = "IL_N-99",
-                              api_key = testkey)
+    il.n99.catch <- rExpertQuery::EQ_CatchCorr(
+      statecode = "IL",
+      auid = "IL_N-99",
+      api_key = testkey
+    )
 
-    il.n99.catch <- il.n99.catch %>%
+    il.n99.catch <- il.n99.catch |>
       # remove objectId
-      dplyr::select(-objectId) %>%
+      dplyr::select(-objectId) |>
       # retain unique rows
       dplyr::distinct()
 
@@ -1182,19 +1229,19 @@ specific assessment unit in catchment correspondence queries.
     the catchments associated with IL_N-99.
 
     ```{r il.au.catch, results = TRUE, message = FALSE, warning = FALSE}
-
     # set up query params for ATTAINS geospatial web services
     query.params <- list(
-        where = "assessmentunitidentifier IN ('IL_N-99')",
-        outFields = "*",
-        f = "geojson"
-      )
+      where = "assessmentunitidentifier IN ('IL_N-99')",
+      outFields = "*",
+      f = "geojson"
+    )
 
     # query ATTAINS geospatial assessments lines layer
     lines.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/1/query?",
-                            query = query.params)
+      query = query.params
+    )
 
-    # read content from ATTAINS geospatial assessments lines layer 
+    # read content from ATTAINS geospatial assessments lines layer
     lines.geojson <- httr::content(lines.response, as = "text", encoding = "UTF-8")
 
     # get sf from ATTAINS geospatial assessments lines layer
@@ -1202,20 +1249,20 @@ specific assessment unit in catchment correspondence queries.
 
     # query ATTAINS geospatial catchment association layer
     catch.response <- httr::GET("https://gispub.epa.gov/arcgis/rest/services/OW/ATTAINS_Assessment/MapServer/3/query?",
-                            query = query.params)
+      query = query.params
+    )
 
-    # read content from ATTAINS geospatial catchment association layer 
+    # read content from ATTAINS geospatial catchment association layer
     catch.geojson <- httr::content(catch.response, as = "text", encoding = "UTF-8")
 
     # # get sf from ATTAINS geospatial assessments lines layer
     catch.sf <- sf::st_read(catch.geojson, quiet = TRUE)
 
     # sum the catchment areas that correspond to IL_N-99
-    sum.catch <- catch.sf %>%
-      dplyr::summarise(total = sum(areasqkm)) %>%
-      sf::st_drop_geometry() %>%
+    sum.catch <- catch.sf |>
+      dplyr::summarise(total = sum(areasqkm)) |>
+      sf::st_drop_geometry() |>
       dplyr::pull()
-
     ```
 
     The total catchment area associated with IL_N-99 is `r sum.catch`.
@@ -1227,16 +1274,19 @@ specific assessment unit in catchment correspondence queries.
 
     ```{r catch.map, fig.cap="Fig. 6 Map of assessment unit IL_N-99 (blue) and its associated catchments (orange)."}
     # create leaflet map
-    leaflet::leaflet() %>%
+    leaflet::leaflet() |>
       # add open street map layer
-      leaflet::addTiles() %>%
+      leaflet::addTiles() |>
       # add catchments, include popups with nhdplus id and area in sq km
-      leaflet::addPolygons(data = catch.sf, color = "darkorange",
-                           popup = paste0(catch.sf$nhdplusid, "<br>",
-                                          catch.sf$areasqkm, " sq km")) %>%
-      # added assessment id  
+      leaflet::addPolygons(
+    data = catch.sf, color = "darkorange",
+    popup = paste0(
+      catch.sf$nhdplusid, "<br>",
+      catch.sf$areasqkm, " sq km"
+    )
+      ) |>
+      # added assessment id
       leaflet::addPolylines(data = lines.sf, color = "blue")
-
     ```
 
 ## EQ_DomainValues
@@ -1273,7 +1323,6 @@ value that should be used in queries.
     "water_type".
 
     ```{r wat.type}
-
     water.types <- rExpertQuery::EQ_DomainValues("water_type")
     ```
 

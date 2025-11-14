@@ -205,7 +205,7 @@ EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL,
   params.cw <- EQ_ExtractParams(extract = "assessments")
 
   # get default params from EQ_Assessments
-  default.params <- EQ_DefaultParams(EQ_Assessments) %>%
+  default.params <- EQ_DefaultParams(EQ_Assessments) |>
     # format for building body
     EQ_FormatParams()
 
@@ -216,8 +216,8 @@ EQ_Assessments <- function(api_key = NULL, act_agency = NULL, act_status = NULL,
   user.evals <- lapply(get.user, eval, envir = parent.frame())
 
   # create df and format params
-  user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) %>%
-    tidyr::pivot_longer(everything(), names_to = "param") %>%
+  user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) |>
+    tidyr::pivot_longer(dplyr::everything(), names_to = "param") |>
     EQ_FormatParams()
 
   # remove intermediate objects

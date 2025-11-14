@@ -5,7 +5,7 @@
 \title{Create POST request and GET content from Expert Query via Expert Query web services (internal
 function)}
 \usage{
-EQ_PostAndContent(headers, body.list, extract)
+EQ_PostAndContent(headers, body.list, extract, max_retries = 3)
 }
 \arguments{
 \item{headers}{Character string. Header for POST request created in EQ_CreateHeader.}
@@ -13,6 +13,8 @@ EQ_PostAndContent(headers, body.list, extract)
 \item{body.list}{List of character strings for count and query POSTs created in EQ_CreateBody.}
 
 \item{extract}{Character string. The Expert Query Data profile type.}
+
+\item{max_retries}{Integer. The number of retry attempts.}
 }
 \value{
 A data frame of the query result or a printed message if the query rows exceed one

@@ -1,4 +1,7 @@
 # set global variables
 utils::globalVariables(c(
-  ".data"
+  ".data", ":="
 ))
+
+#' Include .data from rlang to prevent global variable warnings
+#' @importFrom rlang .data

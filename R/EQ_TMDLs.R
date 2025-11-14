@@ -119,7 +119,7 @@ EQ_TMDLs <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name 
   params.cw <- EQ_ExtractParams(extract = "tmdl")
 
   # get default params from EQ_Assessments
-  default.params <- EQ_DefaultParams(EQ_TMDLs) %>%
+  default.params <- EQ_DefaultParams(EQ_TMDLs) |>
     # format for building body
     EQ_FormatParams()
 
@@ -130,8 +130,8 @@ EQ_TMDLs <- function(api_key = NULL, act_agency = NULL, act_id = NULL, act_name 
   user.evals <- lapply(get.user, eval, envir = parent.frame())
 
   # create df and format params
-  user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) %>%
-    tidyr::pivot_longer(everything(), names_to = "param") %>%
+  user.params <- as.data.frame(t(user.evals), stringsAsFactors = FALSE) |>
+    tidyr::pivot_longer(dplyr::everything(), names_to = "param") |>
     EQ_FormatParams()
 
   # remove intermediate objects

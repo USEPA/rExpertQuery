@@ -21,6 +21,7 @@
 #' "au_mls" (Assessment Units with Monitoring Locations), "catch_corr" (Catchment Correspondence),
 #' "sources" (Sources), and "tmdl" (TMDLs). There is no national extract option available for
 #' Actions Documents. The default is NULL which means no extract will be returned.
+#' @param max_retries Integer. The number of retry attempts.
 #'
 #' @return A data frame containing the user-specified national extract. The columns returned will
 #' vary based on the extract selected and are as follows:
@@ -86,16 +87,16 @@
 #' aus_monloc <- EQ_NationalExtract(extract = "au_mls")
 #' }
 #'
-EQ_NationalExtract <- function(extract = NULL) {
+EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
   if (is.null(extract)) {
     stop("EQ_NationalExtract: Function requires user to select Expert Query Profile to return.")
   }
 
   if (is.null(extract) &
-      !extract %in% c(
-        "actions", "assessments", "aus", "au_mls",
-        "catch_corr", "sources", "tmdl"
-      )) {
+    !extract %in% c(
+      "actions", "assessments", "aus", "au_mls",
+      "catch_corr", "sources", "tmdl"
+    )) {
     stop("EQ_NationalExtract: Function requires user to select Expert Query Profile to return.")
   }
 
@@ -109,60 +110,36 @@ EQ_NationalExtract <- function(extract = NULL) {
 
   # select profile based on user selection
   # when json is updated, date.print will be determined for each profile below label
-  if (extract == "actions") {
-    file <- "actions"
+  file <- switch(extract,
+    "actions" = "actions",
+    "assessments" = "assessments",
+    "aus" = "assessment_units",
+    "au_mls" = "assessment_units_monitoring_locations",
+    "catch_corr" = "catchment_correspondence",
+    "sources" = "sources",
+    "tmdl" = "tmdl"
+  )
 
-    label <- "Actions Profile"
-  }
-
-  if (extract == "assessments") {
-    file <- "assessments"
-
-    label <- "Assessments Profile"
-  }
-
-  if (extract == "aus") {
-    file <- "assessment_units"
-
-    label <- "Assessment Units Profile"
-  }
-
-  if (extract == "au_mls") {
-    file <- "assessment_units_monitoring_locations"
-
-    label <- "Assessment Units with Monitoring Locations Profile"
-
-    extract <- "assessment_units_mls"
-  }
-
-  if (extract == "catch_corr") {
-    file <- "catchment_correspondence"
-
-    label <- "Catchment Correspondance Profile"
-  }
-
-  if (extract == "sources") {
-    file <- "sources"
-
-    label <- "Sources Profile"
-  }
-
-  if (extract == "tmdl") {
-    file <- "tmdl"
-
-    label <- "Total Maximum Daily Load Profile"
-  }
+  label <- switch(extract,
+    "actions" = "Actions Profile",
+    "assessments" = "Assessments Profile",
+    "aus" = "Assessment Units Profile",
+    "au_mls" = "Assessment Units with Monitoring Locations Profile",
+    "catch_corr" = "Catchment Correspondence Profile",
+    "sources" = "Sources Profile",
+    "tmdl" = "Total Maximum Daily Load Profile"
+  )
 
   update.dates <- jsonlite::fromJSON(paste0(base.url, nat.url, folder.num, "/ready.json"))
 
   update.dates <- update.dates$details
 
-  update.date <- update.dates %>%
-    dplyr::filter(name == paste0("attains_app.profile_", file)) %>%
-    dplyr::select(last_refresh_end_time) %>%
-    dplyr::pull() %>%
-    lubridate::as_datetime() %>%
-    lubridate::with_tz(tx = "US/Eastern") %>%
+  update.date <- update.dates |>
+    dplyr::filter(.data[['name']] == paste0("attains_app.profile_", file)) |>
+    dplyr::select(.data[['last_refresh_end_time']]) |>
+    dplyr::pull() |>
+    lubridate::as_datetime() |>
+    lubridate::with_tz(tx = "US/Eastern") |>
     format("%B %d, %Y at %I:%M %p %Z")
 
   print(paste0(
@@ -172,76 +149,78 @@ EQ_NationalExtract <- function(extract = NULL) {
 
   url <- paste0(base.url, nat.url, folder.num, "/", file, ".csv", ".zip")
 
-  # set up tempfile
-  temp <- tempfile(fileext = ".zip")
+  # Helper function for retry logic
+  nat.extract.retries <- function(url, max_retries) {
+    temp <- tempfile(fileext = ".zip")
+    for (attempt in seq_len(max_retries)) {
+      tryCatch(
+        {
+          req <- httr2::request(url) |>
+            httr2::req_timeout(1200) |>
+            httr2::req_method("GET") |>
+            httr2::req_perform(path = temp)
 
-  # increase timeout (for large files)
-  options(timeout = 1200)
-
-  # get request
-  req <- httr2::request(url)
-
-  # get request
-  get.req <- httr2::req_perform(req, path = temp)
-
-  print(paste0(
-    "EQ_NationalExtract: unzipping ", label, " (Expert Query National Extract)."
-  ))
-
-  # unzip file
-  unzipped.file <- utils::unzip(temp, exdir = tempdir())
-
-  # identify csv file to read in
-  csv.file <- unzipped.file[grep("\\.csv$", unzipped.file, ignore.case = TRUE)]
-
-  print(paste0(
-    "EQ_NationalExtract: ", "opening ", label, " (Expert Query National Extract)."
-  ))
+          # If successful, return unzipped file
+          unzipped.file <- utils::unzip(temp, exdir = tempdir())
+          csv.file <- unzipped.file[grep("\\.csv$", unzipped.file, ignore.case = TRUE)]
+          # can add verbose = FALSE, if we want to remove the progress bar here
+          df <- data.table::fread(csv.file, check.names = FALSE)
+          unlink(temp)
+          unlink(unzipped.file)
+          return(df)
+        },
+        error = function(e) {
+          if (attempt == max_retries) {
+            stop(paste0("Failed to download and unzip file after ", max_retries, " attempts. Error: ", e$message))
+          } else {
+            message(paste0("Attempt ", attempt, " failed: ", e$message, ". Retrying..."))
+            Sys.sleep(1) # Optional: wait before retrying
+          }
+        }
+      )
+    }
+    stop("Download and unzip failed after maximum retries.")
+  }
 
   # open large csv file
-  # can add verbose = FALSE, if we want to remove the progress bar here
-  df <- data.table::fread(csv.file, check.names = FALSE)
+  df <- nat.extract.retries(url, max_retries)
 
   # import cross walk to convert column names to match other rExpertQuery function output
   # import crosswalk ref file
   col.cw <- data.table::fread(system.file("extdata", "EQColumnsForPOST.csv",
-                                          package = "rExpertQuery"
-  ), check.names = TRUE) %>%
-    dplyr::select(col.name, nat_extract, dplyr::all_of(extract)) %>%
-    dplyr::filter(!is.na(.data[[extract]])) %>%
+    package = "rExpertQuery"
+  ), check.names = TRUE) |>
+    dplyr::select(.data[['col.name']], .data[['nat_extract']], dplyr::all_of(extract)) |>
+    dplyr::filter(!is.na(.data[[extract]])) |>
     dplyr::arrange((.data[[extract]]))
 
   # combine the three TMDLENDPOINT columns to match output from EQ_TMDLs function
   if (extract == "tmdl") {
-    df <- df %>%
+    df <- df |>
       dplyr::mutate(
         TMDLENDPOINT1 = ifelse(is.na(.data$TMDLENDPOINT1), "", .data$TMDLENDPOINT1),
         TMDLENDPOINT2 = ifelse(is.na(.data$TMDLENDPOINT2), "", .data$TMDLENDPOINT2),
         TMDLENDPOINT3 = ifelse(is.na(.data$TMDLENDPOINT3), "", .data$TMDLENDPOINT3)
-      ) %>%
+      ) |>
       dplyr::mutate(TMDLENDPOINT = paste0(
         .data$TMDLENDPOINT1, .data$TMDLENDPOINT2,
         .data$TMDLENDPOINT3
-      )) %>%
+      )) |>
       dplyr::select(-"TMDLENDPOINT1", -"TMDLENDPOINT2", -"TMDLENDPOINT3")
   }
 
   # change column names
   data.table::setnames(df, as.character(col.cw$nat_extract), as.character(col.cw$col.name),
-                       skip_absent = TRUE
+    skip_absent = TRUE
   )
 
   # change order of columns
   data.table::setcolorder(df, as.character(col.cw$col.name))
 
-  unlink(temp)
-
-  unlink(unzipped.file)
-
   # remove intermediate objects
   rm(
-    url, latest.json, base.url, nat.url, folder.num, update.date, update.dates, label, file, temp,
-    unzipped.file, csv.file, col.cw
+    url, latest.json, base.url, nat.url, folder.num, update.date, update.dates, label, file,
+    col.cw
   )
 
   return(df)
