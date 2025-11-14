@@ -130,12 +130,6 @@ EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
     "tmdl" = "Total Maximum Daily Load Profile"
   )
 
-  # update extract string if extract is assessment units with monitoring locations
-  if(extract == "au_mls") {
-
-    extract <- file
-  }
-
   update.dates <- jsonlite::fromJSON(paste0(base.url, nat.url, folder.num, "/ready.json"))
 
   update.dates <- update.dates$details
@@ -196,9 +190,9 @@ EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
   col.cw <- data.table::fread(system.file("extdata", "EQColumnsForPOST.csv",
     package = "rExpertQuery"
   ), check.names = TRUE) |>
-    dplyr::select(.data[['col.name']], .data[['nat_extract']], .data[[extract]]) |>
-    dplyr::filter(!is.na(.data[[extract]])) |>
-    dplyr::arrange((.data[[extract]]))
+    dplyr::select(.data[['col.name']], .data[['nat_extract']], .data[[file]]) |>
+    dplyr::filter(!is.na(.data[[file]])) |>
+    dplyr::arrange((.data[[file]]))
 
   # combine the three TMDLENDPOINT columns to match output from EQ_TMDLs function
   if (extract == "tmdl") {
