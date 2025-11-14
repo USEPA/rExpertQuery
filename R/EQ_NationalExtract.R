@@ -190,9 +190,9 @@ EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
   col.cw <- data.table::fread(system.file("extdata", "EQColumnsForPOST.csv",
     package = "rExpertQuery"
   ), check.names = TRUE) |>
-    dplyr::select(.data[['col.name']], .data[['nat_extract']], dplyr::all_of(extract)) |>
-    dplyr::filter(!is.na(.data[[extract]])) |>
-    dplyr::arrange((.data[[extract]]))
+    dplyr::select(.data[['col.name']], .data[['nat_extract']], dplyr::all_of(file)) |>
+    dplyr::filter(!is.na(.data[[file]])) |>
+    dplyr::arrange((.data[[file]]))
 
   # combine the three TMDLENDPOINT columns to match output from EQ_TMDLs function
   if (extract == "tmdl") {
