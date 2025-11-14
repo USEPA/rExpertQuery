@@ -190,7 +190,7 @@ EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
   col.cw <- data.table::fread(system.file("extdata", "EQColumnsForPOST.csv",
     package = "rExpertQuery"
   ), check.names = TRUE) |>
-    dplyr::select(.data[['col.name']], .data[['nat_extract']], dplyr::all_of(file)) |>
+    dplyr::select(.data[['col.name']], .data[['nat_extract']], .data[[file]]) |>
     dplyr::filter(!is.na(.data[[file]])) |>
     dplyr::arrange((.data[[file]]))
 
