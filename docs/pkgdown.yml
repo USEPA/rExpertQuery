@@ -1,0 +1,10 @@
+pandoc: '3.2'
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  CybertownTraining: CybertownTraining.html
+  GettingStartedWithrExpertQuery: GettingStartedWithrExpertQuery.html
+last_built: 2025-11-14T16:16Z
+urls:
+  reference: https://usepa.github.io/rExpertQuery/reference
+  article: https://usepa.github.io/rExpertQuery/articles
