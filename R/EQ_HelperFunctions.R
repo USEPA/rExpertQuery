@@ -210,7 +210,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     extract == "act_docs" ~ "action_documents",
     extract == "assessments" ~ extract,
     extract == "aus" ~ "assessment_units",
-    extract == "au_mls" ~ "assessment_units_mls",
+    extract == "au_mls" ~ "assessment_units_monitoring_locations",
     extract == "catch_corr" ~ "catchment_correspondence",
     extract == "sources" ~ extract,
     extract == "tmdl" ~ extract
@@ -392,11 +392,11 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
 
 EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
   .data <- .data |>
-    dplyr::mutate(!!.data[[url.col]] := paste0(
+    dplyr::mutate(!!url.col := paste0(
       "<a href='",
-      !!rlang::sym(.data[[url.col]]),
+      .data[[url.col]],
       "' target='_blank'>",
-      !!rlang::sym(.data[[url.col]]),
+      .data[[url.col]],
       "</a>"
     ))
   return(.data)
