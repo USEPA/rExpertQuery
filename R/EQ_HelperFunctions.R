@@ -392,11 +392,11 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
 
 EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
   .data <- .data |>
-    dplyr::mutate(!!.data[[url.col]] := paste0(
+    dplyr::mutate(!!url.col := paste0(
       "<a href='",
-      !!rlang::sym(.data[[url.col]]),
+      .data[[url.col]],
       "' target='_blank'>",
-      !!rlang::sym(.data[[url.col]]),
+      .data[[url.col]],
       "</a>"
     ))
   return(.data)
