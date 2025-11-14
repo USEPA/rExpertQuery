@@ -1,0 +1,448 @@
+# Query and return ATTAINS Assessments data via Expert Query web services
+
+Query and return ATTAINS Assessments data via Expert Query web services
+
+## Usage
+
+``` r
+EQ_Assessments(
+  api_key = NULL,
+  act_agency = NULL,
+  act_status = NULL,
+  act_type = NULL,
+  act_id = NULL,
+  alt_list_id = NULL,
+  assess_basis = NULL,
+  assess_date_end = NULL,
+  assess_date_start = NULL,
+  assess_methods = NULL,
+  assess_types = NULL,
+  au_name = NULL,
+  au_status = "Active",
+  auid = NULL,
+  cd_cycle_end = NULL,
+  cd_cycle_start = NULL,
+  cwa = NULL,
+  cycle_first_end = NULL,
+  cycle_first_start = NULL,
+  cycle_last_end = NULL,
+  cycle_last_start = NULL,
+  delist_reason = NULL,
+  delisted = NULL,
+  epa_ir_cat = NULL,
+  expect_attain_cycle_hi = NULL,
+  expect_attain_cycle_lo = NULL,
+  mon_end_date_hi = NULL,
+  mon_end_date_lo = NULL,
+  mon_start_date_hi = NULL,
+  mon_start_date_lo = NULL,
+  org_id = NULL,
+  org_name = NULL,
+  overall_status = NULL,
+  param_attain = NULL,
+  param_group = NULL,
+  param_ir_cat = NULL,
+  param_name = NULL,
+  param_state_ir_cat = NULL,
+  param_status = NULL,
+  pollut_ind = NULL,
+  region = NULL,
+  report_cycle = "latest",
+  seas_end_date_hi = NULL,
+  seas_end_date_lo = NULL,
+  seas_start_date_hi = NULL,
+  seas_start_date_lo = NULL,
+  state_ir_cat = NULL,
+  statecode = NULL,
+  tmdl_cycle_hi = NULL,
+  tmdl_cycle_lo = NULL,
+  use_class = NULL,
+  use_group = NULL,
+  use_ir_cat = NULL,
+  use_name = NULL,
+  use_state_ir_cat = NULL,
+  use_support = NULL,
+  vis = NULL,
+  water_type = NULL
+)
+```
+
+## Arguments
+
+- api_key:
+
+  Character string. Users must supply their unique api key to access
+  Expert Query web services. To obtain an api, submit the form at:
+  https://owapps.epa.gov/expertquery/api-key-signup
+
+- act_agency:
+
+  Character string. Denotes the agency that is establishing/issuing the
+  action associated with an Assessment. Options are "State", "Tribe", or
+  "EPA". Default = NULL.
+
+- act_status:
+
+  Character string Status of the Action associated with an assessment.
+  Options are "Draft", ""EPA Final Action", "EPA Review", "Modify",
+  "Public Review", "State Final Action", or "Withdrawn". Default = NULL.
+
+- act_type:
+
+  Character string. Identifies the type of Action associated with an
+  Action. Options are FILL IN FROM EQ. Default = NULL.
+
+- act_id:
+
+  Character string. Unique Identifier for the Action associated with an
+  Assessment that will be used to track the Action entered (such as the
+  corresponding information and associated documents) in ATTAINS, and
+  its associated name. Default = NULL.
+
+- alt_list_id:
+
+  Character string. Unique identifier for a list water, if different
+  from the Assessment Unit ID. Default = NULL.
+
+- assess_basis:
+
+  Character string. Code representing the basis for an Assessment; is it
+  based on monitored data, extrapolate data, or both. Options can be
+  viewed with EQ_DomainValues(assess_basis). Default = NULL.
+
+- assess_date_end:
+
+  Character string. Ending date for range of when Assessment was
+  completed. Format is "YYYY-MM-DD". Default = NULL.
+
+- assess_date_start:
+
+  Character string. Starting date for range of when Assessment was
+  completed. Format is "YYYY-MM-DD". Default = NULL.
+
+- assess_methods:
+
+  Character string. The name of the Assessment Method being used.
+  Options can be viewed with EQ_DomainValues"(assess_methods"). Default
+  = NULL.
+
+- assess_types:
+
+  Character string. Code representing the type of Assessment that was
+  performed. Options can be viewed with EQ_DomainValues("assess_types")
+
+- au_name:
+
+  Character string. The name assigned to an Assessment Unit by the
+  Organization. Default = NULL.
+
+- au_status:
+
+  Character string. The current condition or status of an Assessment
+  Unit. Options are "Active", "Historical" or "Retired". Default =
+  "Active".
+
+- auid:
+
+  Character string. A unique identifier assigned to an Assessment Unit
+  by the Organization. Default = NULL.
+
+- cd_cycle_end:
+
+  Character string. Ending year for cycle cor which Consent Decree
+  actions are due. Format is "YYYY". Default = NULL.
+
+- cd_cycle_start:
+
+  Character string. Starting year for cycle cor which Consent Decree
+  actions are due. Format is "YYYY". Default = NULL.
+
+- cwa:
+
+  Character string. CWA 303(d) priority for developing a TMDL. Options
+  are "High", "Medium", or "Low". Default = NULL.
+
+- cycle_first_end:
+
+  Character string. Ending date for the range of cycles where the
+  Assessment Unit and Cause were first included on the 303(d) list.
+  Format is "YYYY".
+
+- cycle_first_start:
+
+  Character string. Starting date for the range of cycles where the
+  Assessment Unit and Cause were first included on the 303(d) list.
+  Format is "YYYY".
+
+- cycle_last_end:
+
+  Character string. Ending date for the range of cycles where the
+  Assessment Unit and Cause were last included on the 303(d) list.
+  Format is "YYYY".
+
+- cycle_last_start:
+
+  Character string. Starting date for the range of cycles where the
+  Assessment Unit and Cause were last included on the 303(d) list.
+  Format is "YYYY".
+
+- delist_reason:
+
+  Character string. The specific reason or explanation for removing a
+  waterbody or segment from a list of impaired waters or areas of
+  concern. Options are "Applicable WQS. Default = NULL.
+
+- delisted:
+
+  Character string. Indicates whether a waterbody or segment has been
+  removed from a list of impaired waters or areas of concern due to
+  meeting the required water quality standards or improvement targets.
+  Options are "No" or "Yes". Default = NULL.
+
+- epa_ir_cat:
+
+  The overall EPA Integrated Report Category for the Assessment Unit ID,
+  calculated by ATTAINS. Options are "1", "2", "3", "4A", "4B", "4C",
+  "5", "5A", and "5R". Default = NULL. For more information on how the
+  categories are defined and calculated within ATTAINS see:
+  https://www.epa.gov/sites/default/files/2018-09/documents/attains_calculations_of_epa_ir_categories_2018-08-31.pdf
+
+- expect_attain_cycle_hi:
+
+  Character string. Upper end of range of Cycles (years) by which the
+  Assessment Unit is expected to attain its standards (use to indicate
+  whether or not this cause should be considered towards category 4B).
+  Format is YYYY (ex: "2028"). Default = NULL.
+
+- expect_attain_cycle_lo:
+
+  Character string. Lower end of range of Cycles (years) by which the
+  Assessment Unit is expected to attain its standards (use to indicate
+  whether or not this cause should be considered towards category 4B).
+  Format is YYYY (ex: "2028"). Default = NULL.
+
+- mon_end_date_hi:
+
+  Character string. Ending date for the range of dates on which
+  monitoring ended. Format is "YYYY-MM-DD". Default = NULL.
+
+- mon_end_date_lo:
+
+  Character string. Starting date for the range of dates on which
+  monitoring ended. Format is "YYYY-MM-DD". Default = NULL.
+
+- mon_start_date_hi:
+
+  Character string. Ending date for the range of dates on which
+  monitoring began. Format is "YYYY-MM-DD". Default = NULL.
+
+- mon_start_date_lo:
+
+  Character string. Starting date for the range of dates on which
+  monitoring began. Format is "YYYY-MM-DD". Default = NULL.
+
+- org_id:
+
+  Character string. A unique identifier assigned to the Organization.
+  Options can be viewed with EQ_DomainValues("org_id"). Default = NULL.
+
+- org_name:
+
+  Character string. A unique name assigned to the Organization. Options
+  can be viewed with EQ_DomainValues("org_name"). Default = NULL.
+
+- overall_status:
+
+  Character string.The overall support status for the Assessment Unit
+  ID, calculated by ATTAINS. Options are "Fully Supporting", "Not
+  Supporting", "Not Assessed". Default = NULL.
+
+- param_attain:
+
+  The attainment status for the Parameter for a specific Use. Options
+  can be viewed with EQ_DomainValues("param_attain"). Default = NULL.
+
+- param_group:
+
+  A collection of related Parameters. Options can be viewed with
+  EQ_DomainValues("param_attain"). Default = NULL.
+
+- param_ir_cat:
+
+  The EPA Integrated Report Category for the Assessment Unit
+  ID/Parameter combination, calculated by ATTAINS. Options are "1", "2",
+  "3", "4A", "4B", "4C", "5", "5A", and "5R". Default = NULL.
+
+- param_name:
+
+  The name of the characteristic being monitored and assessed. Options
+  can be viewed with EQ_DomainValues("param_name"). Default = NULL.
+
+- param_state_ir_cat:
+
+  Label of Organization-specific Integrated Reporting categories for the
+  Assessment Unit/Parameter combination as defined by the Organization's
+  Domain Administrator. Options can be viewed with
+  EQ_DomainValues("param_state_ir_cat", org_id). Default = NULL
+
+- param_status:
+
+  Status for a Parameter, indicating whether this Parameter is a Cause,
+  Observed Effect, or provided for informational purposes as Meeting
+  Criteria or Meeting Threshold Parameter. Options can be viewed with
+  EQ_DomainValues("param_status"). Default = NULL.
+
+- pollut_ind:
+
+  Flag indicating whether or not the Cause of an impairment is
+  Pollutant. Options are "Yes" or "No". Default = NULL.
+
+- region:
+
+  Character string. Value from 1 to 10 as character string to identify
+  the EPA region of interest. Default = NULL. See
+  https://www.epa.gov/aboutepa/regional-and-geographic-offices for
+  options.
+
+- report_cycle:
+
+  Character string. The Integrated Reporting cycle of the data. Format
+  is "YYYY" or "latest", which will select the most recent available
+  cycle. Default = "latest".
+
+- seas_end_date_hi:
+
+  The ending date for the range of end dates that applies to a Waste
+  Load Allocation. Format is "YYYY-MM-DD". Default = NULL.
+
+- seas_end_date_lo:
+
+  The starting date for the range of end dates that applies to a Waste
+  Load Allocation. Format is "YYYY-MM-DD". Default = NULL.
+
+- seas_start_date_hi:
+
+  The ending date for the range of start dates that applies to a Waste
+  Load Allocation. Format is "YYYY-MM-DD". Default = NULL.
+
+- seas_start_date_lo:
+
+  The starting date for the range of start dates that applies to a Waste
+  Load Allocation. Format is "YYYY-MM-DD". Default = NULL.
+
+- state_ir_cat:
+
+  Character string. Label of Organization-specific Integrated Reporting
+  categories as defined by the Organization's Domain Administrator.
+  Options can be viewed with EQ_DomainValues("state_ir_cat). Default =
+  NULL.
+
+- statecode:
+
+  Character string. FIPS state alpha code that identifies a state (e.g.
+  statecode = "DE" for Delaware). See
+  https://www.waterqualitydata.us/Codes/statecode for options.
+
+- tmdl_cycle_hi:
+
+  Character string. The ending date for the range of dates for cycle
+  when the jurisdiction anticipates submitting the TMDL for EPA
+  approval. Format is "YYYY". Default = NULL.
+
+- tmdl_cycle_lo:
+
+  Character string. The starting date for the range of dates for cycle
+  when the jurisdiction anticipates submitting the TMDL for EPA
+  approval. Format is "YYYY". Default = NULL.
+
+- use_class:
+
+  Character string. The Use Class assigned to an Assessment Unit.
+  Options are "CULTURAL_USE", "DRINKING_WATER_USE", "ECOLOGICAL USE",
+  "FISHCONSUMPTION_USE", "OTHER_USE", and "RECREATION_USE". Default =
+  NULL.
+
+- use_group:
+
+  Character string. This represents a collection of related Uses.
+  Options are "DRINKINGWATER_USE", "ECOLOGICAL_USE",
+  "FISHCONSUMPTION_USE", "RECREATION_USE", and "OTHER_USE". Default =
+  NULL.
+
+- use_ir_cat:
+
+  Character string. The EPA Integrated Report Category for the
+  Assessment Unit ID/Use combination, calculated by ATTAINS. Options are
+  "1", "2", "3", "4A", "4B", "4C", "5", "5A", and "5R". Default = NULL.
+
+- use_name:
+
+  Character string. Name of the designated Use. Options can be viewed
+  with EQ_DomainValues("use_name"). Default = NULL.
+
+- use_state_ir_cat:
+
+  Character string. Label of Organization-specific Integrated Reporting
+  categories for the Assessment Unit/Use combination as defined by the
+  Organization's Domain Administrator.
+
+- use_support:
+
+  Character string. The decision as to whether the Use Name (designated
+  use) is Fully Supporting, Not Supporting, Insufficient Information, or
+  Not Assessed. Options are "Fully Supporting","Not Supporting",
+  "Insufficient Information" or "Not Assessed."
+
+- vis:
+
+  Character string. Indicates if the water has been identified as a
+  priority water by the state under the 303(d) Vision. Options are "Yes"
+  or "No". Default = NULL.
+
+- water_type:
+
+  Character string. An Assessment Unit must have at least one water
+  type, and it may have multiple water types. Options can be viewed with
+  EQ_DomainValues("water_type"). Default = NULL.
+
+## Value
+
+A data frame of ATTAINS Assessments with the columns "objectId",
+"region", "state", "organizationType", "organizationId",
+"organizationName", "waterType", "reportingCycle", "cycleLastAssessed",
+"assessmentUnitId", "assessmentUnitName", "assessmentUnitStatus",
+"overallStatus", "epaIrCategory", "stateIrCategory", "useGroup",
+"useName", "useClassName", "useSupport", "useIrCategory",
+"useStateIrCategory", "monitoringStartDate", "monitoringEndDate",
+"assessmentDate", "assessmentTypes", "assessmentMethods",
+"assessmentBasis", "parameterGroup", "parameterName", "parameterStatus",
+"parameterAttainment", "parameterIrCategory",
+"parameterStateIrCategory", "delisted", "delistedReason",
+"pollutantIndicator", "cycleFirstListed", "alternateListingIdentifier",
+"vision303dPriority", "cwa303dPriorityRanking", "cycleScheduledForTmdl",
+"cycleExpectedToAttain", "consentDecreeCycle", "cycleId",
+"seasonStartDate", "seasonEndDate", "associatedActionId",
+"associatedActionName", "associatedActionType",
+"associatedActionStatus", "associatedActionAgency",
+"locationDescription", "sizeSource", "sourceScale", "waterSize", and
+"waterSizeUnits".
+
+## Examples
+
+``` r
+ if (FALSE) { # \dontrun{
+
+# to run examples add your api key below
+# to get an API key: https://owapps.epa.gov/expertquery/api-key-signup
+testkey <- "YOURAPIKEY"
+
+# Assessments from latest cycle for Massachusetts
+MA_assessments <- EQ_Assessments(statecode = "MA",
+                              api_key = testkey)
+
+# EPA IR category 5 assessments from Montana
+MT_cat_5 <- EQ_Assessments(statecode = "MT",
+                          epa_ir_cat = 5,
+                          api_key = testkey)
+              } # }
+```
