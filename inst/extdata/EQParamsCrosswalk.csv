@@ -93,7 +93,7 @@ tmdl_date_start,tmdlDateLo,,,no,yes,no,no,no,no,no,yes
 use_class,useClassName,,,no,no,yes,yes,yes,no,no,no
 use_group,useGroup,,,no,no,yes,no,no,no,no,no
 use_ir_cat,useIrCategory,,,no,no,yes,no,no,no,no,no
-use_name,useName,UseClassUse,name,no,no,yes,no,no,no,no,no
+use_name,useName,UseName,name,no,no,yes,no,no,no,no,no
 use_state_ir_cat,useStateIrCategory,,,no,no,yes,no,no,no,no,no
 use_support,useSupport,UseAttainmentCode,name,no,no,yes,no,no,no,no,no
 vis,vision303dPriority,,,no,no,yes,no,no,no,no,no
