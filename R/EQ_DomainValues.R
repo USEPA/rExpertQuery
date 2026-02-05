@@ -82,7 +82,7 @@ EQ_DomainValues <- function(domain = NULL) {
           dplyr::rename(eq_param = param) |>
           dplyr::arrange(eq_param)
 
-        message("EQ_DomainValues: domain list retrieved from ATTAINS.")
+        message("EQ_DomainValues: domain list retrieved from ATTAINS web services.")
         return(eq.params)
       } else {
         # fallback to packaged crosswalk
@@ -92,6 +92,7 @@ EQ_DomainValues <- function(domain = NULL) {
 
         return(eq.params)
       }
+  }
 
   if (!is.null(domain)) {
     # check to make sure user supplied domain value is valid
@@ -102,26 +103,28 @@ EQ_DomainValues <- function(domain = NULL) {
 
     # check to make sure user supplied domain value is valid
     if (domain %in% param.cw[['param']]) {
-      # filter for domains which have values in web service
+      # get param name for web services
       param.ws <- param.cw |>
-        dplyr::filter(.data[['attains_ws_name']] != "")
+        dplyr::filter(param == domain) |>
+        dplyr::select(attains_ws_name) |>
+        dplyr::pull()
+
+      # filter for domains which have values in web service
+      eq.params <- tryCatch(
+        jsonlite::fromJSON(paste0(base.url, "?domainName=", param.ws)),
+        error = function(e) NULL)
 
       # check to see if user supplied domain has values in web service
-      if (!domain %in% param.ws[['param']]) {
+      if (!domain %in% param.cw[["param"]]) {
         stop("EQ_DomainValues: User supplied domain value valid, but no list of allowable values is
               available. Review function documentation for more information on allowable values.")
       }
-
-      # remove intermediate object
-      rm(param.ws)
 
       # filter crosswalk by user supplied domain value
       param.filter <- param.cw |>
         dplyr::filter(.data[['param']] %in% domain) |>
         dplyr::select("param", "attains_ws_name", "attains_ws_field") |>
         dplyr::distinct()
-
-      raw.data <- jsonlite::fromJSON(paste0(base.url, "?domainName=", param.filter[['attains_ws_name']]))
 
       print(paste0(
         "EQ_DomainValues: For ", domain, " the values in the '",
@@ -132,9 +135,8 @@ EQ_DomainValues <- function(domain = NULL) {
       rm(param.filter, base.url, param.cw)
     }
 
-      return(raw.data)
+      return(eq.params)
     }
-  }
 }
 
 #' Downloads/updates an internal copy of allowable domain values for EQ_DomainValues
@@ -169,4 +171,3 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
 
     save(eq.params, file = "inst/extdata/EQ_DomainValues.rda")
   }
-
