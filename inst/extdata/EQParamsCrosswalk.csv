@@ -7,7 +7,7 @@ act_name,actionName,,,yes,yes,yes,no,no,no,no,yes
 act_status,associatedActionStatus,ActionStatusType,name,no,no,yes,no,no,no,no,no
 act_type,actionType,ActionType,code,yes,yes,yes,no,no,no,no,no
 ad_param,addressedParameter,ParameterName,name,no,no,no,no,no,no,no,yes
-ad_param_group,addressedParameterGroup,ParemeterGroupTypeCode,name,no,no,no,no,no,no,no,yes
+ad_param_group,addressedParameterGroup,ParameterGroupCodeType,name,no,no,no,no,no,no,no,yes
 alt_list_id,alternateListingIdentifier,,,no,no,yes,no,no,no,no,no
 assess_basis,assessmentBasis,AssessmentBasisCode,name,no,no,yes,no,no,no,no,no
 assess_date_end,assessmentDateHi,,,no,no,yes,no,no,no,no,no
