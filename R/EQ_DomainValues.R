@@ -75,12 +75,15 @@ EQ_DomainValues <- function(domain = NULL) {
         # remote path (as you requested)
         eq.params <- raw.data |>
           dplyr::select(domain) |>
-          dplyr::rename(attains_ws_name = domain) |>
+          dplyr::rename(attains_ws_name = .data$domain) |>
           dplyr::left_join(param.cw, by = dplyr::join_by(attains_ws_name)) |>
-          dplyr::filter(!is.na(.data[["eq_name"]])) |>
-          dplyr::select(param, attains_ws_name, attains_ws_field) |>
-          dplyr::rename(eq_param = param) |>
-          dplyr::arrange(eq_param)
+          dplyr::filter(!is.na(.data$eq_name)) |>
+          dplyr::transmute(
+            eq_param = .data$param,
+            attains_ws_name = .data$attains_ws_name,
+            attains_ws_field = .data$attains_ws_field
+          ) %>%
+          dplyr::arrange(.data$eq_param)
 
         message("EQ_DomainValues: domain list retrieved from ATTAINS web services.")
         return(eq.params)
@@ -107,9 +110,8 @@ EQ_DomainValues <- function(domain = NULL) {
 
       # get param name for web services
       param.ws <- param.cw |>
-        dplyr::filter(param == domain) |>
-        dplyr::select(attains_ws_name) |>
-        dplyr::pull()
+        dplyr::filter(.data$param == .env$domain) |>
+        dplyr::pull(.data$attains_ws_name)
 
       # cols to retain
       retain.cols <- c(
@@ -133,13 +135,13 @@ EQ_DomainValues <- function(domain = NULL) {
 
         # remote path
         eq.params <- raw.data |>
-          dplyr::rename(attains_ws_name = domain) |>
-          dplyr::left_join(param.cw, by = dplyr::join_by(attains_ws_name),
+          dplyr::rename(attains_ws_name = .data$domain) |>
+          dplyr::left_join(param.cw, by = "attains_ws_name",
                            relationship = "many-to-many") |>
-          dplyr::filter(param == domain) |>
-          dplyr::rename(eq_param = param) |>
+          dplyr::filter(.data$param == .env$domain) |>
+          dplyr::rename(eq_param = .data$param) |>
           dplyr::select(dplyr::all_of(retain.cols)) |>
-          dplyr::arrange(eq_param) |>
+          dplyr::arrange(.data$eq_param) |>
           dplyr::distinct()
 
         print(paste0(
@@ -154,17 +156,18 @@ EQ_DomainValues <- function(domain = NULL) {
         # fallback to packaged crosswalk
         message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
 
-        load(file = "inst/extdata/DomainValues.rda")
+        obj <- load(file = "inst/extdata/DomainValues.rda")
+        domain_values <- get(obj)
 
       # filter crosswalk by user supplied domain value
       eq.params <- domain_values |>
-                  dplyr::left_join(param.cw, by = dplyr::join_by(attains_ws_name,
-                                                                 attains_ws_field),
+                  dplyr::left_join(param.cw, by = c("attains_ws_name",
+                                                    "attains_ws_field"),
                            relationship = "many-to-many") |>
-        dplyr::filter(param == domain) |>
-        dplyr::rename(eq_param = param) |>
+        dplyr::filter(.data$param == .env$domain) |>
+        dplyr::rename(eq_param = .data$param) |>
         dplyr::select(dplyr::all_of(retain.cols)) |>
-        dplyr::arrange(eq_param) |>
+        dplyr::arrange(.data$eq_param) |>
         dplyr::distinct()
 
       print(paste0(
@@ -204,12 +207,15 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
 
     eq.params <- raw.data |>
       dplyr::select(domain) |>
-      dplyr::rename(attains_ws_name = domain) |>
-      dplyr::left_join(param.cw, by = dplyr::join_by(attains_ws_name)) |>
-      dplyr::filter(!is.na(.data[["eq_name"]])) |>
-      dplyr::select(param, attains_ws_name, attains_ws_field) |>
-      dplyr::rename(eq_param = param) |>
-      dplyr::arrange(eq_param)
+      dplyr::rename(attains_ws_name = .data$domain) |>
+      dplyr::left_join(param.cw, by = "attains_ws_name") |>
+      dplyr::filter(!is.na(.data$eq_name)) |>
+      dplyr::transmute(
+        eq_param = .data$param,
+        attains_ws_name = .data$attains_ws_name,
+        attains_ws_field = .data$attains_ws_field
+      ) %>%
+      dplyr::arrange(.data$eq_param)
 
     save(eq.params, file = "inst/extdata/DomainValuesNull.rda")
 }
@@ -232,13 +238,13 @@ EQ_UpdateInternalDomainValues<- function() {
   )
 
   param.cw <- param.cw |>
-    dplyr::select(attains_ws_name, attains_ws_field) |>
+    dplyr::select(.data$attains_ws_name, .data$attains_ws_field) |>
     dplyr::distinct()
 
   attains_ws_name <- param.cw |>
-    dplyr::select(attains_ws_name) |>
-    dplyr::filter(attains_ws_name != "" &
-                    !is.na(attains_ws_name)) |>
+    dplyr::select(.data$attains_ws_name) |>
+    dplyr::filter(.data$attains_ws_name != "" &
+                    !is.na(.data$attains_ws_name)) |>
     dplyr::distinct() |>
     dplyr::pull()
 
@@ -254,10 +260,10 @@ EQ_UpdateInternalDomainValues<- function() {
 
   domain_values <- purrr::map_dfr(.x = attains_ws_name, .f = fetch_one)
 
-  domain_values <- domain_values %>%
-    dplyr::left_join(param.cw, by = dplyr::join_by(domain == attains_ws_name),
+  domain_values <- domain_values |>
+    dplyr::left_join(param.cw, by = c("domain" == "attains_ws_name"),
                      relationship = "many-to-many") |>
-    dplyr::rename(attains_ws_name = domain)
+    dplyr::rename(attains_ws_name = .data$domain)
 
   save(domain_values, file = "inst/extdata/DomainValues.rda")
 }

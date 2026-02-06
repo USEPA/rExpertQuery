@@ -21,6 +21,7 @@ Imports:
   httr2,
   jsonlite,
   lubridate,
+  purrr,
   readr,
   rlang,
   tibble,
