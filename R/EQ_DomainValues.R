@@ -264,7 +264,7 @@ EQ_UpdateInternalDomainValues<- function() {
   domain_values <- domain_values |>
     dplyr::left_join(param.cw, by = c("domain" = "attains_ws_name"),
                      relationship = "many-to-many") |>
-    dplyr::rename(attains_ws_name = .data$domain)
+    dplyr::rename(attains_ws_name = domain)
 
   save(domain_values, file = "inst/extdata/DomainValues.rda")
 }
