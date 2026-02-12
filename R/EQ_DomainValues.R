@@ -238,7 +238,8 @@ EQ_UpdateInternalDomainValues<- function() {
   )
 
   param.cw <- param.cw |>
-    dplyr::select(.data$attains_ws_name, .data$attains_ws_field) |>
+    dplyr::select(attains_ws_name,
+                  attains_ws_field) |>
     dplyr::distinct()
 
   attains_ws_name <- param.cw |>
@@ -261,9 +262,9 @@ EQ_UpdateInternalDomainValues<- function() {
   domain_values <- purrr::map_dfr(.x = attains_ws_name, .f = fetch_one)
 
   domain_values <- domain_values |>
-    dplyr::left_join(param.cw, by = c("domain" == "attains_ws_name"),
+    dplyr::left_join(param.cw, by = c("domain" = "attains_ws_name"),
                      relationship = "many-to-many") |>
-    dplyr::rename(attains_ws_name = .data$domain)
+    dplyr::rename(attains_ws_name = domain)
 
   save(domain_values, file = "inst/extdata/DomainValues.rda")
 }
