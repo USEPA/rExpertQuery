@@ -135,6 +135,16 @@ EQ_CompareParams <- function(default, user) {
 #'
 
 EQ_CreateBody <- function(comp.params, crosswalk, extract) {
+  # Normalize expected column names
+  nm <- names(comp.params)
+  pcol <- intersect(c("param", "parameter", "name"), nm)
+  vcol <- intersect(c("value", "val"), nm)
+  if (length(pcol) == 0 || length(vcol) == 0) {
+    stop("EQ_CreateBody: comp.params must have columns named 'param' and 'value' (or equivalents).")
+  }
+  comp.params <- comp.params |>
+    dplyr::rename(param = !!rlang::sym(pcol[1]), value = !!rlang::sym(vcol[1]))
+
   # date params
   date.params <- c(
     "assess_date_end", "assess_date_start", "cd_cycle_end", "cd_cycle_start",
@@ -150,61 +160,64 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
   # text string query params
   query.params <- c("doc_query")
 
-  # create param filters for POST
+  # Build filters
   params.body <- comp.params |>
     dplyr::filter(
-      !.data$value %in% c("NULL", "latest"),
+      !is.na(.data$value),
+      !(.data$value %in% c("NULL", "latest")),
       .data$param != "api_key"
     ) |>
-    dplyr::mutate(value = dplyr::case_when(
-      .data$param == "report_cycle" & value == "any" ~ "-1",
-      .data$param == "region" & !is.null(value) & value != "10" ~ paste0("0", value),
-      .data$param %in% c(
-        "au_status", "delisted",
-        "pollutant_ind", "vis",
-        "in_meas", "indian_country"
-      ) & !is.null(.data$value) ~ substr(.data$value, 1, 1),
-      .data$param == "use_support" & .data$value == "Fully Supporting" ~ "F",
-      .data$param == "use_support" & .data$value == "Not Supporting" ~ "N",
-      .data$param == "use_support" & .data$value == "Insufficient Information" ~ "I",
-      .data$param == "use_support" & .data$value == "Not Assessed" ~ "X",
-      .data$param %in% c(
-        "assess_date_end", "assess_date_start",
-        "mon_end_date", "mon_start_date"
-      ) ~ format(
-        as.Date(.data$value, "%Y-%m-%d"),
-        "%m-%d-%Y"
-      ),
-      .default = as.character(.data$value)
-    )) |>
+    dplyr::mutate(
+      value = dplyr::case_when(
+        .data$param == "report_cycle" & .data$value == "any" ~ "-1",
+        .data$param == "region" & !is.null(.data$value) & .data$value != "10" ~ paste0("0", .data$value),
+        .data$param %in% c("au_status", "delisted", "pollutant_ind", "vis", "in_meas", "indian_country") &
+          !is.null(.data$value) ~ substr(.data$value, 1, 1),
+        .data$param == "use_support" & .data$value == "Fully Supporting" ~ "F",
+        .data$param == "use_support" & .data$value == "Not Supporting" ~ "N",
+        .data$param == "use_support" & .data$value == "Insufficient Information" ~ "I",
+        .data$param == "use_support" & .data$value == "Not Assessed" ~ "X",
+        TRUE ~ as.character(.data$value)
+      )
+    ) |>
     dplyr::left_join(crosswalk, by = dplyr::join_by("param")) |>
+    # Clean deparsed vectors like c("a","b")
     dplyr::mutate(value = gsub('c\\(|\\)|"', "", .data$value)) |>
+    # Split multi-value params
     tidyr::separate_rows(.data$value, sep = ",\\s*") |>
+    dplyr::mutate(
+      value = trimws(.data$value),
+      # Convert only true ISO dates after splitting
+      value = dplyr::if_else(
+        .data$param %in% date.params & grepl("^\\d{4}-\\d{2}-\\d{2}$", .data$value),
+        format(as.Date(.data$value, format = "%Y-%m-%d"), "%m-%d-%Y"),
+        .data$value
+      )
+    ) |>
+    # Quote each atomic value for JSON assembly
     dplyr::mutate(value = paste0('"', .data$value, '"')) |>
-    dplyr::group_by(.data$eq_name) |>
-    dplyr::mutate(value = paste0(.data$value, collapse = ",")) |>
-    dplyr::distinct() |>
-    dplyr::mutate(value = dplyr::case_when(
-      !.data$param %in% date.params & !.data$param %in% query.params ~ paste0(
-        '"', .data$eq_name,
-        '":', "[",
-        .data$value, "]"
-      ),
-      .default = paste0('"', .data$eq_name, '":', .data$value)
-    )) |>
-    dplyr::ungroup() |>
-    dplyr::mutate(value = paste0(.data$value, collapse = ",")) |>
-    dplyr::select("value") |>
-    dplyr::distinct() |>
-    dplyr::pull()
+    # Keep param while collapsing values per eq_name
+    dplyr::group_by(.data$eq_name, .data$param) |>
+    dplyr::summarise(
+      value = paste0(.data$value, collapse = ","),
+      .groups = "drop"
+    ) |>
+    # Wrap arrays for non-date, non-query fields; scalars (dates, queries) stay unbracketed
+    dplyr::mutate(
+      value = dplyr::case_when(
+        !.data$param %in% date.params & !.data$param %in% query.params ~
+          paste0('"', .data$eq_name, '":[', .data$value, ']'),
+        TRUE ~ paste0('"', .data$eq_name, '":', .data$value)
+      )
+    ) |>
+    # Final collapse across fields
+    dplyr::summarise(value = paste0(.data$value, collapse = ","), .groups = "drop") |>
+    dplyr::pull(.data$value)
 
-  # setup body for finding row count of query
-  count.setup <- paste0(
-    '{"filters":{',
-    params.body, "}}"
-  )
+  # Count body
+  count.setup <- paste0('{"filters":{', params.body, "}}")
 
-  # select filter column
+  # Which column set to request
   extract.filter <- dplyr::case_when(
     extract == "actions" ~ extract,
     extract == "act_docs" ~ "action_documents",
@@ -216,14 +229,14 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     extract == "tmdl" ~ extract
   )
 
-
-  # create string of column names base on extract selection
-  columns.string <- readr::read_csv(system.file("extdata", "EQColumnsForPOST.csv",
-    package = "rExpertQuery"
-  ), show_col_types = FALSE) |>
+  # Column names for POST
+  columns.string <- readr::read_csv(
+    system.file("extdata", "EQColumnsForPOST.csv", package = "rExpertQuery"),
+    show_col_types = FALSE
+  ) |>
     dplyr::select("col.name", dplyr::all_of(extract.filter)) |>
-    dplyr::filter(!is.na(get(extract.filter))) |>
-    dplyr::arrange(get(extract.filter)) |>
+    dplyr::filter(!is.na(.data[[extract.filter]])) |>
+    dplyr::arrange(.data[[extract.filter]]) |>
     dplyr::select("col.name") |>
     dplyr::mutate(
       col.name = paste0('"', .data$col.name, '"'),
@@ -232,24 +245,17 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     dplyr::distinct() |>
     dplyr::pull()
 
-  # create column string for POST
+  # Data body
   extract.cols <- paste0('"columns":[', columns.string, "]}")
 
-  # set up body for POST including filters, options, and columns
   body.setup <- paste0(
-    '{"filters":{',
-    params.body, "},",
+    '{"filters":{', params.body, '},',
     '"options":{"format":"csv"},',
     extract.cols
   )
 
-  post.bodies <- list(count.setup, body.setup)
-
-  rm(comp.params, params.body, count.setup, body.setup)
-
-  return(post.bodies)
+  list(count.setup, body.setup)
 }
-
 
 
 #' Create header for count and data POST requests (internal function)
@@ -372,7 +378,7 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
   # request to return query results
   query.res <- request.retries(query.url, body.list[[2]], headers, max_retries) |>
     httr2::resp_body_string() |>
-    readr::read_csv()
+    (\(txt) readr::read_csv(I(txt), show_col_types = FALSE))()
 
   # remove intermediate objects
   rm(headers, base.url, extract.url.name, function.url.name, query.url, body.list)
