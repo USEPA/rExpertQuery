@@ -50,6 +50,8 @@ Suggests:
     usethis,
     usmap,
     yaml
+Depends: 
+    R (>= 4.1.0)
 VignetteBuilder: knitr, rmarkdown
 LazyData: true
 LazyDataCompression: xz
