@@ -145,7 +145,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
   comp.params <- comp.params |>
     dplyr::rename(param = !!rlang::sym(pcol[1]), value = !!rlang::sym(vcol[1]))
 
-  # date params
+  # Date and query params
   date.params <- c(
     "assess_date_end", "assess_date_start", "cd_cycle_end", "cd_cycle_start",
     "comp_date_end", "comp_date_start", "cycle_first_end", "cycle_first_start",
@@ -156,12 +156,10 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     "seas_start_date_lo", "tmdl_cycle_hi", "tmdl_cycle_lo", "tmdl_date_end",
     "tmdl_date_start"
   )
-
-  # text string query params
   query.params <- c("doc_query")
 
-  # Build filters
-  params.body <- comp.params |>
+  # Prepare filter rows with eq_name mapping
+  filt <- comp.params |>
     dplyr::filter(
       !is.na(.data$value),
       !(.data$value %in% c("NULL", "latest")),
@@ -183,41 +181,27 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     dplyr::left_join(crosswalk, by = dplyr::join_by("param")) |>
     # Clean deparsed vectors like c("a","b")
     dplyr::mutate(value = gsub('c\\(|\\)|"', "", .data$value)) |>
-    # Split multi-value params
+    # Split multi-value params into atomic tokens
     tidyr::separate_rows(.data$value, sep = ",\\s*") |>
+    dplyr::mutate(value = trimws(.data$value)) |>
+    # Convert only ISO YYYY-MM-DD strings for date params
     dplyr::mutate(
-      value = trimws(.data$value),
-      # Convert only true ISO dates after splitting
       value = dplyr::if_else(
         .data$param %in% date.params & grepl("^\\d{4}-\\d{2}-\\d{2}$", .data$value),
         format(as.Date(.data$value, format = "%Y-%m-%d"), "%m-%d-%Y"),
         .data$value
       )
-    ) |>
-    # Quote each atomic value for JSON assembly
-    dplyr::mutate(value = paste0('"', .data$value, '"')) |>
-    # Keep param while collapsing values per eq_name
-    dplyr::group_by(.data$eq_name, .data$param) |>
-    dplyr::summarise(
-      value = paste0(.data$value, collapse = ","),
-      .groups = "drop"
-    ) |>
-    # Wrap arrays for non-date, non-query fields; scalars (dates, queries) stay unbracketed
-    dplyr::mutate(
-      value = dplyr::case_when(
-        !.data$param %in% date.params & !.data$param %in% query.params ~
-          paste0('"', .data$eq_name, '":[', .data$value, ']'),
-        TRUE ~ paste0('"', .data$eq_name, '":', .data$value)
-      )
-    ) |>
-    # Final collapse across fields
-    dplyr::summarise(value = paste0(.data$value, collapse = ","), .groups = "drop") |>
-    dplyr::pull(.data$value)
+    )
 
-  # Count body
-  count.setup <- paste0('{"filters":{', params.body, "}}")
+  # Build filters as a named list: non-date fields become vectors; date/query stay scalar
+  filt_list <- filt |>
+    dplyr::group_by(.data$eq_name) |>
+    dplyr::summarise(values = list(unique(.data$value)), .groups = "drop")
 
-  # Which column set to request
+  # Named list for JSON
+  filters_obj <- rlang::set_names(filt_list$values, filt_list$eq_name)
+
+  # Column list for the extract
   extract.filter <- dplyr::case_when(
     extract == "actions" ~ extract,
     extract == "act_docs" ~ "action_documents",
@@ -229,29 +213,24 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     extract == "tmdl" ~ extract
   )
 
-  # Column names for POST
-  columns.string <- readr::read_csv(
+  columns <- readr::read_csv(
     system.file("extdata", "EQColumnsForPOST.csv", package = "rExpertQuery"),
     show_col_types = FALSE
   ) |>
     dplyr::select("col.name", dplyr::all_of(extract.filter)) |>
     dplyr::filter(!is.na(.data[[extract.filter]])) |>
     dplyr::arrange(.data[[extract.filter]]) |>
-    dplyr::select("col.name") |>
-    dplyr::mutate(
-      col.name = paste0('"', .data$col.name, '"'),
-      col.name = paste0(.data$col.name, collapse = ",")
-    ) |>
-    dplyr::distinct() |>
-    dplyr::pull()
+    dplyr::pull(.data$col.name) |>
+    unique()
 
-  # Data body
-  extract.cols <- paste0('"columns":[', columns.string, "]}")
+  # JSON bodies using jsonlite (no manual paste)
+  count.setup <- jsonlite::toJSON(list(filters = filters_obj), auto_unbox = TRUE)
 
-  body.setup <- paste0(
-    '{"filters":{', params.body, '},',
-    '"options":{"format":"csv"},',
-    extract.cols
+  body.setup  <- jsonlite::toJSON(
+    list(filters = filters_obj,
+         options = list(format = "csv"),
+         columns = columns),
+    auto_unbox = TRUE
   )
 
   list(count.setup, body.setup)
