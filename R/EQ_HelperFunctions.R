@@ -320,7 +320,7 @@ EQ_PostAndContent <- function(headers, body.list, extract, max_retries = 3) {
             stop(paste0("Failed to perform request after ", max_retries, " attempts. Error: ", e$message))
           } else {
             message(paste0("Attempt ", i, " failed: ", e$message, ". Retrying..."))
-            Sys.sleep(1) # Optional: wait before retrying
+            Sys.sleep(5) # Optional: wait before retrying
           }
         }
       )
