@@ -156,7 +156,8 @@ EQ_DomainValues <- function(domain = NULL) {
         # fallback to packaged crosswalk
         message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
 
-        obj <- load(file = "inst/extdata/DomainValues.rda")
+        dv_filepath = system.file("extdata", "DomainValues.rda", package = "rExpertQuery")
+        obj <- load(file = dv_filepath)
         domain_values <- get(obj)
 
       # filter crosswalk by user supplied domain value
