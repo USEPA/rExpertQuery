@@ -67,9 +67,9 @@ EQ_DomainValues <- function(domain = NULL) {
       "EQ_DomainValues: getting list of available domain names. Values in the eq_param column can be used as inputs in EQ_DomainValues."
     ))
 
-    raw.data <- tryCatch(
+    raw.data <- suppressMessages(suppressWarnings(tryCatch(
       jsonlite::fromJSON(base.url),
-      error = function(e) NULL)
+      error = function(e) NULL)))
 
       if (!is.null(raw.data) && "domain" %in% names(raw.data) && nrow(raw.data) > 0) {
         # remote path (as you requested)
@@ -91,8 +91,13 @@ EQ_DomainValues <- function(domain = NULL) {
         # fallback to packaged crosswalk
         message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
 
-        load(file = "inst/extdata/DomainValuesNull.rda")
+        e <- new.env(parent = emptyenv())
 
+        dv_filepath <- system.file("extdata", "DomainValuesNull.rda",
+                                   package = "rExpertQuery", mustWork = TRUE)
+
+        load(dv_filepath, envir = e)
+        eq.params <- e[["domain_values"]]
         return(eq.params)
       }
   }
@@ -127,9 +132,9 @@ EQ_DomainValues <- function(domain = NULL) {
       )
 
       # filter for domains which have values in web service
-      raw.data <- tryCatch(
+      raw.data <- suppressMessages(suppressWarnings(tryCatch(
         jsonlite::fromJSON(paste0(base.url, "?domainName=", param.ws)),
-        error = function(e) NULL)
+        error = function(e) NULL)))
 
       if (!is.null(raw.data) && "domain" %in% names(raw.data) && nrow(raw.data) > 0) {
 
@@ -156,8 +161,13 @@ EQ_DomainValues <- function(domain = NULL) {
         # fallback to packaged crosswalk
         message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
 
-        obj <- load(file = "inst/extdata/DomainValues.rda")
-        domain_values <- get(obj)
+        e <- new.env(parent = emptyenv())
+
+        dv_filepath <- system.file("extdata", "DomainValues.rda",
+                                   package = "rExpertQuery", mustWork = TRUE)
+
+        load(dv_filepath, envir = e)
+        domain_values <- e[["domain_values"]]
 
       # filter crosswalk by user supplied domain value
       eq.params <- domain_values |>
@@ -176,7 +186,12 @@ EQ_DomainValues <- function(domain = NULL) {
         "allowable values for rExpert Query functions."
       ))
 
-      rm(param.filter, base.url, param.cw)
+      # remove intermediate objects
+      objs <- c("param.filter", "base.url", "param.cw")
+      rm(
+        list = objs[sapply(objs, exists, envir = .GlobalEnv, inherits = FALSE)],
+        envir = .GlobalEnv
+      )
     }
 
       return(eq.params)
@@ -188,9 +203,6 @@ EQ_DomainValues <- function(domain = NULL) {
 #'
 #' @return Returns a data frame of the allowable domain values for the "domain"
 #' param of EQ_DomainValues.
-#'
-#' @examples
-#'  \dontrun{
 #'
 # base URL to query ATTAINS web services
 EQ_UpdateInternalDomainValuesNull <- function(){
@@ -217,16 +229,13 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
       ) %>%
       dplyr::arrange(.data$eq_param)
 
-    save(eq.params, file = "inst/extdata/DomainValuesNull.rda")
+    save(eq.params, file = file.path("inst", "extdata", "DomainValuesNull.rda"), compress = "xz")
 }
 
 #' Downloads/updates an internal copy of allowable domain values for EQ_DomainValues when domain != NULL
 #'
 #' @return Returns a data frame of the allowable domain values all allowable values of domain excluding NULL.
 #' param of EQ_DomainValues.
-#'
-#' @examples
-#'  \dontrun{
 #'
 # base URL to query ATTAINS web services
 EQ_UpdateInternalDomainValues<- function() {
@@ -266,5 +275,5 @@ EQ_UpdateInternalDomainValues<- function() {
                      relationship = "many-to-many") |>
     dplyr::rename(attains_ws_name = domain)
 
-  save(domain_values, file = "inst/extdata/DomainValues.rda")
+  save(domain_values, file = file.path("inst", "extdata", "DomainValues.rda"), compress = "xz")
 }
