@@ -13,7 +13,3 @@ param of EQ_DomainValues.
 \description{
 Downloads/updates an internal copy of allowable domain values for EQ_DomainValues when domain != NULL
 }
-\examples{
- \dontrun{}
-
-}
