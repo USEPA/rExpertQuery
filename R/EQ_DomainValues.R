@@ -67,9 +67,9 @@ EQ_DomainValues <- function(domain = NULL) {
       "EQ_DomainValues: getting list of available domain names. Values in the eq_param column can be used as inputs in EQ_DomainValues."
     ))
 
-    raw.data <- tryCatch(
+    raw.data <- suppressMessages(suppressWarnings(tryCatch(
       jsonlite::fromJSON(base.url),
-      error = function(e) NULL)
+      error = function(e) NULL)))
 
       if (!is.null(raw.data) && "domain" %in% names(raw.data) && nrow(raw.data) > 0) {
         # remote path (as you requested)
@@ -127,9 +127,9 @@ EQ_DomainValues <- function(domain = NULL) {
       )
 
       # filter for domains which have values in web service
-      raw.data <- tryCatch(
+      raw.data <- suppressMessages(suppressWarnings(tryCatch(
         jsonlite::fromJSON(paste0(base.url, "?domainName=", param.ws)),
-        error = function(e) NULL)
+        error = function(e) NULL)))
 
       if (!is.null(raw.data) && "domain" %in% names(raw.data) && nrow(raw.data) > 0) {
 
@@ -177,7 +177,12 @@ EQ_DomainValues <- function(domain = NULL) {
         "allowable values for rExpert Query functions."
       ))
 
-      rm(param.filter, base.url, param.cw)
+      # remove intermediate objects
+      objs <- c("param.filter", "base.url", "param.cw")
+      rm(
+        list = objs[sapply(objs, exists, envir = .GlobalEnv, inherits = FALSE)],
+        envir = .GlobalEnv
+      )
     }
 
       return(eq.params)
