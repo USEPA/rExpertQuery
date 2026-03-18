@@ -205,7 +205,7 @@ EQ_DomainValues <- function(domain = NULL) {
 #' param of EQ_DomainValues.
 #'
 #' @examples
-#'  \dontrun{
+#'  \dontrun{}
 #'
 # base URL to query ATTAINS web services
 EQ_UpdateInternalDomainValuesNull <- function(){
@@ -232,7 +232,7 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
       ) %>%
       dplyr::arrange(.data$eq_param)
 
-    save(eq.params, file = "inst/extdata/DomainValuesNull.rda")
+    save(eq.params, file = file.path("inst", "extdata", "DomainValuesNull.rda"), compress = "xz")
 }
 
 #' Downloads/updates an internal copy of allowable domain values for EQ_DomainValues when domain != NULL
@@ -241,7 +241,7 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
 #' param of EQ_DomainValues.
 #'
 #' @examples
-#'  \dontrun{
+#'  \dontrun{}
 #'
 # base URL to query ATTAINS web services
 EQ_UpdateInternalDomainValues<- function() {
@@ -281,5 +281,5 @@ EQ_UpdateInternalDomainValues<- function() {
                      relationship = "many-to-many") |>
     dplyr::rename(attains_ws_name = domain)
 
-  save(domain_values, file = "inst/extdata/DomainValues.rda")
+  save(domain_values, file = file.path("inst", "extdata", "DomainValues.rda"), compress = "xz")
 }
