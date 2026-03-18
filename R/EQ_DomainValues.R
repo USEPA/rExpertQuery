@@ -204,9 +204,6 @@ EQ_DomainValues <- function(domain = NULL) {
 #' @return Returns a data frame of the allowable domain values for the "domain"
 #' param of EQ_DomainValues.
 #'
-#' @examples
-#'  \dontrun{}
-#'
 # base URL to query ATTAINS web services
 EQ_UpdateInternalDomainValuesNull <- function(){
 base.url <- "https://attains.epa.gov/attains-public/api/domains"
@@ -239,9 +236,6 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
 #'
 #' @return Returns a data frame of the allowable domain values all allowable values of domain excluding NULL.
 #' param of EQ_DomainValues.
-#'
-#' @examples
-#'  \dontrun{}
 #'
 # base URL to query ATTAINS web services
 EQ_UpdateInternalDomainValues<- function() {
