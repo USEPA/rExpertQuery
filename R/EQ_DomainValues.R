@@ -93,10 +93,11 @@ EQ_DomainValues <- function(domain = NULL) {
 
         e <- new.env(parent = emptyenv())
 
-        dv_filepath = system.file("extdata", "DomainValuesNull.rda", package = "rExpertQuery")
-        obj <- load(file = dv_filepath, envir = e)
-        eq.params <- get(obj)
+        dv_filepath <- system.file("extdata", "DomainValuesNull.rda",
+                                   package = "rExpertQuery", mustWork = TRUE)
 
+        load(dv_filepath, envir = e)
+        eq_params <- e[["domain_values"]]
         return(eq.params)
       }
   }
@@ -162,9 +163,11 @@ EQ_DomainValues <- function(domain = NULL) {
 
         e <- new.env(parent = emptyenv())
 
-        dv_filepath = system.file("extdata", "DomainValues.rda", package = "rExpertQuery")
-        obj <- load(file = dv_filepath, envir = e)
-        domain_values <- get(obj)
+        dv_filepath <- system.file("extdata", "DomainValues.rda",
+                                   package = "rExpertQuery", mustWork = TRUE)
+
+        load(dv_filepath, envir = e)
+        domain_values <- e[["domain_values"]]
 
       # filter crosswalk by user supplied domain value
       eq.params <- domain_values |>
