@@ -3,7 +3,7 @@
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/USEPA/rExpertQuery/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/USEPA/ExpertQueryTMDLDashboard/actions/workflows/R-CMD-check.yaml)
 
-A draft R package (UNDER ACTIVE DEVELOPMENT) for retrieving ATTAINS data efficiently via Expert Query web services (https://www.epa.gov/waterdata/expert-query).
+R package (UNDER ACTIVE DEVELOPMENT) for retrieving ATTAINS data efficiently via Expert Query web services (https://www.epa.gov/waterdata/expert-query).
 
 ## Installation
 
