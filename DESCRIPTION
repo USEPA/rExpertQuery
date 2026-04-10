@@ -15,7 +15,7 @@ Copyright: This software is in the public domain because it contains materials
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Imports:
+Imports: 
   data.table,
   dplyr,
   httr2,
@@ -27,25 +27,26 @@ Imports:
   tibble,
   tidyr,
   utils
-Suggests:
+Suggests: 
     datasets,
     devtools,
     DT,
     ggplot2,
+    httptest2,
     httr,
     knitr,
     leaflet,
     maps,
     pkgdown,
     plotly,
-    rmarkdown,
     remotes,
+    rmarkdown,
     roxygen2,
     sf,
     spelling,
     stringi,
-    testthis,
     testthat (>= 3.0.0),
+    testthis,
     usdata,
     usethis,
     usmap,
