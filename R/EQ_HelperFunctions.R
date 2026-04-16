@@ -386,3 +386,34 @@ EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
     ))
   return(.data)
 }
+
+#' Set EQ_API_KEY for local and automated testing
+#'
+#' @param .data Data frame to convert planSummaryLink to functional URL links for use in data tables.
+#' @param url.col Column name containing string for formatting. Default is "planSummaryLink".
+#'
+#' @return The .data data frame with planSummaryLink entries formatted as URL links.
+#'
+# check to see if key is stored in R session
+# this allows developers to easily use their own key during local dev and testing
+# per session: options(rexpertquery.EQ_API_KEY = "YOUR_KEY_HERE")
+# use options(rexpertquery.EQ_API_KEY = NULL) to remove
+
+.setEQKey <- function() {
+opt <- getOption("EQ_API_KEY", "")
+if (nzchar(opt)) {
+  return(opt)
+}
+
+# check to see if key is stored in system environment (primarily for use in checks)
+env <- Sys.getenv("EQ_API_KEY", unset = "")
+if (nzchar(env)) {
+  return(env)
+}
+
+# if neither exist
+def <- NULL
+if (nzchar(def)) {
+  return(def)
+}
+}
