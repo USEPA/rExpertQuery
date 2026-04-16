@@ -11,10 +11,6 @@ httptest2::with_mock_dir("dir/RI-actions", {
 
   testthat::test_that("Actions returns expected column names", {
 
-    param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
-                                            package = "rExpertQuery"
-    ))
-
     expected <- c("objectId", "region", "state", "organizationType",
                   "organizationId", "organizationName", "waterType",
                   "parameterGroup", "parameter", "actionType", "actionId",
