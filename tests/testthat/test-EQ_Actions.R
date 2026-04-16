@@ -3,5 +3,7 @@ httptest2::with_mock_dir("dir/RI-actions", {
     expect_equal(NROW(EQ_Actions(statecode = "RI", api_key = EPATADA:::.setEQKey())), 485)
   })
 
-  testthat::test_that("Actions returns expected number of columns")
+  testthat::test_that("Actions returns expected number of columns", {
+    expect_equal(NCOL())
+  })
 })
