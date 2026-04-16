@@ -1,3 +1,7 @@
+test <- EQ_Assessments(statecode = "IL",
+               epa_ir_cat = 3,
+               api_key = .setEQKey())
+
 # having trouble with assessments, need to run and update expected cols and values later
 
 httptest2::with_mock_dir("dir/IL-cat3-assessments", {
