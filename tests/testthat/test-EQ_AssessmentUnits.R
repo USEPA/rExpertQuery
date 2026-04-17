@@ -13,11 +13,13 @@ httptest2::with_mock_dir("dir/MO-leisurelake-assessmentunits", {
 
   testthat::test_that("Assessment Units returns expected column names", {
 
-    expected <- c("objectId"             "region"               "state"                "organizationType"
-                  [5] "organizationId"       "organizationName"     "waterType"            "locationTypeCode"
-                  [9] "locationText"         "useClassName"         "assessmentUnitId"     "assessmentUnitName"
-                  [13] "assessmentUnitStatus" "reportingCycle"       "cycleId"              "locationDescription"
-                  [17] "sizeSource"           "sourceScale"          "waterSize"            "waterSizeUnits" )
+    expected <- c("objectId", "region", "state", "organizationType",
+                  "organizationId", "organizationName", "waterType",
+                  "locationTypeCode", "locationText", "useClassName",
+                  "assessmentUnitId", "assessmentUnitName",
+                  "assessmentUnitStatus", "reportingCycle", "cycleId",
+                  "locationDescription", "sizeSource", "sourceScale",
+                  "waterSize", "waterSizeUnits" )
 
     actual <- names(EQ_AssessmentUnits(statecode = "MO",
                                        au_name = "Leisure Lake",
