@@ -1,11 +1,15 @@
 httptest2::with_mock_dir("dir/OR-actionsdocuments", {
   testthat::test_that("Actions returns expected number of row", {
     expect_equal(NROW(EQ_ActionsDocuments(state = "OR",
-                                          api_key = .setEQKey())), 82)
+                                          comp_date_start = "01-01-2018",
+                                          comp_date_end = "12-31-2020",
+                                          api_key = .setEQKey())), 48)
   })
 
   testthat::test_that("Actions returns expected number of columns", {
     expect_equal(NCOL(EQ_ActionsDocuments(state = "OR",
+                                          comp_date_start = "01-01-2018",
+                                          comp_date_end = "12-31-2020",
                                           api_key = .setEQKey())), 18)
   })
 
@@ -19,6 +23,8 @@ httptest2::with_mock_dir("dir/OR-actionsdocuments", {
                   "actionDocumentType" )
 
     actual <- names(EQ_ActionsDocuments(state = "OR",
+                                        comp_date_start = "01-01-2018",
+                                        comp_date_end = "12-31-2020",
                                         api_key = .setEQKey()))
 
     length.diff <- length(setdiff(expected, actual))

@@ -1,33 +1,44 @@
-test <- EQ_Assessments(statecode = "IL",
-               epa_ir_cat = 3,
-               api_key = .setEQKey())
-
-# having trouble with assessments, need to run and update expected cols and values later
-
-httptest2::with_mock_dir("dir/IL-cat3-assessments", {
+httptest2::with_mock_dir("dir/IL-cat5-assessments-algal", {
   testthat::test_that("Assessments returns expected number of row", {
     expect_equal(NROW(EQ_Assessments(statecode = "IL",
-                                     epa_ir_cat = 3,
-                                     api_key = .setEQKey())), 82)
+                                     epa_ir_cat = 5,
+                                     param_group = "ALGAL GROWTH",
+                                     api_key = .setEQKey())), 234)
   })
 
   testthat::test_that("Assessments returns expected number of columns", {
     expect_equal(NCOL(EQ_Assessments(statecode = "IL",
-                                     epa_ir_cat = 3,
-                                     api_key = .setEQKey())), 18)
+                                     epa_ir_cat = 5,
+                                     param_group = "ALGAL GROWTH",
+                                     api_key = .setEQKey())), 56)
   })
 
   testthat::test_that("Assessments returns expected column names", {
 
-    expected <- c("objectId", "actionDocumentUrl", "actionId", "actionName",
-                  "actionType", "completionDate", "organizationId",
-                  "organizationName", "organizationType", "region", "state",
-                  "tmdlDate", "documentDesc", "documentFileName",
-                  "documentFileTypeName", "documentKey", "documentName",
-                  "actionDocumentType" )
+    expected <- c("objectId", "region", "state", "organizationType",
+                  "organizationId", "organizationName", "waterType",
+                  "reportingCycle", "cycleLastAssessed", "assessmentUnitId",
+                  "assessmentUnitName", "assessmentUnitStatus", "overallStatus",
+                  "epaIrCategory", "stateIrCategory", "useGroup", "useName",
+                  "useClassName", "useSupport", "useIrCategory",
+                  "useStateIrCategory", "monitoringStartDate",
+                  "monitoringEndDate", "assessmentDate", "assessmentTypes",
+                  "assessmentMethods", "assessmentBasis", "parameterGroup",
+                  "parameterName", "parameterStatus", "parameterAttainment",
+                  "parameterIrCategory", "parameterStateIrCategory", "delisted",
+                  "delistedReason", "pollutantIndicator", "cycleFirstListed",
+                  "alternateListingIdentifier", "vision303dPriority",
+                  "cwa303dPriorityRanking", "cycleScheduledForTmdl",
+                  "cycleExpectedToAttain", "consentDecreeCycle", "cycleId",
+                  "seasonStartDate", "seasonEndDate", "associatedActionId",
+                  "associatedActionName", "associatedActionType",
+                  "associatedActionStatus", "associatedActionAgency",
+                  "locationDescription", "sizeSource", "sourceScale",
+                  "waterSize", "waterSizeUnits")
 
     actual <- names(EQ_Assessments(statecode = "IL",
-                                   epa_ir_cat = 3,
+                                   epa_ir_cat = 5,
+                                   param_group = "ALGAL GROWTH",
                                    api_key = .setEQKey()))
 
     length.diff <- length(setdiff(expected, actual))
@@ -37,35 +48,9 @@ httptest2::with_mock_dir("dir/IL-cat3-assessments", {
   })
 })
 
-httptest2::with_mock_dir("dir/all-assessments", {
+httptest2::with_mock_dir("dir/nat-assessments-query", {
   testthat::test_that("EQ_Assessments returns error message if query results exceed maximum allowed", {
-    expect_equal(NROW(EQ_Assessments(api_key = .setEQKey())), 82)
-  })
-  # need to update this once I can see what result looks like
-
-  testthat::test_that("Assessments returns expected number of columns", {
-    expect_equal(NCOL(EQ_Assessments(statecode = "IL",
-                                     epa_ir_cat = 3,
-                                     api_key = .setEQKey())), 18)
-  })
-
-  testthat::test_that("Assessments returns expected column names", {
-
-    expected <- c("objectId", "actionDocumentUrl", "actionId", "actionName",
-                  "actionType", "completionDate", "organizationId",
-                  "organizationName", "organizationType", "region", "state",
-                  "tmdlDate", "documentDesc", "documentFileName",
-                  "documentFileTypeName", "documentKey", "documentName",
-                  "actionDocumentType" )
-
-    actual <- names(EQ_Assessments(statecode = "IL",
-                                   epa_ir_cat = 3,
-                                   api_key = .setEQKey()))
-
-    length.diff <- length(setdiff(expected, actual))
-
-    testthat::expect_equal(length.diff, 0)
-
+    expect_error(EQ_Assessments(api_key = .setEQKey()))
   })
 })
 

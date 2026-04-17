@@ -1,11 +1,15 @@
 httptest2::with_mock_dir("dir/RI-actions", {
   testthat::test_that("Actions returns expected number of row", {
     expect_equal(NROW(EQ_Actions(statecode = "RI",
-                                 api_key = .setEQKey())), 485)
+                                 fisc_year_start = 2014,
+                                 fisc_year_end = 2020,
+                                 api_key = .setEQKey())), 77)
   })
 
   testthat::test_that("Actions returns expected number of columns", {
     expect_equal(NCOL(EQ_Actions(statecode = "RI",
+                                 fisc_year_start = 2014,
+                                 fisc_year_end = 2020,
                                  api_key = .setEQKey())), 23)
   })
 
@@ -21,7 +25,9 @@ httptest2::with_mock_dir("dir/RI-actions", {
                   "planSummaryLink")
 
     actual <- names(EQ_Actions(statecode = "RI",
-                         api_key = .setEQKey()))
+                               fisc_year_start = 2014,
+                               fisc_year_end = 2020,
+                               api_key = .setEQKey()))
 
     length.diff <- length(setdiff(expected, actual))
 
@@ -29,3 +35,11 @@ httptest2::with_mock_dir("dir/RI-actions", {
 
   })
 })
+
+# # need to update function so that this will fail if relevant
+# httptest2::with_mock_dir("dir/wrong-statecode-actions-query", {
+#   testthat::test_that("EQ_Actions returns error message if statecode is not a real statecode", {
+#     expect_error(EQ_Actions(statecode = "NO",
+#                             api_key = .setEQKey()))
+#   })
+# })
