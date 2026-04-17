@@ -75,15 +75,15 @@ EQ_DomainValues <- function(domain = NULL) {
         # remote path (as you requested)
         eq.params <- raw.data |>
           dplyr::select(domain) |>
-          dplyr::rename(attains_ws_name = .data$domain) |>
+          dplyr::rename(attains_ws_name = domain) |>
           dplyr::left_join(param.cw, by = dplyr::join_by(attains_ws_name)) |>
-          dplyr::filter(!is.na(.data$eq_name)) |>
+          dplyr::filter(!is.na(eq_name)) |>
           dplyr::transmute(
-            eq_param = .data$param,
-            attains_ws_name = .data$attains_ws_name,
-            attains_ws_field = .data$attains_ws_field
+            eq_param = param,
+            attains_ws_name = attains_ws_name,
+            attains_ws_field = attains_ws_field
           ) %>%
-          dplyr::arrange(.data$eq_param)
+          dplyr::arrange(eq_param)
 
         message("EQ_DomainValues: domain list retrieved from ATTAINS web services.")
         return(eq.params)
@@ -115,8 +115,8 @@ EQ_DomainValues <- function(domain = NULL) {
 
       # get param name for web services
       param.ws <- param.cw |>
-        dplyr::filter(.data$param == .env$domain) |>
-        dplyr::pull(.data$attains_ws_name)
+        dplyr::filter(param == .env$domain) |>
+        dplyr::pull(attains_ws_name)
 
       # cols to retain
       retain.cols <- c(
@@ -140,13 +140,13 @@ EQ_DomainValues <- function(domain = NULL) {
 
         # remote path
         eq.params <- raw.data |>
-          dplyr::rename(attains_ws_name = .data$domain) |>
+          dplyr::rename(attains_ws_name = domain) |>
           dplyr::left_join(param.cw, by = "attains_ws_name",
                            relationship = "many-to-many") |>
-          dplyr::filter(.data$param == .env$domain) |>
-          dplyr::rename(eq_param = .data$param) |>
+          dplyr::filter(param == .env$domain) |>
+          dplyr::rename(eq_param = param) |>
           dplyr::select(dplyr::all_of(retain.cols)) |>
-          dplyr::arrange(.data$eq_param) |>
+          dplyr::arrange(eq_param) |>
           dplyr::distinct()
 
         print(paste0(
@@ -174,10 +174,10 @@ EQ_DomainValues <- function(domain = NULL) {
                   dplyr::left_join(param.cw, by = c("attains_ws_name",
                                                     "attains_ws_field"),
                            relationship = "many-to-many") |>
-        dplyr::filter(.data$param == .env$domain) |>
-        dplyr::rename(eq_param = .data$param) |>
+        dplyr::filter(param == .env$domain) |>
+        dplyr::rename(eq_param = param) |>
         dplyr::select(dplyr::all_of(retain.cols)) |>
-        dplyr::arrange(.data$eq_param) |>
+        dplyr::arrange(eq_param) |>
         dplyr::distinct()
 
       print(paste0(
@@ -219,15 +219,15 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
 
     eq.params <- raw.data |>
       dplyr::select(domain) |>
-      dplyr::rename(attains_ws_name = .data$domain) |>
+      dplyr::rename(attains_ws_name = domain) |>
       dplyr::left_join(param.cw, by = "attains_ws_name") |>
-      dplyr::filter(!is.na(.data$eq_name)) |>
+      dplyr::filter(!is.na(eq_name)) |>
       dplyr::transmute(
-        eq_param = .data$param,
-        attains_ws_name = .data$attains_ws_name,
-        attains_ws_field = .data$attains_ws_field
+        eq_param = param,
+        attains_ws_name = attains_ws_name,
+        attains_ws_field = attains_ws_field
       ) %>%
-      dplyr::arrange(.data$eq_param)
+      dplyr::arrange(eq_param)
 
     save(eq.params, file = file.path("inst", "extdata", "DomainValuesNull.rda"), compress = "xz")
 }
@@ -252,9 +252,9 @@ EQ_UpdateInternalDomainValues<- function() {
     dplyr::distinct()
 
   attains_ws_name <- param.cw |>
-    dplyr::select(.data$attains_ws_name) |>
-    dplyr::filter(.data$attains_ws_name != "" &
-                    !is.na(.data$attains_ws_name)) |>
+    dplyr::select(attains_ws_name) |>
+    dplyr::filter(attains_ws_name != "" &
+                    !is.na(attains_ws_name)) |>
     dplyr::distinct() |>
     dplyr::pull()
 

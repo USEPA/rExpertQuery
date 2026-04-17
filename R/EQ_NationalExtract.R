@@ -198,13 +198,13 @@ EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
   if (extract == "tmdl") {
     df <- df |>
       dplyr::mutate(
-        TMDLENDPOINT1 = ifelse(is.na(.data$TMDLENDPOINT1), "", .data$TMDLENDPOINT1),
-        TMDLENDPOINT2 = ifelse(is.na(.data$TMDLENDPOINT2), "", .data$TMDLENDPOINT2),
-        TMDLENDPOINT3 = ifelse(is.na(.data$TMDLENDPOINT3), "", .data$TMDLENDPOINT3)
+        TMDLENDPOINT1 = ifelse(is.na(TMDLENDPOINT1), "", TMDLENDPOINT1),
+        TMDLENDPOINT2 = ifelse(is.na(TMDLENDPOINT2), "", TMDLENDPOINT2),
+        TMDLENDPOINT3 = ifelse(is.na(TMDLENDPOINT3), "", TMDLENDPOINT3)
       ) |>
       dplyr::mutate(TMDLENDPOINT = paste0(
-        .data$TMDLENDPOINT1, .data$TMDLENDPOINT2,
-        .data$TMDLENDPOINT3
+        TMDLENDPOINT1, TMDLENDPOINT2,
+        TMDLENDPOINT3
       )) |>
       dplyr::select(-"TMDLENDPOINT1", -"TMDLENDPOINT2", -"TMDLENDPOINT3")
   }

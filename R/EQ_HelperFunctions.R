@@ -81,7 +81,7 @@ EQ_FormatParams <- function(.data) {
   })
 
   params.df <- params.df |>
-    dplyr::mutate(value = as.character(.data$value))
+    dplyr::mutate(value = as.character(value))
 
   return(params.df)
 }
@@ -104,7 +104,7 @@ EQ_FormatParams <- function(.data) {
 EQ_CompareParams <- function(default, user) {
   # filter out any default params that user entered a value for
   default.params <- default |>
-    dplyr::filter(!.data$param %in% user$param)
+    dplyr::filter(!param %in% user$param)
 
   # combine user supplied and default params
   all.params <- user |>
@@ -161,42 +161,42 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
   # Prepare filter rows with eq_name mapping
   filt <- comp.params |>
     dplyr::filter(
-      !is.na(.data$value),
-      !(.data$value %in% c("NULL", "latest")),
-      .data$param != "api_key"
+      !is.na(value),
+      !(value %in% c("NULL", "latest")),
+      param != "api_key"
     ) |>
     dplyr::mutate(
       value = dplyr::case_when(
-        .data$param == "report_cycle" & .data$value == "any" ~ "-1",
-        .data$param == "region" & !is.null(.data$value) & .data$value != "10" ~ paste0("0", .data$value),
-        .data$param %in% c("au_status", "delisted", "pollutant_ind", "vis", "in_meas", "indian_country") &
-          !is.null(.data$value) ~ substr(.data$value, 1, 1),
-        .data$param == "use_support" & .data$value == "Fully Supporting" ~ "F",
-        .data$param == "use_support" & .data$value == "Not Supporting" ~ "N",
-        .data$param == "use_support" & .data$value == "Insufficient Information" ~ "I",
-        .data$param == "use_support" & .data$value == "Not Assessed" ~ "X",
-        TRUE ~ as.character(.data$value)
+        param == "report_cycle" & value == "any" ~ "-1",
+        param == "region" & !is.null(value) & value != "10" ~ paste0("0", value),
+        param %in% c("au_status", "delisted", "pollutant_ind", "vis", "in_meas", "indian_country") &
+          !is.null(value) ~ substr(value, 1, 1),
+        param == "use_support" & value == "Fully Supporting" ~ "F",
+        param == "use_support" & value == "Not Supporting" ~ "N",
+        param == "use_support" & value == "Insufficient Information" ~ "I",
+        param == "use_support" & value == "Not Assessed" ~ "X",
+        TRUE ~ as.character(value)
       )
     ) |>
     dplyr::left_join(crosswalk, by = dplyr::join_by("param")) |>
     # Clean deparsed vectors like c("a","b")
-    dplyr::mutate(value = gsub('c\\(|\\)|"', "", .data$value)) |>
+    dplyr::mutate(value = gsub('c\\(|\\)|"', "", value)) |>
     # Split multi-value params into atomic tokens
-    tidyr::separate_rows(.data$value, sep = ",\\s*") |>
-    dplyr::mutate(value = trimws(.data$value)) |>
+    tidyr::separate_rows(value, sep = ",\\s*") |>
+    dplyr::mutate(value = trimws(value)) |>
     # Convert only ISO YYYY-MM-DD strings for date params
     dplyr::mutate(
       value = dplyr::if_else(
-        .data$param %in% date.params & grepl("^\\d{4}-\\d{2}-\\d{2}$", .data$value),
-        format(as.Date(.data$value, format = "%Y-%m-%d"), "%m-%d-%Y"),
-        .data$value
+        param %in% date.params & grepl("^\\d{4}-\\d{2}-\\d{2}$", value),
+        format(as.Date(value, format = "%Y-%m-%d"), "%m-%d-%Y"),
+        value
       )
     )
 
   # Build filters as a named list: non-date fields become vectors; date/query stay scalar
   filt_list <- filt |>
-    dplyr::group_by(.data$eq_name) |>
-    dplyr::summarise(values = list(unique(.data$value)), .groups = "drop")
+    dplyr::group_by(eq_name) |>
+    dplyr::summarise(values = list(unique(value)), .groups = "drop")
 
   # Named list for JSON
   filters_obj <- rlang::set_names(filt_list$values, filt_list$eq_name)
@@ -220,7 +220,7 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
     dplyr::select("col.name", dplyr::all_of(extract.filter)) |>
     dplyr::filter(!is.na(.data[[extract.filter]])) |>
     dplyr::arrange(.data[[extract.filter]]) |>
-    dplyr::pull(.data$col.name) |>
+    dplyr::pull(col.name) |>
     unique()
 
   # JSON bodies using jsonlite (no manual paste)
