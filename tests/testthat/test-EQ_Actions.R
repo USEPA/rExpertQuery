@@ -1,19 +1,19 @@
 httptest2::with_mock_dir("dir/RI-actions", {
-  testthat::test_that("Actions returns expected number of row", {
+  testthat::test_that("EQ_Actions returns expected number of row", {
     expect_equal(NROW(EQ_Actions(statecode = "RI",
                                  fisc_year_start = 2014,
                                  fisc_year_end = 2020,
                                  api_key = .setEQKey())), 77)
   })
 
-  testthat::test_that("Actions returns expected number of columns", {
+  testthat::test_that("EQ_Actions returns expected number of columns", {
     expect_equal(NCOL(EQ_Actions(statecode = "RI",
                                  fisc_year_start = 2014,
                                  fisc_year_end = 2020,
                                  api_key = .setEQKey())), 23)
   })
 
-  testthat::test_that("Actions returns expected column names", {
+  testthat::test_that("EQ_Actions returns expected column names", {
 
     expected <- c("objectId", "region", "state", "organizationType",
                   "organizationId", "organizationName", "waterType",

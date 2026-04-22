@@ -1,19 +1,19 @@
 httptest2::with_mock_dir("dir/IL-cat5-assessments-algal", {
-  testthat::test_that("Assessments returns expected number of row", {
+  testthat::test_that("EQ_Assessments returns expected number of row", {
     expect_equal(NROW(EQ_Assessments(statecode = "IL",
                                      epa_ir_cat = 5,
                                      param_group = "ALGAL GROWTH",
                                      api_key = .setEQKey())), 234)
   })
 
-  testthat::test_that("Assessments returns expected number of columns", {
+  testthat::test_that("EQ_Assessments returns expected number of columns", {
     expect_equal(NCOL(EQ_Assessments(statecode = "IL",
                                      epa_ir_cat = 5,
                                      param_group = "ALGAL GROWTH",
                                      api_key = .setEQKey())), 56)
   })
 
-  testthat::test_that("Assessments returns expected column names", {
+  testthat::test_that("EQ_Assessments returns expected column names", {
 
     expected <- c("objectId", "region", "state", "organizationType",
                   "organizationId", "organizationName", "waterType",
