@@ -1,5 +1,5 @@
-httptest2::with_mock_dir("dir/MT-ausmls-kleinschmidtcreek", {
-  testthat::test_that("EQ_AUsMLs returns expected number of rows", {
+httptest2::with_mock_dir("dir/FL-tmdls-2018-2020", {
+  testthat::test_that("EQ_TMDLs returns expected number of rows", {
     expect_equal(NROW(EQ_TMDLs(fisc_year_start = 2018,
                                fisc_year_end = 2020,
                                statecode = "FL",
@@ -7,7 +7,7 @@ httptest2::with_mock_dir("dir/MT-ausmls-kleinschmidtcreek", {
     ), 333)
   })
 
-  testthat::test_that("EQ_AUsMLs returns expected number of columns", {
+  testthat::test_that("EQ_TMDLs returns expected number of columns", {
     expect_equal(NCOL(EQ_TMDLs(fisc_year_start = 2018,
                                fisc_year_end = 2020,
                                statecode = "FL",
@@ -15,7 +15,7 @@ httptest2::with_mock_dir("dir/MT-ausmls-kleinschmidtcreek", {
     ), 34)
   })
 
-  testthat::test_that("EQ_AUsMLs returns expected column names", {
+  testthat::test_that("EQ_TMDLs returns expected column names", {
 
     expected <- c("objectId", "region", "state", "organizationType",
                   "organizationId", "organizationName", "waterType",
