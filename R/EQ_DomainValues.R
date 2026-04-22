@@ -82,7 +82,7 @@ EQ_DomainValues <- function(domain = NULL) {
             eq_param = param,
             attains_ws_name = attains_ws_name,
             attains_ws_field = attains_ws_field
-          ) %>%
+          ) |>
           dplyr::arrange(eq_param)
 
         message("EQ_DomainValues: domain list retrieved from ATTAINS web services.")
@@ -226,7 +226,7 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
         eq_param = param,
         attains_ws_name = attains_ws_name,
         attains_ws_field = attains_ws_field
-      ) %>%
+      ) |>
       dplyr::arrange(eq_param)
 
     save(eq.params, file = file.path("inst", "extdata", "DomainValuesNull.rda"), compress = "xz")

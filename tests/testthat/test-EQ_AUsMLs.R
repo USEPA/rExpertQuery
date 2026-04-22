@@ -29,7 +29,7 @@ httptest2::with_mock_dir("dir/MT-ausmls-kleinschmidtcreek", {
                               api_key = .setEQKey())
     )
 
-    length.diff <- length(setdiff(expected, actual))
+    length.diff <- length(setdiff(expected,lki actual))
 
     testthat::expect_equal(length.diff, 0)
 
