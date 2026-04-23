@@ -1,6 +1,4 @@
-
-httptest2::with_mock_dir("dir/domain-values-null", {
-  testthat::test_that("EQ_DomainValues returns expected columns when domain = NULL", {
+testthat::test_that("EQ_DomainValues returns expected columns when domain = NULL", {
 
     expected <- c( "eq_param", "attains_ws_name", "attains_ws_field")
 
@@ -28,12 +26,10 @@ httptest2::with_mock_dir("dir/domain-values-null", {
     length.diff <- length(setdiff(expected, actual))
 
     testthat::expect_equal(length.diff, 0)
-  })
+ })
 
-})
 
-httptest2::with_mock_dir("dir/domain-values-asses-type", {
-  testthat::test_that("EQ_DomainValues returns expected columns when domain = water_type", {
+testthat::test_that("EQ_DomainValues returns expected columns when domain = 'assess_types'", {
 
     expected <- c("OTHER",
                   "PATHOGEN INDICATORS",
@@ -51,4 +47,4 @@ httptest2::with_mock_dir("dir/domain-values-asses-type", {
 
     testthat::expect_equal(length.diff, 0)
   })
-})
+

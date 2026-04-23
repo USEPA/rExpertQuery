@@ -1,0 +1,11 @@
+structure(list(method = "GET", url = "https://cg-7343d0e5-571f-451f-971f-8aaaf971df7e.s3-us-gov-west-1.amazonaws.com/national-downloads/1776698474/tmdl.csv.zip", 
+    status_code = 200L, headers = structure(list(`x-amz-id-2` = "+dkGOR1riLNqNoQZ7kBlmBCPg3QDOMgGu5uyyleRQrC9v2GUVe72Ygp6oZ9OsiKN8kSTH2SXcTo=", 
+        `x-amz-request-id` = "QGMWHZBZ4TQZTN62", Date = "Thu, 23 Apr 2026 20:04:24 GMT", 
+        `Last-Modified` = "Mon, 20 Apr 2026 17:05:08 GMT", ETag = "\"5f7d2f560493bd54a9186147f107a476\"", 
+        `x-amz-server-side-encryption` = "AES256", `x-amz-meta-s3cmd-attrs` = "atime:1776704691/ctime:1776704703/gid:6877/gname:WATERSPB/md5:5f7d2f560493bd54a9186147f107a476/mode:33188/mtime:1776704703/uid:3858/uname:owetl", 
+        `Accept-Ranges` = "bytes", `Content-Type` = "application/zip", 
+        `Content-Length` = "33085955", Server = "AmazonS3"), class = "httr2_headers"), 
+    body = structure(find_mock_file("cg-7343d0e5-571f-451f-971f-8aaaf971df7e.s3-us-gov-west-1.amazonaws.com/national-downloads/1776698474/tmdl.csv.zip.R-FILE"), 
+        class = "httr2_path"), timing = c(redirect = 0, namelookup = 0.007499, 
+    connect = 0.049255, pretransfer = 0.221342, starttransfer = 0.426401, 
+    total = 434.736145), cache = new.env(parent = emptyenv())), class = "httr2_response")
