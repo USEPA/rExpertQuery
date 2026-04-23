@@ -1,38 +1,54 @@
-httptest2::with_mock_dir("dir/nat-extract-actions", {
-  testthat::test_that("EQ_NationalProfile returns expected column names", {
-    expect_equal(NROW(EQ_Sources(report_cycle = 2018,
-                                 statecode = "TX",
-                                 source = "AGRICULTURE",
-                                 api_key = .setEQKey())
-    ), 305)
-  })
 
-  testthat::test_that("EQ_Sources returns results for all expected statecodes", {
-    expect_equal(NCOL(EQ_Sources(report_cycle = 2018,
-                                 statecode = "TX",
-                                 source = "AGRICULTURE",
-                                 api_key = .setEQKey())
-    ), 21)
-  })
+httptest2::with_mock_dir("dir/domain-values-null", {
+  testthat::test_that("EQ_DomainValues returns expected columns when domain = NULL", {
 
-  testthat::test_that("EQ_Sources returns expected column names", {
+    expected <- c( "eq_param", "attains_ws_name", "attains_ws_field")
 
-    expected <- c("objectId", "region", "state", "organizationType",
-                  "organizationId", "organizationName", "waterType",
-                  "assessmentUnitId", "assessmentUnitName", "reportingCycle",
-                  "overallStatus", "epaIrCategory", "stateIrCategory",
-                  "parameterGroup", "causeName", "sourceName", "confirmed",
-                  "cycleId", "locationDescription", "waterSize", "waterSizeUnits")
-
-    actual <- names(EQ_Sources(report_cycle = 2018,
-                               statecode = "TX",
-                               source = "AGRICULTURE",
-                               api_key = .setEQKey())
-    )
+    actual <- names(EQ_DomainValues())
 
     length.diff <- length(setdiff(expected, actual))
 
     testthat::expect_equal(length.diff, 0)
+  })
 
+  testthat::test_that("EQ_DomainValues returns expected values when domain = NULL", {
+
+    expected <- c("act_agency", "act_agency", "act_status", "act_type",
+                  "ad_param", "ad_param_group", "assess_basis", "assess_methods",
+                  "assess_types", "au_status", "cause", "delist_reason",
+                  "doc_type", "file_type", "loc_type", "org_id", "org_name",
+                  "param_attain", "param_group", "param_name",
+                  "param_state_ir_cat", "param_status", "source_scale",
+                  "source_type", "statecode", "use_name", "use_support",
+                  "water_type")
+
+    actual <- EQ_DomainValues() |>
+      dplyr::pull(eq_param)
+
+    length.diff <- length(setdiff(expected, actual))
+
+    testthat::expect_equal(length.diff, 0)
+  })
+
+})
+
+httptest2::with_mock_dir("dir/domain-values-asses-type", {
+  testthat::test_that("EQ_DomainValues returns expected columns when domain = water_type", {
+
+    expected <- c("OTHER",
+                  "PATHOGEN INDICATORS",
+                  "PHYSICAL/CHEMICAL",
+                  "HABITAT",
+                  "TOXICOLOGICAL",
+                  "OTHER PUBLIC HEALTH INDICATORS",
+                  "OTHER AQUATIC LIFE INDICATORS",
+                  "BIOLOGICAL")
+
+    actual <- EQ_DomainValues(domain = "assess_types") |>
+      dplyr::pull(name)
+
+    length.diff <- length(setdiff(expected, actual))
+
+    testthat::expect_equal(length.diff, 0)
   })
 })

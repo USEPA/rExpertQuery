@@ -14,14 +14,14 @@
 #' ** The National Extracts are large files. You must have enough memory available in order for
 #' these functions to import them into R successfully.
 #'
-#' HRM NOTE 2/11/25 - can download but not import catchment correspondence due to file size.
-#'
 #' @param extract Character argument. Specifies which Expert Query National Extract should be
 #' imported. Options are "actions" (Actions), "assessments" (Assessments), "au" (Assessment Units),
 #' "au_mls" (Assessment Units with Monitoring Locations), "catch_corr" (Catchment Correspondence),
 #' "sources" (Sources), and "tmdl" (TMDLs). There is no national extract option available for
 #' Actions Documents. The default is NULL which means no extract will be returned.
 #' @param max_retries Integer. The number of retry attempts.
+#' @param limit Integer. The number of rows that should be returned. Primarily used
+#' for testing or development purposes. Default is NULL (all available rows returned).
 #'
 #' @return A data frame containing the user-specified national extract. The columns returned will
 #' vary based on the extract selected and are as follows:
@@ -87,7 +87,9 @@
 #' aus_monloc <- EQ_NationalExtract(extract = "au_mls")
 #' }
 #'
-EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
+EQ_NationalExtract <- function(extract = NULL,
+                               max_retries = 3,
+                               limit = NULL) {
   if (is.null(extract)) {
     stop("EQ_NationalExtract: Function requires user to select Expert Query Profile to return.")
   }
@@ -222,6 +224,19 @@ EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
     url, latest.json, base.url, nat.url, folder.num, update.date, update.dates, label, file,
     col.cw
   )
+
+  # if limit is not NULL
+  if(!is.null(limit)) {
+
+    if(!is.numeric(limit)) {
+      stop("Param 'limit' must be an integer")
+    }
+
+    if(is.numeric(limit)) {
+      df <- df |>
+        dplyr::slice_head(n = limit)
+    }
+  }
 
   return(df)
 }

@@ -1,0 +1,11 @@
+structure(list(method = "GET", url = "https://cg-7343d0e5-571f-451f-971f-8aaaf971df7e.s3-us-gov-west-1.amazonaws.com/national-downloads/1776698474/actions.csv.zip", 
+    status_code = 200L, headers = structure(list(`x-amz-id-2` = "THE6+JQ2pO5yxWEk6dF0MAMxmy64EmViGHzguuv1BQmGVxkavCLbJK1+ifpJT/CqcCwVO+AyRF3XxG3LpIaFf7n/tE54VoQHm9sYcjznJ5k=", 
+        `x-amz-request-id` = "7TQ22H9YEM3EG9DR", Date = "Thu, 23 Apr 2026 19:29:10 GMT", 
+        `Last-Modified` = "Mon, 20 Apr 2026 15:22:24 GMT", ETag = "\"c3a457cb2a6c3c866f58a04f052328cd\"", 
+        `x-amz-server-side-encryption` = "AES256", `x-amz-meta-s3cmd-attrs` = "atime:1776698540/ctime:1776698542/gid:6877/gname:WATERSPB/md5:c3a457cb2a6c3c866f58a04f052328cd/mode:33188/mtime:1776698542/uid:3858/uname:owetl", 
+        `Accept-Ranges` = "bytes", `Content-Type` = "application/zip", 
+        `Content-Length` = "8390199", Server = "AmazonS3"), class = "httr2_headers"), 
+    body = structure(find_mock_file("cg-7343d0e5-571f-451f-971f-8aaaf971df7e.s3-us-gov-west-1.amazonaws.com/national-downloads/1776698474/actions.csv.zip.R-FILE"), 
+        class = "httr2_path"), timing = c(redirect = 0, namelookup = 0.004854, 
+    connect = 0.036511, pretransfer = 0.202496, starttransfer = 0.373358, 
+    total = 105.951389), cache = new.env(parent = emptyenv())), class = "httr2_response")
