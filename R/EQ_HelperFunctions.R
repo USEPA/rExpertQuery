@@ -396,8 +396,8 @@ EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
 #'
 # check to see if key is stored in R session
 # this allows developers to easily use their own key during local dev and testing
-# per session: options(rexpertquery.EQ_API_KEY = "YOUR_KEY_HERE")
-# use options(rexpertquery.EQ_API_KEY = NULL) to remove
+# per session: Sys.setenv(EQ_API_KEY = "your-api-key")
+
 
 .setEQKey <- function() {
 opt <- getOption("EQ_API_KEY", "")

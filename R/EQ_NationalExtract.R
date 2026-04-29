@@ -106,7 +106,15 @@ EQ_NationalExtract <- function(extract = NULL,
 
   nat.url <- "national-downloads/"
 
-  latest.json <- jsonlite::fromJSON(paste0(base.url, nat.url, "latest.json"))
+  .get_json_httr2 <- function(url) {
+    httr2::request(url) |>
+      httr2::req_headers(Accept = "application/json") |>
+      httr2::req_timeout(30) |>
+      httr2::req_perform() |>
+      httr2::resp_body_json(simplifyVector = TRUE, check_type = FALSE)
+  }
+
+  latest.json <- .get_json_httr2(paste0(base.url, nat.url, "latest.json"))
 
   folder.num <- latest.json$julian
 
@@ -132,7 +140,7 @@ EQ_NationalExtract <- function(extract = NULL,
     "tmdl" = "Total Maximum Daily Load Profile"
   )
 
-  update.dates <- jsonlite::fromJSON(paste0(base.url, nat.url, folder.num, "/ready.json"))
+  update.dates <- .get_json_httr2(paste0(base.url, nat.url, folder.num, "/ready.json"))
 
   update.dates <- update.dates$details
 
