@@ -137,8 +137,8 @@ EQ_NationalExtract <- function(extract = NULL,
   update.dates <- update.dates$details
 
   update.date <- update.dates |>
-    dplyr::filter(.data[['name']] == paste0("attains_app.profile_", file)) |>
-    dplyr::select(.data[['last_refresh_end_time']]) |>
+    dplyr::filter(name == paste0("attains_app.profile_", file)) |>
+    dplyr::select(last_refresh_end_time) |>
     dplyr::pull() |>
     lubridate::as_datetime() |>
     lubridate::with_tz(tx = "US/Eastern") |>
@@ -192,9 +192,9 @@ EQ_NationalExtract <- function(extract = NULL,
   col.cw <- data.table::fread(system.file("extdata", "EQColumnsForPOST.csv",
     package = "rExpertQuery"
   ), check.names = TRUE) |>
-    dplyr::select(.data[['col.name']], .data[['nat_extract']], .data[[file]]) |>
-    dplyr::filter(!is.na(.data[[file]])) |>
-    dplyr::arrange((.data[[file]]))
+    dplyr::select(col.name, nat_extract, position = dplyr::all_of(file)) |>
+    dplyr::filter(!is.na(position)) |>
+    dplyr::arrange(position)
 
   # combine the three TMDLENDPOINT columns to match output from EQ_TMDLs function
   if (extract == "tmdl") {
