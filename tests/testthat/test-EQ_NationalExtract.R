@@ -1,4 +1,4 @@
-httptest2::with_mock_dir("dir/nat-extract-actions", {
+httptest2::with_mock_dir(testthat::test_path("dir", "nat-extract-actions"), {
   testthat::test_that("EQ_NationalExtract returns all expected columns for Actions", {
 
   expected <- c("objectId", "region", "state", "organizationType",
@@ -20,21 +20,22 @@ httptest2::with_mock_dir("dir/nat-extract-actions", {
 })
 })
 
-httptest2::with_mock_dir("dir/nat-extract-tmdls", {
+httptest2::with_mock_dir(testthat::test_path("dir", "nat-extract-tmdls"), {
   testthat::test_that("EQ_NationalExtract returns all expected columns for TMDLs", {
 
         expected <- c("objectId", "region", "state", "organizationType",
                       "organizationId", "organizationName", "waterType",
                       "pollutantGroup", "pollutant", "addressedParameterGroup",
                       "addressedParameter", "sourceType", "npdesIdentifier",
-                      "otherIdentifier", "actionId", "actionName", "actionAgency",
-                      "inIndianCountry", "explicitMarginOfSafety",
-                      "implicitMarginOfSafety", "includeInMeasure",
-                      "completionDate", "tmdlDate", "fiscalYearEstablished",
-                      "assessmentUnitId", "assessmentUnitName",
-                      "loadAllocation", "loadAllocationUnits",
-                      "locationDescription", "tmdlEndpoint", "waterSize",
-                      "waterSizeUnits", "wasteLoadAllocation", "planSummaryLink")
+                      "otherIdentifier", "actionId", "actionName",
+                      "actionAgency", "inIndianCountry",
+                      "explicitMarginOfSafety", "implicitMarginOfSafety",
+                      "includeInMeasure", "completionDate", "tmdlDate",
+                      "fiscalYearEstablished", "assessmentUnitId",
+                      "assessmentUnitName", "loadAllocation",
+                      "loadAllocationUnits", "locationDescription",
+                      "tmdlEndpoint", "waterSize", "waterSizeUnits",
+                      "wasteLoadAllocation", "planSummaryLink" )
 
         actual <- names(EQ_NationalExtract("tmdl",
                                            limit = 10))
@@ -43,16 +44,5 @@ httptest2::with_mock_dir("dir/nat-extract-tmdls", {
         length.diff <- length(setdiff(expected, actual))
 
         testthat::expect_equal(length.diff, 0)
-  })
-})
-
-
-# Make sure the directory exists (once)
-dir.create(testthat::test_path("dir/nat-extract-tmdls"), recursive = TRUE, showWarnings = FALSE)
-
-# Record the response into tests/testthat/dir/nat-extract-tmdls
-httptest2::with_mock_dir(testthat::test_path("dir/nat-extract-tmdls"), {
-  httptest2::capture_requests({
-    EQ_NationalExtract("tmdl", limit = 10)
   })
 })

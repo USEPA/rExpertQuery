@@ -94,7 +94,7 @@ EQ_NationalExtract <- function(extract = NULL,
     stop("EQ_NationalExtract: Function requires user to select Expert Query Profile to return.")
   }
 
-  if (is.null(extract) &
+  if (is.null(extract) ||
     !extract %in% c(
       "actions", "assessments", "aus", "au_mls",
       "catch_corr", "sources", "tmdl"
@@ -106,12 +106,21 @@ EQ_NationalExtract <- function(extract = NULL,
 
   nat.url <- "national-downloads/"
 
+  # parse JSON over httr2, tolerant of text/plain
   .get_json_httr2 <- function(url) {
-    httr2::request(url) |>
+    req <- httr2::request(url) |>
       httr2::req_headers(Accept = "application/json") |>
-      httr2::req_timeout(30) |>
-      httr2::req_perform() |>
-      httr2::resp_body_json(simplifyVector = TRUE, check_type = FALSE)
+      httr2::req_timeout(30)
+
+    resp <- httr2::req_perform(req)
+
+    # accept text/plain and fall back to jsonlite if needed
+    tryCatch(
+      httr2::resp_body_json(resp, simplifyVector = TRUE, check_type = FALSE),
+      error = function(e) {
+        jsonlite::fromJSON(httr2::resp_body_string(resp), simplifyVector = TRUE)
+      }
+    )
   }
 
   latest.json <- .get_json_httr2(paste0(base.url, nat.url, "latest.json"))
@@ -149,7 +158,7 @@ EQ_NationalExtract <- function(extract = NULL,
     dplyr::select(last_refresh_end_time) |>
     dplyr::pull() |>
     lubridate::as_datetime() |>
-    lubridate::with_tz(tx = "US/Eastern") |>
+    lubridate::with_tz(tz = "US/Eastern") |>
     format("%B %d, %Y at %I:%M %p %Z")
 
   print(paste0(
