@@ -47,4 +47,12 @@ httptest2::with_mock_dir("dir/nat-extract-tmdls", {
 })
 
 
+# Make sure the directory exists (once)
+dir.create(testthat::test_path("dir/nat-extract-tmdls"), recursive = TRUE, showWarnings = FALSE)
 
+# Record the response into tests/testthat/dir/nat-extract-tmdls
+httptest2::with_mock_dir(testthat::test_path("dir/nat-extract-tmdls"), {
+  httptest2::capture_requests({
+    EQ_NationalExtract("tmdl", limit = 10)
+  })
+})
