@@ -174,10 +174,14 @@ EQ_NationalExtract <- function(extract = NULL,
     for (attempt in seq_len(max_retries)) {
       tryCatch(
         {
-          req <- httr2::request(url) |>
+          resp <- httr2::request(url) |>
             httr2::req_timeout(1200) |>
             httr2::req_method("GET") |>
             httr2::req_perform(path = temp)
+
+          zip_raw <- httr2::resp_body_raw(resp)
+
+          writeBin(zip_raw, temp)
 
           # If successful, return unzipped file
           unzipped.file <- utils::unzip(temp, exdir = tempdir())

@@ -1,4 +1,4 @@
-httptest2::with_mock_dir(testthat::test_path("dir", "nat-extract-actions"), {
+httptest2::with_mock_dir("dir/nat-extract-actions", {
   testthat::test_that("EQ_NationalExtract returns all expected columns for Actions", {
 
   expected <- c("objectId", "region", "state", "organizationType",
@@ -20,7 +20,7 @@ httptest2::with_mock_dir(testthat::test_path("dir", "nat-extract-actions"), {
 })
 })
 
-httptest2::with_mock_dir(testthat::test_path("dir", "nat-extract-tmdls"), {
+httptest2::with_mock_dir("dir/nat-extract-tmdls", {
   testthat::test_that("EQ_NationalExtract returns all expected columns for TMDLs", {
 
         expected <- c("objectId", "region", "state", "organizationType",
