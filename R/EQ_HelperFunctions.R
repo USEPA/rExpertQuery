@@ -413,7 +413,7 @@ if (nzchar(env)) {
 
 # if neither exist
 def <- NULL
-if (nzchar(def)) {
+if (!nzchar(opt) & !nzchar(env)) {
   return(def)
 }
 }
