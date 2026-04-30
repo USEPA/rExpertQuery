@@ -1,4 +1,4 @@
-httptest2::with_mock_dir("dir/MT-ausmls-kleinschmidtcreek", {
+httptest2::with_mock_dir("dir/MTml", {
   testthat::test_that("EQ_AUsMLs returns expected number of rows", {
     expect_equal(NROW(EQ_AUsMLs(org_id = "MTDEQ",
                                 au_name = "Kleinschmidt Creek",

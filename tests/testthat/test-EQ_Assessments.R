@@ -1,4 +1,4 @@
-httptest2::with_mock_dir("dir/IL-cat5-assessments-algal", {
+httptest2::with_mock_dir("dir/ILcat5", {
   testthat::test_that("EQ_Assessments returns expected number of row", {
     expect_equal(NROW(EQ_Assessments(statecode = "IL",
                                      epa_ir_cat = 5,
@@ -48,7 +48,7 @@ httptest2::with_mock_dir("dir/IL-cat5-assessments-algal", {
   })
 })
 
-httptest2::with_mock_dir("dir/nat-assessments-query", {
+httptest2::with_mock_dir("dir/NATassess", {
   testthat::test_that("EQ_Assessments returns error message if query results exceed maximum allowed", {
     expect_error(EQ_Assessments(api_key = .setEQKey()))
   })

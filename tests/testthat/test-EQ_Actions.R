@@ -1,4 +1,4 @@
-httptest2::with_mock_dir("dir/RI-actions", {
+httptest2::with_mock_dir("dir/RIact", {
   testthat::test_that("EQ_Actions returns expected number of row", {
     expect_equal(NROW(EQ_Actions(statecode = "RI",
                                  fisc_year_start = 2014,
