@@ -5,7 +5,7 @@
 \title{Returns user-specified Expert Query National Extracts of ATTAINS data for use cases
 where nationwide data is desired.}
 \usage{
-EQ_NationalExtract(extract = NULL, max_retries = 3)
+EQ_NationalExtract(extract = NULL, max_retries = 3, limit = NULL)
 }
 \arguments{
 \item{extract}{Character argument. Specifies which Expert Query National Extract should be
@@ -15,6 +15,9 @@ imported. Options are "actions" (Actions), "assessments" (Assessments), "au" (As
 Actions Documents. The default is NULL which means no extract will be returned.}
 
 \item{max_retries}{Integer. The number of retry attempts.}
+
+\item{limit}{Integer. The number of rows that should be returned. Primarily used
+for testing or development purposes. Default is NULL (all available rows returned).}
 }
 \value{
 A data frame containing the user-specified national extract. The columns returned will
@@ -84,8 +87,6 @@ https://owapps.epa.gov/expertquery/national-downloads
 
 ** The National Extracts are large files. You must have enough memory available in order for
 these functions to import them into R successfully.
-
-HRM NOTE 2/11/25 - can download but not import catchment correspondence due to file size.
 }
 \examples{
 \dontrun{
