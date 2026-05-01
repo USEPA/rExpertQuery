@@ -6,11 +6,6 @@
 \usage{
 .setEQKey()
 }
-\arguments{
-\item{.data}{Data frame to convert planSummaryLink to functional URL links for use in data tables.}
-
-\item{url.col}{Column name containing string for formatting. Default is "planSummaryLink".}
-}
 \value{
 The .data data frame with planSummaryLink entries formatted as URL links.
 }

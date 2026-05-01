@@ -389,9 +389,6 @@ EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
 
 #' Set EQ_API_KEY for local and automated testing
 #'
-#' @param .data Data frame to convert planSummaryLink to functional URL links for use in data tables.
-#' @param url.col Column name containing string for formatting. Default is "planSummaryLink".
-#'
 #' @return The .data data frame with planSummaryLink entries formatted as URL links.
 #'
 # check to see if key is stored in R session
