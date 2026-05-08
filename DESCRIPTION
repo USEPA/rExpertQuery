@@ -50,7 +50,8 @@ Suggests:
     usdata,
     usethis,
     usmap,
-    yaml
+    yaml,
+    zip
 Depends: 
     R (>= 4.1.0)
 VignetteBuilder: knitr, rmarkdown
