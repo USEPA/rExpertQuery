@@ -31,3 +31,9 @@
   : Query and return ATTAINS Sources data via Expert Query web services
 - [`EQ_TMDLs()`](https://usepa.github.io/rExpertQuery/reference/EQ_TMDLs.md)
   : Query and return ATTAINS TMDL data via Expert Query web services
+- [`EQ_UpdateInternalDomainValues()`](https://usepa.github.io/rExpertQuery/reference/EQ_UpdateInternalDomainValues.md)
+  : Downloads/updates an internal copy of allowable domain values for
+  EQ_DomainValues when domain != NULL
+- [`EQ_UpdateInternalDomainValuesNull()`](https://usepa.github.io/rExpertQuery/reference/EQ_UpdateInternalDomainValuesNull.md)
+  : Downloads/updates an internal copy of allowable domain values for
+  EQ_DomainValues when domain = NULL

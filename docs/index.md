@@ -1,11 +1,11 @@
 ## rExpertQuery
 
-[![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![R-CMD-check](https://github.com/USEPA/rExpertQuery/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/USEPA/ExpertQueryTMDLDashboard/actions/workflows/R-CMD-check.yaml)
 
-[![Codecov test
-coverage](https://codecov.io/gh/USEPA/rExpertQuery/graph/badge.svg)](https://app.codecov.io/gh/USEPA/rExpertQuery)
-
-A draft R package (UNDER ACTIVE DEVELOPMENT) for retrieving ATTAINS data
+R package (UNDER ACTIVE DEVELOPMENT) for retrieving ATTAINS data
 efficiently via Expert Query web services
 (<https://www.epa.gov/waterdata/expert-query>).
 
