@@ -66,7 +66,7 @@ all Region 4 Actions that should not be included in Measures.
 R4_actions_not_meas <- rExpertQuery::EQ_Actions(api_key = testkey, region = 4, in_meas = "No")
 ```
 
-This query returns 203 results, so we’ll review only a small random
+This query returns 202 results, so we’ll review only a small random
 subset of them in a data table just to get an idea of what those results
 look like:
 
@@ -78,6 +78,9 @@ R4_subset <- R4_actions_not_meas |>
 # create data tab;e
 DT::datatable(R4_subset, options = list(pageLength = 2, scrollX = TRUE))
 ```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
 
 You might also want to create a more specific query. For example, you
 might want to find all Actions from Missouri that were issued by EPA
@@ -103,6 +106,9 @@ MO_epa <- rExpertQuery::EQ_Actions(
 DT::datatable(MO_epa, options = list(pageLength = 10, scrollX = TRUE))
 ```
 
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
 ## EQ_ActionsDocuments
 
 [**EQ_ActionsDocuments()**](https://usepa.github.io/rExpertQuery/reference/EQ_ActionsDocuments.html)queries
@@ -119,9 +125,9 @@ Nutrient_docs <- rExpertQuery::EQ_ActionsDocuments(
 )
 ```
 
-    ## [1] "EQ_ActionDocuments: The current query will return 17,989 rows."
+    ## [1] "EQ_ActionDocuments: The current query will return 16,962 rows."
 
-This query yields 17,989 results. As well as providing the Action and
+This query yields 16,962 results. As well as providing the Action and
 Document Name for all results, *EQ_Actions()* also returns the column
 “actionDocumentUrl” containg the URL to link to the document. Becaue the
 query yields so many results, we’ll take a look at a smaller subset of
@@ -133,6 +139,9 @@ Nutrient_docs_subset <- Nutrient_docs |>
 
 DT::datatable(Nutrient_docs_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
 
 You can also query by more typical parameters like organization name
 (org_name), EPA region (region) , or action type (act_type). The example
@@ -154,6 +163,9 @@ PA_4B_subset <- PA_4B |>
 
 DT::datatable(PA_4B_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
 
 As there are only 17 4B Restoration Approach documents from
 Pennsylvania, we can review them all in the table below. As in the other
@@ -185,6 +197,9 @@ KY_subset <- KY_assessments |>
 DT::datatable(KY_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
 It is also possible to design more specific assessment queries. For
 example, you might want to narrow down the results to show causes for a
 use class in one region. The code below demonstrates querying for EPA
@@ -201,7 +216,7 @@ R3_ecological <- rExpertQuery::EQ_Assessments(
 )
 ```
 
-    ## [1] "EQ_Assessments: The current query will return 144,650 rows."
+    ## [1] "EQ_Assessments: The current query will return 150,188 rows."
 
 ``` r
 R3_ecological_subset <- R3_ecological |>
@@ -209,6 +224,9 @@ R3_ecological_subset <- R3_ecological |>
 
 DT::datatable(R3_ecological_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
 
 ## EQ_AssessmentUnits
 
@@ -238,6 +256,9 @@ RI_aus_subset <- RI_aus |>
 DT::datatable(RI_aus_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
 It is is also possible to search fo retired assessment units, as show in
 the example from Florida below.
 
@@ -249,7 +270,7 @@ FL_retired <- rExpertQuery::EQ_AssessmentUnits(
 )
 ```
 
-    ## [1] "EQ_AssessmentUnits: The current query will return 35 rows."
+    ## [1] "EQ_AssessmentUnits: The current query will return 0 rows."
 
 ``` r
 FL_ret_subset <- FL_retired |>
@@ -257,6 +278,9 @@ FL_ret_subset <- FL_retired |>
 
 DT::datatable(FL_ret_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
 
 ## EQ_AUsMLs
 
@@ -299,16 +323,7 @@ DC_catch <- rExpertQuery::EQ_CatchCorr(
 )
 ```
 
-    ## [1] "EQ_CatchCorr: The current query will return 2,229 rows."
-
-    ## Rows: 2229 Columns: 11
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr (7): region, state, organizationType, organizationId, organizationName, ...
-    ## dbl (4): objectId, catchmentNhdPlusId, reportingCycle, cycleId
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## [1] "EQ_CatchCorr: The current query will return 2,438 rows."
 
 The table below shows 20 random results from the DC catchment
 correspondence query.
@@ -319,6 +334,9 @@ DC_subset <- DC_catch |>
 
 DT::datatable(DC_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
 
 It is also possible to focus on a specific assessment unit in catchment
 correspondence queries. The next example queries for a single Illinois
@@ -343,6 +361,9 @@ IL_N99_subset <- IL_N99_catch |>
 DT::datatable(IL_N99_catch, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
 ## EQ_NationalExtract
 
 [**EQ_NationalExtract()**](https://usepa.github.io/rExpertQuery/reference/EQ_NationalExtract.html)provides
@@ -357,13 +378,13 @@ and some may not open in R if there is not enough memory available.
 Nat_tmdls <- rExpertQuery::EQ_NationalExtract("tmdl")
 ```
 
-    ## [1] "EQ_NationalExtract: downloading Total Maximum Daily Load Profile (Expert Query National Extract). It was last updated on November 07, 2025 at 09:02 PM EST."
+    ## [1] "EQ_NationalExtract: downloading Total Maximum Daily Load Profile (Expert Query National Extract). It was last updated on April 24, 2026 at 10:28 PM EDT."
 
 ``` r
 Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
 ```
 
-    ## [1] "EQ_NationalExtract: downloading Actions Profile (Expert Query National Extract). It was last updated on November 07, 2025 at 09:02 PM EST."
+    ## [1] "EQ_NationalExtract: downloading Actions Profile (Expert Query National Extract). It was last updated on April 24, 2026 at 10:29 PM EDT."
 
 ## EQ_Sources
 
@@ -385,14 +406,17 @@ WI_habalt_sources <- rExpertQuery::EQ_Sources(
 )
 ```
 
-    ## [1] "EQ_Sources: The current query will return 584 rows."
+    ## [1] "EQ_Sources: The current query will return 587 rows."
 
-There were 584 for this query, which can be reviewed in the data table
+There were 587 for this query, which can be reviewed in the data table
 below.
 
 ``` r
 DT::datatable(WI_habalt_sources, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
 
 It is also possible to query directly be the name of the source. The
 example below queries all organizations for the source
@@ -405,15 +429,18 @@ legacy_sources <- rExpertQuery::EQ_Sources(
 )
 ```
 
-    ## [1] "EQ_Sources: The current query will return 187 rows."
+    ## [1] "EQ_Sources: The current query will return 188 rows."
 
-There were 584 records for the source “LEGACY/HISTORICAL POLLUTANTS”.
+There were 587 records for the source “LEGACY/HISTORICAL POLLUTANTS”.
 These results can be reviewed in the table below to see which states,
 regions, etc. are associated with this source.
 
 ``` r
 DT::datatable(legacy_sources, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
 
 ## EQ_TMDLs
 
@@ -439,6 +466,9 @@ There 474 can be reviewed in the data table below.
 DT::datatable(HI_both_tmdls, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
 This example demonstrates using another combination of arguments in the
 query, searching for records from EPA Region 10 that pertain to the
 addressed parameter group “CAUSE UNKNOWN”.
@@ -459,6 +489,9 @@ There 588 are displayed in the table below.
 DT::datatable(R10_unknown, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
 
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
 ## EQ_DomainValues
 
 [**EQ_DomainValues()**](https://usepa.github.io/rExpertQuery/reference/EQ_DomainValues.html)
@@ -471,36 +504,39 @@ used as an argument in **EQ_DomainValues()**.
 rExpertQuery::EQ_DomainValues()
 ```
 
-    ## [1] "EQ_DomainValues: getting list of available domain names."
+    ## [1] "EQ_DomainValues: getting list of available domain names. Values in the eq_param column can be used as inputs in EQ_DomainValues."
 
-    ##                domain
-    ## 1        param_attain
-    ## 2       delist_reason
-    ## 3            doc_type
-    ## 4        param_status
-    ## 5         param_group
-    ## 6      assess_methods
-    ## 7        assess_basis
-    ## 8  param_state_ir_cat
-    ## 9          act_status
-    ## 10             org_id
-    ## 11           org_name
-    ## 12          au_status
-    ## 13           act_type
-    ## 14         act_agency
-    ## 15         act_agency
-    ## 16       assess_types
-    ## 17         water_type
-    ## 18          statecode
-    ## 19        source_type
-    ## 20           use_name
-    ## 21        use_support
-    ## 22          file_type
-    ## 23           ad_param
-    ## 24              cause
-    ## 25         param_name
-    ## 26           loc_type
-    ## 27       source_scale
+    ## EQ_DomainValues: domain list retrieved from ATTAINS web services.
+
+    ##              eq_param         attains_ws_name attains_ws_field
+    ## 1          act_agency              AgencyCode             name
+    ## 2          act_agency              AgencyCode             name
+    ## 3          act_status        ActionStatusType             name
+    ## 4            act_type              ActionType             code
+    ## 5            ad_param           ParameterName             name
+    ## 6      ad_param_group  ParameterGroupCodeType             name
+    ## 7        assess_basis     AssessmentBasisCode             name
+    ## 8      assess_methods          MethodTypeCode             name
+    ## 9        assess_types      AssessmentTypeCode             name
+    ## 10          au_status         StatusIndicator             name
+    ## 11              cause           ParameterName             name
+    ## 12      delist_reason     DelistingReasonCode             name
+    ## 13           doc_type      ActionDocumentType             name
+    ## 14          file_type        DocumentFileType             name
+    ## 15           loc_type        LocationTypeCode             name
+    ## 16             org_id                 OrgName             code
+    ## 17           org_name                 OrgName             name
+    ## 18       param_attain ParameterAttainmentCode             name
+    ## 19        param_group  ParameterGroupCodeType             name
+    ## 20         param_name           ParameterName             name
+    ## 21 param_state_ir_cat     StateIRCategoryCode             name
+    ## 22       param_status         ParameterStatus             name
+    ## 23       source_scale     SizeSourceScaleText             name
+    ## 24        source_type              SourceName             name
+    ## 25          statecode            OrgStateCode             name
+    ## 26           use_name                 UseName             name
+    ## 27        use_support       UseAttainmentCode             name
+    ## 28         water_type           WaterTypeCode             name
 
 The example below shows how to return allowable values for “org_id”.
 
@@ -508,8 +544,13 @@ The example below shows how to return allowable values for “org_id”.
 Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
 ```
 
-    ## [1] "EQ_DomainValues: For org_id the values in the code column of the function output are the allowable values for rExpert Query functions."
+    ## [1] "EQ_DomainValues: For org_id the values in the 'code' column of the function output are the allowable values for rExpert Query functions."
+
+    ## EQ_DomainValues: domain list retrieved from ATTAINS web services.
 
 ``` r
 DT::datatable(Org_vals, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
 ```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
