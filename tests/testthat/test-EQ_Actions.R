@@ -1,9 +1,10 @@
-httptest2::with_mock_dir("dir/RIact", {
-  testthat::test_that("EQ_Actions returns expected number of row", {
+testthat::test_that("EQ_Actions returns expected number of row", {
+  with_pkg_mocks("RIact", {
     expect_equal(NROW(EQ_Actions(statecode = "RI",
                                  fisc_year_start = 2014,
                                  fisc_year_end = 2020,
                                  api_key = .setEQKey())), 77)
+  })
   })
 
   testthat::test_that("EQ_Actions returns expected number of columns", {
