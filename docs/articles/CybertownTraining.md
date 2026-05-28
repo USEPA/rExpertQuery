@@ -59,17 +59,38 @@ remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TR
 
     ## Downloading GitHub repo USEPA/rExpertQuery@develop
 
+    ## sf         (1.1-0    -> 1.1-1 ) [CRAN]
+    ## cpp11      (0.5.4    -> 0.5.5 ) [CRAN]
+    ## roxygen2   (7.3.3    -> 8.0.0 ) [CRAN]
+    ## terra      (1.9-11   -> 1.9-27) [CRAN]
+    ## data.table (1.18.2.1 -> 1.18.4) [CRAN]
+
+    ## Installing 5 packages: sf, cpp11, roxygen2, terra, data.table
+
+    ## Installing packages into 'C:/Users/hmarler/AppData/Local/Temp/RtmpcdnLOt/temp_libpath2fa83ceb49fe'
+    ## (as 'lib' is unspecified)
+
+    ## package 'sf' successfully unpacked and MD5 sums checked
+    ## package 'cpp11' successfully unpacked and MD5 sums checked
+    ## package 'roxygen2' successfully unpacked and MD5 sums checked
+    ## package 'terra' successfully unpacked and MD5 sums checked
+    ## package 'data.table' successfully unpacked and MD5 sums checked
     ## 
+    ## The downloaded binary packages are in
+    ##  C:\Users\hmarler\AppData\Local\Temp\RtmpYnTxPW\downloaded_packages
     ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ##          checking for file 'C:\Users\hmarler\AppData\Local\Temp\RtmpywqNsa\remotes2b947e5159e5\USEPA-rExpertQuery-ce1ba15/DESCRIPTION' ...     checking for file 'C:\Users\hmarler\AppData\Local\Temp\RtmpywqNsa\remotes2b947e5159e5\USEPA-rExpertQuery-ce1ba15/DESCRIPTION' ...   ✔  checking for file 'C:\Users\hmarler\AppData\Local\Temp\RtmpywqNsa\remotes2b947e5159e5\USEPA-rExpertQuery-ce1ba15/DESCRIPTION' (601ms)
-    ##       ─  preparing 'rExpertQuery': (4.7s)
+    ##          checking for file 'C:\Users\hmarler\AppData\Local\Temp\RtmpYnTxPW\remotes59643c4c4d50\USEPA-rExpertQuery-96f363b/DESCRIPTION' ...     checking for file 'C:\Users\hmarler\AppData\Local\Temp\RtmpYnTxPW\remotes59643c4c4d50\USEPA-rExpertQuery-96f363b/DESCRIPTION' ...   ✔  checking for file 'C:\Users\hmarler\AppData\Local\Temp\RtmpYnTxPW\remotes59643c4c4d50\USEPA-rExpertQuery-96f363b/DESCRIPTION' (753ms)
+    ##       ─  preparing 'rExpertQuery': (33.7s)
     ##    checking DESCRIPTION meta-information ...     checking DESCRIPTION meta-information ...   ✔  checking DESCRIPTION meta-information
-    ##       ─  checking for LF line-endings in source and make files and shell scripts (430ms)
+    ##       ─  checking for LF line-endings in source and make files and shell scripts (653ms)
     ##       ─  checking for empty or unneeded directories
     ##      Omitted 'LazyData' and 'LazyDataCompression' from DESCRIPTION
-    ##       ─  building 'rExpertQuery_0.1.0.tar.gz'
+    ##       ─  building 'rExpertQuery_0.1.0.tar.gz' (622ms)
     ##      
     ## 
+
+    ## Installing package into 'C:/Users/hmarler/AppData/Local/Temp/RtmpcdnLOt/temp_libpath2fa83ceb49fe'
+    ## (as 'lib' is unspecified)
 
 ``` r
 library(rExpertQuery)
@@ -92,65 +113,18 @@ using the code chunk below:
 # load additional packages for this vignette
 library(datasets)
 library(data.table)
-```
-
-    ## Warning: package 'data.table' was built under R version 4.4.3
-
-``` r
 library(dplyr)
-```
-
-    ## Warning: package 'dplyr' was built under R version 4.4.3
-
-``` r
 library(DT)
-```
-
-    ## Warning: package 'DT' was built under R version 4.4.3
-
-``` r
 library(ggplot2)
 library(httr)
-```
-
-    ## Warning: package 'httr' was built under R version 4.4.3
-
-``` r
 library(leaflet)
-```
-
-    ## Warning: package 'leaflet' was built under R version 4.4.3
-
-``` r
 library(maps)
-```
-
-    ## Warning: package 'maps' was built under R version 4.4.3
-
-``` r
 library(plotly)
-```
-
-    ## Warning: package 'plotly' was built under R version 4.4.3
-
-``` r
 library(sf)
 library(usdata)
-```
-
-    ## Warning: package 'usdata' was built under R version 4.4.3
-
-``` r
 library(usmap)
-```
-
-    ## Warning: package 'usmap' was built under R version 4.4.3
-
-``` r
 library(stringi)
 ```
-
-    ## Warning: package 'stringi' was built under R version 4.4.3
 
 As a final setup step, we will turn off scientific notation so that any
 catchment id numbers from our queries are displayed correctly.
@@ -282,7 +256,7 @@ A screenshot of the Expert Query National Downloads web page
     assessments.nat <- rExpertQuery::EQ_NationalExtract("assessments")
     ```
 
-        ## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on November 07, 2025 at 08:50 PM EST."
+        ## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on May 09, 2026 at 12:08 AM EDT."
 
     ``` r
     # filter for latest assessments
@@ -452,7 +426,7 @@ A screenshot of the Expert Query National Downloads web page
       dplyr::filter(epaIrCategory %in% c("4", "5"))
     ```
 
-    The resulting data frame is large, with 128,919 unique impaired
+    The resulting data frame is large, with 137,482 unique impaired
     waters nationally. Due to its size, we’ll include a random subset of
     250 results in a data table to review during the demo. You can view
     the full results by viewing the imp.waters df.
@@ -531,8 +505,8 @@ A screenshot of the Expert Query National Downloads web page
       dplyr::distinct()
     ```
 
-    There are 21 with monitoringLocationId data in ATTAINS. Of these
-    states, 3 also contain monitoringLocationDataLinks. We can create a
+    There are 22 with monitoringLocationId data in ATTAINS. Of these
+    states, 4 also contain monitoringLocationDataLinks. We can create a
     data table to display this information and apply some conditional
     formatting to highlight the states with
     monitoringLocationIdentifiers in blue and those with
@@ -789,7 +763,7 @@ queries ATTAINS Assessment Units data. The default is to only return
     )
     ```
 
-        ## [1] "EQ_AssessmentUnits: The current query will return 35 rows."
+        ## [1] "EQ_AssessmentUnits: The current query will return 0 rows."
 
     ``` r
     # create data table
@@ -1011,7 +985,7 @@ ATTAINS Actions data by a variety of user supplied parameters.
     n_act.fy.24 <- dplyr::n_distinct(act.fy.24$actionId)
     ```
 
-    There were 7 unique actions by actionId established in R3 in
+    There were 6 unique actions by actionId established in R3 in
     FY 2024. We can create data table with counts for each actionType.
 
     ``` r
@@ -1053,7 +1027,7 @@ keyword.
     )
     ```
 
-    This query yields 17,989 results. As well as providing the actionId
+    This query yields 16,962 results. As well as providing the actionId
     and documentName for all results, *EQ_Actions()* also returns the
     column “actionDocumentUrl” containing the URL to link to the
     document. Because the query yields so many results, we’ll take a
@@ -1369,15 +1343,14 @@ value that should be used in queries.
     domain.vals <- EQ_DomainValues()
     ```
 
-        ## [1] "EQ_DomainValues: getting list of available domain names."
+        ## [1] "EQ_DomainValues: getting list of available domain names. Values in the eq_param column can be used as inputs in EQ_DomainValues."
+
+        ## EQ_DomainValues: domain list retrieved from ATTAINS web services.
 
     EQ_DomainValues can provide values for the following query
-    parameters: act_agency, act_status, act_type, ad_param,
-    assess_basis, assess_methods, assess_types, au_status, cause,
-    delist_reason, doc_type, file_type, loc_type, org_id, org_name,
-    param_attain, param_group, param_name, param_state_ir_cat,
-    param_status, source_scale, source_type, statecode, use_name,
-    use_support and water_type .
+    parameters:
+
+    .
 
 2.  **How many different values for “water_type” can be used in
     rExpertQuery functions?**
@@ -1390,7 +1363,9 @@ value that should be used in queries.
     water.types <- rExpertQuery::EQ_DomainValues("water_type")
     ```
 
-        ## [1] "EQ_DomainValues: For water_type the values in the name column of the function output are the allowable values for rExpert Query functions."
+        ## [1] "EQ_DomainValues: For water_type the values in the 'name' column of the function output are the allowable values for rExpert Query functions."
+
+        ## EQ_DomainValues: domain list retrieved from ATTAINS web services.
 
     The printed message informs us that the “name” column contains the
     values for use in water_type queries for rExpertQuery functions. For
