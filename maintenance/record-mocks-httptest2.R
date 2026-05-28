@@ -1,56 +1,33 @@
-# Run this script manually; do NOT run it during tests/CI
-# install.packages(c("httptest2","withr","rprojroot","devtools")) if needed
-
 library(httptest2)
 library(withr)
 
-# Find your package root
+# Find package root
 pkg_root <- if (requireNamespace("rprojroot", quietly = TRUE)) {
   rprojroot::find_package_root_file()
 } else {
-  getwd()  # run from package root if rprojroot not available
+  getwd()
 }
 
-# Choose a very short scratch directory for recording
-scratch <- if (dir.exists("C:/m")) "C:/m/htt2" else tempfile("htt2")
-dir.create(scratch, recursive = TRUE, showWarnings = FALSE)
+fixtures_root <- file.path(pkg_root, "inst", "extdata", "htt2")
+dir.create(fixtures_root, recursive = TRUE, showWarnings = FALSE)
 
-# Load your package code (adjust package name if using library())
-if (requireNamespace("devtools", quietly = TRUE)) {
-  devtools::load_all(pkg_root, quiet = TRUE)
-} else {
-  # If your package is installed, you can do: library(yourpkg)
-  message("Consider installing devtools for load_all(); falling back to installed package if available.")
-}
+record_to_pkg <- function(subdir, code) {
+  target <- file.path(fixtures_root, subdir)
+  dir.create(target, recursive = TRUE, showWarnings = FALSE)
+  message("Recording into: ", normalizePath(target, winslash = "/"))
 
-# Record outside the package dir so httptest2 doesn't prepend tests/testthat
-withr::with_dir(tempdir(), {
-  # Optional verbose capture
-  old <- options(httptest2.verbose = TRUE)
-  on.exit(options(old), add = TRUE)
-
-  record <- function(name, code) {
-    target <- file.path(scratch, name)
-    dir.create(target, recursive = TRUE, showWarnings = FALSE)
-    message("Recording into: ", normalizePath(target, winslash = "/"))
-    httptest2::with_mock_dir(target, {
-      httptest2::capture_requests({
-        eval(substitute(code), envir = parent.frame())
-      })
-    })
-  }
-
-  # Minimal sanity check to ensure capture works in this session
-  tmp_check <- file.path(scratch, "_check")
-  dir.create(tmp_check, showWarnings = FALSE)
-  httptest2::with_mock_dir(tmp_check, {
+  # Record by working from the target directory
+  withr::with_dir(target, {
+    options(httptest2.verbose = TRUE)
     httptest2::capture_requests({
-      httr2::request("https://httpbin.org/get") |> httr2::req_perform()
+      eval(substitute(code), envir = parent.frame())
     })
   })
+  invisible(target)
+}
 
   # Your recordings
-  record("ORad", {
+  record_to_pkg("ORad", {
     EQ_ActionsDocuments(
       state = "OR",
       comp_date_start = "01-01-2018",
@@ -59,7 +36,7 @@ withr::with_dir(tempdir(), {
     )
   })
 
-  record("RIact", {
+  record_to_pkg("RIact", {
     EQ_Actions(
       statecode = "RI",
       fisc_year_start = 2014,
@@ -68,7 +45,7 @@ withr::with_dir(tempdir(), {
     )
   })
 
-  record("ILcat5", {
+  record_to_pkg("ILcat5", {
     EQ_Assessments(
       statecode = "IL",
       epa_ir_cat = 5,
@@ -77,7 +54,7 @@ withr::with_dir(tempdir(), {
     )
   })
 
-  record("MOau", {
+  record_to_pkg("MOau", {
     EQ_AssessmentUnits(
       statecode = "MO",
       au_name = "Leisure Lake",
@@ -85,7 +62,7 @@ withr::with_dir(tempdir(), {
     )
   })
 
-  record("MTml", {
+  record_to_pkg("MTml", {
     EQ_AUsMLs(
       org_id = "MTDEQ",
       au_name = "Kleinschmidt Creek",
@@ -93,22 +70,22 @@ withr::with_dir(tempdir(), {
     )
   })
 
-  record("ALcc", {
+  record_to_pkg("ALcc", {
     EQ_CatchCorr(
       auid = "AL03150202-0404-110",
       api_key = .setEQKey()
     )
   })
 
-  record("NATact", {
+  record_to_pkg("NATact", {
     EQ_NationalExtract("actions", limit = 10)
   })
 
-  record("NATtmdl", {
+  record_to_pkg("NATtmdl", {
     EQ_NationalExtract("actions", limit = 10)
   })
 
-  record("TXsrc", {
+  record_to_pkg("TXsrc", {
     EQ_Sources(
       report_cycle = 2018,
       statecode = "TX",
@@ -117,7 +94,7 @@ withr::with_dir(tempdir(), {
     )
   })
 
-  record("FLtmdl", {
+  record_to_pkg("FLtmdl", {
     EQ_Sources(
       report_cycle = 2018,
       statecode = "TX",
@@ -125,7 +102,6 @@ withr::with_dir(tempdir(), {
       api_key = .setEQKey()
     )
   })
-})
 
 # Copy the recordings into a short-named fixtures dir under inst/extdata
 fixtures_root <- file.path(pkg_root, "inst", "extdata", "htt2")
