@@ -156,7 +156,8 @@ EQ_NationalExtract <- function(extract = NULL, max_retries = 3) {
       tryCatch(
         {
           req <- httr2::request(url) |>
-            httr2::req_timeout(1200) |>
+            httr2::req_progress() |>
+            httr2::req_timeout(3600) |>
             httr2::req_method("GET") |>
             httr2::req_perform(path = temp)
 
