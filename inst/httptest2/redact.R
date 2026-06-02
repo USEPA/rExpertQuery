@@ -1,10 +1,11 @@
-# inst/httptest2/redact.R
-# Always use fully qualified calls to httptest2 functions here.
 httptest2::set_redactor(function(x) {
   x |>
-    # Example replacements; adjust to your API/paths
-    httptest2::gsub_response("https://api.epa.gov/expertquery/api/attains/", "epa/") |>
-    httptest2::gsub_response("https://api.epa.gov/expertquery/api/", "epa/") |>
-    # Redact Authorization headers, query params, etc., as needed
-    httptest2::redact_authorization()
+    # 1) Shorten S3 host: cg-<uuid>.s3-us-gov-west-1.amazonaws.com -> s3
+    httptest2::gsub_response("https?://cg-[0-9a-f\\-]+\\.s3-us-gov-west-1\\.amazonaws\\.com", "s3") |>
+
+    # 2) Collapse versioned dir: /national-downloads/<digits>/ -> /national/
+    httptest2::gsub_response("/national-downloads/[0-9]+/", "/national/") |>
+
+    # 3) Also shorten your API base if desired to keep other paths short
+    httptest2::gsub_response("https://api\\.epa\\.gov/expertquery/api/attains/", "epa/")
 })

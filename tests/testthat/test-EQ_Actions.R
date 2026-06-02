@@ -35,7 +35,7 @@ testthat::test_that("EQ_Actions returns expected number of row", {
     testthat::expect_equal(length.diff, 0)
 
   })
-})
+}
 
 # # need to update function so that this will fail if relevant
 # httptest2::with_mock_dir("dir/wrong-statecode-actions-query", {

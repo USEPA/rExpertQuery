@@ -1,5 +1,16 @@
-library(httptest2)
-library(withr)
+# Run manually, not in CI/tests
+
+suppressPackageStartupMessages({
+  library(httptest2)
+  library(withr)
+})
+
+# Load your package code so EQ_* are available
+if (requireNamespace("devtools", quietly = TRUE)) {
+  devtools::load_all(quiet = TRUE)
+} else {
+  library(rExpertQuery)  # if installed
+}
 
 # Find package root
 pkg_root <- if (requireNamespace("rprojroot", quietly = TRUE)) {
@@ -8,15 +19,17 @@ pkg_root <- if (requireNamespace("rprojroot", quietly = TRUE)) {
   getwd()
 }
 
+# Fixtures dir inside the package
 fixtures_root <- file.path(pkg_root, "inst", "extdata", "htt2")
 dir.create(fixtures_root, recursive = TRUE, showWarnings = FALSE)
 
+# Recorder that writes directly into inst/extdata/htt2/<subdir>
 record_to_pkg <- function(subdir, code) {
   target <- file.path(fixtures_root, subdir)
   dir.create(target, recursive = TRUE, showWarnings = FALSE)
   message("Recording into: ", normalizePath(target, winslash = "/"))
 
-  # Record by working from the target directory
+  # Work from target so files are written there
   withr::with_dir(target, {
     options(httptest2.verbose = TRUE)
     httptest2::capture_requests({
@@ -26,107 +39,81 @@ record_to_pkg <- function(subdir, code) {
   invisible(target)
 }
 
-  # Your recordings
-  record_to_pkg("ORad", {
-    EQ_ActionsDocuments(
-      state = "OR",
-      comp_date_start = "01-01-2018",
-      comp_date_end = "12-31-2020",
-      api_key = .setEQKey()
-    )
-  })
+# Your recordings
+record_to_pkg("ORad", {
+  EQ_ActionsDocuments(
+    state = "OR",
+    comp_date_start = "01-01-2018",
+    comp_date_end = "12-31-2020",
+    api_key = .setEQKey()
+  )
+})
 
-  record_to_pkg("RIact", {
-    EQ_Actions(
-      statecode = "RI",
-      fisc_year_start = 2014,
-      fisc_year_end = 2020,
-      api_key = .setEQKey()
-    )
-  })
+record_to_pkg("RIact", {
+  EQ_Actions(
+    statecode = "RI",
+    fisc_year_start = 2014,
+    fisc_year_end = 2020,
+    api_key = .setEQKey()
+  )
+})
 
-  record_to_pkg("ILcat5", {
-    EQ_Assessments(
-      statecode = "IL",
-      epa_ir_cat = 5,
-      param_group = "ALGAL GROWTH",
-      api_key = .setEQKey()
-    )
-  })
+record_to_pkg("ILcat5", {
+  EQ_Assessments(
+    statecode = "IL",
+    epa_ir_cat = 5,
+    param_group = "ALGAL GROWTH",
+    api_key = .setEQKey()
+  )
+})
 
-  record_to_pkg("MOau", {
-    EQ_AssessmentUnits(
-      statecode = "MO",
-      au_name = "Leisure Lake",
-      api_key = .setEQKey()
-    )
-  })
+record_to_pkg("MOau", {
+  EQ_AssessmentUnits(
+    statecode = "MO",
+    au_name = "Leisure Lake",
+    api_key = .setEQKey()
+  )
+})
 
-  record_to_pkg("MTml", {
-    EQ_AUsMLs(
-      org_id = "MTDEQ",
-      au_name = "Kleinschmidt Creek",
-      api_key = .setEQKey()
-    )
-  })
+record_to_pkg("MTml", {
+  EQ_AUsMLs(
+    org_id = "MTDEQ",
+    au_name = "Kleinschmidt Creek",
+    api_key = .setEQKey()
+  )
+})
 
-  record_to_pkg("ALcc", {
-    EQ_CatchCorr(
-      auid = "AL03150202-0404-110",
-      api_key = .setEQKey()
-    )
-  })
+record_to_pkg("ALcc", {
+  EQ_CatchCorr(
+    auid = "AL03150202-0404-110",
+    api_key = .setEQKey()
+  )
+})
 
-  record_to_pkg("NATact", {
-    EQ_NationalExtract("actions", limit = 10)
-  })
+record_to_pkg("NATact", {
+  EQ_NationalExtract("actions", limit = 10)
+})
 
-  record_to_pkg("NATtmdl", {
-    EQ_NationalExtract("actions", limit = 10)
-  })
+record_to_pkg("NATtmdl", {
+  EQ_NationalExtract("tmdl", limit = 10)  # was "actions" in your snippet
+})
 
-  record_to_pkg("TXsrc", {
-    EQ_Sources(
-      report_cycle = 2018,
-      statecode = "TX",
-      source = "AGRICULTURE",
-      api_key = .setEQKey()
-    )
-  })
+record_to_pkg("TXsrc", {
+  EQ_Sources(
+    report_cycle = 2018,
+    statecode = "TX",
+    source = "AGRICULTURE",
+    api_key = .setEQKey()
+  )
+})
 
-  record_to_pkg("FLtmdl", {
-    EQ_Sources(
-      report_cycle = 2018,
-      statecode = "TX",
-      source = "AGRICULTURE",
-      api_key = .setEQKey()
-    )
-  })
+record_to_pkg("FLtmdl", {
+  EQ_Sources(
+    report_cycle = 2018,
+    statecode = "FL",   # your snippet had TX; adjust if needed
+    source = "AGRICULTURE",
+    api_key = .setEQKey()
+  )
+})
 
-# Copy the recordings into a short-named fixtures dir under inst/extdata
-fixtures_root <- file.path(pkg_root, "inst", "extdata", "htt2")
-dir.create(fixtures_root, recursive = TRUE, showWarnings = FALSE)
-
-copy_dir <- function(src, dst) {
-  files <- list.files(src, all.files = TRUE, full.names = TRUE, recursive = TRUE, include.dirs = TRUE, no.. = TRUE)
-  for (f in files) {
-    rel <- sub(paste0("^", normalizePath(src, winslash = "/")), "", normalizePath(f, winslash = "/"))
-    rel <- sub("^/", "", rel)
-    out <- file.path(dst, rel)
-    if (dir.exists(f)) {
-      dir.create(out, recursive = TRUE, showWarnings = FALSE)
-    } else {
-      dir.create(dirname(out), recursive = TRUE, showWarnings = FALSE)
-      file.copy(f, out, overwrite = TRUE)
-    }
-  }
-}
-
-# Copy each recorded subdir (skip the _check dir)
-for (d in list.dirs(scratch, full.names = TRUE, recursive = FALSE)) {
-  nm <- basename(d)
-  if (nm == "_check") next
-  copy_dir(d, file.path(fixtures_root, nm))
-}
-
-message("Fixtures copied to: ", normalizePath(fixtures_root, winslash = "/"))
+message("All fixtures recorded under: ", normalizePath(fixtures_root, winslash = "/"))
