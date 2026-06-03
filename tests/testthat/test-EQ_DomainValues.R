@@ -1,7 +1,7 @@
 testthat::test_that("EQ_DomainValues returns expected columns when domain = NULL", {
   expected <- c("eq_param", "attains_ws_name", "attains_ws_field")
 
-  actual <- names(EQ_DomainValues())
+  actual <- names(EQ_DomainValues(api_key = .setEQKey()))
 
   length.diff <- length(setdiff(expected, actual))
 
@@ -20,7 +20,7 @@ testthat::test_that("EQ_DomainValues returns expected values when domain = NULL"
     "water_type"
   )
 
-  actual <- EQ_DomainValues() |>
+  actual <- EQ_DomainValues(api_key = .setEQKey()) |>
     dplyr::pull(eq_param)
 
   length.diff <- length(setdiff(expected, actual))
@@ -41,7 +41,7 @@ testthat::test_that("EQ_DomainValues returns expected columns when domain = 'ass
     "BIOLOGICAL"
   )
 
-  actual <- EQ_DomainValues(domain = "assess_types") |>
+  actual <- EQ_DomainValues(domain = "assess_types", api_key = .setEQKey())) |>
     dplyr::pull(name)
 
   length.diff <- length(setdiff(expected, actual))
