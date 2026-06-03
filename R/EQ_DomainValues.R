@@ -97,7 +97,7 @@ EQ_DomainValues <- function(domain = NULL) {
                                    package = "rExpertQuery", mustWork = TRUE)
 
         load(dv_filepath, envir = e)
-        eq.params <- e[["domain_values"]]
+        eq.params <- e[["param"]]
         return(eq.params)
       }
   }
