@@ -4,7 +4,12 @@
 \alias{EQ_UpdateInternalDomainValuesNull}
 \title{Downloads/updates an internal copy of allowable domain values for EQ_DomainValues when domain = NULL}
 \usage{
-EQ_UpdateInternalDomainValuesNull()
+EQ_UpdateInternalDomainValuesNull(api_key = NULL)
+}
+\arguments{
+\item{api_key}{Character string. Users must supply their unique api key to access Expert
+Query/ATTAINS web services. To obtain an api, submit the form at:
+https://owapps.epa.gov/expertquery/api-key-signup}
 }
 \value{
 Returns a data frame of the allowable domain values for the "domain"
