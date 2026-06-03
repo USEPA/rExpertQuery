@@ -226,10 +226,12 @@ EQ_CreateBody <- function(comp.params, crosswalk, extract) {
   # JSON bodies using jsonlite (no manual paste)
   count.setup <- jsonlite::toJSON(list(filters = filters_obj), auto_unbox = TRUE)
 
-  body.setup  <- jsonlite::toJSON(
-    list(filters = filters_obj,
-         options = list(format = "csv"),
-         columns = columns),
+  body.setup <- jsonlite::toJSON(
+    list(
+      filters = filters_obj,
+      options = list(format = "csv"),
+      columns = columns
+    ),
     auto_unbox = TRUE
   )
 
@@ -397,20 +399,20 @@ EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
 
 
 .setEQKey <- function() {
-opt <- getOption("EQ_API_KEY", "")
-if (nzchar(opt)) {
-  return(opt)
-}
+  opt <- getOption("EQ_API_KEY", "")
+  if (nzchar(opt)) {
+    return(opt)
+  }
 
-# check to see if key is stored in system environment (primarily for use in checks)
-env <- Sys.getenv("EQ_API_KEY", unset = "")
-if (nzchar(env)) {
-  return(env)
-}
+  # check to see if key is stored in system environment (primarily for use in checks)
+  env <- Sys.getenv("EQ_API_KEY", unset = "")
+  if (nzchar(env)) {
+    return(env)
+  }
 
-# if neither exist
-def <- NULL
-if (!nzchar(opt) & !nzchar(env)) {
-  return(def)
-}
+  # if neither exist
+  def <- NULL
+  if (!nzchar(opt) & !nzchar(env)) {
+    return(def)
+  }
 }

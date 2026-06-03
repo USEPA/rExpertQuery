@@ -2,7 +2,7 @@
 utils::globalVariables(c(
   ":=",
   ".data",
-   ".env",
+  ".env",
   "attains_ws_field",
   "attains_ws_name",
   "col.name",

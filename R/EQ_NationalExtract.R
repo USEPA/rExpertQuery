@@ -247,13 +247,12 @@ EQ_NationalExtract <- function(extract = NULL,
   )
 
   # if limit is not NULL
-  if(!is.null(limit)) {
-
-    if(!is.numeric(limit)) {
+  if (!is.null(limit)) {
+    if (!is.numeric(limit)) {
       stop("Param 'limit' must be an integer")
     }
 
-    if(is.numeric(limit)) {
+    if (is.numeric(limit)) {
       df <- df |>
         dplyr::slice_head(n = limit)
     }

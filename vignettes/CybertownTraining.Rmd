@@ -245,7 +245,7 @@ page](images/nat.downloads.png){width="3in"}
     library).
 
     ```{r common.impairment, message = FALSE}
-    # import natioanl assessments profile
+    # import national assessments profile
     assessments.nat <- rExpertQuery::EQ_NationalExtract("assessments")
 
     # filter for latest assessments
@@ -268,7 +268,7 @@ page](images/nat.downloads.png){width="3in"}
       dplyr::group_by(parameterName) |>
       # count listings for each parameterName
       dplyr::summarise(count = length(assessmentUnitId)) |>
-      # arrane in descending order
+      # arrange in descending order
       dplyr::arrange(desc(count))
 
     # create data table of impairment count results
@@ -360,7 +360,7 @@ page](images/nat.downloads.png){width="3in"}
     creating a data table, respectively.
 
     ```{r tmdl.fs}
-    # filter national assessments to includ only Fully Supporting w/ TMDL
+    # filter national assessments to include only Fully Supporting w/ TMDL
     tmdl.fs <- assessments.nat |>
       dplyr::filter(
     overallStatus == "Fully Supporting",
@@ -522,7 +522,7 @@ page](images/nat.downloads.png){width="3in"}
     target = "row",
     backgroundColor = styleEqual(c("yes"), c("#66c3c5"))
       ) |>
-      # highlight rows for orgs that also have data for data links in organge
+      # highlight rows for orgs that also have data for data links in orange
       DT::formatStyle(
     "monitoringLocationDataLink",
     target = "row",
@@ -726,7 +726,7 @@ queries ATTAINS Assessment Units data. The default is to only return
 1.  **What are the retired assessment units for Florida?**
 
     This can be answered with a simple EQ_AssessmentUnits query
-    specifying Florida with an assesment unit status of "Retired"
+    specifying Florida with an assessment unit status of "Retired"
     without using functions from any additional packages. For easier
     review, we'll create a datatable with
     [DT](https://rstudio.github.io/DT/).
@@ -787,7 +787,7 @@ queries ATTAINS TMDL data and can utilize many search parameters.
 
     # determine number per group
     HI.sum <- HI.count |>
-      # groupy by pollutantGroup
+      # group by pollutantGroup
       dplyr::group_by(pollutantGroup, ) |>
       # count unique auids per pollutantGroup
       dplyr::summarize(count = dplyr::n_distinct(assessmentUnitId)) |>
@@ -880,7 +880,7 @@ ATTAINS Actions data by a variety of user supplied parameters.
     We can use [dplyr](https://dplyr.tidyverse.org/) and
     [DT](https://rstudio.github.io/DT/) with the query results to find
     the answer and display the relevant actionIds. For the query, we use
-    EQ_Actions to search for Deleware actions with the "in_meas"
+    EQ_Actions to search for Delaware actions with the "in_meas"
     parameter set to "Yes". Then we count the distinct actionIds.
 
     ```{r DE.actions, result=FALSE, message=FALSE, warning=FALSE}
@@ -1065,7 +1065,7 @@ keyword.
 
     # filter for assessment units with monitoring locations from Alaska
     filt.ak.mls <- ak.mls |>
-      # filter for rows with a valule for monitoring location id
+      # filter for rows with a value for monitoring location id
       dplyr::filter(
     !is.na(monitoringLocationId),
     monitoringLocationId != ""
@@ -1078,7 +1078,7 @@ keyword.
       # retain unique rows
       dplyr::distinct()
 
-    # list of orgs inlcuded in monitoringLocationOrgId
+    # list of orgs included in monitoringLocationOrgId
     ak.orgs <- sort(unique(filt.ak.mls$monitoringLocationOrgId))
 
     DT::datatable(filt.ak.mls, options = list(pageLength = 10, scrollX = TRUE))
@@ -1102,7 +1102,7 @@ keyword.
     no.ml.ak <- ak.mls |>
       dplyr::filter(!assessmentUnitId %in% filt.ak.mls$assessmentUnitId)
 
-    # count number of unique asessment units without listed monitoringLocationIds
+    # count number of unique assessment units without listed monitoringLocationIds
     n_no.ml.ak <- dplyr::n_distinct(no.ml.ak$assessmentUnitId)
     ```
 
@@ -1175,7 +1175,7 @@ keyword.
 ## EQ_CatchCorr
 
 [**EQ_CatchCorr()**](https://usepa.github.io/rExpertQuery/reference/EQ_CatchCorr.html)
-queries ATTAINS Catchment Correspondance data. These queries return
+queries ATTAINS Catchment Correspondence data. These queries return
 large files, particularly if a large geospatial area is defined, so best
 practice is to make your query as specific as possible. Many machines
 may not have enough memory to load an entire state's worth of catchment
@@ -1185,7 +1185,7 @@ specific assessment unit in catchment correspondence queries.
 1.  **Which catchments correspond to assessmentUnitId "IL_N-99" ?**
 
     We can start with a very focused query to retrieve information for
-    the Illinios assessment unit "IL_N-99". Then we'll use
+    the Illinois assessment unit "IL_N-99". Then we'll use
     [dplyr](https://dplyr.tidyverse.org/) functions to retain the unique
     rows make a a [DT](https://rstudio.github.io/DT/) data table.
 
@@ -1214,15 +1214,15 @@ specific assessment unit in catchment correspondence queries.
     or from ATTAINS geospatial web services. For this example, we will
     use ATTAINS geospatial web services as this will also allow us to
     create a map of the catchments and assessment unit. This example
-    utlizes a few new R packages, [httr](https://httr.r-lib.org/)
-    (wrapper for curl packge),
+    utilizes a few new R packages, [httr](https://httr.r-lib.org/)
+    (wrapper for curl package),
     [leaflet](https://cran.r-project.org/web/packages/leaflet/index.html)
     (interactive maps), and
     [sf](https://cran.r-project.org/web/packages/sf/index.html) (spatial
     vector data).
 
     The first step is to set up query parameters for ATTAINS geospatial
-    webservices. Then query the assessment lines and catchment
+    web services. Then query the assessment lines and catchment
     associations layers to retrieve the geospatial data for the
     assessment unit and its associated catchments. The data from the
     catchment association layer allows us to sum the total area for all

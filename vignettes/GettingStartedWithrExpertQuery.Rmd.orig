@@ -4,7 +4,7 @@ format: html
 editor: visual
 author: "ATTAINS Team"
 date: "`r Sys.Date()`"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
     fig_caption: yes
@@ -173,7 +173,7 @@ Nutrient_docs <- rExpertQuery::EQ_ActionsDocuments(
 This query yields `r formatC(nrow(Nutrient_docs), big.mark = ",")`
 results. As well as providing the Action and Document Name for all
 results, *EQ_Actions()* also returns the column "actionDocumentUrl"
-containg the URL to link to the document. Becaue the query yields so
+containg the URL to link to the document. Because the query yields so
 many results, we'll take a look at a smaller subset of them in a data
 table to understand the structure of the results.
 
@@ -335,7 +335,7 @@ recorded leads to a data set with
 ## EQ_CatchCorr
 
 [**EQ_CatchCorr()**](https://usepa.github.io/rExpertQuery/reference/EQ_CatchCorr.html)
-queries ATTAINS Catchment Correspondance data. These queries return
+queries ATTAINS Catchment Correspondence data. These queries return
 large files, particularly if a large geospatial area is defined, so best
 practice is to make your query as specific as possible. Many machines
 may not have enough memory to load an entire state's worth of catchment

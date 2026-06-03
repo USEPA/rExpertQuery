@@ -129,7 +129,7 @@ Nutrient_docs <- rExpertQuery::EQ_ActionsDocuments(
 
 This query yields 16,962 results. As well as providing the Action and
 Document Name for all results, *EQ_Actions()* also returns the column
-“actionDocumentUrl” containg the URL to link to the document. Becaue the
+“actionDocumentUrl” containg the URL to link to the document. Because the
 query yields so many results, we’ll take a look at a smaller subset of
 them in a data table to understand the structure of the results.
 
