@@ -1,3 +1,4 @@
+httptest2::with_mock_dir("dir/NULLdv", {
 testthat::test_that("EQ_DomainValues returns expected columns when domain = NULL", {
   expected <- c("eq_param", "attains_ws_name", "attains_ws_field")
 
@@ -6,6 +7,7 @@ testthat::test_that("EQ_DomainValues returns expected columns when domain = NULL
   length.diff <- length(setdiff(expected, actual))
 
   testthat::expect_equal(length.diff, 0)
+})
 })
 
 testthat::test_that("EQ_DomainValues returns expected values when domain = NULL", {

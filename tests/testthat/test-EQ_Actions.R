@@ -10,6 +10,7 @@ testthat::test_that("EQ_Actions returns expected number of row", {
 })
 
 testthat::test_that("EQ_Actions returns expected number of columns", {
+  with_pkg_mocks("RIact", {
   expect_equal(NCOL(EQ_Actions(
     statecode = "RI",
     fisc_year_start = 2014,
@@ -40,6 +41,7 @@ testthat::test_that("EQ_Actions returns expected column names", {
   length.diff <- length(setdiff(expected, actual))
 
   testthat::expect_equal(length.diff, 0)
+})
 })
 
 # # need to update function so that this will fail if relevant
