@@ -41,7 +41,7 @@ testthat::test_that("EQ_DomainValues returns expected columns when domain = 'ass
     "BIOLOGICAL"
   )
 
-  actual <- EQ_DomainValues(domain = "assess_types", api_key = .setEQKey())) |>
+  actual <- EQ_DomainValues(domain = "assess_types", api_key = .setEQKey()) |>
     dplyr::pull(name)
 
   length.diff <- length(setdiff(expected, actual))
