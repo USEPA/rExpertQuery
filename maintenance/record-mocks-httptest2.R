@@ -116,4 +116,13 @@ record_to_pkg("FLtmdl", {
   )
 })
 
+record_to_pkg("NULLdv", {
+  EQ_DomainValues(api_key = .setEQKey())
+})
+
+record_to_pkg("assessTypesdv", {
+  EQ_DomainValues(domain = "assess_types", api_key = .setEQKey())
+})
+
+
 message("All fixtures recorded under: ", normalizePath(fixtures_root, winslash = "/"))

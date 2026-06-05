@@ -1,4 +1,4 @@
-httptest2::with_mock_dir("inst/extdata/htt2/ORad", {
+httptest2::with_mock_dir("dir/ORad", {
   testthat::test_that("EQ_ActionsDocuments returns expected number of row", {
     expect_equal(NROW(EQ_ActionsDocuments(
       state = "OR",
