@@ -7,6 +7,7 @@ utils::globalVariables(c(
   "attains_ws_name",
   "col.name",
   "domain",
+  "eq_domain_values_null",
   "eq_name",
   "eq_param",
   "last_refresh_end_time",

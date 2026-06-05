@@ -22,7 +22,7 @@ testthat::test_that("EQ_DomainValues returns expected values when domain = NULL"
     "water_type"
   )
 
-  actual <- EQ_DomainValues(api_key = .setEQKey()) |>
+  actual <- names(EQ_DomainValues(api_key = .setEQKey())) |>
     dplyr::pull(eq_param)
 
   length.diff <- length(setdiff(expected, actual))
