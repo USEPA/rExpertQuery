@@ -1,0 +1,10 @@
+structure(list(method = "GET", url = "https://cg-7343d0e5-571f-451f-971f-8aaaf971df7e.s3-us-gov-west-1.amazonaws.com/national-downloads/1779667202/actions.csv.zip", 
+    status_code = 200L, headers = structure(list(`x-amz-id-2` = "nkJOf5yL8+ZhD2PIAL2VQiutSEXTmTJE5I0D1OReMkkr1rfBBWbDPpaIYKPSx8oArP5q4Uw5mOyufPFJEd3BayvBULDsVf2u", 
+        `x-amz-request-id` = "TYVMJ12JDGCBVN1G", Date = "Thu, 28 May 2026 12:28:10 GMT", 
+        `Last-Modified` = "Mon, 25 May 2026 00:01:33 GMT", ETag = "\"4b4e034d22578dd37c7cf41e563884f2\"", 
+        `x-amz-server-side-encryption` = "AES256", `x-amz-meta-s3cmd-attrs` = "atime:1779667291/ctime:1779667291/gid:100/gname:users/md5:4b4e034d22578dd37c7cf41e563884f2/mode:33188/mtime:1779667291/uid:3858/uname:owetl", 
+        `Accept-Ranges` = "bytes", `Content-Type` = "application/zip", 
+        `Content-Length` = "8318022", Server = "AmazonS3"), class = "httr2_headers"), 
+    body = as.raw(c(0x50, 0x4b, 0x03, 0x04, 0x2d)), timing = c(redirect = 0, 
+    namelookup = 0, connect = 0, pretransfer = 0.000241, starttransfer = 0.21761, 
+    total = 53.354008), cache = new.env(parent = emptyenv())), class = "httr2_response")

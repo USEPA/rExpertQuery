@@ -1,0 +1,3 @@
+objectId,region,state,organizationType,organizationId,organizationName,waterType,locationTypeCode,locationText,useClassName,assessmentUnitId,assessmentUnitName,assessmentUnitStatus,reportingCycle,cycleId,locationDescription,sizeSource,sourceScale,waterSize,waterSizeUnits
+3020736,07,MO,State,MDNR,Missouri,RESERVOIR,,,L3,MO_7134.00,Leisure Lake,A,2026,20265,"Legal US: ; Legal DS: NE SE05,61N,25W",,,38,Acres
+3031493,07,MO,State,MDNR,Missouri,RESERVOIR,,,L3,MO_7176.00,Leisure Lake,A,2026,20265,"Legal US: ; Legal DS: 33,48N,08W",,,45,Acres

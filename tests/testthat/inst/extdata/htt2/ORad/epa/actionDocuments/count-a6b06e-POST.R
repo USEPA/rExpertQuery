@@ -1,0 +1,11 @@
+structure(list(method = "POST", url = "epa/actionDocuments/count", 
+    status_code = 403L, headers = structure(list(date = "Wed, 03 Jun 2026 13:59:47 GMT", 
+        `content-type` = "application/json", `access-control-allow-origin` = "*", 
+        `content-encoding` = "gzip", `strict-transport-security` = "max-age=31536000; includeSubDomains; preload", 
+        vary = "Accept-Encoding", `x-api-umbrella-request-id` = "cuhn47ogfc0d7tipuihg", 
+        `x-cache` = "MISS", `x-content-type-options` = "nosniff", 
+        `x-vcap-request-id` = "c9cf2216-90c0-4494-66fd-c735e7e5ee10", 
+        `x-xss-protection` = "1; mode=block", `x-frame-options` = "DENY"), class = "httr2_headers"), 
+    body = charToRaw("{\n  \"error\": {\n    \"code\": \"API_KEY_INVALID\",\n    \"message\": \"An invalid api_key was supplied. Get one at https://api.epa.gov:443\"\n  }\n}"), 
+    timing = c(redirect = 0, namelookup = 0, connect = 0, pretransfer = 0.000413, 
+    starttransfer = 0.248296, total = 0.248447), cache = new.env(parent = emptyenv())), class = "httr2_response")

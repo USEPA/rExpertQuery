@@ -1,6 +1,24 @@
 # set global variables
 utils::globalVariables(c(
-  ".data", ":=", ".env", "attains_ws_field", "attains_ws_name", "domain"
+  ":=",
+  ".data",
+  ".env",
+  "attains_ws_field",
+  "attains_ws_name",
+  "col.name",
+  "domain",
+  "eq_domain_values_null",
+  "eq_name",
+  "eq_param",
+  "last_refresh_end_time",
+  "name",
+  "nat_extract",
+  "param",
+  "position",
+  "TMDLENDPOINT1",
+  "TMDLENDPOINT2",
+  "TMDLENDPOINT3",
+  "value"
 ))
 
 #' Include .data from rlang to prevent global variable warnings

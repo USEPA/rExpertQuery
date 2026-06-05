@@ -9,4 +9,4 @@
 library(testthat)
 library(rExpertQuery)
 
-test_check("rExpertQuery")
+testthat::test_check("rExpertQuery")

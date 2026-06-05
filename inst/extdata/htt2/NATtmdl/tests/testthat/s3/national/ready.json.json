@@ -1,0 +1,129 @@
+{
+    "ready": "go",
+    "tag": null,
+    "problems": [
+        "refresh spans larger than 24 hours."
+    ],
+    "details": [
+        {
+            "name": "attains_app.profile_action_documents",
+            "table_found": true,
+            "mview_found": true,
+            "last_refresh_date": "2026-06-01T12:23:46-04:00",
+            "last_refresh_end_time": "2026-06-01T12:23:48-04:00",
+            "last_refresh_type": "COMPLETE",
+            "last_refresh_elapsed": "0:00",
+            "num_rows": 31532,
+            "last_analyzed": null,
+            "fresh_stats": false
+        },
+        {
+            "name": "attains_app.profile_actions",
+            "table_found": true,
+            "mview_found": true,
+            "last_refresh_date": "2026-05-30T01:04:26-04:00",
+            "last_refresh_end_time": "2026-05-30T01:05:16-04:00",
+            "last_refresh_type": "COMPLETE",
+            "last_refresh_elapsed": "0:00",
+            "num_rows": 258815,
+            "last_analyzed": "2026-05-30T06:14:43-04:00",
+            "fresh_stats": true
+        },
+        {
+            "name": "attains_app.profile_assessments",
+            "table_found": true,
+            "mview_found": true,
+            "last_refresh_date": "2026-05-29T22:18:13-04:00",
+            "last_refresh_end_time": "2026-05-30T00:38:52-04:00",
+            "last_refresh_type": "COMPLETE",
+            "last_refresh_elapsed": "2:20",
+            "num_rows": 10655956,
+            "last_analyzed": "2026-05-30T06:16:05-04:00",
+            "fresh_stats": true
+        },
+        {
+            "name": "attains_app.profile_assessment_units",
+            "table_found": true,
+            "mview_found": true,
+            "last_refresh_date": "2026-05-29T21:00:04-04:00",
+            "last_refresh_end_time": "2026-05-29T21:37:38-04:00",
+            "last_refresh_type": "COMPLETE",
+            "last_refresh_elapsed": "0:37",
+            "num_rows": 3266559,
+            "last_analyzed": "2026-05-29T22:28:24-04:00",
+            "fresh_stats": true
+        },
+        {
+            "name": "attains_app.profile_assessment_units_monitoring_locations",
+            "table_found": true,
+            "mview_found": true,
+            "last_refresh_date": "2026-05-29T21:37:41-04:00",
+            "last_refresh_end_time": "2026-05-29T22:17:49-04:00",
+            "last_refresh_type": "COMPLETE",
+            "last_refresh_elapsed": "0:40",
+            "num_rows": 2755415,
+            "last_analyzed": "2026-05-29T22:14:24-04:00",
+            "fresh_stats": false
+        },
+        {
+            "name": "attains_app.profile_catchment_correspondence",
+            "table_found": true,
+            "mview_found": true,
+            "last_refresh_date": "2026-05-29T21:30:14-04:00",
+            "last_refresh_end_time": "2026-05-30T01:28:37-04:00",
+            "last_refresh_type": "COMPLETE",
+            "last_refresh_elapsed": "3:58",
+            "num_rows": 172952973,
+            "last_analyzed": "2026-05-30T06:00:52-04:00",
+            "fresh_stats": true
+        },
+        {
+            "name": "attains_app.profile_sources",
+            "table_found": true,
+            "mview_found": true,
+            "last_refresh_date": "2026-05-30T00:38:57-04:00",
+            "last_refresh_end_time": "2026-05-30T00:50:30-04:00",
+            "last_refresh_type": "COMPLETE",
+            "last_refresh_elapsed": "0:11",
+            "num_rows": 2769836,
+            "last_analyzed": "2026-05-30T06:15:09-04:00",
+            "fresh_stats": true
+        },
+        {
+            "name": "attains_app.profile_tmdl",
+            "table_found": true,
+            "mview_found": true,
+            "last_refresh_date": "2026-05-30T00:50:32-04:00",
+            "last_refresh_end_time": "2026-05-30T01:04:26-04:00",
+            "last_refresh_type": "COMPLETE",
+            "last_refresh_elapsed": "0:13",
+            "num_rows": 1950572,
+            "last_analyzed": "2026-05-30T06:15:21-04:00",
+            "fresh_stats": true
+        },
+        {
+            "name": "attains_app.profile_documents",
+            "table_found": true,
+            "mview_found": true,
+            "last_refresh_date": "2026-05-30T01:07:26-04:00",
+            "last_refresh_end_time": "2026-05-30T01:07:29-04:00",
+            "last_refresh_type": "COMPLETE",
+            "last_refresh_elapsed": "0:00",
+            "num_rows": 15395,
+            "last_analyzed": "2026-05-30T06:13:31-04:00",
+            "fresh_stats": true
+        },
+        {
+            "name": "attains_app.profile_documents_text",
+            "table_found": true,
+            "mview_found": true,
+            "last_refresh_date": "2026-05-30T01:07:29-04:00",
+            "last_refresh_end_time": "2026-05-30T01:32:44-04:00",
+            "last_refresh_type": "COMPLETE",
+            "last_refresh_elapsed": "0:25",
+            "num_rows": 15238,
+            "last_analyzed": "2026-05-30T06:13:35-04:00",
+            "fresh_stats": true
+        }
+    ]
+}
