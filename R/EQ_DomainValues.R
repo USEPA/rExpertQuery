@@ -65,11 +65,8 @@ EQ_DomainValues <- function(api_key = NULL, domain = NULL) {
   # base URL to query ATTAINS web services
   base.url <- "https://api.epa.gov/attains/domains?"
 
-  # add api key to url
-  final.url <- paste0(base.url, "&api_key=", api_key)
-
-  # remove intermediate object
-  rm(base.url)
+  # api key for adding to url
+  add.api <- paste0("&api_key=", api_key)
 
   # read in parameter crosswalk
   param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
@@ -83,7 +80,7 @@ EQ_DomainValues <- function(api_key = NULL, domain = NULL) {
     ))
 
     raw.data <- suppressMessages(suppressWarnings(tryCatch(
-      jsonlite::fromJSON(final.url),
+      jsonlite::fromJSON(paste0(base.url, add.api)),
       error = function(e) NULL)))
 
       if (!is.null(raw.data) && "domain" %in% names(raw.data) && nrow(raw.data) > 0) {
@@ -107,6 +104,10 @@ EQ_DomainValues <- function(api_key = NULL, domain = NULL) {
         message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
 
         eq.params <- eq_domain_values_null
+
+        # remove intermediate object
+        rm(base.url)
+
         return(eq.params)
       }
   }
@@ -142,7 +143,7 @@ EQ_DomainValues <- function(api_key = NULL, domain = NULL) {
 
       # filter for domains which have values in web service
       raw.data <- suppressMessages(suppressWarnings(tryCatch(
-        jsonlite::fromJSON(paste0(final.url, "?domainName=", param.ws)),
+        jsonlite::fromJSON(paste0(base.url, "domainName=", param.ws, add.api)),
         error = function(e) NULL)))
 
       if (!is.null(raw.data) && "domain" %in% names(raw.data) && nrow(raw.data) > 0) {
@@ -195,7 +196,10 @@ EQ_DomainValues <- function(api_key = NULL, domain = NULL) {
         list = objs[sapply(objs, exists, envir = .GlobalEnv, inherits = FALSE)],
         envir = .GlobalEnv
       )
-    }
+      }
+
+      # remove intermediate object
+      rm(base.url)
 
       return(eq.params)
     }
