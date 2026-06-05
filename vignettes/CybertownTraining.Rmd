@@ -1307,7 +1307,7 @@ value that should be used in queries.
 
     ```{r dom.vals}
     # run EQ_DomainValues with no value provided for "domain" to return list of params
-    domain.vals <- EQ_DomainValues()
+    domain.vals <- EQ_DomainValues(api_key = testkey)
     ```
 
     EQ_DomainValues can provide values for the following query
@@ -1323,7 +1323,7 @@ value that should be used in queries.
     "water_type".
 
     ```{r wat.type}
-    water.types <- rExpertQuery::EQ_DomainValues("water_type")
+    water.types <- rExpertQuery::EQ_DomainValues("water_type", api_key = testkey)
     ```
 
     The printed message informs us that the "name" column contains the
