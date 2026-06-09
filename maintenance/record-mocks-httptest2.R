@@ -5,25 +5,25 @@ suppressPackageStartupMessages({
   library(withr)
 })
 
-# Load your package code so EQ_* are available
+# load package code so EQ_* are available
 if (requireNamespace("devtools", quietly = TRUE)) {
   devtools::load_all(quiet = TRUE)
 } else {
   library(rExpertQuery)  # if installed
 }
 
-# Find package root
+# find package root
 pkg_root <- if (requireNamespace("rprojroot", quietly = TRUE)) {
   rprojroot::find_package_root_file()
 } else {
   getwd()
 }
 
-# Fixtures dir inside the package
+# fixtures dir inside the package
 fixtures_root <- file.path(pkg_root, "inst", "extdata", "htt2")
 dir.create(fixtures_root, recursive = TRUE, showWarnings = FALSE)
 
-# Recorder that writes directly into inst/extdata/htt2/<subdir>
+# recorder that writes directly into inst/extdata/htt2/<subdir>
 record_to_pkg <- function(subdir, code) {
   target <- file.path(fixtures_root, subdir)
   dir.create(target, recursive = TRUE, showWarnings = FALSE)
@@ -39,7 +39,7 @@ record_to_pkg <- function(subdir, code) {
   invisible(target)
 }
 
-# Your recordings
+# testthat recordings
 record_to_pkg("ORad", {
   EQ_ActionsDocuments(
     state = "OR",
@@ -95,7 +95,7 @@ record_to_pkg("NATact", {
 })
 
 record_to_pkg("NATtmdl", {
-  EQ_NationalExtract("tmdl", limit = 10)  # was "actions" in your snippet
+  EQ_NationalExtract("tmdl", limit = 10)
 })
 
 record_to_pkg("TXsrc", {
@@ -110,7 +110,7 @@ record_to_pkg("TXsrc", {
 record_to_pkg("FLtmdl", {
   EQ_Sources(
     report_cycle = 2018,
-    statecode = "FL",   # your snippet had TX; adjust if needed
+    statecode = "FL",
     source = "AGRICULTURE",
     api_key = .setEQKey()
   )
