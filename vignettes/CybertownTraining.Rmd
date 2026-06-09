@@ -392,7 +392,7 @@ page](images/nat.downloads.png){width="3in"}
     [dplyr](https://dplyr.tidyverse.org/) and
     [DT](https://rstudio.github.io/DT/). This time we are retaining a
     few more columns for inclusion in the data table and are filtering
-    by epaIRCategory for category 4 and 5 waters.
+    by epaIrCategory for category 4 and 5 waters.
 
     ```{r impaired.waters}
     # select subset of columns to include
@@ -749,7 +749,7 @@ queries ATTAINS Assessment Units data. The default is to only return
 queries ATTAINS TMDL data and can utilize many search parameters.
 
 1.  **What are all the TMDLs in HI? How many are there (counted as
-    unique combinations of actionID/pollutant/assessmentUnitId)? How
+    unique combinations of actionId/pollutant/assessmentUnitId)? How
     many are associated with each pollutantGroup?**
 
     To answer this question we'll use
@@ -829,7 +829,7 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     ```
 
     There are `r formatC(nrow(tmdl.proj.count), big.mark = ",")` TMDL
-    projects (by actionID) approved so far in FY 2025. In order to
+    projects (by actionId) approved so far in FY 2025. In order to
     create a user-friendly [DT](https://rstudio.github.io/DT/)
     datatable, we will have to take a few more steps. The columns,
     assessmentUnitId, pollutant, and addressedParameter are likely to

@@ -792,7 +792,7 @@ queries ATTAINS TMDL data and can utilize many search parameters.</p>
 <ol style="list-style-type: decimal">
 <li>
 <p><strong>What are all the TMDLs in HI? How many are there (counted
-as unique combinations of actionID/pollutant/assessmentUnitId)? How many
+as unique combinations of actionId/pollutant/assessmentUnitId)? How many
 are associated with each pollutantGroup?</strong></p>
 <p>To answer this question we’ll use <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> and <a href="https://plotly.com/r/" class="external-link">plotly</a>. The EQ_TMDLs query is simple,
 specifying only the state of Hawaii since we want to return all of
@@ -862,7 +862,7 @@ tmdl_start_date parameter along with specifying 10 for the region.</p>
 <span></span>
 <span><span class="co"># count distinct actionIds</span></span>
 <span><span class="va">tmdl.proj.count</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">tmdl.proj</span><span class="op">$</span><span class="va">actionId</span><span class="op">)</span></span></code></pre></div>
-<p>There are TMDL projects (by actionID) approved so far in FY 2025. In
+<p>There are TMDL projects (by actionId) approved so far in FY 2025. In
 order to create a user-friendly <a href="https://rstudio.github.io/DT/" class="external-link">DT</a> datatable, we will have to
 take a few more steps. The columns, assessmentUnitId, pollutant, and
 addressedParameter are likely to have more than one value per actionId.
