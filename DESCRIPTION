@@ -55,6 +55,8 @@ Suggests:
 Depends: 
     R (>= 4.1.0)
 VignetteBuilder: knitr, rmarkdown
+BuildVignettes: true
+Language: en-US
 LazyData: true
 LazyDataCompression: xz
 Config/testthat/edition: 3
