@@ -57,10 +57,10 @@
 #'
 EQ_DomainValues <- function(api_key = NULL, domain = NULL) {
 
-  # check for api key
-  if (is.null(api_key)) {
-    stop("EQ_DomainValues: An api key is required to access EQ/ATTAINS web services.")
-  }
+  # # check for api key
+  # if (is.null(api_key)) {
+  #   stop("EQ_DomainValues: An api key is required to access EQ/ATTAINS web services.")
+  # }
 
   # base URL to query ATTAINS web services
   base.url <- "https://api.epa.gov/attains/domains?"
@@ -206,7 +206,7 @@ EQ_DomainValues <- function(api_key = NULL, domain = NULL) {
   }
 }
 
-#' Downloads/updates an internal copy of allowable domain values for EQ_DomainValues when domain = NULL
+#' Downloads/updates an internal copy of allowable domain values for EQ_DomainValues
 #'
 #' @param api_key Character string. Users must supply their unique api key to access Expert
 #' Query/ATTAINS web services. To obtain an api, submit the form at:
@@ -216,7 +216,7 @@ EQ_DomainValues <- function(api_key = NULL, domain = NULL) {
 #' param of EQ_DomainValues.
 #'
 # base URL to query ATTAINS web services
-EQ_UpdateInternalDomainValuesNull <- function(api_key = NULL){
+EQ_UpdateInternalDomainValues <- function(api_key = NULL){
 
   # check for api key
   if (is.null(api_key)) {
@@ -234,7 +234,8 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
     jsonlite::fromJSON(paste0(base.url, "&api_key=", api_key)),
     error = function(e) NULL)
 
-    eq_domain_values_null <- raw.data |>
+  # update for domain = NULL
+  eq_domain_values_null <- raw.data |>
       dplyr::select(domain) |>
       dplyr::rename(attains_ws_name = domain) |>
       dplyr::left_join(param.cw, by = "attains_ws_name") |>
@@ -246,28 +247,7 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
       ) |>
       dplyr::arrange(eq_param)
 
-    usethis::use_data(eq_domain_values_null, internal = TRUE, overwrite = TRUE)
-}
-
-#' Downloads/updates an internal copy of allowable domain values for EQ_DomainValues when domain != NULL
-#'
-#' @param api_key Character string. Users must supply their unique api key to access Expert
-#' Query/ATTAINS web services. To obtain an api, submit the form at:
-#' https://owapps.epa.gov/expertquery/api-key-signup
-#'
-#' @return Returns a data frame of the allowable domain values all allowable values of domain excluding NULL.
-#' param of EQ_DomainValues.
-#'
-# base URL to query ATTAINS web services
-EQ_UpdateInternalDomainValues<- function(api_key = NULL) {
-
-  # check for api key
-  if (is.null(api_key)) {
-    stop("EQ_DomainValues: An api key is required to access EQ/ATTAINS web services.")
-  }
-
-  base.url <-  "https://api.epa.gov/attains/domains?"
-
+  # update for other domains
   param.cw <- utils::read.csv(
     system.file("extdata", "EQParamsCrosswalk.csv", package = "rExpertQuery"),
     stringsAsFactors = FALSE
@@ -302,5 +282,10 @@ EQ_UpdateInternalDomainValues<- function(api_key = NULL) {
                      relationship = "many-to-many") |>
     dplyr::rename(attains_ws_name = domain)
 
-  usethis::use_data(eq_domain_values, internal = TRUE, overwrite = TRUE)
+  usethis::use_data(
+    eq_domain_values,
+    eq_domain_values_null,
+    internal = TRUE,
+    overwrite = TRUE
+  )
 }
