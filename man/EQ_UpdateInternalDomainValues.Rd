@@ -2,7 +2,7 @@
 % Please edit documentation in R/EQ_DomainValues.R
 \name{EQ_UpdateInternalDomainValues}
 \alias{EQ_UpdateInternalDomainValues}
-\title{Downloads/updates an internal copy of allowable domain values for EQ_DomainValues when domain != NULL}
+\title{Downloads/updates an internal copy of allowable domain values for EQ_DomainValues}
 \usage{
 EQ_UpdateInternalDomainValues(api_key = NULL)
 }
@@ -12,9 +12,9 @@ Query/ATTAINS web services. To obtain an api, submit the form at:
 https://owapps.epa.gov/expertquery/api-key-signup}
 }
 \value{
-Returns a data frame of the allowable domain values all allowable values of domain excluding NULL.
+Returns a data frame of the allowable domain values for the "domain"
 param of EQ_DomainValues.
 }
 \description{
-Downloads/updates an internal copy of allowable domain values for EQ_DomainValues when domain != NULL
+Downloads/updates an internal copy of allowable domain values for EQ_DomainValues
 }
