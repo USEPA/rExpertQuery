@@ -1,4 +1,4 @@
-httptest2::with_test_mocks("dir/MTml", {
+with_test_mocks("MTml", {
   testthat::test_that("EQ_AUsMLs returns expected number of rows", {
     expect_equal(NROW(EQ_AUsMLs(
       org_id = "MTDEQ",

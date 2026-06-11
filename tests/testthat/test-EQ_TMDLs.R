@@ -1,4 +1,4 @@
-httptest2::with_test_mocks("dir/FLtmdl", {
+with_test_mocks("FLtmdl", {
   testthat::test_that("EQ_TMDLs returns expected number of rows", {
     expect_equal(NROW(EQ_TMDLs(
       fisc_year_start = 2018,

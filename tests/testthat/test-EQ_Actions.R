@@ -1,5 +1,5 @@
+with_test_mocks("RIact", {
 testthat::test_that("EQ_Actions returns expected number of row", {
-  with_test_mocks("RIact", {
     expect_equal(NROW(EQ_Actions(
       statecode = "RI",
       fisc_year_start = 2014,
@@ -7,10 +7,8 @@ testthat::test_that("EQ_Actions returns expected number of row", {
       api_key = .setEQKey()
     )), 77)
   })
-})
 
 testthat::test_that("EQ_Actions returns expected number of columns", {
-  with_test_mocks("RIact", {
   expect_equal(NCOL(EQ_Actions(
     statecode = "RI",
     fisc_year_start = 2014,
@@ -18,10 +16,8 @@ testthat::test_that("EQ_Actions returns expected number of columns", {
     api_key = .setEQKey()
   )), 23)
 })
-})
 
 testthat::test_that("EQ_Actions returns expected column names", {
-  with_test_mocks("RIact", {
   expected <- c(
     "objectId", "region", "state", "organizationType",
     "organizationId", "organizationName", "waterType",

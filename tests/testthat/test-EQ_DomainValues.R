@@ -1,4 +1,4 @@
-httptest2::with_test_mocks("dir/NULLdv", {
+with_test_mocks("NULLdv", {
   testthat::test_that("EQ_DomainValues returns expected columns when domain = NULL", {
     expected <- c("eq_param", "attains_ws_name", "attains_ws_field")
 
@@ -8,9 +8,7 @@ httptest2::with_test_mocks("dir/NULLdv", {
 
     testthat::expect_equal(length.diff, 0)
   })
-})
 
-httptest2::with_test_mocks("dir/NULLdv", {
   testthat::test_that("EQ_DomainValues returns expected values when domain = NULL", {
     expected <- c(
       "act_agency", "act_agency", "act_status", "act_type",
@@ -33,8 +31,7 @@ httptest2::with_test_mocks("dir/NULLdv", {
   })
 })
 
-
-httptest2::with_test_mocks("dir/assessTypesdv", {
+with_test_mocks("assessTypesdv", {
   testthat::test_that("EQ_DomainValues returns expected columns when domain = 'assess_types'", {
     expected <- c(
       "OTHER",

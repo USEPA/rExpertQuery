@@ -57,6 +57,10 @@ record_to_tests("NATtmdl", {
   EQ_NationalExtract("tmdl", limit = 10)
 })
 
+record_to_tests("NATassess", {
+  EQ_Assessments(api_key = .setEQKey())
+})
+
 record_to_tests("TXsrc", {
   EQ_Sources(
     report_cycle = 2018,
@@ -66,10 +70,10 @@ record_to_tests("TXsrc", {
   )
 })
 
-record_to_tests("FLtmdl", {
+record_to_tests("IAtmdl", {
   EQ_Sources(
     report_cycle = 2018,
-    statecode = "FL",
+    statecode = "IA",
     source = "AGRICULTURE",
     api_key = .setEQKey()
   )
