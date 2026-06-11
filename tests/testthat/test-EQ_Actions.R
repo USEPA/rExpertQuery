@@ -18,8 +18,10 @@ testthat::test_that("EQ_Actions returns expected number of columns", {
     api_key = .setEQKey()
   )), 23)
 })
+})
 
 testthat::test_that("EQ_Actions returns expected column names", {
+  with_pkg_mocks("RIact", {
   expected <- c(
     "objectId", "region", "state", "organizationType",
     "organizationId", "organizationName", "waterType",
