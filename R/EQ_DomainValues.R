@@ -57,149 +57,133 @@
 #'
 EQ_DomainValues <- function(api_key = NULL, domain = NULL) {
 
-  # # check for api key
-  # if (is.null(api_key)) {
-  #   stop("EQ_DomainValues: An api key is required to access EQ/ATTAINS web services.")
-  # }
+  # create local name for param
+  dom <- domain
 
-  # base URL to query ATTAINS web services
+  # set domain correctly if no api_key is provided by user and "domain =" is not included
+  if (is.null(dom) &&
+      is.character(api_key) && length(api_key) == 1 &&
+      !is.na(api_key) && nzchar(api_key) &&
+      api_key %in% param.cw[["param"]]) {
+    dom <- api_key
+    api_key <- NULL
+  }
+
+  # Load parameter crosswalk (fail fast if missing)
+  cw_path <- system.file(
+    "extdata", "EQParamsCrosswalk.csv",
+    package = "rExpertQuery",
+    mustWork = TRUE
+  )
+  param.cw <- utils::read.csv(cw_path, stringsAsFactors = FALSE)
+
+  # base URL for ATTAINS
   base.url <- "https://api.epa.gov/attains/domains?"
+  add.api <- if (!is.null(api_key)) paste0("&api_key=", api_key) else ""
 
-  # api key for adding to url
-  add.api <- paste0("&api_key=", api_key)
-
-  # read in parameter crosswalk
-  param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
-    package = "rExpertQuery"
-  ))
-
-  # return list of all allowable domain values if no domain value is supplied
-  if (is.null(domain)) {
-    print(paste0(
-      "EQ_DomainValues: getting list of available domain names. Values in the eq_param column can be used as inputs in EQ_DomainValues."
-    ))
+  # domain = NULL: list all domain names
+  if (is.null(dom)) {
+    message("EQ_DomainValues: getting list of available domain names. Values in eq_param can be used as inputs in EQ_DomainValues.")
 
     raw.data <- suppressMessages(suppressWarnings(tryCatch(
       jsonlite::fromJSON(paste0(base.url, add.api)),
-      error = function(e) NULL)))
+      error = function(e) NULL
+    )))
 
-      if (!is.null(raw.data) && "domain" %in% names(raw.data) && nrow(raw.data) > 0) {
-        # remote path (as you requested)
-        eq.params <- raw.data |>
-          dplyr::select(domain) |>
-          dplyr::rename(attains_ws_name = domain) |>
-          dplyr::left_join(param.cw, by = dplyr::join_by(attains_ws_name)) |>
-          dplyr::filter(!is.na(eq_name)) |>
-          dplyr::transmute(
-            eq_param = param,
-            attains_ws_name = attains_ws_name,
-            attains_ws_field = attains_ws_field
-          ) |>
-          dplyr::arrange(eq_param)
+    if (!is.null(raw.data) && "domain" %in% names(raw.data) && nrow(raw.data) > 0) {
+      eq.params <- raw.data |>
+        dplyr::select(domain) |>
+        dplyr::rename(attains_ws_name = domain) |>
+        dplyr::left_join(param.cw, by = "attains_ws_name") |>
+        dplyr::filter(!is.na(eq_name)) |>
+        dplyr::transmute(
+          eq_param = param,
+          attains_ws_name = attains_ws_name,
+          attains_ws_field = attains_ws_field
+        ) |>
+        dplyr::arrange(eq_param)
 
-        message("EQ_DomainValues: domain list retrieved from ATTAINS web services.")
-        return(eq.params)
-      } else {
-        # fallback to packaged crosswalk
-        message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
-
-        eq.params <- eq_domain_values_null
-
-        # remove intermediate object
-        rm(base.url)
-
-        return(eq.params)
-      }
-  }
-
-  if (!is.null(domain)) {
-    # check to make sure user supplied domain value is valid
-    if (!domain %in% param.cw[['param']]) {
-      stop("EQ_DomainValues: User supplied domain value is not valid. Check spelling and review
-           function documentation to ensure the domain value entered is correct.")
+      message("EQ_DomainValues: domain list retrieved from ATTAINS web services.")
+      return(eq.params)
     }
 
-    # check to make sure user supplied domain value is valid
-    if (domain %in% param.cw[['param']]) {
-      # check to see if user supplied domain has values in web service
+    if(is.null(raw.data)) {
+      message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
 
-      # get param name for web services
-      param.ws <- param.cw |>
-        dplyr::filter(param == .env$domain) |>
-        dplyr::pull(attains_ws_name)
+      if (!exists("eq_domain_values_null", inherits = TRUE)) {
+        stop("EQ_DomainValues: internal dataset 'eq_domain_values_null' not found in the installed package. Ensure R/sysdata.rda is included, or run EQ_UpdateInternalDomainValues(api_key) to refresh.")
+      }
+      return(eq_domain_values_null)
+    }
+  }
 
-      # cols to retain
-      retain.cols <- c(
-        "attains_ws_name",
-        "name",
-        "code",
-        "context",
-        "context2",
-        "dateModified",
-        "attains_ws_field",
-        "eq_name",
-        "eq_param"
-      )
+  # domain != NULL
+  if (!is.null(dom)) {
+    # validate user input against crosswalk
+    if (!dom %in% param.cw[["param"]]) {
+      stop("EQ_DomainValues: User supplied domain value is not valid. Check spelling and review function documentation to ensure the domain value entered is correct.")
+    }
 
-      # filter for domains which have values in web service
-      raw.data <- suppressMessages(suppressWarnings(tryCatch(
-        jsonlite::fromJSON(paste0(base.url, "domainName=", param.ws, add.api)),
-        error = function(e) NULL)))
+    # get the ATTAINS domain name to query
+    param.ws <- param.cw |>
+      dplyr::filter(param == dom) |>
+      dplyr::pull(attains_ws_name)
 
-      if (!is.null(raw.data) && "domain" %in% names(raw.data) && nrow(raw.data) > 0) {
+    retain.cols <- c(
+      "attains_ws_name",
+      "name",
+      "code",
+      "context",
+      "context2",
+      "dateModified",
+      "attains_ws_field",
+      "eq_name",
+      "eq_param"
+    )
 
-        # remote path
-        eq.params <- raw.data |>
-          dplyr::rename(attains_ws_name = domain) |>
-          dplyr::left_join(param.cw, by = "attains_ws_name",
-                           relationship = "many-to-many") |>
-          dplyr::filter(param == .env$domain) |>
-          dplyr::rename(eq_param = param) |>
-          dplyr::select(dplyr::all_of(retain.cols)) |>
-          dplyr::arrange(eq_param) |>
-          dplyr::distinct()
+    raw.data <- suppressMessages(suppressWarnings(tryCatch(
+      jsonlite::fromJSON(paste0(base.url, "domainName=", param.ws, add.api)),
+      error = function(e) NULL
+    )))
 
-        print(paste0(
-          "EQ_DomainValues: For ", domain, " the values in the '",
-          eq.params[['attains_ws_field']][1], "' column of the function output are the ",
-          "allowable values for rExpert Query functions."
-        ))
-
-        message("EQ_DomainValues: domain list retrieved from ATTAINS web services.")
-        return(eq.params)
-      } else {
-        # fallback to packaged crosswalk
-        message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
-
-        domain_values <- eq_domain_values
-
-      # filter crosswalk by user supplied domain value
-      eq.params <- domain_values |>
-                  dplyr::left_join(param.cw, by = c("attains_ws_name",
-                                                    "attains_ws_field"),
-                           relationship = "many-to-many") |>
-        dplyr::filter(param == .env$domain) |>
+    if (!is.null(raw.data) && "domain" %in% names(raw.data) && nrow(raw.data) > 0) {
+      eq.params <- raw.data |>
+        dplyr::rename(attains_ws_name = domain) |>
+        dplyr::left_join(param.cw, by = "attains_ws_name") |>
+        dplyr::filter(param == dom) |>
         dplyr::rename(eq_param = param) |>
         dplyr::select(dplyr::all_of(retain.cols)) |>
         dplyr::arrange(eq_param) |>
         dplyr::distinct()
 
-      print(paste0(
+      message(paste0(
         "EQ_DomainValues: For ", domain, " the values in the '",
-        eq.params[['attains_ws_field']][1], "' column of the function output are the ",
-        "allowable values for rExpert Query functions."
+        eq.params[["attains_ws_field"]][1], "' column of the function output are the allowable values for rExpertQuery functions."
       ))
 
-      # remove intermediate objects
-      objs <- c("param.filter", "base.url", "param.cw")
-      rm(
-        list = objs[sapply(objs, exists, envir = .GlobalEnv, inherits = FALSE)],
-        envir = .GlobalEnv
-      )
+      message("EQ_DomainValues: domain list retrieved from ATTAINS web services.")
+      return(eq.params)
+    } else {
+      # fallback to internal crosswalk-derived values
+      message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
+
+      if (!exists("eq_domain_values", inherits = TRUE)) {
+        stop("EQ_DomainValues: internal dataset 'eq_domain_values' not found in the installed package. Ensure R/sysdata.rda is included, or run EQ_UpdateInternalDomainValues(api_key) to refresh.")
       }
 
-      # remove intermediate object
-      rm(base.url)
+      eq.params <- eq_domain_values |>
+        dplyr::left_join(param.cw, by = c("attains_ws_name", "attains_ws_field"),
+                         relationship = "many-to-many") |>
+        dplyr::filter(param == dom) |>
+        dplyr::rename(eq_param = param) |>
+        dplyr::select(dplyr::all_of(retain.cols)) |>
+        dplyr::arrange(eq_param) |>
+        dplyr::distinct()
+
+      message(paste0(
+        "EQ_DomainValues: For ", dom, " the values in the '",
+        eq.params[["attains_ws_field"]][1], "' column of the function output are the allowable values for rExpertQuery functions."
+      ))
 
       return(eq.params)
     }
@@ -256,7 +240,9 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
   param.cw <- param.cw |>
     dplyr::select(attains_ws_name,
                   attains_ws_field) |>
-    dplyr::distinct()
+    dplyr::distinct() |>
+    dplyr::filter(attains_ws_name != "",
+                  !is.na(attains_ws_name))
 
   attains_ws_name <- param.cw |>
     dplyr::select(attains_ws_name) |>
@@ -266,7 +252,7 @@ param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
     dplyr::pull()
 
   fetch_one <- function(param.ws) {
-    url <- paste0(base.url, "?domainName=", param.ws, "&api_key=", api_key)
+    url <- paste0(base.url, "domainName=", param.ws, "&api_key=", api_key)
 
     raw.data <- tryCatch(
       jsonlite::fromJSON(url),
