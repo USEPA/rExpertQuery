@@ -1,5 +1,5 @@
-httptest2::with_mock_dir("dir/ILcat5", {
   testthat::test_that("EQ_Assessments returns expected number of row", {
+    with_test_mocks("ILcat5", {
     expect_equal(NROW(EQ_Assessments(
       statecode = "IL",
       epa_ir_cat = 5,
@@ -7,8 +7,10 @@ httptest2::with_mock_dir("dir/ILcat5", {
       api_key = .setEQKey()
     )), 234)
   })
+  })
 
   testthat::test_that("EQ_Assessments returns expected number of columns", {
+    with_test_mocks("ILcat5", {
     expect_equal(NCOL(EQ_Assessments(
       statecode = "IL",
       epa_ir_cat = 5,
@@ -16,8 +18,10 @@ httptest2::with_mock_dir("dir/ILcat5", {
       api_key = .setEQKey()
     )), 56)
   })
+  })
 
   testthat::test_that("EQ_Assessments returns expected column names", {
+    with_test_mocks("ILcat5", {
     expected <- c(
       "objectId", "region", "state", "organizationType",
       "organizationId", "organizationName", "waterType",
@@ -54,8 +58,9 @@ httptest2::with_mock_dir("dir/ILcat5", {
   })
 })
 
-httptest2::with_mock_dir("dir/NATassess", {
-  testthat::test_that("EQ_Assessments returns error message if query results exceed maximum allowed", {
-    expect_error(EQ_Assessments(api_key = .setEQKey()))
-  })
-})
+# not working need to work on mock recording
+# with_test_mocks("NATassess", {
+#   testthat::test_that("EQ_Assessments returns error message if query results exceed maximum allowed", {
+#     expect_error(EQ_Assessments(api_key = .setEQKey()))
+#   })
+# })

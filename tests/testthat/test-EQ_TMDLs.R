@@ -1,5 +1,5 @@
-httptest2::with_mock_dir("dir/FLtmdl", {
-  testthat::test_that("EQ_TMDLs returns expected number of rows", {
+testthat::test_that("EQ_TMDLs returns expected number of rows", {
+with_test_mocks("FLtmdl", {
     expect_equal(NROW(EQ_TMDLs(
       fisc_year_start = 2018,
       fisc_year_end = 2020,
@@ -7,8 +7,10 @@ httptest2::with_mock_dir("dir/FLtmdl", {
       api_key = .setEQKey()
     )), 333)
   })
+})
 
-  testthat::test_that("EQ_TMDLs returns expected number of columns", {
+testthat::test_that("EQ_TMDLs returns expected number of columns", {
+with_test_mocks("FLtmdl", {
     expect_equal(NCOL(EQ_TMDLs(
       fisc_year_start = 2018,
       fisc_year_end = 2020,
@@ -16,8 +18,10 @@ httptest2::with_mock_dir("dir/FLtmdl", {
       api_key = .setEQKey()
     )), 34)
   })
+})
 
-  testthat::test_that("EQ_TMDLs returns expected column names", {
+testthat::test_that("EQ_TMDLs returns expected column names", {
+with_test_mocks("FLtmdl", {
     expected <- c(
       "objectId", "region", "state", "organizationType",
       "organizationId", "organizationName", "waterType",

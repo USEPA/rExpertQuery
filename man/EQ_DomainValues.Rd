@@ -4,13 +4,9 @@
 \alias{EQ_DomainValues}
 \title{Provides allowable values for a param by leveraging ATTAINS web services.}
 \usage{
-EQ_DomainValues(api_key = NULL, domain = NULL)
+EQ_DomainValues(domain = NULL, api_key = NULL)
 }
 \arguments{
-\item{api_key}{Character string. Users must supply their unique api key to access Expert
-Query/ATTAINS web services. To obtain an api, submit the form at:
-https://owapps.epa.gov/expertquery/api-key-signup}
-
 \item{domain}{Character string. Running this function without entering a value
 for domain will return a list of all allowable domain values. Not all params
 in rExpertQuery are limited to a set list of allowable domain values (ex: date
@@ -35,6 +31,10 @@ which an allowable list of values can be returned from ATTAINS web services.
 The "eq_param" column returns the names of the params as used in rExpertQuery
 functions. Any of these can be used as values in the "domain" param in
 EQ_DomainValues.}
+
+\item{api_key}{Character string. Users must supply their unique api key to access Expert
+Query/ATTAINS web services. To obtain an api, submit the form at:
+https://owapps.epa.gov/expertquery/api-key-signup}
 }
 \value{
 If a domain value is provided, a df of allowable values for the
