@@ -55,19 +55,10 @@
 #'
 #' @importFrom rlang .data
 #'
-EQ_DomainValues <- function(api_key = NULL, domain = NULL) {
+EQ_DomainValues <- function(domain = NULL, api_key = NULL) {
 
   # create local name for param
   dom <- domain
-
-  # set domain correctly if no api_key is provided by user and "domain =" is not included
-  if (is.null(dom) &&
-      is.character(api_key) && length(api_key) == 1 &&
-      !is.na(api_key) && nzchar(api_key) &&
-      api_key %in% param.cw[["param"]]) {
-    dom <- api_key
-    api_key <- NULL
-  }
 
   # Load parameter crosswalk (fail fast if missing)
   cw_path <- system.file(
