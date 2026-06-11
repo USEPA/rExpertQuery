@@ -1,4 +1,4 @@
-httptest2::with_mock_dir("dir/ALcc", {
+httptest2::with_test_mocks("dir/ALcc", {
   testthat::test_that("EQ_CatchCorr returns expected number of rows", {
     expect_equal(NROW(EQ_CatchCorr(
       auid = "AL03150202-0404-110",

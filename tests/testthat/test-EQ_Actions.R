@@ -1,5 +1,5 @@
 testthat::test_that("EQ_Actions returns expected number of row", {
-  with_pkg_mocks("RIact", {
+  with_test_mocks("RIact", {
     expect_equal(NROW(EQ_Actions(
       statecode = "RI",
       fisc_year_start = 2014,
@@ -10,7 +10,7 @@ testthat::test_that("EQ_Actions returns expected number of row", {
 })
 
 testthat::test_that("EQ_Actions returns expected number of columns", {
-  with_pkg_mocks("RIact", {
+  with_test_mocks("RIact", {
   expect_equal(NCOL(EQ_Actions(
     statecode = "RI",
     fisc_year_start = 2014,
@@ -21,7 +21,7 @@ testthat::test_that("EQ_Actions returns expected number of columns", {
 })
 
 testthat::test_that("EQ_Actions returns expected column names", {
-  with_pkg_mocks("RIact", {
+  with_test_mocks("RIact", {
   expected <- c(
     "objectId", "region", "state", "organizationType",
     "organizationId", "organizationName", "waterType",
@@ -47,7 +47,7 @@ testthat::test_that("EQ_Actions returns expected column names", {
 })
 
 # # need to update function so that this will fail if relevant
-# httptest2::with_mock_dir("dir/wrong-statecode-actions-query", {
+# httptest2::with_test_mocks("dir/wrong-statecode-actions-query", {
 #   testthat::test_that("EQ_Actions returns error message if statecode is not a real statecode", {
 #     expect_error(EQ_Actions(statecode = "NO",
 #                             api_key = .setEQKey()))

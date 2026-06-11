@@ -1,0 +1,10 @@
+structure(list(method = "GET", url = "s3/national/tmdl.csv.zip", 
+    status_code = 200L, headers = structure(list(`x-amz-id-2` = "zcKxMJGtjjkaxsGtNP0V+XzjD6LDRPE8wPL4j6GhXyOXp0naN/ySxE3Rn/PmrRqGoI2GjsoozBkiDODNXTM2WBcA16OwZaGQvzz7dcjwwAc=", 
+        `x-amz-request-id` = "2TBJSRS1B83PYM6M", Date = "Thu, 11 Jun 2026 17:46:49 GMT", 
+        `Last-Modified` = "Mon, 08 Jun 2026 00:18:33 GMT", ETag = "\"ae7b4664841c599de6cf8b368780a5ef\"", 
+        `x-amz-server-side-encryption` = "AES256", `x-amz-meta-s3cmd-attrs` = "atime:1780877911/ctime:1780877910/gid:100/gname:users/md5:ae7b4664841c599de6cf8b368780a5ef/mode:33188/mtime:1780877910/uid:3858/uname:owetl", 
+        `Accept-Ranges` = "bytes", `Content-Type` = "application/zip", 
+        `Content-Length` = "33473093", Server = "AmazonS3"), class = "httr2_headers"), 
+    body = as.raw(c(0x50, 0x4b, 0x03, 0x04, 0x2d)), timing = c(redirect = 0, 
+    namelookup = 0, connect = 0, pretransfer = 0.000392, starttransfer = 0.162557, 
+    total = 19.144765), cache = new.env(parent = emptyenv())), class = "httr2_response")

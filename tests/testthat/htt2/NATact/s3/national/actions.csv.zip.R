@@ -1,0 +1,10 @@
+structure(list(method = "GET", url = "s3/national/actions.csv.zip", 
+    status_code = 200L, headers = structure(list(`x-amz-id-2` = "SzQOIwIXDjmTO8gxWpzJajBXdOHnuhWxp379dR0a+jUS3ZbPMJnQqrJXZbu6Gybsp7QK/Oa/JtSOPYqUuMK8r13tSBBVFecqDyVPqDUiFOA=", 
+        `x-amz-request-id` = "9VMA5SX59J2RBDT8", Date = "Thu, 11 Jun 2026 17:52:36 GMT", 
+        `Last-Modified` = "Mon, 08 Jun 2026 00:01:16 GMT", ETag = "\"1103abf8bd8309463dac081c39ab1409\"", 
+        `x-amz-server-side-encryption` = "AES256", `x-amz-meta-s3cmd-attrs` = "atime:1780876874/ctime:1780876873/gid:100/gname:users/md5:1103abf8bd8309463dac081c39ab1409/mode:33188/mtime:1780876873/uid:3858/uname:owetl", 
+        `Accept-Ranges` = "bytes", `Content-Type` = "application/zip", 
+        `Content-Length` = "8360668", Server = "AmazonS3"), class = "httr2_headers"), 
+    body = as.raw(c(0x50, 0x4b, 0x03, 0x04, 0x2d)), timing = c(redirect = 0, 
+    namelookup = 0, connect = 0, pretransfer = 0.000555, starttransfer = 0.172059, 
+    total = 4.991976), cache = new.env(parent = emptyenv())), class = "httr2_response")

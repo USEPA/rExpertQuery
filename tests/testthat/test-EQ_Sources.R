@@ -1,4 +1,4 @@
-httptest2::with_mock_dir("dir/TXsrc", {
+httptest2::with_test_mocks("dir/TXsrc", {
   testthat::test_that("EQ_Sources returns expected number of rows", {
     expect_equal(NROW(EQ_Sources(
       report_cycle = 2018,

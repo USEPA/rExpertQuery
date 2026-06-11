@@ -1,4 +1,4 @@
-httptest2::with_mock_dir("dir/MOau", {
+httptest2::with_test_mocks("dir/MOau", {
   testthat::test_that("Assessment Units returns expected number of rows", {
     expect_equal(NROW(EQ_AssessmentUnits(
       statecode = "MO",
