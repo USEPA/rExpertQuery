@@ -776,7 +776,7 @@ queries ATTAINS Assessment Units data. The default is to only return
 queries ATTAINS TMDL data and can utilize many search parameters.
 
 1.  **What are all the TMDLs in HI? How many are there (counted as
-    unique combinations of actionID/pollutant/assessmentUnitId)? How
+    unique combinations of actionId/pollutant/assessmentUnitId)? How
     many are associated with each pollutantGroup?**
 
     To answer this question we’ll use
@@ -856,7 +856,7 @@ queries ATTAINS TMDL data and can utilize many search parameters.
     tmdl.proj.count <- dplyr::n_distinct(tmdl.proj$actionId)
     ```
 
-    There are TMDL projects (by actionID) approved so far in FY 2025. In
+    There are TMDL projects (by actionId) approved so far in FY 2025. In
     order to create a user-friendly [DT](https://rstudio.github.io/DT/)
     datatable, we will have to take a few more steps. The columns,
     assessmentUnitId, pollutant, and addressedParameter are likely to

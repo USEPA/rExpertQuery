@@ -70,11 +70,11 @@ record_to_tests("TXsrc", {
   )
 })
 
-record_to_tests("IAtmdl", {
-  EQ_Sources(
-    report_cycle = 2018,
-    statecode = "IA",
-    source = "AGRICULTURE",
+record_to_tests("FLtmdl", {
+  EQ_TMDLs(
+    fisc_year_start = 2018,
+    fisc_year_end = 2020,
+    statecode = "FL",
     api_key = .setEQKey()
   )
 })
