@@ -3,7 +3,7 @@ httptest2::set_redactor(function(x) {
   if (inherits(x, "httr2_request")) {
     s3_pat <- "^cg-[0-9a-f\\-]+\\.s3-us-gov-west-1\\.amazonaws\\.com$"
 
-    # Structured URL (typical for httr2)
+    # Structured URL
     if (is.list(x$url)) {
       # Host/hostname → short forms
       if (!is.null(x$url$host) && is.character(x$url$host)) {
@@ -55,10 +55,10 @@ httptest2::set_redactor(function(x) {
     # Only redact for text/JSON; skip binary like application/zip, octet-stream
     ct <- tolower(if (!is.null(x$headers[["content-type"]])) x$headers[["content-type"]] else "")
     if (grepl("application/zip|application/octet-stream", ct, perl = TRUE)) {
-      return(x)  # do NOT modify binary bodies
+      return(x)
     }
 
-    # Your existing body gsubs for text/JSON
+    # gsubs for text/JSON
     x <- httptest2::gsub_response(
       x,
       "https?://cg-[0-9a-f\\-]+\\.s3-us-gov-west-1\\.amazonaws\\.com",
