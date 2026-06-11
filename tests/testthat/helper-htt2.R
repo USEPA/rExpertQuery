@@ -135,11 +135,7 @@ record_to_tests <- function(subdir, code) {
   invisible(target)
 }
 
-with_test_mocks <- function(subdir, code) {
-  stopifnot(requireNamespace("testthat", quietly = TRUE))
-  dir_rel <- file.path("htt2", subdir)
-  if (!dir.exists(testthat::test_path(dir_rel))) {
-    stop("Mock directory not found: ", testthat::test_path(dir_rel))
-  }
-  httptest2::with_test_mocks(dir_rel, code)  # pass 'code' unevaluated
+with_test_mocks <- function(dir, code) {
+  # testthat::test_path builds an absolute path in the test context
+  httptest2::with_mock_dir(testthat::test_path("htt2", dir), code)
 }

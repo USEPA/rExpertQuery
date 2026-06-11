@@ -1,5 +1,5 @@
-with_test_mocks("ORad", {
   testthat::test_that("EQ_ActionsDocuments returns expected number of row", {
+    with_test_mocks("ORad", {
     expect_equal(NROW(EQ_ActionsDocuments(
       state = "OR",
       comp_date_start = "01-01-2018",
@@ -7,8 +7,10 @@ with_test_mocks("ORad", {
       api_key = .setEQKey()
     )), 48)
   })
+  })
 
   testthat::test_that("EQ_ActionsDocuments returns expected number of columns", {
+    with_test_mocks("ORad", {
     expect_equal(NCOL(EQ_ActionsDocuments(
       state = "OR",
       comp_date_start = "01-01-2018",
@@ -16,8 +18,10 @@ with_test_mocks("ORad", {
       api_key = .setEQKey()
     )), 18)
   })
+  })
 
   testthat::test_that("EQ_ActionsDocuments returns expected column names", {
+    with_test_mocks("ORad", {
     expected <- c(
       "objectId", "actionDocumentUrl", "actionId", "actionName",
       "actionType", "completionDate", "organizationId",
