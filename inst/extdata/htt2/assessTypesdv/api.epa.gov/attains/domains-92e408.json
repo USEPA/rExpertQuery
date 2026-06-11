@@ -1,0 +1,66 @@
+[
+    {
+        "domain": "AssessmentTypeCode",
+        "name": "OTHER",
+        "code": "OTHER",
+        "context": null,
+        "context2": null,
+        "dateModified": "2017-08-28"
+    },
+    {
+        "domain": "AssessmentTypeCode",
+        "name": "PATHOGEN INDICATORS",
+        "code": "PATHOGEN INDICATORS",
+        "context": null,
+        "context2": null,
+        "dateModified": "2017-08-28"
+    },
+    {
+        "domain": "AssessmentTypeCode",
+        "name": "PHYSICAL/CHEMICAL",
+        "code": "PHYSICAL/CHEMICAL",
+        "context": null,
+        "context2": null,
+        "dateModified": "2017-08-28"
+    },
+    {
+        "domain": "AssessmentTypeCode",
+        "name": "HABITAT",
+        "code": "HABITAT",
+        "context": null,
+        "context2": null,
+        "dateModified": "2017-08-28"
+    },
+    {
+        "domain": "AssessmentTypeCode",
+        "name": "TOXICOLOGICAL",
+        "code": "TOXICOLOGICAL",
+        "context": null,
+        "context2": null,
+        "dateModified": "2017-08-28"
+    },
+    {
+        "domain": "AssessmentTypeCode",
+        "name": "OTHER PUBLIC HEALTH INDICATORS",
+        "code": "OTHER PUBLIC HEALTH INDICATORS",
+        "context": null,
+        "context2": null,
+        "dateModified": "2017-08-28"
+    },
+    {
+        "domain": "AssessmentTypeCode",
+        "name": "OTHER AQUATIC LIFE INDICATORS",
+        "code": "OTHER AQUATIC LIFE INDICATORS",
+        "context": null,
+        "context2": null,
+        "dateModified": "2017-08-28"
+    },
+    {
+        "domain": "AssessmentTypeCode",
+        "name": "BIOLOGICAL",
+        "code": "BIOLOGICAL",
+        "context": null,
+        "context2": null,
+        "dateModified": "2017-08-28"
+    }
+]
