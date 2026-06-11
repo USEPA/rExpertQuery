@@ -122,7 +122,7 @@ EQ_DomainValues <- function(domain = NULL, api_key = NULL) {
       return(eq.params)
     } else {
       message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
-      eq_domain_values_null <- getFromNamespace("eq_domain_values_null", "rExpertQuery")
+      eq_domain_values_null <- utils::getFromNamespace("eq_domain_values_null", "rExpertQuery")
       return(eq_domain_values_null)
     }
 
@@ -186,7 +186,7 @@ EQ_DomainValues <- function(domain = NULL, api_key = NULL) {
       # fallback to internal crosswalk-derived values (NOT the NULL-domain list)
       message("EQ_DomainValues: ATTAINS domain values unavailable; returning internal list (may be out of date).")
 
-      eq_domain_values <- getFromNamespace("eq_domain_values", "rExpertQuery")
+      eq_domain_values <- utils::getFromNamespace("eq_domain_values", "rExpertQuery")
 
       eq.params <- eq_domain_values |>
         dplyr::left_join(param.cw, by = c("attains_ws_name", "attains_ws_field"),
