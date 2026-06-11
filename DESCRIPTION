@@ -51,7 +51,8 @@ Suggests:
     usethis,
     usmap,
     yaml,
-    zip
+    zip,
+    withr
 Depends: 
     R (>= 4.1.0)
 VignetteBuilder: knitr, rmarkdown
