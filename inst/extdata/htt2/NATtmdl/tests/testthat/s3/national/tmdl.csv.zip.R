@@ -1,10 +1,10 @@
 structure(list(method = "GET", url = "s3/national/tmdl.csv.zip", 
-    status_code = 200L, headers = structure(list(`x-amz-id-2` = "6CwxzIlY8yZ0OGa0akOK9WfRFlDDgNajOJh83ncRuCBH5mhq17Cw7HQIiMxJRjxqqhbfTkTxag6/Kyt7Ov2KQVN3hlIALRSPbC08tyYf1PI=", 
-        `x-amz-request-id` = "X0H7DKR9KER6Z817", Date = "Tue, 02 Jun 2026 21:20:07 GMT", 
-        `Last-Modified` = "Mon, 01 Jun 2026 16:49:03 GMT", ETag = "\"e4256f162c2f2d418c002128a8426f62\"", 
-        `x-amz-server-side-encryption` = "AES256", `x-amz-meta-s3cmd-attrs` = "atime:1780332542/ctime:1780332541/gid:100/gname:users/md5:e4256f162c2f2d418c002128a8426f62/mode:33188/mtime:1780332541/uid:3858/uname:owetl", 
+    status_code = 200L, headers = structure(list(`x-amz-id-2` = "voqID8nbo+LUrjkzCE7FpD75eFDZPPUrOTSKqtkonPwtm6rSWbzLjtClSLYi/LVdqVpEGSENsf/JAG/T3nYTICpdfAm/TBAXQHwg51jxe9o=", 
+        `x-amz-request-id` = "GS45FP79M81Y74YF", Date = "Thu, 11 Jun 2026 13:43:16 GMT", 
+        `Last-Modified` = "Mon, 08 Jun 2026 00:18:33 GMT", ETag = "\"ae7b4664841c599de6cf8b368780a5ef\"", 
+        `x-amz-server-side-encryption` = "AES256", `x-amz-meta-s3cmd-attrs` = "atime:1780877911/ctime:1780877910/gid:100/gname:users/md5:ae7b4664841c599de6cf8b368780a5ef/mode:33188/mtime:1780877910/uid:3858/uname:owetl", 
         `Accept-Ranges` = "bytes", `Content-Type` = "application/zip", 
-        `Content-Length` = "33058928", Server = "AmazonS3"), class = "httr2_headers"), 
+        `Content-Length` = "33473093", Server = "AmazonS3"), class = "httr2_headers"), 
     body = as.raw(c(0x50, 0x4b, 0x03, 0x04, 0x2d)), timing = c(redirect = 0, 
-    namelookup = 0, connect = 0, pretransfer = 0.00021, starttransfer = 0.14788, 
-    total = 365.802445), cache = new.env(parent = emptyenv())), class = "httr2_response")
+    namelookup = 0, connect = 0, pretransfer = 0.000271, starttransfer = 0.160144, 
+    total = 2.446197), cache = new.env(parent = emptyenv())), class = "httr2_response")
