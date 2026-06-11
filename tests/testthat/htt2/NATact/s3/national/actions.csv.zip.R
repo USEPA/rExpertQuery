@@ -1,10 +1,11 @@
-structure(list(method = "GET", url = "s3/national/actions.csv.zip", 
-    status_code = 200L, headers = structure(list(`x-amz-id-2` = "SzQOIwIXDjmTO8gxWpzJajBXdOHnuhWxp379dR0a+jUS3ZbPMJnQqrJXZbu6Gybsp7QK/Oa/JtSOPYqUuMK8r13tSBBVFecqDyVPqDUiFOA=", 
-        `x-amz-request-id` = "9VMA5SX59J2RBDT8", Date = "Thu, 11 Jun 2026 17:52:36 GMT", 
+structure(list(method = "GET", url = "https://cg-7343d0e5-571f-451f-971f-8aaaf971df7e.s3-us-gov-west-1.amazonaws.com/national-downloads/1780876801/actions.csv.zip", 
+    status_code = 200L, headers = structure(list(`x-amz-id-2` = "fE15VwqHqR6JARURXjr6k4FUExdeJwnm32bWslmPU1iPr8QKuOUg+GAp0Wbr1f6eEHwmWJa+uCN2idETxdeHhRptkDZV1g7MCuleTyLKsYs=", 
+        `x-amz-request-id` = "YNQYXHNVCKNWBKSB", Date = "Thu, 11 Jun 2026 18:15:51 GMT", 
         `Last-Modified` = "Mon, 08 Jun 2026 00:01:16 GMT", ETag = "\"1103abf8bd8309463dac081c39ab1409\"", 
         `x-amz-server-side-encryption` = "AES256", `x-amz-meta-s3cmd-attrs` = "atime:1780876874/ctime:1780876873/gid:100/gname:users/md5:1103abf8bd8309463dac081c39ab1409/mode:33188/mtime:1780876873/uid:3858/uname:owetl", 
         `Accept-Ranges` = "bytes", `Content-Type` = "application/zip", 
         `Content-Length` = "8360668", Server = "AmazonS3"), class = "httr2_headers"), 
-    body = as.raw(c(0x50, 0x4b, 0x03, 0x04, 0x2d)), timing = c(redirect = 0, 
-    namelookup = 0, connect = 0, pretransfer = 0.000555, starttransfer = 0.172059, 
-    total = 4.991976), cache = new.env(parent = emptyenv())), class = "httr2_response")
+    body = structure(find_mock_file("s3/national/actions.csv.zip.R-FILE"), 
+        class = "httr2_path"), timing = c(redirect = 0, namelookup = 0, 
+    connect = 0, pretransfer = 0.000536, starttransfer = 0.142101, 
+    total = 1.398437), cache = new.env(parent = emptyenv())), class = "httr2_response")

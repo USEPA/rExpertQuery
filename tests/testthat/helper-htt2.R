@@ -3,8 +3,9 @@ httptest2::set_redactor(function(x) {
   if (inherits(x, "httr2_request")) {
     s3_pat <- "^cg-[0-9a-f\\-]+\\.s3-us-gov-west-1\\.amazonaws\\.com$"
 
+    # Structured URL (typical for httr2)
     if (is.list(x$url)) {
-      # Host/hostname rewrites
+      # Host/hostname → short forms
       if (!is.null(x$url$host) && is.character(x$url$host)) {
         if (x$url$host == "api.epa.gov") x$url$host <- "epa"
         if (grepl(s3_pat, x$url$host))   x$url$host <- "s3"
@@ -13,12 +14,10 @@ httptest2::set_redactor(function(x) {
         if (x$url$hostname == "api.epa.gov") x$url$hostname <- "epa"
         if (grepl(s3_pat, x$url$hostname))   x$url$hostname <- "s3"
       }
-      # Path rewrites
+      # Path: strip EPA prefix; collapse national-downloads/<digits>/ → national/
       if (!is.null(x$url$path) && is.character(x$url$path) && nzchar(x$url$path)) {
         p <- x$url$path
-        # Strip EPA prefix
         p <- sub("^/?expertquery/api/attains/?", "", p)
-        # Collapse versioned national-downloads dir
         p <- sub("^/?national-downloads/[0-9]+/", "national/", p)
         x$url$path <- p
       }
@@ -51,8 +50,15 @@ httptest2::set_redactor(function(x) {
     return(x)
   }
 
-  # Response-side redactions (your existing rules)
+  # Response-side redaction (body content)
   if (inherits(x, "httr2_response")) {
+    # Only redact for text/JSON; skip binary like application/zip, octet-stream
+    ct <- tolower(if (!is.null(x$headers[["content-type"]])) x$headers[["content-type"]] else "")
+    if (grepl("application/zip|application/octet-stream", ct, perl = TRUE)) {
+      return(x)  # do NOT modify binary bodies
+    }
+
+    # Your existing body gsubs for text/JSON
     x <- httptest2::gsub_response(
       x,
       "https?://cg-[0-9a-f\\-]+\\.s3-us-gov-west-1\\.amazonaws\\.com",
