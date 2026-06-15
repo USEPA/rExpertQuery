@@ -1,4 +1,4 @@
-# testthat recordings
+# testthat recordings for functions using EQ web services
 record_to_tests("ORad", {
   EQ_ActionsDocuments(
     state = "OR",
@@ -49,14 +49,6 @@ record_to_tests("ALcc", {
   )
 })
 
-record_to_tests("NATact", {
-  EQ_NationalExtract("actions", limit = 10)
-})
-
-record_to_tests("NATtmdl", {
-  EQ_NationalExtract("tmdl", limit = 10)
-})
-
 record_to_tests("NATassess", {
   EQ_Assessments(api_key = .setEQKey())
 })
@@ -87,5 +79,24 @@ record_to_tests("assessTypesdv", {
   EQ_DomainValues(domain = "assess_types", api_key = .setEQKey())
 })
 
+
+# record mocks from functions which create csv files
+actions.df <- EQ_NationalExtract("actions")
+
+actions.df <- actions.df |>
+  dplyr::slice_sample(n = 10)
+
+dir.create("tests/testthat/htt2/NATact", recursive = TRUE, showWarnings = FALSE)
+saveRDS(actions.df, "tests/testthat/htt2/NATact/actions.rds")
+
+tmdls.df <- EQ_NationalExtract("tmdl")
+
+tmdls.df <- tmdls.df |>
+  dplyr::slice_sample(n = 10)
+
+dir.create("tests/testthat/htt2/NATtmdl", recursive = TRUE, showWarnings = FALSE)
+saveRDS(tmdls.df, "tests/testthat/htt2/NATtmdl/tmdls.rds")
+
+rm(actions.df, tmdls.df)
 
 message("All fixtures recorded under: ", normalizePath(fixtures_root, winslash = "/"))

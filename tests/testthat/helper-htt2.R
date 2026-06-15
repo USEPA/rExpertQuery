@@ -136,6 +136,40 @@ record_to_tests <- function(subdir, code) {
 }
 
 with_test_mocks <- function(dir, code) {
-  # testthat::test_path builds an absolute path in the test context
-  httptest2::with_mock_dir(testthat::test_path("htt2", dir), code)
+  # Ensure recording is off, and restore on exit
+  old_opts <- options("httptest2.capture" = FALSE)
+  on.exit(options(old_opts), add = TRUE)
+
+  # Absolute path to the mock directory
+  path <- testthat::test_path("htt2", dir)
+  if (!dir.exists(path)) {
+    stop("Mock dir not found: ", path)
+  }
+
+  message("with_test_mocks using: ", normalizePath(path, winslash = "/"))
+  httptest2::with_mock_dir(path, code)
 }
+
+# # Temporarily override a function in a package namespace
+# .local_override <- function(pkg, name, replacement) {
+#   ns <- asNamespace(pkg)
+#   if (!exists(name, envir = ns, inherits = FALSE)) {
+#     stop("No binding '", name, "' in namespace '", pkg, "'.")
+#   }
+#   was_locked <- bindingIsLocked(name, ns)
+#   if (was_locked) unlockBinding(name, ns)
+#   old <- get(name, envir = ns)
+#   assign(name, replacement, envir = ns)
+#   if (was_locked) lockBinding(name, ns)
+#   list(pkg = pkg, name = name, old = old, was_locked = was_locked)
+# }
+#
+# .local_restore <- function(overrides) {
+#   for (ov in rev(overrides)) {
+#     ns <- asNamespace(ov$pkg)
+#     was_locked <- bindingIsLocked(ov$name, ns)
+#     if (was_locked) unlockBinding(ov$name, ns)
+#     assign(ov$name, ov$old, envir = ns)
+#     if (was_locked) lockBinding(ov$name, ns)
+#   }
+# }

@@ -20,8 +20,6 @@
 #' "sources" (Sources), and "tmdl" (TMDLs). There is no national extract option available for
 #' Actions Documents. The default is NULL which means no extract will be returned.
 #' @param max_retries Integer. The number of retry attempts.
-#' @param limit Integer. The number of rows that should be returned. Primarily used
-#' for testing or development purposes. Default is NULL (all available rows returned).
 #'
 #' @return A data frame containing the user-specified national extract. The columns returned will
 #' vary based on the extract selected and are as follows:
@@ -88,8 +86,7 @@
 #' }
 #'
 EQ_NationalExtract <- function(extract = NULL,
-                               max_retries = 3,
-                               limit = NULL) {
+                               max_retries = 3) {
   if (is.null(extract)) {
     stop("EQ_NationalExtract: Function requires user to select Expert Query Profile to return.")
   }
@@ -246,18 +243,6 @@ EQ_NationalExtract <- function(extract = NULL,
     url, latest.json, base.url, nat.url, folder.num, update.date, update.dates, label, file,
     col.cw
   )
-
-  # if limit is not NULL
-  if (!is.null(limit)) {
-    if (!is.numeric(limit)) {
-      stop("Param 'limit' must be an integer")
-    }
-
-    if (is.numeric(limit)) {
-      df <- df |>
-        dplyr::slice_head(n = limit)
-    }
-  }
 
   return(df)
 }
