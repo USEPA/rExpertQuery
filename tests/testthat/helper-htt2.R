@@ -136,6 +136,16 @@ record_to_tests <- function(subdir, code) {
 }
 
 with_test_mocks <- function(dir, code) {
-  # testthat::test_path builds an absolute path in the test context
-  httptest2::with_mock_dir(testthat::test_path("htt2", dir), code)
+  # Ensure recording is off, and restore on exit
+  old_opts <- options("httptest2.capture" = FALSE)
+  on.exit(options(old_opts), add = TRUE)
+
+  # Absolute path to the mock directory
+  path <- testthat::test_path("htt2", dir)
+  if (!dir.exists(path)) {
+    stop("Mock dir not found: ", path)
+  }
+
+  message("with_test_mocks using: ", normalizePath(path, winslash = "/"))
+  httptest2::with_mock_dir(path, code)
 }
