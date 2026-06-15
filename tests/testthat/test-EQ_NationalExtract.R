@@ -81,7 +81,7 @@ testthat::test_that("EQ_NationalExtract returns all expected columns for TMDLs",
     "wasteLoadAllocation", "planSummaryLink"
   )
 
-  res <- EQ_NationalExtract("tmdls")
+  res <- EQ_NationalExtract("tmdl")
   testthat::expect_true(is.data.frame(res))
   testthat::expect_equal(length(setdiff(expected, names(res))), 0)
 })
