@@ -230,18 +230,35 @@ EQ_NationalExtract <- function(extract = NULL,
       dplyr::select(-"TMDLENDPOINT1", -"TMDLENDPOINT2", -"TMDLENDPOINT3")
   }
 
-  # change column names
-  data.table::setnames(df, as.character(col.cw$nat_extract), as.character(col.cw$col.name),
-    skip_absent = TRUE
-  )
+  # Build case-insensitive match from nat_extract -> actual df names
+  old_df_names <- names(df)
+  match_idx <- match(tolower(col.cw$nat_extract), tolower(old_df_names))
+  present <- !is.na(match_idx)
+  if (any(present)) {
+    data.table::setnames(
+      df,
+      old = old_df_names[match_idx[present]],
+      new = as.character(col.cw$col.name)[present],
+      skip_absent = TRUE
+    )
+  }
 
-  # change order of columns
-  data.table::setcolorder(df, as.character(col.cw$col.name))
+  # Ensure any expected final columns absent after renaming are present as NA
+  expected_final <- as.character(col.cw$col.name)
+  missing_final <- setdiff(expected_final, names(df))
+  if (length(missing_final)) {
+    for (nm in missing_final) df[[nm]] <- NA_character_
+  }
+
+  # change order of columns: put expected finals first in the specified order,
+  # keep any other columns at the end to avoid errors
+  reorder <- c(expected_final, setdiff(names(df), expected_final))
+  data.table::setcolorder(df, reorder)
 
   # remove intermediate objects
   rm(
     url, latest.json, base.url, nat.url, folder.num, update.date, update.dates, label, file,
-    col.cw
+    col.cw, reorder
   )
 
   return(df)

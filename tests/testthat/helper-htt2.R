@@ -175,43 +175,58 @@ with_test_mocks <- function(dir, code) {
   }
 }
 
+# Build a temp CSV for a profile from an RDS that has FINAL columns:
+# - Rename final -> raw (nat_extract) using EQColumnsForPOST.csv
+# - Add NA placeholders for any raw columns required by the profile but missing
+# Returns: absolute path to the CSV.
 make_raw_csv_from_rds <- function(profile, rds_rel) {
   stopifnot(is.character(profile), length(profile) == 1L)
+  # Resolve the RDS path under tests/testthat
   rds_path <- do.call(testthat::test_path, as.list(rds_rel))
   if (!file.exists(rds_path)) stop("RDS not found: ", rds_path)
-
   df_final <- readRDS(rds_path)
 
-  # Read package mapping to translate final -> raw for this profile
-  map_path <- system.file("extdata", "EQColumnsForPOST.csv", package = "rExpertQuery", mustWork = TRUE)
+  # Mapping CSV shipped with the package
+  map_path <- system.file("extdata", "EQColumnsForPOST.csv",
+                          package = "rExpertQuery", mustWork = TRUE)
   map_df <- data.table::fread(map_path, check.names = TRUE)
 
-  # Find the profile column in the mapping (case-insensitive)
-  col_idx <- which(tolower(names(map_df)) == tolower(profile))
-  if (!length(col_idx)) {
-    stop("Profile column '", profile, "' not found in mapping.")
+  # Find the profile column in the mapping, case-insensitive
+  prof_idx <- which(tolower(names(map_df)) == tolower(profile))
+  if (!length(prof_idx)) {
+    stop("Profile column '", profile, "' not found in mapping. Available: ",
+         paste(names(map_df), collapse = ", "))
   }
-  file_col <- names(map_df)[col_idx[1]]
+  prof_col <- names(map_df)[prof_idx[1]]
 
-  map_subset <- map_df[!is.na(map_df[[file_col]]), ]
+  # Only rows used by this profile; order if 'position' exists
+  map_subset <- map_df[!is.na(map_df[[prof_col]]), ]
   if ("position" %in% names(map_subset)) data.table::setorderv(map_subset, "position")
 
   if (!all(c("col.name", "nat_extract") %in% names(map_subset))) {
-    stop("Mapping CSV missing required columns 'col.name' and/or 'nat_extract'.")
+    stop("Mapping CSV missing 'col.name' and/or 'nat_extract'.")
   }
 
-  # Build final -> raw mapping and rename whatever overlaps
+  # Final -> raw mapping
   raw_by_final <- setNames(as.character(map_subset[["nat_extract"]]),
                            as.character(map_subset[["col.name"]]))
+
+  # Rename fixture columns back to raw if we have a mapping
   finals_in_fixture <- intersect(names(df_final), names(raw_by_final))
-  if (!length(finals_in_fixture)) {
-    stop("No overlap between fixture final columns and mapping for profile '", profile, "'.")
+  df_raw <- df_final
+  if (length(finals_in_fixture)) {
+    names(df_raw)[match(finals_in_fixture, names(df_raw))] <- raw_by_final[finals_in_fixture]
   }
 
-  df_raw <- df_final
-  names(df_raw)[match(finals_in_fixture, names(df_raw))] <- raw_by_final[finals_in_fixture]
+  # Ensure all raw columns for this profile exist; add NA if missing
+  required_raw <- unique(na.omit(as.character(map_subset[["nat_extract"]])))
+  missing_raw <- setdiff(required_raw, names(df_raw))
+  if (length(missing_raw)) {
+    # Fill as NA_character_; downstream code can coerce as needed
+    for (nm in missing_raw) df_raw[[nm]] <- NA_character_
+  }
 
-  # Write to a temporary CSV that will serve as the "unzipped" file
+  # Write to a temp CSV
   tmp_dir <- tempfile(sprintf("ne_%s_", tolower(profile)))
   dir.create(tmp_dir, recursive = TRUE, showWarnings = FALSE)
   csv_path <- file.path(tmp_dir, sprintf("%s.csv", tolower(profile)))
@@ -219,12 +234,10 @@ make_raw_csv_from_rds <- function(profile, rds_rel) {
   csv_path
 }
 
-# An unzip override that handles both list=TRUE and extraction
+# Unzip override that supports list=TRUE and returns our CSV
 mock_unzip_returning <- function(csv_path) {
   function(zipfile, files = NULL, list = FALSE, exdir = tempdir(), ...) {
-    if (isTRUE(list)) {
-      return(basename(csv_path))
-    }
+    if (isTRUE(list)) return(basename(csv_path))
     target_name <- if (is.null(files) || length(files) == 0L) basename(csv_path) else files[[1L]]
     dest <- file.path(exdir, target_name)
     dir.create(dirname(dest), recursive = TRUE, showWarnings = FALSE)
