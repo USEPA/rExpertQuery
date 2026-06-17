@@ -131,7 +131,7 @@ testthat::test_that("EQ_NationalExtract returns all expected columns for Sources
           col.name   = expected,
           nat_extract = expected,
           position   = seq_along(expected),
-          actions    = seq_along(expected) # non-NA marks inclusion for this profile
+          sources    = seq_along(expected) # non-NA marks inclusion for this profile
         )
       } else {
         real_fread(input, ...)
