@@ -89,14 +89,14 @@ actions.df <- actions.df |>
 dir.create("tests/testthat/htt2/NATact", recursive = TRUE, showWarnings = FALSE)
 saveRDS(actions.df, "tests/testthat/htt2/NATact/actions.rds")
 
-tmdls.df <- EQ_NationalExtract("tmdl")
+sources.df <- EQ_NationalExtract("sources")
 
-tmdls.df <- tmdls.df |>
+sources.df <- sources.df |>
   dplyr::slice_sample(n = 10)
 
-dir.create("tests/testthat/htt2/NATtmdl", recursive = TRUE, showWarnings = FALSE)
-saveRDS(tmdls.df, "tests/testthat/htt2/NATtmdl/tmdls.rds")
+dir.create("tests/testthat/htt2/NATsource", recursive = TRUE, showWarnings = FALSE)
+saveRDS(sources.df, "tests/testthat/htt2/NATsource/sources.rds")
 
-rm(actions.df, tmdls.df)
+rm(actions.df, sources.df)
 
 message("All fixtures recorded under: ", normalizePath(fixtures_root, winslash = "/"))
