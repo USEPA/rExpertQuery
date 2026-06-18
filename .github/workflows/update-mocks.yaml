@@ -1,0 +1,74 @@
+name: update test mocks
+
+on:
+  schedule:
+    - cron: '0 8 1 * *'  # first day of every month at 08:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-test-mocks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install packages
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::httptest2
+            any::withr
+            any::testthat
+            any::data.table
+
+      - name: Run script to update mocks
+        run: Rscript dev/record-mocks-httptest2.R
+
+      - name: Commit changes to a new branch
+        env:
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          set -e
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          TS=$(date -u +'%Y%m%d-%H%M%S')
+          BRANCH="chore/update-mocks-${TS}"
+          git checkout -b "$BRANCH"
+          git add -A tests/testthat/htt2
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: update test mocks [skip ci]"
+          git push -u origin "$BRANCH"
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+
+      - name: Open pull request
+        if: env.BRANCH != ''
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          set -e
+          TITLE="chore: update test mocks"
+          BODY="This PR updates recorded httptest2 fixtures."
+          # Try to create PR; if one already exists from this branch, just exit successfully
+          curl -s -o /dev/null -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: token ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${GH_REPO}/pulls \
+            -d "$(jq -n --arg t "$TITLE" --arg h "$BRANCH" --arg b "$BASE" --arg body "$BODY" \
+                  '{title:$t, head:$h, base:$b, body:$body}')" \
+            | grep -E '20[0-9]'
