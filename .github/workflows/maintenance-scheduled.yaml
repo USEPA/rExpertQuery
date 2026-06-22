@@ -34,7 +34,7 @@ with:
 - name: Install dependencies
 uses: r-lib/actions/setup-r-dependencies@v2
 
-- name: Install EPATADA package
+- name: Install rExpertQuery package
 run: |
   install.packages("remotes")
 library(remotes)

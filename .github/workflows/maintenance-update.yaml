@@ -36,11 +36,11 @@ shell: Rscript {0}
 
 - name: Update reference files
 run: |
-  library(EPATADA)
-EPATADA:::.TADA_UpdateRefFiles()
+  library(rExpertQuery)
+rExpertQuery:::EQ_UpdateDomainValues()
 shell: Rscript {0}
 
-- name: Commit updated reference files
+- name: Commit updated ATTAINS domain values
 uses: EndBug/add-and-commit@v10
 with:
   author_name: 'github-actions[bot]'
@@ -48,7 +48,7 @@ author_email: 'github-actions[bot]@users.noreply.github.com'
 message: "Update reference files"
 add: '[./inst/extdata/*]'
 
-- name: Update example data
+- name: Update domain values
 run: |
   library(EPATADA)
 EPATADA:::.TADA_UpdateExampleData()
