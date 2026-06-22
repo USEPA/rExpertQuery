@@ -1,6 +1,9 @@
-name: Component File Update
+name: Scheduled Component File Update
 
 on:
+  # Daily at 2:01 AM UTC
+  schedule:
+    - cron: '1 2 * * *'
   workflow_dispatch:
 
 permissions:
@@ -14,11 +17,20 @@ jobs:
       EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
 
     steps:
-      - name: Checkout repo
+      - name: Checkout maintenance branch (if exists)
+        id: checkout_maint
         uses: actions/checkout@v4
         with:
+          ref: maintenance-branch
           fetch-depth: 0
-          # ref: ${{ github.ref_name }}  # optional; omit to use the ref that triggered the run
+        continue-on-error: true
+
+      - name: Fallback to develop branch
+        if: ${{ steps.checkout_maint.outcome == 'failure' }}
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
 
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
@@ -45,10 +57,11 @@ jobs:
           library(rExpertQuery)
           rExpertQuery:::EQ_UpdateDomainValues()
 
-      - name: Commit updated internal ref data
+      - name: Commit updated internal ref
         uses: EndBug/add-and-commit@v10
         with:
           author_name: 'github-actions[bot]'
-          author_email: 'github-actions[bot]@users.noreply.github.com'
+          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
           message: "chore: Update example data [skip ci]"
           add: './data/*'
+          new_branch: maintenance-branch
