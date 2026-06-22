@@ -38,31 +38,16 @@ uses: r-lib/actions/setup-r-dependencies@v2
 run: |
   install.packages("remotes")
 library(remotes)
-remotes::install_github("USEPA/EPATADA", ref = "develop", dependencies = TRUE, force = TRUE)
+remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
 shell: Rscript {0}
 
-- name: Update reference files
+- name: Update ATTAINS domain values
 run: |
-  library(EPATADA)
-EPATADA:::.TADA_UpdateRefFiles()
+  library(rExpertQuery)
+rExpertQuery:::EQ_UpdateDomainValues()
 shell: Rscript {0}
 
-- name: Commit updated reference files
-uses: EndBug/add-and-commit@v10
-with:
-  author_name: 'github-actions[bot]'
-author_email: 'github-actions[bot]@users.noreply.github.com'
-message: "Update reference files"
-add: '[./inst/extdata/*]'
-new_branch: maintenance-branch
-
-- name: Update example data
-run: |
-  library(EPATADA)
-EPATADA:::.TADA_UpdateExampleData()
-shell: Rscript {0}
-
-- name: Commit updated example data
+- name: Commit updated internal ref
 uses: EndBug/add-and-commit@v10
 with:
   author_name: 'github-actions[bot]'
