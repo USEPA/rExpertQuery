@@ -1,0 +1,592 @@
+# Getting Started With rExpertQuery
+
+## About Expert Query and rExpertQuery
+
+[Expert Query](https://owapps.epa.gov/expertquery/attains/tmdl) empowers
+users to access surface water quality data from the [Assessment and TMDL
+Tracking and Implementation System
+(ATTAINS)](https://www.epa.gov/waterdata/upload-data-resources-registered-attains-usershttps://www.epa.gov/waterdata/upload-data-resources-registered-attains-users)
+encompassing Assessment decisions (under Clean Water Act Sections
+303(d), 305(b), and 106) and Action data like Total Maximum Daily Loads
+(TMDLs), Advance Restoration Plans (ARPs), and Protection Approaches.
+
+The tool supports querying and downloading data within and across
+organizations (states or tribes), such as querying all the data within
+an EPA region or all nutrient TMDLs nationally. It also allows users to
+download national ATTAINS data extracts.
+
+rExpertQuery takes this a step further as its functions facilitate
+querying the Expert Query web services from R functions which allow the
+user to import the resulting data sets directly in to R for more
+detailed review and analysis.
+
+It is crucial to be aware of certain complexities inherent in the data
+and querying process. Users are cautioned against direct comparisons
+between states due to differences in water quality standards and
+assessment methodologies.
+
+While Expert Query facilitates data querying, it lacks built-in summary
+capabilities. Users are encouraged to download and summarize data, but
+use caution when relying on row counts, as duplicate entries may occur.
+This complexity arises from multiple tables that have many-to-many
+relationships. Future vignettes and functions may provide examples of
+how to summarize Expert Query data.
+
+## Installation
+
+You must first have R and R Studio installed to use the rExpert Query
+(see instructions below if needed). rExpert Query is in active
+development, therefore we highly recommend that you update it and all of
+its dependency libraries each time you use the package.
+
+You can install and/or update the [rExpertQuery
+Package](https://github.com/USEPA/rExpertQuery) and all dependencies by
+running:
+
+``` r
+
+if (!"remotes" %in% installed.packages()) {
+  install.packages("remotes")
+}
+
+remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
+
+library(dplyr)
+library(data.table)
+```
+
+## EQ_Actions
+
+[**EQ_Actions()**](https://usepa.github.io/rExpertQuery/reference/EQ_Actions.htmlhttps://usepa.github.io/rExpertQuery/reference/EQ_Actions.html)queries
+ATTAINS Actions data by a variety of user supplied parameters. For
+example, you might like to run a relatively simple query return data for
+all Region 4 Actions that should not be included in Measures.
+
+``` r
+
+# query Actions from Region 4 that are not included in Measures
+R4_actions_not_meas <- rExpertQuery::EQ_Actions(api_key = testkey, region = 4, in_meas = "No")
+```
+
+This query returns 202 results, so we’ll review only a small random
+subset of them in a data table just to get an idea of what those results
+look like:
+
+``` r
+
+# create random subset of R4 query results
+R4_subset <- R4_actions_not_meas |>
+  dplyr::slice_sample(n = 20)
+
+# create data tab;e
+DT::datatable(R4_subset, options = list(pageLength = 2, scrollX = TRUE))
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+You might also want to create a more specific query. For example, you
+might want to find all Actions from Missouri that were issued by EPA
+with completion dates between 2000-01-01 and 2020-12-31. As this more
+detailed query returns a smaller data set, the data table shows all
+results of the query
+
+``` r
+
+# query Actions for Missouri Actions with action agency "EPA" and parameter group "PATHOGENS"
+MO_epa <- rExpertQuery::EQ_Actions(
+  api_key = testkey, statecode = "MO",
+  act_agency = "EPA",
+  param_group = "PATHOGENS",
+  comp_date_start = "2000-01-01",
+  comp_date_end = "2020-12-31"
+)
+```
+
+    ## [1] "EQ_Actions: The current query will return 4 rows."
+
+``` r
+
+# view MO results
+DT::datatable(MO_epa, options = list(pageLength = 10, scrollX = TRUE))
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+## EQ_ActionsDocuments
+
+[**EQ_ActionsDocuments()**](https://usepa.github.io/rExpertQuery/reference/EQ_ActionsDocuments.html)queries
+ATTAINS Actions Documents data with user supplied parameters. One of its
+unique features is that you can search the documents themselves by
+keyword or phrase. For example, you might want to find all Actions
+Documents which contained the keyword “nutrients”.
+
+``` r
+
+# Actions Documents containing "nutrient"
+Nutrient_docs <- rExpertQuery::EQ_ActionsDocuments(
+  doc_query = "nutrient",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_ActionDocuments: The current query will return 16,962 rows."
+
+This query yields 16,962 results. As well as providing the Action and
+Document Name for all results, *EQ_Actions()* also returns the column
+“actionDocumentUrl” containing the URL to link to the document. Because
+the query yields so many results, we’ll take a look at a smaller subset
+of them in a data table to understand the structure of the results.
+
+``` r
+
+Nutrient_docs_subset <- Nutrient_docs |>
+  dplyr::slice_sample(n = 20)
+
+DT::datatable(Nutrient_docs_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+You can also query by more typical parameters like organization name
+(org_name), EPA region (region) , or action type (act_type). The example
+below demonstrates using the function to search for 4B Restoration
+Approach documents from Pennsylvania.
+
+``` r
+
+PA_4B <- rExpertQuery::EQ_ActionsDocuments(
+  statecode = "PA", act_type = "4B Restoration Approach",
+  api = testkey
+)
+```
+
+    ## [1] "EQ_ActionDocuments: The current query will return 14 rows."
+
+``` r
+
+PA_4B_subset <- PA_4B |>
+  dplyr::slice_sample(n = 20)
+
+DT::datatable(PA_4B_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+As there are only 17 4B Restoration Approach documents from
+Pennsylvania, we can review them all in the table below. As in the other
+Actions Document Example, the actionDocumentUrl column contains a link
+to the document.
+
+## EQ_Assessments
+
+[**EQ_Assessments()**](https://usepa.github.io/rExpertQuery/reference/EQ_Assessments.html)queries
+ATTAINS Assessments data. For many use cases, querying Assessments for a
+single organization or state is desirable. The next example shows how to
+query by a single state and use class for the latest cycle.
+
+``` r
+
+KY_assessments <- rExpertQuery::EQ_Assessments(
+  statecode = "KY",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_Assessments: The current query will return 20,254 rows."
+
+There are 20,254 results for the basic latest cycle Kentucky query.
+
+``` r
+
+KY_subset <- KY_assessments |>
+  dplyr::slice_sample(n = 20)
+
+DT::datatable(KY_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+It is also possible to design more specific assessment queries. For
+example, you might want to narrow down the results to show causes for a
+use class in one region. The code below demonstrates querying for EPA
+Region 3 Assessments in the ECOLOGICAL_USE group with at least one
+parameter with the status “Cause”. The data table below shows a random
+sample of the results from this Region 3 Query.
+
+``` r
+
+R3_ecological <- rExpertQuery::EQ_Assessments(
+  region = 3,
+  use_group = "ECOLOGICAL_USE",
+  param_status = "Cause",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_Assessments: The current query will return 150,188 rows."
+
+``` r
+
+R3_ecological_subset <- R3_ecological |>
+  dplyr::slice_sample(n = 20)
+
+DT::datatable(R3_ecological_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+## EQ_AssessmentUnits
+
+[**EQ_AssessmentUnits()**](https://usepa.github.io/rExpertQuery/reference/EQ_AssessmentUnits.html)queries
+ATTAINS Assessment Units data. The default is to only return “Active”
+assessment units, but input params can be adjusted to query for
+“Retired” or “Historical” assessment units in addition to or instead of
+“Active”. The example below shows a simple example for querying for
+Active assessment units for a single state.
+
+``` r
+
+RI_aus <- rExpertQuery::EQ_AssessmentUnits(
+  statecode = "RI",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_AssessmentUnits: The current query will return 1,772 rows."
+
+We can take a look at a random selection of 20 of the active assessment
+units from Rhode Island.
+
+``` r
+
+RI_aus_subset <- RI_aus |>
+  dplyr::slice_sample(n = 20)
+
+DT::datatable(RI_aus_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+It is is also possible to search for retired assessment units, as show
+in the example from Florida below.
+
+``` r
+
+FL_retired <- rExpertQuery::EQ_AssessmentUnits(
+  statecode = "FL",
+  au_status = "Retired",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_AssessmentUnits: The current query will return 0 rows."
+
+``` r
+
+FL_ret_subset <- FL_retired |>
+  dplyr::slice_sample(n = 20)
+
+DT::datatable(FL_ret_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+## EQ_AUsMLs
+
+[**EQ_AUsMLs()**](https://usepa.github.io/rExpertQuery/reference/EQ_AUsMLs.html)returns
+information on the monitoring locations used to make assessment
+determinations at specific assessment units. Not all organizations
+provide monitoring location data in ATTAINS. The first example uses a
+state that does supply some monitoring location data.
+
+``` r
+
+AK_ausmls <- rExpertQuery::EQ_AUsMLs(
+  statecode = "AK",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_AUsMLs: The current query will return 844 rows."
+
+``` r
+
+AK_filt <- AK_ausmls |> dplyr::filter(!is.na(monitoringLocationId))
+```
+
+While the resulting data set from the query has 844 results, filtering
+the data set to retain only records where a monitoring location id has
+been recorded leads to a data set with 208 results.
+
+## EQ_CatchCorr
+
+[**EQ_CatchCorr()**](https://usepa.github.io/rExpertQuery/reference/EQ_CatchCorr.html)
+queries ATTAINS Catchment Correspondence data. These queries return
+large files, particularly if a large geospatial area is defined, so best
+practice is to make your query as specific as possible. Many machines
+may not have enough memory to load an entire state’s worth of catchment
+correspondence data in an R session.
+
+``` r
+
+DC_catch <- rExpertQuery::EQ_CatchCorr(
+  statecode = "DC",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_CatchCorr: The current query will return 2,438 rows."
+
+The table below shows 20 random results from the DC catchment
+correspondence query.
+
+``` r
+
+DC_subset <- DC_catch |>
+  dplyr::slice_sample(n = 20)
+
+DT::datatable(DC_subset, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+It is also possible to focus on a specific assessment unit in catchment
+correspondence queries. The next example queries for a single Illinois
+assessment unit by its id.
+
+``` r
+
+IL_N99_catch <- rExpertQuery::EQ_CatchCorr(
+  statecode = "IL",
+  auid = "IL_N-99",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_CatchCorr: The current query will return 249 rows."
+
+The resulting table shows all results from this much smaller query.
+
+``` r
+
+IL_N99_subset <- IL_N99_catch |>
+  dplyr::slice_sample(n = 20)
+
+DT::datatable(IL_N99_catch, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+## EQ_NationalExtract
+
+[**EQ_NationalExtract()**](https://usepa.github.io/rExpertQuery/reference/EQ_NationalExtract.html)provides
+an efficient method for importing the [Expert Query National
+Extracts](https://owapps.epa.gov/expertquery/national-downloads). This
+function requires one argument, “extract” to specify which of the
+National Extracts to download. The following examples show how to
+download the TMDL and Actions extracts. The extracts are all large files
+and some may not open in R if there is not enough memory available.
+
+``` r
+
+Nat_tmdls <- rExpertQuery::EQ_NationalExtract("tmdl")
+```
+
+    ## [1] "EQ_NationalExtract: downloading Total Maximum Daily Load Profile (Expert Query National Extract). It was last updated on April 24, 2026 at 10:28 PM EDT."
+
+``` r
+
+Nat_actions <- rExpertQuery::EQ_NationalExtract("actions")
+```
+
+    ## [1] "EQ_NationalExtract: downloading Actions Profile (Expert Query National Extract). It was last updated on April 24, 2026 at 10:29 PM EDT."
+
+## EQ_Sources
+
+[**EQ_Sources()**](https://usepa.github.io/rExpertQuery/reference/EQ_Sources.html)queries
+ATTAINS Sources data. Not all organizations report sources in their
+assessments,
+
+but for those that do, querying by source can be another useful option
+for querying ATTAINS data. The next code chunk shows how to query
+sources for one state by a parameter group, for example searching for
+sources related to the parameter group “HABITAT ALTERATIONS” in
+Wisconsin.
+
+``` r
+
+WI_habalt_sources <- rExpertQuery::EQ_Sources(
+  statecode = "WI",
+  param_group = "HABITAT ALTERATIONS",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_Sources: The current query will return 587 rows."
+
+There were 587 for this query, which can be reviewed in the data table
+below.
+
+``` r
+
+DT::datatable(WI_habalt_sources, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+It is also possible to query directly be the name of the source. The
+example below queries all organizations for the source
+“LEGACY/HISTORICAL POLLUTANTS”.
+
+``` r
+
+legacy_sources <- rExpertQuery::EQ_Sources(
+  source = "LEGACY/HISTORICAL POLLUTANTS",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_Sources: The current query will return 188 rows."
+
+There were 587 records for the source “LEGACY/HISTORICAL POLLUTANTS”.
+These results can be reviewed in the table below to see which states,
+regions, etc. are associated with this source.
+
+``` r
+
+DT::datatable(legacy_sources, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+## EQ_TMDLs
+
+[**EQ_TMDLs()**](https://usepa.github.io/rExpertQuery/reference/EQ_TMDLs.html)
+queries ATTAINS TMDL data and can utilize many search parameters. The
+example below shows querying Hawaii for TMDLs with a source_type of
+“Both”, which means that both point and non point sources were part of
+the TMDL.
+
+``` r
+
+HI_both_tmdls <- rExpertQuery::EQ_TMDLs(
+  statecode = "HI",
+  source_type = "Both",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_TMDL: The current query will return 474 rows."
+
+There 474 can be reviewed in the data table below.
+
+``` r
+
+DT::datatable(HI_both_tmdls, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+This example demonstrates using another combination of arguments in the
+query, searching for records from EPA Region 10 that pertain to the
+addressed parameter group “CAUSE UNKNOWN”.
+
+``` r
+
+R10_unknown <- rExpertQuery::EQ_TMDLs(
+  region = 10,
+  ad_param_group = "CAUSE UNKNOWN",
+  api_key = testkey
+)
+```
+
+    ## [1] "EQ_TMDL: The current query will return 588 rows."
+
+There 588 are displayed in the table below.
+
+``` r
+
+DT::datatable(R10_unknown, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
+
+## EQ_DomainValues
+
+[**EQ_DomainValues()**](https://usepa.github.io/rExpertQuery/reference/EQ_DomainValues.html)
+is a function to help users understand the available domain values can
+be used in the other rExpertQuery functions. If run with no argument
+supplied, it will return a list of all available domains that can be
+used as an argument in **EQ_DomainValues()**.
+
+``` r
+
+rExpertQuery::EQ_DomainValues()
+```
+
+    ## [1] "EQ_DomainValues: getting list of available domain names. Values in the eq_param column can be used as inputs in EQ_DomainValues."
+
+    ## EQ_DomainValues: domain list retrieved from ATTAINS web services.
+
+    ##              eq_param         attains_ws_name attains_ws_field
+    ## 1          act_agency              AgencyCode             name
+    ## 2          act_agency              AgencyCode             name
+    ## 3          act_status        ActionStatusType             name
+    ## 4            act_type              ActionType             code
+    ## 5            ad_param           ParameterName             name
+    ## 6      ad_param_group  ParameterGroupCodeType             name
+    ## 7        assess_basis     AssessmentBasisCode             name
+    ## 8      assess_methods          MethodTypeCode             name
+    ## 9        assess_types      AssessmentTypeCode             name
+    ## 10          au_status         StatusIndicator             name
+    ## 11              cause           ParameterName             name
+    ## 12      delist_reason     DelistingReasonCode             name
+    ## 13           doc_type      ActionDocumentType             name
+    ## 14          file_type        DocumentFileType             name
+    ## 15           loc_type        LocationTypeCode             name
+    ## 16             org_id                 OrgName             code
+    ## 17           org_name                 OrgName             name
+    ## 18       param_attain ParameterAttainmentCode             name
+    ## 19        param_group  ParameterGroupCodeType             name
+    ## 20         param_name           ParameterName             name
+    ## 21 param_state_ir_cat     StateIRCategoryCode             name
+    ## 22       param_status         ParameterStatus             name
+    ## 23       source_scale     SizeSourceScaleText             name
+    ## 24        source_type              SourceName             name
+    ## 25          statecode            OrgStateCode             name
+    ## 26           use_name                 UseName             name
+    ## 27        use_support       UseAttainmentCode             name
+    ## 28         water_type           WaterTypeCode             name
+
+The example below shows how to return allowable values for “org_id”.
+
+``` r
+
+Org_vals <- rExpertQuery::EQ_DomainValues(domain = "org_id")
+```
+
+    ## [1] "EQ_DomainValues: For org_id the values in the 'code' column of the function output are the allowable values for rExpert Query functions."
+
+    ## EQ_DomainValues: domain list retrieved from ATTAINS web services.
+
+``` r
+
+DT::datatable(Org_vals, options = list(pageLength = 5, scrollX = TRUE), escape = FALSE)
+```
+
+    ## Error in `loadNamespace()`:
+    ## ! there is no package called 'webshot'
