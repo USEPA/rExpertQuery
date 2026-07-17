@@ -1,8 +1,8 @@
-name: Update test mocks
+name: Scheduled Component File Update
 
 on:
   schedule:
-    - cron: '0 8 1 * *' # first day of every month at 08:00 UTC
+    - cron: '1 2 * * *' # daily at 2:01 AM UTC
   workflow_dispatch:
 
 permissions:
@@ -10,30 +10,45 @@ permissions:
   pull-requests: write
 
 jobs:
-  update-test-mocks:
+  maintenance_updates:
     runs-on: ubuntu-latest
 
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
+
     steps:
-      - name: Check out repository
+      - name: Check out default branch
         uses: actions/checkout@v4
         with:
-          persist-credentials: true
           fetch-depth: 0
+          persist-credentials: true
+          ref: develop
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
-
-      - name: Install packages
-        uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          packages: |
-            any::httptest2
-            any::withr
-            any::testthat
-            any::data.table
+          use-public-rspm: true
 
-      - name: Run script to update mocks
-        run: Rscript dev/record-mocks-httptest2.R
+      - name: Install dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+
+      - name: Install rExpertQuery package
+        run: |
+          install.packages("remotes")
+          remotes::install_github(
+            "USEPA/rExpertQuery",
+            ref = "develop",
+            dependencies = TRUE,
+            force = TRUE
+          )
+        shell: Rscript {0}
+
+      - name: Update ATTAINS domain values
+        run: |
+          library(rExpertQuery)
+          rExpertQuery:::EQ_UpdateDomainValues()
+        shell: Rscript {0}
 
       - name: Create branch and commit changes
         id: commit
@@ -44,10 +59,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           TS=$(date -u +'%Y%m%d-%H%M%S')
-          BRANCH="chore/update-mocks-${TS}"
+          BRANCH="chore/update-component-${TS}"
 
           git checkout -b "$BRANCH"
-          git add -A tests/testthat/htt2
+          git add -A data/
 
           if git diff --cached --quiet; then
             echo "No changes to commit"
@@ -55,7 +70,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore: update test mocks"
+          git commit -m "chore: update component data"
           git push -u origin "$BRANCH"
 
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
@@ -69,8 +84,8 @@ jobs:
         run: |
           set -e
 
-          TITLE="chore: update test mocks"
-          BODY="Automated update of recorded httptest2 fixtures."
+          TITLE="chore: update component data"
+          BODY="Automated update of component/internal data files."
 
           gh pr create \
             --repo "$GH_REPO" \

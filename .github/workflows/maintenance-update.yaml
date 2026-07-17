@@ -1,0 +1,78 @@
+name: Manual Component File Update
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch to update'
+        required: true
+        default: 'feature/my-branch'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
+
+    steps:
+      - name: Refuse develop branch
+        run: |
+          if [ "${{ inputs.ref }}" = "develop" ]; then
+            echo "Direct updates to develop are not allowed."
+            exit 1
+          fi
+
+      - name: Check out selected branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+          ref: ${{ inputs.ref }}
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+
+      - name: Install rExpertQuery package
+        run: |
+          install.packages("remotes")
+          remotes::install_github(
+            "USEPA/rExpertQuery",
+            ref = "develop",
+            dependencies = TRUE,
+            force = TRUE
+          )
+        shell: Rscript {0}
+
+      - name: Update ATTAINS domain values
+        run: |
+          library(rExpertQuery)
+          rExpertQuery:::EQ_UpdateDomainValues()
+        shell: Rscript {0}
+
+      - name: Commit and push updates
+        run: |
+          set -e
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          BRANCH="${{ inputs.ref }}"
+          git add -A data/
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "chore: update component data"
+          git push origin "HEAD:$BRANCH"

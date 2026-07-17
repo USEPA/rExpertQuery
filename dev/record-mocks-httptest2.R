@@ -1,3 +1,6 @@
+# source helper function
+source("tests/testthat/helper-htt2.R")
+
 # testthat recordings for functions using EQ web services
 record_to_tests("ORad", {
   EQ_ActionsDocuments(
