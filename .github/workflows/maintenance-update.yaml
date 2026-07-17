@@ -56,7 +56,7 @@ jobs:
       - name: Update ATTAINS domain values
         run: |
           library(rExpertQuery)
-          rExpertQuery:::EQ_UpdateInternalDomainValues()
+          rExpertQuery:::EQ_UpdateInternalDomainValues(api_key = rExpertQuery:::.setEQKey())
         shell: Rscript {0}
 
       - name: Commit and push updates
