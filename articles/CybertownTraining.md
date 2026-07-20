@@ -62,9 +62,16 @@ remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TR
 
     ## Downloading GitHub repo USEPA/rExpertQuery@develop
 
-    ## 
+    ## diffobj (0.3.6 -> 0.3.8) [CRAN]
+    ## sp      (2.2-1 -> 2.2-3) [CRAN]
+
+    ## Installing 2 packages: diffobj, sp
+
+    ## Installing packages into '/home/runner/work/_temp/Library'
+    ## (as 'lib' is unspecified)
+
     ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ## * checking for file ‘/tmp/RtmpZ3iUrH/remotes1fd1117d49f5/USEPA-rExpertQuery-a698e7e/DESCRIPTION’ ... OK
+    ## * checking for file ‘/tmp/Rtmpqg2VXT/remotes1fbc154e2871/USEPA-rExpertQuery-513d388/DESCRIPTION’ ... OK
     ## * preparing ‘rExpertQuery’:
     ## * checking DESCRIPTION meta-information ... OK
     ## * checking for LF line-endings in source and make files and shell scripts
@@ -244,7 +251,7 @@ A screenshot of the Expert Query National Downloads web page
     assessments.nat <- rExpertQuery::EQ_NationalExtract("assessments")
     ```
 
-        ## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on July 10, 2026 at 09:28 PM EDT."
+        ## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on July 17, 2026 at 09:29 PM EDT."
 
     ``` r
 
@@ -1047,7 +1054,7 @@ keyword.
     )
     ```
 
-    This query yields 16,985 results. As well as providing the actionId
+    This query yields 16,992 results. As well as providing the actionId
     and documentName for all results, *EQ_Actions()* also returns the
     column “actionDocumentUrl” containing the URL to link to the
     document. Because the query yields so many results, we’ll take a
