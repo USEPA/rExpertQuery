@@ -30,7 +30,7 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install dependencies
+       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
 
       - name: Install rExpertQuery package
@@ -44,53 +44,32 @@ jobs:
           )
         shell: Rscript {0}
 
-      - name: Update ATTAINS domain values
+      - name: Update ATTAINS domain values and save CSV
         run: |
           library(rExpertQuery)
-          rExpertQuery:::EQ_UpdateDomainValues()
+
+          # Get/update the data
+          df <- rExpertQuery:::EQ_UpdateInternalDomainValues(
+            api_key = rExpertQuery:::.setEQKey()
+          )
+
+          # Ensure output directory exists
+          dir.create("inst/extdata", recursive = TRUE, showWarnings = FALSE)
+
+          # Save as CSV
+          write.csv(df, "inst/extdata/EQParamsCrosswalk.csv", row.names = FALSE)
         shell: Rscript {0}
 
-      - name: Create branch and commit changes
-        id: commit
+      - name: Commit and push updates
         run: |
           set -e
-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          TS=$(date -u +'%Y%m%d-%H%M%S')
-          BRANCH="chore/update-component-${TS}"
-
-          git checkout -b "$BRANCH"
-          git add -A data/
-
+          BRANCH="${{ inputs.ref }}"
+          git add inst/extdata/EQParamsCrosswalk.csv
           if git diff --cached --quiet; then
             echo "No changes to commit"
-            echo "branch=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-
-          git commit -m "chore: update component data"
-          git push -u origin "$BRANCH"
-
-          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
-
-      - name: Open pull request
-        if: steps.commit.outputs.branch != ''
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
-          BASE_BRANCH: develop
-        run: |
-          set -e
-
-          TITLE="chore: update component data"
-          BODY="Automated update of component/internal data files."
-
-          gh pr create \
-            --repo "$GH_REPO" \
-            --head "${{ steps.commit.outputs.branch }}" \
-            --base "$BASE_BRANCH" \
-            --title "$TITLE" \
-            --body "$BODY" \
-            || echo "PR may already exist"
+          git commit -m "chore: update EQParamsCrosswalk"
+          git push origin "HEAD:$BRANCH"
