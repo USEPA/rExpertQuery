@@ -53,26 +53,32 @@ jobs:
           )
         shell: Rscript {0}
 
-      - name: Update ATTAINS domain values
+      - name: Update ATTAINS domain values and save CSV
         run: |
           library(rExpertQuery)
-          rExpertQuery:::EQ_UpdateInternalDomainValues(api_key = rExpertQuery:::.setEQKey())
+
+          # Get/update the data
+          df <- rExpertQuery:::EQ_UpdateInternalDomainValues(
+            api_key = rExpertQuery:::.setEQKey()
+          )
+
+          # Ensure output directory exists
+          dir.create("inst/extdata", recursive = TRUE, showWarnings = FALSE)
+
+          # Save as CSV
+          write.csv(df, "inst/extdata/EQParamsCrosswalk.csv", row.names = FALSE)
         shell: Rscript {0}
 
       - name: Commit and push updates
         run: |
           set -e
-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           BRANCH="${{ inputs.ref }}"
-          git add -A data/
-
+          git add inst/extdata/EQParamsCrosswalk.csv
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
-
-          git commit -m "chore: update component data"
+          git commit -m "chore: update EQParamsCrosswalk"
           git push origin "HEAD:$BRANCH"
