@@ -62,16 +62,16 @@ remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TR
 
     ## Downloading GitHub repo USEPA/rExpertQuery@develop
 
-    ## diffobj (0.3.6 -> 0.3.8) [CRAN]
-    ## sp      (2.2-1 -> 2.2-3) [CRAN]
+    ## cpp11    (NA -> 0.5.5) [CRAN]
+    ## progress (NA -> 1.2.3) [CRAN]
 
-    ## Installing 2 packages: diffobj, sp
+    ## Installing 2 packages: cpp11, progress
 
     ## Installing packages into '/home/runner/work/_temp/Library'
     ## (as 'lib' is unspecified)
 
     ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ## * checking for file ‘/tmp/Rtmpqg2VXT/remotes1fbc154e2871/USEPA-rExpertQuery-513d388/DESCRIPTION’ ... OK
+    ## * checking for file ‘/tmp/RtmpUC9vVB/remotes21d114a53511/USEPA-rExpertQuery-c1490a4/DESCRIPTION’ ... OK
     ## * preparing ‘rExpertQuery’:
     ## * checking DESCRIPTION meta-information ... OK
     ## * checking for LF line-endings in source and make files and shell scripts
@@ -251,7 +251,7 @@ A screenshot of the Expert Query National Downloads web page
     assessments.nat <- rExpertQuery::EQ_NationalExtract("assessments")
     ```
 
-        ## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on July 17, 2026 at 09:29 PM EDT."
+        ## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on August 07, 2026 at 09:30 PM EDT."
 
     ``` r
 
@@ -427,7 +427,7 @@ A screenshot of the Expert Query National Downloads web page
       dplyr::filter(epaIrCategory %in% c("4", "5"))
     ```
 
-    The resulting data frame is large, with 137,547 unique impaired
+    The resulting data frame is large, with 139,342 unique impaired
     waters nationally. Due to its size, we’ll include a random subset of
     250 results in a data table to review during the demo. You can view
     the full results by viewing the imp.waters df.
@@ -1054,7 +1054,7 @@ keyword.
     )
     ```
 
-    This query yields 16,992 results. As well as providing the actionId
+    This query yields 17,006 results. As well as providing the actionId
     and documentName for all results, *EQ_Actions()* also returns the
     column “actionDocumentUrl” containing the URL to link to the
     document. Because the query yields so many results, we’ll take a
