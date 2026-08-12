@@ -62,16 +62,9 @@ remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TR
 
     ## Downloading GitHub repo USEPA/rExpertQuery@develop
 
-    ## cpp11    (NA -> 0.5.5) [CRAN]
-    ## progress (NA -> 1.2.3) [CRAN]
-
-    ## Installing 2 packages: cpp11, progress
-
-    ## Installing packages into '/home/runner/work/_temp/Library'
-    ## (as 'lib' is unspecified)
-
+    ## 
     ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ## * checking for file ‘/tmp/RtmpUC9vVB/remotes21d114a53511/USEPA-rExpertQuery-c1490a4/DESCRIPTION’ ... OK
+    ## * checking for file ‘/tmp/Rtmp3aoW2c/remotes20eb3443067d/USEPA-rExpertQuery-01b0a35/DESCRIPTION’ ... OK
     ## * preparing ‘rExpertQuery’:
     ## * checking DESCRIPTION meta-information ... OK
     ## * checking for LF line-endings in source and make files and shell scripts
