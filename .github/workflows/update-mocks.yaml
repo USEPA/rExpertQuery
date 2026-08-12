@@ -13,6 +13,9 @@ jobs:
   update-test-mocks:
     runs-on: ubuntu-latest
 
+    env:
+      EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
