@@ -1,0 +1,410 @@
+[
+    {
+        "domain": "ParameterAttainmentCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "DelistingReasonCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "LocationTypeValue",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "LoadAllocationUnitCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "WaterTypeGroup",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "ActionDocumentType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "TrendCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "UseName",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "AssessmentDocumentType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "ParameterStatus",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "ParameterGroupCodeType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "TribeStateCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "TrophicStatusCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "UseClassType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "SurveyDocumentType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "WaterTypeUnitsCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "MethodTypeCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "AssessmentBasisCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "SurveySubPopulationType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "StateIRCategoryCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "ActionStatusType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "OrgName",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "ReportingCycleStatusCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "UseQualifierCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "SizeEstimationMethodCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "StatusIndicator",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "UnitType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "PollutantSourceType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "AssessmentUnitDocumentType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "CycleDocumentType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "ActionType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "AgencyCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "ParameterQualifierCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "SurveyStatusType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "AssessmentTypeCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "SharingType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "WaterTypeCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "SurveyUseType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "OrgStateCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "SourceName",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "UseClassUse",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "UseAttainmentCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "ContactType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "MetricType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "AssessmentConfidenceCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "DocumentFileType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "ParameterName",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "LocationTypeCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "SizeSourceScaleText",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "SurveyCategoryType",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    },
+    {
+        "domain": "DocumentTypeCode",
+        "name": "",
+        "code": "",
+        "context": null,
+        "context2": null,
+        "dateModified": null
+    }
+]
