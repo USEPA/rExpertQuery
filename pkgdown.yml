@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   CybertownTraining: CybertownTraining.html
   GettingStartedWithrExpertQuery: GettingStartedWithrExpertQuery.html
-last_built: 2026-08-12T21:15Z
+last_built: 2026-08-12T21:23Z
 urls:
   reference: https://usepa.github.io/rExpertQuery/reference
   article: https://usepa.github.io/rExpertQuery/articles
