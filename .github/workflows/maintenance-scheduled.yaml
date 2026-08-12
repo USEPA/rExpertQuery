@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
 
     steps:
@@ -62,14 +61,14 @@ jobs:
 
       - name: Commit and push updates
         run: |
-          set -e
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          BRANCH="${{ inputs.ref }}"
-          git add inst/extdata/EQParamsCrosswalk.csv
-          if git diff --cached --quiet; then
+           set -e
+           git config user.name "github-actions[bot]"
+           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+           BRANCH="develop"
+           git add inst/extdata/EQParamsCrosswalk.csv
+           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
-          fi
-          git commit -m "chore: update EQParamsCrosswalk"
-          git push origin "HEAD:$BRANCH"
+           fi
+           git commit -m "chore: update EQParamsCrosswalk"
+           git push origin "HEAD:$BRANCH"
