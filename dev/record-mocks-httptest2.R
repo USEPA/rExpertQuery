@@ -9,7 +9,7 @@ record_to_tests("ORad", {
     state = "OR",
     comp_date_start = "01-01-2018",
     comp_date_end = "12-31-2020",
-    api_key = .setEQKey()
+    api_key = rExpertQuery:::.setEQKey()
   )
 })
 
@@ -18,7 +18,7 @@ record_to_tests("RIact", {
     statecode = "RI",
     fisc_year_start = 2014,
     fisc_year_end = 2020,
-    api_key = .setEQKey()
+    api_key = rExpertQuery:::.setEQKey()
   )
 })
 
@@ -27,7 +27,7 @@ record_to_tests("ILcat5", {
     statecode = "IL",
     epa_ir_cat = 5,
     param_group = "ALGAL GROWTH",
-    api_key = .setEQKey()
+    api_key = rExpertQuery:::.setEQKey()
   )
 })
 
@@ -35,7 +35,7 @@ record_to_tests("MOau", {
   EQ_AssessmentUnits(
     statecode = "MO",
     au_name = "Leisure Lake",
-    api_key = .setEQKey()
+    api_key = rExpertQuery:::.setEQKey()
   )
 })
 
@@ -43,19 +43,19 @@ record_to_tests("MTml", {
   EQ_AUsMLs(
     org_id = "MTDEQ",
     au_name = "Kleinschmidt Creek",
-    api_key = .setEQKey()
+    api_key = rExpertQuery:::.setEQKey()
   )
 })
 
 record_to_tests("ALcc", {
   EQ_CatchCorr(
     auid = "AL03150202-0404-110",
-    api_key = .setEQKey()
+    api_key = rExpertQuery:::.setEQKey()
   )
 })
 
 record_to_tests("NATassess", {
-  EQ_Assessments(api_key = .setEQKey())
+  EQ_Assessments(api_key = rExpertQuery:::.setEQKey())
 })
 
 record_to_tests("TXsrc", {
@@ -63,7 +63,7 @@ record_to_tests("TXsrc", {
     report_cycle = 2018,
     statecode = "TX",
     source = "AGRICULTURE",
-    api_key = .setEQKey()
+    api_key = rExpertQuery:::.setEQKey()
   )
 })
 
@@ -72,16 +72,16 @@ record_to_tests("FLtmdl", {
     fisc_year_start = 2018,
     fisc_year_end = 2020,
     statecode = "FL",
-    api_key = .setEQKey()
+    api_key = rExpertQuery:::.setEQKey()
   )
 })
 
 record_to_tests("NULLdv", {
-  EQ_DomainValues(api_key = .setEQKey())
+  EQ_DomainValues(api_key = rExpertQuery:::.setEQKey())
 })
 
 record_to_tests("assessTypesdv", {
-  EQ_DomainValues(domain = "assess_types", api_key = .setEQKey())
+  EQ_DomainValues(domain = "assess_types", api_key = rExpertQuery:::.setEQKey())
 })
 
 
