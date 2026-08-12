@@ -36,4 +36,6 @@ jobs:
         run: Rscript dev/diagnose-eq.R
         shell: bash
         env:
-          EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
+           GITHUB_TOKEN: ${{ github.token }}
+           GITHUB_PAT: ${{ github.token }}
+           EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
