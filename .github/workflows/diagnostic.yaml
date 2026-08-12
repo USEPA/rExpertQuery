@@ -22,6 +22,8 @@ jobs:
       - name: Install remotes
         run: install.packages("remotes")
         shell: Rscript {0}
+        env:
+          GITHUB_PAT: ${{ github.token }}
 
       - name: Install rExpertQuery from GitHub
         run: |
