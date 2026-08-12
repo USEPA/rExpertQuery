@@ -1,3 +1,5 @@
+library(rExpertQuery)
+
 # source helper function
 source("tests/testthat/helper-htt2.R")
 
