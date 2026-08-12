@@ -22,8 +22,6 @@ jobs:
       - name: Install remotes
         run: install.packages("remotes")
         shell: Rscript {0}
-        env:
-          GITHUB_PAT: ${{ github.token }}
 
       - name: Install rExpertQuery from GitHub
         run: |
@@ -34,6 +32,9 @@ jobs:
             force = TRUE
           )
         shell: Rscript {0}
+        env:
+          GITHUB_PAT: ${{ github.token }}
+        
       - name: Diagnose EQ API access
         run: Rscript dev/diagnose-eq.R
         shell: bash
