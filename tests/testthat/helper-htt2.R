@@ -83,7 +83,7 @@ httptest2::set_redactor(function(x) {
 record_to_tests <- function(subdir, code) {
   stopifnot(requireNamespace("testthat", quietly = TRUE))
 
-  base_tt <- normalizePath(testthat::test_path("."), winslash = "/", mustWork = TRUE)  # .../tests/testthat
+  base_tt <- normalizePath(testthat::test_path("."), winslash = "/", mustWork = TRUE)
   proj    <- normalizePath(file.path(base_tt, "..", ".."), winslash = "/", mustWork = TRUE)
   target  <- file.path(base_tt, "htt2", subdir)
 
@@ -91,48 +91,15 @@ record_to_tests <- function(subdir, code) {
   message("Recording into: ", normalizePath(target, winslash = "/"))
 
   expr <- substitute(code)
+  caller <- parent.frame()
 
-  # Record from project root so httptest2 writes under proj/tests/testthat
   withr::with_dir(proj, {
-    op <- options(httptest2.verbose = TRUE); on.exit(options(op), add = TRUE)
-    httptest2::capture_requests(eval(expr, envir = parent.frame()))
+    op <- options(httptest2.verbose = TRUE)
+    on.exit(options(op), add = TRUE)
+    httptest2::capture_requests(eval(expr, envir = caller))
   })
 
-  # Possible roots where httptest2 may have written host dirs
-  src_roots <- unique(c(
-    file.path(proj, "tests", "testthat"),
-    base_tt,
-    file.path(base_tt, "tests", "testthat")
-  ))
-
-  # Known/likely host folders; include both redacted and unredacted names
-  hosts <- c("api.epa.gov", "s3", "epa")
-
-  moved_any <- FALSE
-  for (root in src_roots) {
-    if (!dir.exists(root)) next
-    for (h in hosts) {
-      src <- file.path(root, h)
-      if (!dir.exists(src)) next
-      dst <- file.path(target, h)
-      dir.create(dst, recursive = TRUE, showWarnings = FALSE)
-
-      files <- list.files(src, recursive = TRUE, all.files = TRUE, full.names = TRUE, no.. = TRUE)
-      if (length(files)) moved_any <- TRUE
-      for (f in files) {
-        rel <- sub(paste0("^", gsub("\\\\", "/", normalizePath(src, winslash = "/", mustWork = TRUE)), "/?"),
-                   "", gsub("\\\\", "/", normalizePath(f, winslash = "/", mustWork = TRUE)))
-        out <- file.path(dst, rel)
-        dir.create(dirname(out), recursive = TRUE, showWarnings = FALSE)
-        file.copy(f, out, overwrite = TRUE)
-      }
-      unlink(src, recursive = TRUE, force = TRUE)
-    }
-  }
-
-  if (!moved_any) warning("No captured files found under any candidate roots.")
-  message("Recorded fixtures moved to: ", normalizePath(target, winslash = "/"))
-  invisible(target)
+  ...
 }
 
 with_test_mocks <- function(dir, code) {
