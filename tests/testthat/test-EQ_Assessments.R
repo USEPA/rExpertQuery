@@ -57,10 +57,3 @@
     testthat::expect_equal(length.diff, 0)
   })
 })
-
-# not working need to work on mock recording
-# with_test_mocks("NATassess", {
-#   testthat::test_that("EQ_Assessments returns error message if query results exceed maximum allowed", {
-#     expect_error(EQ_Assessments(api_key = .setEQKey()))
-#   })
-# })
