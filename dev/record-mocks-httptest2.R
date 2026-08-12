@@ -3,13 +3,16 @@ library(rExpertQuery)
 # source helper function
 source("tests/testthat/helper-htt2.R")
 
+# get api key once
+eq_key <- rExpertQuery:::.setEQKey()
+
 # testthat recordings for functions using EQ web services
 record_to_tests("ORad", {
   EQ_ActionsDocuments(
     state = "OR",
     comp_date_start = "01-01-2018",
     comp_date_end = "12-31-2020",
-    api_key = rExpertQuery:::.setEQKey()
+    api_key = eq_key
   )
 })
 
@@ -18,7 +21,7 @@ record_to_tests("RIact", {
     statecode = "RI",
     fisc_year_start = 2014,
     fisc_year_end = 2020,
-    api_key = rExpertQuery:::.setEQKey()
+    api_key = eq_key
   )
 })
 
@@ -27,7 +30,7 @@ record_to_tests("ILcat5", {
     statecode = "IL",
     epa_ir_cat = 5,
     param_group = "ALGAL GROWTH",
-    api_key = rExpertQuery:::.setEQKey()
+    api_key = eq_key
   )
 })
 
@@ -35,7 +38,7 @@ record_to_tests("MOau", {
   EQ_AssessmentUnits(
     statecode = "MO",
     au_name = "Leisure Lake",
-    api_key = rExpertQuery:::.setEQKey()
+    api_key = eq_key
   )
 })
 
@@ -43,19 +46,19 @@ record_to_tests("MTml", {
   EQ_AUsMLs(
     org_id = "MTDEQ",
     au_name = "Kleinschmidt Creek",
-    api_key = rExpertQuery:::.setEQKey()
+    api_key = eq_key
   )
 })
 
 record_to_tests("ALcc", {
   EQ_CatchCorr(
     auid = "AL03150202-0404-110",
-    api_key = rExpertQuery:::.setEQKey()
+    api_key = eq_key
   )
 })
 
 record_to_tests("NATassess", {
-  EQ_Assessments(api_key = rExpertQuery:::.setEQKey())
+  EQ_Assessments(api_key = eq_key)
 })
 
 record_to_tests("TXsrc", {
@@ -63,7 +66,7 @@ record_to_tests("TXsrc", {
     report_cycle = 2018,
     statecode = "TX",
     source = "AGRICULTURE",
-    api_key = rExpertQuery:::.setEQKey()
+    api_key = eq_key
   )
 })
 
@@ -72,16 +75,16 @@ record_to_tests("FLtmdl", {
     fisc_year_start = 2018,
     fisc_year_end = 2020,
     statecode = "FL",
-    api_key = rExpertQuery:::.setEQKey()
+    api_key = eq_key
   )
 })
 
 record_to_tests("NULLdv", {
-  EQ_DomainValues(api_key = rExpertQuery:::.setEQKey())
+  EQ_DomainValues(api_key = eq_key)
 })
 
 record_to_tests("assessTypesdv", {
-  EQ_DomainValues(domain = "assess_types", api_key = rExpertQuery:::.setEQKey())
+  EQ_DomainValues(domain = "assess_types", api_key =eq_key)
 })
 
 
@@ -104,4 +107,4 @@ saveRDS(sources.df, "tests/testthat/htt2/NATsource/sources.rds")
 
 rm(actions.df, sources.df)
 
-message("All fixtures recorded under: ", normalizePath(fixtures_root, winslash = "/"))
+message("All fixtures recorded under: ", normalizePath("tests/testthat/htt2", winslash = "/"))
