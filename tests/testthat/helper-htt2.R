@@ -99,7 +99,47 @@ record_to_tests <- function(subdir, code) {
     httptest2::capture_requests(eval(expr, envir = caller))
   })
 
-  ...
+  src_roots <- unique(c(
+    file.path(proj, "tests", "testthat"),
+    base_tt,
+    file.path(base_tt, "tests", "testthat")
+  ))
+
+  hosts <- c("api.epa.gov", "s3", "epa")
+
+  moved_any <- FALSE
+  for (root in src_roots) {
+    if (!dir.exists(root)) next
+    for (h in hosts) {
+      src <- file.path(root, h)
+      if (!dir.exists(src)) next
+      dst <- file.path(target, h)
+      dir.create(dst, recursive = TRUE, showWarnings = FALSE)
+
+      files <- list.files(src, recursive = TRUE, all.files = TRUE, full.names = TRUE, no.. = TRUE)
+      if (length(files)) moved_any <- TRUE
+      for (f in files) {
+        rel <- sub(
+          paste0("^", gsub("\\\\", "/", normalizePath(src, winslash = "/", mustWork = TRUE)), "/?"),
+          "",
+          gsub("\\\\", "/", normalizePath(f, winslash = "/", mustWork = TRUE))
+        )
+        out <- file.path(dst, rel)
+        dir.create(dirname(out), recursive = TRUE, showWarnings = FALSE)
+        file.copy(f, out, overwrite = TRUE)
+      }
+      unlink(src, recursive = TRUE, force = TRUE)
+    }
+  }
+
+  if (!moved_any) warning("No captured files found under any candidate roots.")
+  message("Recorded fixtures moved to: ", normalizePath(target, winslash = "/"))
+  invisible(target)
+}
+
+record_without_capture <- function(code) {
+  expr <- substitute(code)
+  eval(expr, envir = parent.frame())
 }
 
 with_test_mocks <- function(dir, code) {

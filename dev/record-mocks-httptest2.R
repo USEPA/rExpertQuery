@@ -7,7 +7,7 @@ source("tests/testthat/helper-htt2.R")
 eq_key <- Sys.getenv("EQ_API_KEY")
 
 # testthat recordings for functions using EQ web services
-record_to_tests("ORad", {
+record_without_capture({
   EQ_ActionsDocuments(
     state = "OR",
     comp_date_start = "01-01-2018",
