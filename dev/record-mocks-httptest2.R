@@ -57,10 +57,6 @@ record_to_tests("ALcc", {
   )
 })
 
-record_to_tests("NATassess", {
-  EQ_Assessments(api_key = eq_key)
-})
-
 record_to_tests("TXsrc", {
   EQ_Sources(
     report_cycle = 2018,
