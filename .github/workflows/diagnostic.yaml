@@ -1,5 +1,5 @@
 - name: Diagnose EQ API access
-run: Rscript dev/diagnose-eq.R
-shell: bash
-env:
-  EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
+  run: Rscript dev/diagnose-eq.R
+  shell: bash
+  env:
+    EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
