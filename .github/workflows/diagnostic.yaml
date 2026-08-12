@@ -1,5 +1,39 @@
-- name: Diagnose EQ API access
-  run: Rscript dev/diagnose-eq.R
-  shell: bash
-  env:
-    EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
+name: Diagnostic EQ API Access
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install remotes
+        run: install.packages("remotes")
+        shell: Rscript {0}
+
+      - name: Install rExpertQuery from GitHub
+        run: |
+          remotes::install_github(
+            "USEPA/rExpertQuery",
+            ref = "develop",
+            dependencies = TRUE,
+            force = TRUE
+          )
+        shell: Rscript {0}
+      - name: Diagnose EQ API access
+        run: Rscript dev/diagnose-eq.R
+        shell: bash
+        env:
+          EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
