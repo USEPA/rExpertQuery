@@ -31,6 +31,8 @@ jobs:
             any::withr
             any::testthat
             any::data.table
+            any::dplyr
+            .
 
       - name: Run script to update mocks
         run: Rscript dev/record-mocks-httptest2.R
