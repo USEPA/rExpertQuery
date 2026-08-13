@@ -163,6 +163,8 @@ attains@epa.gov.
 - [`EQ_UpdateInternalDomainValues()`](https://usepa.github.io/rExpertQuery/reference/EQ_UpdateInternalDomainValues.md)
   : Downloads/updates an internal copy of allowable domain values for
   EQ_DomainValues
+- [`.download_nat_extract()`](https://usepa.github.io/rExpertQuery/reference/dot-download_nat_extract.md)
+  : Helper function for downloading National Extracts
 - [`.setEQKey()`](https://usepa.github.io/rExpertQuery/reference/dot-setEQKey.md)
   : Set EQ_API_KEY for local and automated testing
 
