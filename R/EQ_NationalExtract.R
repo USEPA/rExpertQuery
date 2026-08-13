@@ -165,46 +165,8 @@ EQ_NationalExtract <- function(extract = NULL,
 
   url <- paste0(base.url, nat.url, folder.num, "/", file, ".csv", ".zip")
 
-  # Helper function for retry logic
-  nat.extract.retries <- function(url, max_retries) {
-    temp <- tempfile(fileext = ".zip")
-    for (attempt in seq_len(max_retries)) {
-      tryCatch(
-        {
-          resp <- httr2::request(url) |>
-            httr2::req_progress() |>
-            httr2::req_timeout(3600) |>
-            httr2::req_method("GET") |>
-            httr2::req_perform(path = temp)
-
-          zip_raw <- httr2::resp_body_raw(resp)
-
-          writeBin(zip_raw, temp)
-
-          # If successful, return unzipped file
-          unzipped.file <- utils::unzip(temp, exdir = tempdir())
-          csv.file <- unzipped.file[grep("\\.csv$", unzipped.file, ignore.case = TRUE)]
-          # can add verbose = FALSE, if we want to remove the progress bar here
-          df <- data.table::fread(csv.file, check.names = FALSE)
-          unlink(temp)
-          unlink(unzipped.file)
-          return(df)
-        },
-        error = function(e) {
-          if (attempt == max_retries) {
-            stop(paste0("Failed to download and unzip file after ", max_retries, " attempts. Error: ", e$message))
-          } else {
-            message(paste0("Attempt ", attempt, " failed: ", e$message, ". Retrying..."))
-            Sys.sleep(1) # Optional: wait before retrying
-          }
-        }
-      )
-    }
-    stop("Download and unzip failed after maximum retries.")
-  }
-
   # open large csv file
-  df <- nat.extract.retries(url, max_retries)
+  df <- .download_nat_extract(url, max_retries)
 
   # import cross walk to convert column names to match other rExpertQuery function output
   # import crosswalk ref file
