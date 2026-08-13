@@ -416,3 +416,54 @@ EQ_FormatPlanLinks <- function(.data, url.col = "planSummaryLink") {
     return(def)
   }
 }
+
+#' Helper function for downloading National Extracts
+#'
+#' @param url Character string.URL to download the national extract.
+#' @param max_retries Integer, Number of times to rety the download before failing.
+#'
+#' @return Downloaded and unzipped national extract.
+#'
+
+.download_nat_extract <- function(url, max_retries) {
+  temp <- tempfile(fileext = ".zip")
+
+  for (attempt in seq_len(max_retries)) {
+    tryCatch(
+      {
+        resp <- httr2::request(url) |>
+          httr2::req_progress() |>
+          httr2::req_timeout(3600) |>
+          httr2::req_method("GET") |>
+          httr2::req_perform(path = temp)
+
+        zip_raw <- httr2::resp_body_raw(resp)
+        writeBin(zip_raw, temp)
+
+        unzipped.file <- utils::unzip(temp, exdir = tempdir())
+        csv.file <- unzipped.file[grep("\\.csv$", unzipped.file, ignore.case = TRUE)]
+        df <- data.table::fread(csv.file, check.names = FALSE)
+
+        unlink(temp)
+        unlink(unzipped.file)
+        return(df)
+      },
+      error = function(e) {
+        if (attempt == max_retries) {
+          stop(
+            paste0(
+              "Failed to download and unzip file after ",
+              max_retries,
+              " attempts. Error: ", e$message
+            )
+          )
+        } else {
+          message(paste0("Attempt ", attempt, " failed: ", e$message, ". Retrying..."))
+          Sys.sleep(1)
+        }
+      }
+    )
+  }
+
+  stop("Download and unzip failed after maximum retries.")
+}
