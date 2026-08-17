@@ -15,6 +15,7 @@ jobs:
 
     env:
       EQ_API_KEY: ${{ secrets.EQ_API_KEY }}
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Check out default branch
