@@ -64,7 +64,7 @@ remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TR
 
     ## 
     ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ## * checking for file ‘/tmp/Rtmp5Tp5cA/remotes1f7cbf52ff3/USEPA-rExpertQuery-3ba602a/DESCRIPTION’ ... OK
+    ## * checking for file ‘/tmp/RtmpfEg1WS/remotes1ffe52916876/USEPA-rExpertQuery-fd9118a/DESCRIPTION’ ... OK
     ## * preparing ‘rExpertQuery’:
     ## * checking DESCRIPTION meta-information ... OK
     ## * checking for LF line-endings in source and make files and shell scripts
@@ -244,7 +244,7 @@ A screenshot of the Expert Query National Downloads web page
     assessments.nat <- rExpertQuery::EQ_NationalExtract("assessments")
     ```
 
-        ## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on August 07, 2026 at 09:30 PM EDT."
+        ## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on August 14, 2026 at 09:30 PM EDT."
 
     ``` r
 
@@ -1047,7 +1047,7 @@ keyword.
     )
     ```
 
-    This query yields 17,006 results. As well as providing the actionId
+    This query yields 17,012 results. As well as providing the actionId
     and documentName for all results, *EQ_Actions()* also returns the
     column “actionDocumentUrl” containing the URL to link to the
     document. Because the query yields so many results, we’ll take a
