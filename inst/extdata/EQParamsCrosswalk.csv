@@ -90,7 +90,7 @@ tmdl_cycle_hi,cycleScheduledForTmdlHi,,,no,no,yes,no,no,no,no,no
 tmdl_cycle_lo,cycleScheduledForTmdlLo,,,no,no,yes,no,no,no,no,no
 tmdl_date_end,tmdlDateHi,,,no,yes,no,no,no,no,no,yes
 tmdl_date_start,tmdlDateLo,,,no,yes,no,no,no,no,no,yes
-use_class,useClassName,,,no,no,yes,yes,yes,no,no,no
+use_class,useClassName,UseClassUse,name,no,no,yes,yes,yes,no,no,no
 use_group,useGroup,,,no,no,yes,no,no,no,no,no
 use_ir_cat,useIrCategory,,,no,no,yes,no,no,no,no,no
 use_name,useName,UseName,name,no,no,yes,no,no,no,no,no
