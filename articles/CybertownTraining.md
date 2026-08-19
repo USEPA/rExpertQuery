@@ -55,16 +55,16 @@ if (!"remotes" %in% installed.packages()) {
   install.packages("remotes")
 }
 
-remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TRUE, force = TRUE)
+remotes::install_github("USEPA/rExpertQuery", ref = "add_useclasuse_domainvals", dependencies = TRUE, force = TRUE)
 ```
 
     ## Using github PAT from envvar GITHUB_PAT. Use `gitcreds::gitcreds_set()` and unset GITHUB_PAT in .Renviron (or elsewhere) if you want to use the more secure git credential store instead.
 
-    ## Downloading GitHub repo USEPA/rExpertQuery@develop
+    ## Downloading GitHub repo USEPA/rExpertQuery@add_useclasuse_domainvals
 
     ## 
     ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ## * checking for file ‘/tmp/RtmpfEg1WS/remotes1ffe52916876/USEPA-rExpertQuery-fd9118a/DESCRIPTION’ ... OK
+    ## * checking for file ‘/tmp/RtmpyN5FW5/remotes200e8c98f58/USEPA-rExpertQuery-3bf64fc/DESCRIPTION’ ... OK
     ## * preparing ‘rExpertQuery’:
     ## * checking DESCRIPTION meta-information ... OK
     ## * checking for LF line-endings in source and make files and shell scripts
