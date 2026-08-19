@@ -26,8 +26,7 @@ EQ_ExtractParams <- function(extract = NULL) {
   params.cw <- readr::read_csv(system.file("extdata", "EQParamsCrosswalk.csv",
     package = "rExpertQuery"
   ), show_col_types = FALSE) |>
-    dplyr::filter(get(extract.filter) == "yes") |>
-    # dplyr::filter(.data[[extract.filter]] == "yes") |>
+    dplyr::filter(!!rlang::sym(extract.filter) == "yes") |>
     dplyr::select("param", "eq_name")
 
   # return the crosswalk

@@ -19,8 +19,8 @@
 #' param_attain (Parameter Attainment), param_group (Parameter Group), param_name
 #' (Parameter Name), param_state_ir_code (Parameter State Integrated Report Code),
 #' param_status (Parameter Status), source_scale (Source Scale), source_type (Source
-#' Type), statecode (State), use_name (Use Name), use_support (Use Support), and
-#' water_type (Water Type).
+#' Type), statecode (State), use_name (Use Name), use_class (Use Class), use_support
+#' (Use Support), and water_type (Water Type).
 #'
 #' Default is NULL. When param = NULL, the df returned will list all domains for
 #' which an allowable list of values can be returned from ATTAINS web services.
