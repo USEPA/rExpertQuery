@@ -69,7 +69,7 @@
                         <h4 data-toc-skip class="author">ATTAINS
 Team</h4>
             
-            <h4 data-toc-skip class="date">2026-08-19</h4>
+            <h4 data-toc-skip class="date">2026-08-20</h4>
       
 
       <div class="d-none name"><code>CybertownTraining.Rmd</code></div>
@@ -129,9 +129,12 @@ and all dependencies by running:</p>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"USEPA/rExpertQuery"</span>, ref <span class="op">=</span> <span class="st">"add_useclasuse_domainvals"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Using github PAT from envvar GITHUB_PAT. Use `gitcreds::gitcreds_set()` and unset GITHUB_PAT in .Renviron (or elsewhere) if you want to use the more secure git credential store instead.</span></span></code></pre>
 <pre><code><span><span class="co">## Downloading GitHub repo USEPA/rExpertQuery@add_useclasuse_domainvals</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## <span style="color: #00BBBB;">──</span> <span style="color: #00BBBB;">R CMD build</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></span>
-<span><span class="co">## * checking for file ‘/tmp/RtmpyN5FW5/remotes200e8c98f58/USEPA-rExpertQuery-3bf64fc/DESCRIPTION’ ... OK</span></span>
+<pre><code><span><span class="co">## bit64 (4.8.2 -&gt; 4.8.4) [CRAN]</span></span></code></pre>
+<pre><code><span><span class="co">## Installing 1 packages: bit64</span></span></code></pre>
+<pre><code><span><span class="co">## Installing package into '/home/runner/work/_temp/Library'</span></span>
+<span><span class="co">## (as 'lib' is unspecified)</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">──</span> <span style="color: #00BBBB;">R CMD build</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">## * checking for file ‘/tmp/RtmpG1NTu3/remotes1ff64e97e36c/USEPA-rExpertQuery-3bf64fc/DESCRIPTION’ ... OK</span></span>
 <span><span class="co">## * preparing ‘rExpertQuery’:</span></span>
 <span><span class="co">## * checking DESCRIPTION meta-information ... OK</span></span>
 <span><span class="co">## * checking for LF line-endings in source and make files and shell scripts</span></span>
@@ -140,11 +143,11 @@ and all dependencies by running:</p>
 <span><span class="co">## * building ‘rExpertQuery_0.1.0.tar.gz’</span></span></code></pre>
 <pre><code><span><span class="co">## Installing package into '/home/runner/work/_temp/Library'</span></span>
 <span><span class="co">## (as 'lib' is unspecified)</span></span></code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://usepa.github.io/rExpertQuery/">rExpertQuery</a></span><span class="op">)</span></span></code></pre></div>
 <p>This vignette also requires additional packages which can be
 installed using the code chunk below:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># # list of additional required packages</span></span>
 <span><span class="co">#  demo.pkgs &lt;- c("datasets", "data.table", "dplyr", "DT", "ggplot2", "httr", "leaflet", "maps", "plotly", "sf", "usdata", "usmap", "stringi")</span></span>
 <span><span class="co">#</span></span>
@@ -171,7 +174,7 @@ installed using the code chunk below:</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stringi.gagolewski.com/" class="external-link">stringi</a></span><span class="op">)</span></span></code></pre></div>
 <p>As a final setup step, we will turn off scientific notation so that
 any catchment id numbers from our queries are displayed correctly.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># turn off scientific notation (for catchment ids)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -188,7 +191,7 @@ Expert Query API Key</div>
 <p>To run this vignette, we can use the following test key. Users should
 obtain their own API key if they will be using rExpertQuery to develop
 their own workflows.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load test api  key</span></span>
 <span><span class="va">testkey</span> <span class="op">&lt;-</span> <span class="st">"53BVce47MQ3KXKibjx35g4ojaDQGh8qWfbdO8cE0"</span></span></code></pre></div>
 </div>
@@ -293,11 +296,11 @@ containing parameter causes, and summarize how many times each parameter
 was listed as a cause of impairment. The additional packages used to
 answer this question are <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> (data manipulation) and <a href="https://rstudio.github.io/DT/" class="external-link">DT</a> (interface to DataTables
 library).</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import national assessments profile</span></span>
 <span><span class="va">assessments.nat</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_NationalExtract.html">EQ_NationalExtract</a></span><span class="op">(</span><span class="st">"assessments"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on August 14, 2026 at 09:30 PM EDT."</span></span></code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># filter for latest assessments</span></span>
 <span><span class="va">assessments.nat</span> <span class="op">&lt;-</span> <span class="va">assessments.nat</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">organizationId</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -332,7 +335,7 @@ states contain waters impaired for SELENIUM?</strong></p>
 <p>Again, we’ll use the national assessments data filtered to the latest
 cycle. Then we will filter for rows where the parameter is both selenium
 and listed as a cause. The additional packages used in this step are <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> and <a href="https://rstudio.github.io/DT/" class="external-link">DT</a>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># filter assessments data set for</span></span>
 <span><span class="va">param.nat</span> <span class="op">&lt;-</span> <span class="va">assessments.nat</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># filter for selenium and cause</span></span>
@@ -353,7 +356,7 @@ code chunk also uses <a href="https://openintrostat.github.io/usdata/index.html"
 demographic data), <a href="https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html" class="external-link">datasets</a>
 (collection of data sets for use in R), <a href="https://usmap.dev/" class="external-link">usmap</a> (US choropleth plotting) and <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> (creating
 graphics).</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># filter to create df of states that have at least one selenium impairment}</span></span>
 <span><span class="va">state.names.sel</span> <span class="op">&lt;-</span> <span class="va">param.nat</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># select state column from filtered df</span></span>
@@ -376,7 +379,7 @@ graphics).</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>SeleniumImpairment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">state</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">state.names.sel</span>,</span>
 <span><span class="st">"yes"</span>, <span class="st">"no"</span></span>
 <span>  <span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create map, specifying data and values</span></span>
 <span><span class="fu">usmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/usmap/man/plot_usmap.html" class="external-link">plot_usmap</a></span><span class="op">(</span></span>
 <span>  regions <span class="op">=</span> <span class="st">"state"</span>, data <span class="op">=</span> <span class="va">sel.map.data</span>,</span>
@@ -402,7 +405,7 @@ nationally?</strong></p>
 can filter for Fully Supporting waters with an asssociatedActionType of
 “TMDL”. Again, we can use a combination of <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> and <a href="https://rstudio.github.io/DT/" class="external-link">DT</a>, for data manipulation and
 creating a data table, respectively.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># filter national assessments to include only Fully Supporting w/ TMDL</span></span>
 <span><span class="va">tmdl.fs</span> <span class="op">&lt;-</span> <span class="va">assessments.nat</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
@@ -436,7 +439,7 @@ nationally)?</strong></p>
 <p>The workflow here is similar to the previous question, relying on <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> and <a href="https://rstudio.github.io/DT/" class="external-link">DT</a>. This time we are retaining
 a few more columns for inclusion in the data table and are filtering by
 epaIrCategory for category 4 and 5 waters.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># select subset of columns to include</span></span>
 <span><span class="va">imp.waters</span> <span class="op">&lt;-</span> <span class="va">assessments.nat</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
@@ -452,7 +455,7 @@ epaIrCategory for category 4 and 5 waters.</p>
 waters nationally. Due to its size, we’ll include a random subset of 250
 results in a data table to review during the demo. You can view the full
 results by viewing the imp.waters df.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># data table with random 250 impaired waters</span></span>
 <span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span></span>
 <span>  <span class="va">imp.waters</span> <span class="op">|&gt;</span></span>
@@ -473,7 +476,7 @@ Units with Monitoring Locations data set. The param value for this in
 EQ_NationalExtract is “au_mls”. Additional packages needed are <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> and <a href="https://rstudio.github.io/DT/" class="external-link">DT</a>. We’ll use some additional
 options in <a href="https://rstudio.github.io/DT/" class="external-link">DT</a> to highlight
 useful rows in the final data table.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import national extract for assessment units/monitoring locations</span></span>
 <span><span class="va">nat.ausmls</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_NationalExtract.html">EQ_NationalExtract</a></span><span class="op">(</span><span class="st">"au_mls"</span><span class="op">)</span></span></code></pre></div>
 <p>The next step is to filter the data frame and retain only rows that
@@ -489,7 +492,7 @@ apply an additional filter and keep only rows that have a value in the
 monitoringLocationDataLink column. Then select only the rows
 organizationId, organizationName, and organizationType and retain the
 unique rows.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># filter for rows that contain monitoringLocationIds and are from State orgs</span></span>
 <span><span class="va">filtered.mls</span> <span class="op">&lt;-</span> <span class="va">nat.ausmls</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
@@ -522,7 +525,7 @@ table to display this information and apply some conditional formatting
 to highlight the states with monitoringLocationIdentifiers in blue and
 those with monitoringLocationIdentifiers and monitoringLocationDataLinks
 in orange.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create data frame summarizing which states have monitoringLocationIds and monitoringLocationDataLinks in ATTAINS</span></span>
 <span><span class="va">ml.table</span> <span class="op">&lt;-</span> <span class="va">nat.ausmls</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># create df of all orgs</span></span>
@@ -579,7 +582,7 @@ The remaining steps can be accomplished with <a href="https://dplyr.tidyverse.or
 combinations of assessmentUnitId, assessmentUnitName, waterSize and
 waterSizeUnits, then summing the waterSize column to find the number of
 stream miles.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set up query to search assessments for KS, primary contact recreation use, and stream, default behavior is to query latest report cycle</span></span>
 <span><span class="va">ks.imp.streams</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_Assessments.html">EQ_Assessments</a></span><span class="op">(</span></span>
 <span>  statecode <span class="op">=</span> <span class="st">"KS"</span>,</span>
@@ -610,7 +613,7 @@ Montana?</strong></p>
 <p>We start by querying for Montana assessments with zinc as a cause and
 can use <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> and <a href="https://plotly.com/r/" class="external-link">plotly</a> (graphing library) to summarize
 the results by useName and create a bar plot of the results.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query MT's latest assessments for zinc as a cause</span></span>
 <span><span class="va">MT.impair</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_Assessments.html">EQ_Assessments</a></span><span class="op">(</span></span>
 <span>  statecode <span class="op">=</span> <span class="st">"MT"</span>,</span>
@@ -622,7 +625,7 @@ the results by useName and create a bar plot of the results.</p>
 <p>Next we summarize the uses associated with zinc impairments and count
 the number of unique assessmentUnitIdentifiers for each use to
 facilitate creating a bar plot.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># summarize by useName</span></span>
 <span><span class="va">MT.impair.use</span> <span class="op">&lt;-</span> <span class="va">MT.impair</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">useName</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -631,7 +634,7 @@ facilitate creating a bar plot.</p>
 <p>There are 3 uses with zinc as a cause in Montana: Agricultural,
 Aquatic Life, and Drinking Water . As our last step, we’ll create the
 bar plot.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">plotly</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/plotly/man/plot_ly.html" class="external-link">plot_ly</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">MT.impair.use</span>,</span>
 <span>  x <span class="op">=</span> <span class="op">~</span><span class="va">useName</span>,</span>
@@ -640,7 +643,7 @@ bar plot.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <div class="plotly html-widget html-fill-item" id="htmlwidget-10b3b7155e8045a1b2ad" style="width:700px;height:192px;"></div>
-<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"visdat":{"200e16bd78c2":["function () ","plotlyVisDat"]},"cur_data":"200e16bd78c2","attrs":{"200e16bd78c2":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"useName","type":"category","categoryorder":"array","categoryarray":["Agricultural","Aquatic Life","Drinking Water"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"count"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Agricultural","Aquatic Life","Drinking Water"],"y":[1,95,28],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p class="caption">
+<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"visdat":{"1ff61dee0ec2":["function () ","plotlyVisDat"]},"cur_data":"1ff61dee0ec2","attrs":{"1ff61dee0ec2":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"useName","type":"category","categoryorder":"array","categoryarray":["Agricultural","Aquatic Life","Drinking Water"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"count"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Agricultural","Aquatic Life","Drinking Water"],"y":[1,95,28],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p class="caption">
 Fig 2. Zinc impairments by useName for Montana’s latest assessment
 cycle.
 </p>
@@ -655,7 +658,7 @@ reporting cycle. In order to compare reporting cycles, we’ll also need
 to provide a value for the previous cycle and run the query again, this
 time for the previous reporting cycle and without specifying the
 category.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get cat 5 waters from 2024 assessment cycle</span></span>
 <span><span class="va">IL.latest</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_Assessments.html">EQ_Assessments</a></span><span class="op">(</span></span>
 <span>  statecode <span class="op">=</span> <span class="st">"IL"</span>,</span>
@@ -682,7 +685,7 @@ This allows us to combine the latest and previous cycle data frames and
 filter them to create a data frame which contains only the assessment
 units that changed from some other category to category 5 from the
 previous cycle to the latest cycle.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># filter previous cycle to include only cat 5 waters from 2024</span></span>
 <span><span class="va">IL.previous</span> <span class="op">&lt;-</span> <span class="va">IL.previous</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># retain only cat 5 waters from latest cycle</span></span>
@@ -703,12 +706,12 @@ previous cycle to the latest cycle.</p>
 <p>Finally, we can summarize by counting the categories the new category
 5s were previously in and create a pie chart with a default color scheme
 to visualize.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># summarize what cats the new cat 5s were in previously</span></span>
 <span><span class="va">IL.change.sum</span> <span class="op">&lt;-</span> <span class="va">IL.changes</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">epaIrCategory.previous</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">assessmentUnitId</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create plotly plot</span></span>
 <span><span class="fu">plotly</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/plotly/man/plot_ly.html" class="external-link">plot_ly</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># add pipe based IL.change.sum</span></span>
@@ -728,7 +731,7 @@ to visualize.</p>
 <span>  <span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <div class="plotly html-widget html-fill-item" id="htmlwidget-4018eef1a407a0df6b52" style="width:700px;height:192px;"></div>
-<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"visdat":{"200e384c37ff":["function () ","plotlyVisDat"],"200e78301545":["function () ","data"]},"cur_data":"200e78301545","attrs":{"200e78301545":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"values":{},"labels":{},"type":"pie","marker":{"line":{"color":"white","width":2}},"hoverinfo":"value","outsidetextfont":{"color":"black"},"sort":false,"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"legend":{"orientation":"h","xanchor":"center","x":0.5},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"values":[24,3,10,24],"labels":["2","3","4A","4C"],"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"white","width":2}},"hoverinfo":["value","value","value","value"],"outsidetextfont":{"color":"black"},"sort":false,"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p class="caption">
+<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"visdat":{"1ff61de3775c":["function () ","plotlyVisDat"],"1ff63a7ab9e4":["function () ","data"]},"cur_data":"1ff63a7ab9e4","attrs":{"1ff63a7ab9e4":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"values":{},"labels":{},"type":"pie","marker":{"line":{"color":"white","width":2}},"hoverinfo":"value","outsidetextfont":{"color":"black"},"sort":false,"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"legend":{"orientation":"h","xanchor":"center","x":0.5},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"values":[24,3,10,24],"labels":["2","3","4A","4C"],"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"white","width":2}},"hoverinfo":["value","value","value","value"],"outsidetextfont":{"color":"black"},"sort":false,"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p class="caption">
 Fig 3. New category 5 waters in Illinois in the 2024 cycle, summarized
 by their 2022 categories.
 </p>
@@ -752,7 +755,7 @@ Florida?</strong></p>
 specifying Florida with an assessment unit status of “Retired” without
 using functions from any additional packages. For easier review, we’ll
 create a datatable with <a href="https://rstudio.github.io/DT/" class="external-link">DT</a>.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># search for retired assessment units in Florida</span></span>
 <span><span class="va">FL.ret.auids</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_AssessmentUnits.html">EQ_AssessmentUnits</a></span><span class="op">(</span></span>
 <span>  statecode <span class="op">=</span> <span class="st">"FL"</span>,</span>
@@ -760,7 +763,7 @@ create a datatable with <a href="https://rstudio.github.io/DT/" class="external-
 <span>  api_key <span class="op">=</span> <span class="va">testkey</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "EQ_AssessmentUnits: The current query will return 0 rows."</span></span></code></pre>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create data table</span></span>
 <span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span><span class="va">FL.ret.auids</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>pageLength <span class="op">=</span> <span class="fl">5</span>, scrollX <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="datatables html-widget html-fill-item" id="htmlwidget-5b1b2f4ad92281566982" style="width:100%;height:auto;"></div>
@@ -781,7 +784,7 @@ are associated with each pollutantGroup?</strong></p>
 <p>To answer this question we’ll use <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> and <a href="https://plotly.com/r/" class="external-link">plotly</a>. The EQ_TMDLs query is simple,
 specifying only the state of Hawaii since we want to return all of
 Hawaii’s TMDLs.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query for Hawaii TMDLs</span></span>
 <span><span class="va">HI.tmdls</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_TMDLs.html">EQ_TMDLs</a></span><span class="op">(</span></span>
 <span>  statecode <span class="op">=</span> <span class="st">"HI"</span>,</span>
@@ -797,7 +800,7 @@ chunk below demonstrates one way to determine the number of TMDLs by
 unique assessmentUnitIdentifier/pollutant/actionId. We can than
 visualize TMDLs related to each pollutantGroup with a simple bar
 graph.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># determine the number of tmdls</span></span>
 <span><span class="va">HI.count</span> <span class="op">&lt;-</span> <span class="va">HI.tmdls</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># select required columns</span></span>
@@ -813,7 +816,7 @@ graph.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">assessmentUnitId</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># if pollutantGroup is missing, assign to group named "NULL"</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pollutantGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">pollutantGroup</span><span class="op">)</span>, <span class="st">"NULL"</span>, <span class="va">pollutantGroup</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create bar plot</span></span>
 <span><span class="fu">plotly</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/plotly/man/plot_ly.html" class="external-link">plot_ly</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">HI.sum</span>,</span>
@@ -823,7 +826,7 @@ graph.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <div class="plotly html-widget html-fill-item" id="htmlwidget-25c3e940e6859592f801" style="width:700px;height:432.632880098888px;"></div>
-<script type="application/json" data-for="htmlwidget-25c3e940e6859592f801">{"x":{"visdat":{"200e3e6c8c61":["function () ","plotlyVisDat"]},"cur_data":"200e3e6c8c61","attrs":{"200e3e6c8c61":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"pollutantGroup","type":"category","categoryorder":"array","categoryarray":["ALGAL GROWTH","NULL","NUTRIENTS","ORGANIC ENRICHMENT/OXYGEN DEPLETION","PATHOGENS","PH/ACIDITY/CAUSTIC CONDITIONS","SEDIMENT","TEMPERATURE","TOTAL TOXICS","TURBIDITY"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"count"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["ALGAL GROWTH","NUTRIENTS","ORGANIC ENRICHMENT/OXYGEN DEPLETION","PATHOGENS","PH/ACIDITY/CAUSTIC CONDITIONS","SEDIMENT","TEMPERATURE","TOTAL TOXICS","TURBIDITY","NULL"],"y":[11,28,2,11,1,2,1,1,52,11],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p class="caption">
+<script type="application/json" data-for="htmlwidget-25c3e940e6859592f801">{"x":{"visdat":{"1ff69abb10b":["function () ","plotlyVisDat"]},"cur_data":"1ff69abb10b","attrs":{"1ff69abb10b":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"pollutantGroup","type":"category","categoryorder":"array","categoryarray":["ALGAL GROWTH","NULL","NUTRIENTS","ORGANIC ENRICHMENT/OXYGEN DEPLETION","PATHOGENS","PH/ACIDITY/CAUSTIC CONDITIONS","SEDIMENT","TEMPERATURE","TOTAL TOXICS","TURBIDITY"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"count"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["ALGAL GROWTH","NUTRIENTS","ORGANIC ENRICHMENT/OXYGEN DEPLETION","PATHOGENS","PH/ACIDITY/CAUSTIC CONDITIONS","SEDIMENT","TEMPERATURE","TOTAL TOXICS","TURBIDITY","NULL"],"y":[11,28,2,11,1,2,1,1,52,11],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p class="caption">
 Fig 4. Number of TMDLs per pollutantGroup in Hawaii.
 </p>
 </div>
@@ -836,7 +839,7 @@ in FY 2025 in R10?</strong></p>
 single <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> function. The
 2025 fiscal year began on October 1, 2024, so that will be set as the
 tmdl_start_date parameter along with specifying 10 for the region.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># r10 query for FY 2025 TMDLs</span></span>
 <span><span class="va">tmdl.proj</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_TMDLs.html">EQ_TMDLs</a></span><span class="op">(</span></span>
 <span>  region <span class="op">=</span> <span class="fl">10</span>,</span>
@@ -854,7 +857,7 @@ In order to create a readable table with only one row per actionId, we
 will use <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> functions to
 manipulate the data frame so that for example, multiple pollutants will
 be listed together in the same row.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tmdl.sum</span> <span class="op">&lt;-</span> <span class="va">tmdl.proj</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># select columns</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
@@ -900,7 +903,7 @@ How many actions (by actionIds) are in this group?</strong></p>
 find the answer and display the relevant actionIds. For the query, we
 use EQ_Actions to search for Delaware actions with the “in_meas”
 parameter set to “Yes”. Then we count the distinct actionIds.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query Actions from Delaware that are included in Measures</span></span>
 <span><span class="va">DE.meas</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_Actions.html">EQ_Actions</a></span><span class="op">(</span></span>
 <span>  statecode <span class="op">=</span> <span class="st">"DE"</span>,</span>
@@ -908,13 +911,13 @@ parameter set to “Yes”. Then we count the distinct actionIds.</p>
 <span>  api_key <span class="op">=</span> <span class="va">testkey</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "EQ_Actions: The current query will return 649 rows."</span></span></code></pre>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># count unique actionIds</span></span>
 <span><span class="va">DE.count</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">DE.meas</span><span class="op">$</span><span class="va">actionId</span><span class="op">)</span></span></code></pre></div>
 <p>There are 480 actionIds that should be included when calculating
 measures for Delaware. In a similar process to the final TMDL example,
 we can create a data table with one row per actionId.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># determine unique actionIds</span></span>
 <span><span class="va">DE.actids</span> <span class="op">&lt;-</span> <span class="va">DE.meas</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># select columns</span></span>
@@ -935,7 +938,7 @@ we can create a data table with one row per actionId.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">parameter</span>, <span class="op">-</span><span class="va">assessmentUnitId</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># retain unique rows</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span></span>
 <span>  <span class="va">DE.actids</span> <span class="op">|&gt;</span></span>
 <span><span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_FormatPlanLinks.html">EQ_FormatPlanLinks</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -952,7 +955,7 @@ FY 2024? What was the most common type of action established in R3 in FY
 <p>For this query, we will set region equal to 3 and both
 fisc_year_start and fisc_year_end to 2024. Then use <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> and <a href="https://rstudio.github.io/DT/" class="external-link">DT</a> to summarize and display
 results as in the first EQ_Actions example.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query for R3 FY2024 actions</span></span>
 <span><span class="va">act.fy.24</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_Actions.html">EQ_Actions</a></span><span class="op">(</span></span>
 <span>  region <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -965,7 +968,7 @@ results as in the first EQ_Actions example.</p>
 <span><span class="va">n_act.fy.24</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">act.fy.24</span><span class="op">$</span><span class="va">actionId</span><span class="op">)</span></span></code></pre></div>
 <p>There were 6 unique actions by actionId established in R3 in FY 2024.
 We can create data table with counts for each actionType.</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">act.fy.24.counts</span> <span class="op">&lt;-</span> <span class="va">act.fy.24</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># select columns</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
@@ -1000,7 +1003,7 @@ keyword.</p>
 keyword “nutrient”?</strong></p>
 <p>The only query parameter we will provide is the keyword
 “nutrient”.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Actions Documents containing "nutrient"</span></span>
 <span><span class="va">nutrient.doc</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_ActionsDocuments.html">EQ_ActionsDocuments</a></span><span class="op">(</span></span>
 <span>  doc_query <span class="op">=</span> <span class="st">"nutrient"</span>,</span>
@@ -1012,7 +1015,7 @@ column “actionDocumentUrl” containing the URL to link to the document.
 Because the query yields so many results, we’ll take a look at the
 highest ranking 50 matches in a <a href="https://rstudio.github.io/DT/" class="external-link">DT</a> data table to understand the
 structure of the results.</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create data table</span></span>
 <span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span></span>
 <span>  <span class="va">nutrient.doc</span> <span class="op">|&gt;</span></span>
@@ -1031,13 +1034,13 @@ structure of the results.</p>
 per region from the initial “nutrients” keyword query. We can display
 the results in a <a href="https://plotly.com/r/" class="external-link">plotly</a> bar
 plot.</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nutrient.doc.regions</span> <span class="op">&lt;-</span> <span class="va">nutrient.doc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># group by region</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">region</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># count action ids by region</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">actionId</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create bar plot</span></span>
 <span><span class="fu">plotly</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/plotly/man/plot_ly.html" class="external-link">plot_ly</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">nutrient.doc.regions</span>,</span>
@@ -1047,7 +1050,7 @@ plot.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <div class="plotly html-widget html-fill-item" id="htmlwidget-21c7483268bafca56cec" style="width:700px;height:192px;"></div>
-<script type="application/json" data-for="htmlwidget-21c7483268bafca56cec">{"x":{"visdat":{"200e465a3626":["function () ","plotlyVisDat"]},"cur_data":"200e465a3626","attrs":{"200e465a3626":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"region","type":"category","categoryorder":"array","categoryarray":["01","02","03","04","05","06","07","08","09","10"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"count"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["01","02","03","04","05","06","07","08","09","10"],"y":[705,335,5515,1148,1213,784,904,878,213,254],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p class="caption">
+<script type="application/json" data-for="htmlwidget-21c7483268bafca56cec">{"x":{"visdat":{"1ff641643171":["function () ","plotlyVisDat"]},"cur_data":"1ff641643171","attrs":{"1ff641643171":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"region","type":"category","categoryorder":"array","categoryarray":["01","02","03","04","05","06","07","08","09","10"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"count"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["01","02","03","04","05","06","07","08","09","10"],"y":[705,335,5515,1148,1213,784,904,878,213,254],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p class="caption">
 Fig 5. Number of documents containing the keyword ‘nutrient’ by EPA
 Region.
 </p>
@@ -1070,7 +1073,7 @@ only rows that have a value for monitoringLocation. We can create a <a href="htt
 results. We can also use the base R functions sort and unique to make a
 list of the organizations represented in the monitoringLocationOrgId
 column and organize them alphabetically.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query for assessment units and monitoring locations from Alaska</span></span>
 <span><span class="va">ak.mls</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_AUsMLs.html">EQ_AUsMLs</a></span><span class="op">(</span></span>
 <span>  statecode <span class="op">=</span> <span class="st">"AK"</span>,</span>
@@ -1107,7 +1110,7 @@ monitoringLocations in Alaska?</strong></p>
 <p>This question can be answered by filtering the initial Alaska query
 results for assessmentUnitIds without any corresponding
 monitoringLocationIdentifiers.</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># filter Alaska data set for assessmentUnitIds without listed monitoringLocationIds</span></span>
 <span><span class="va">no.ml.ak</span> <span class="op">&lt;-</span> <span class="va">ak.mls</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">assessmentUnitId</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">filt.ak.mls</span><span class="op">$</span><span class="va">assessmentUnitId</span><span class="op">)</span></span>
@@ -1129,7 +1132,7 @@ their latest report cycle?</strong></p>
 <p>Start by querying for EQ_Source for region 6. Then use <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> and <a href="https://openintrostat.github.io/usdata/index.html" class="external-link">usdata</a> to
 manipulate the data and create a list of the region 6 states that list
 probable sources for any assessments in their latest report cycle.</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query for probable sources in the latest assessment cycle in R6</span></span>
 <span><span class="va">r6.sources</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_Sources.html">EQ_Sources</a></span><span class="op">(</span></span>
 <span>  region <span class="op">=</span> <span class="fl">6</span>,</span>
@@ -1161,7 +1164,7 @@ can use <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> f
 count the number of times a probable source is listed by each state,
 select the most one from each state and make a a <a href="https://rstudio.github.io/DT/" class="external-link">DT</a> data table of the
 results.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># count the number of times a probable source is listed for each state</span></span>
 <span><span class="va">r6.sources.summarize</span> <span class="op">&lt;-</span> <span class="va">r6.sources</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">organizationId</span>, <span class="va">assessmentUnitId</span>, <span class="va">sourceName</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -1197,7 +1200,7 @@ specific assessment unit in catchment correspondence queries.</p>
 the Illinois assessment unit “IL_N-99”. Then we’ll use <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> functions to retain the
 unique rows make a a <a href="https://rstudio.github.io/DT/" class="external-link">DT</a> data
 table.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># query for IL_N-99 catchment data</span></span>
 <span><span class="va">il.n99.catch</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_CatchCorr.html">EQ_CatchCorr</a></span><span class="op">(</span></span>
 <span>  statecode <span class="op">=</span> <span class="st">"IL"</span>,</span>
@@ -1232,7 +1235,7 @@ layers to retrieve the geospatial data for the assessment unit and its
 associated catchments. The data from the catchment association layer
 allows us to sum the total area for all the catchments associated with
 IL_N-99.</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set up query params for ATTAINS geospatial web services</span></span>
 <span><span class="va">query.params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  where <span class="op">=</span> <span class="st">"assessmentunitidentifier IN ('IL_N-99')"</span>,</span>
@@ -1272,7 +1275,7 @@ IL_N-99.</p>
 create a leaflet map with the default Open Street Map tile then add the
 catchment polygons with a popup contain the nhdplusid and area in sq km.
 The final step is to add the assessment unit line.</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create leaflet map</span></span>
 <span><span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/leaflet.html" class="external-link">leaflet</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># add open street map layer</span></span>
@@ -1314,7 +1317,7 @@ for?</strong></p>
 <p>Running the EQ_DomainValues function with no value provided for the
 “domain” argument will return a list of the parameter names that it can
 return domain values for.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run EQ_DomainValues with no value provided for "domain" to return list of params</span></span>
 <span><span class="va">domain.vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/EQ_DomainValues.html">EQ_DomainValues</a></span><span class="op">(</span>api_key <span class="op">=</span> <span class="va">testkey</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## EQ_DomainValues: getting list of available domain names. Values in eq_param can be used as inputs in EQ_DomainValues.</span></span></code></pre>
@@ -1329,7 +1332,7 @@ rExpertQuery functions?</strong></p>
 <p>To find the allowable values for “water_type” in rExpertQuery
 function, we can run EQ_DomainValues again, this time specifying
 “water_type”.</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">water.types</span> <span class="op">&lt;-</span> <span class="fu">rExpertQuery</span><span class="fu">::</span><span class="fu"><a href="../reference/EQ_DomainValues.html">EQ_DomainValues</a></span><span class="op">(</span><span class="st">"water_type"</span>, api_key <span class="op">=</span> <span class="va">testkey</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## EQ_DomainValues: For water_type the values in the 'name' column of the function output are the allowable values for rExpertQuery functions.</span></span></code></pre>
 <pre><code><span><span class="co">## EQ_DomainValues: domain list retrieved from ATTAINS web services.</span></span></code></pre>

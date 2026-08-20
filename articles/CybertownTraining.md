@@ -62,9 +62,15 @@ remotes::install_github("USEPA/rExpertQuery", ref = "add_useclasuse_domainvals",
 
     ## Downloading GitHub repo USEPA/rExpertQuery@add_useclasuse_domainvals
 
-    ## 
+    ## bit64 (4.8.2 -> 4.8.4) [CRAN]
+
+    ## Installing 1 packages: bit64
+
+    ## Installing package into '/home/runner/work/_temp/Library'
+    ## (as 'lib' is unspecified)
+
     ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ## * checking for file ‘/tmp/RtmpyN5FW5/remotes200e8c98f58/USEPA-rExpertQuery-3bf64fc/DESCRIPTION’ ... OK
+    ## * checking for file ‘/tmp/RtmpG1NTu3/remotes1ff64e97e36c/USEPA-rExpertQuery-3bf64fc/DESCRIPTION’ ... OK
     ## * preparing ‘rExpertQuery’:
     ## * checking DESCRIPTION meta-information ... OK
     ## * checking for LF line-endings in source and make files and shell scripts
