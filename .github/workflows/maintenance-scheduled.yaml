@@ -48,9 +48,11 @@ jobs:
         run: |
           library(rExpertQuery)
 
+          api_key <- Sys.getenv("EQ_API_KEY")
+
           # Get/update the data
           df <- rExpertQuery:::EQ_UpdateInternalDomainValues(
-            api_key = rExpertQuery:::.setEQKey()
+            api_key = api_key
           )
 
           # Ensure output directory exists
