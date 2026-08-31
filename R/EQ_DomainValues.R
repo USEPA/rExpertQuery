@@ -216,78 +216,70 @@ EQ_DomainValues <- function(domain = NULL, api_key = NULL) {
 #' param of EQ_DomainValues.
 #'
 # base URL to query ATTAINS web services
-EQ_UpdateInternalDomainValues <- function(api_key = NULL){
+EQ_UpdateInternalDomainValues <- function(api_key = NULL) {
 
-  # check for api key
   if (is.null(api_key)) {
-    stop("EQ_DomainValues: An api key is required to access EQ/ATTAINS web services.")
+    stop("EQ_UpdateInternalDomainValues: An api key is required to access EQ/ATTAINS web services.")
   }
 
-base.url <-  "https://api.epa.gov/attains/domains?"
+  base.url <- "https://api.epa.gov/attains/domains?"
 
-# read in parameter crosswalk
-param.cw <- utils::read.csv(system.file("extdata", "EQParamsCrosswalk.csv",
-                                        package = "rExpertQuery"
-))
-
-  raw.data <- tryCatch(
-    jsonlite::fromJSON(paste0(base.url, "&api_key=", api_key)),
-    error = function(e) NULL)
-
-  # update for domain = NULL
-  eq_domain_values_null <- raw.data |>
-      dplyr::select(domain) |>
-      dplyr::rename(attains_ws_name = domain) |>
-      dplyr::left_join(param.cw, by = "attains_ws_name") |>
-      dplyr::filter(!is.na(eq_name)) |>
-      dplyr::transmute(
-        eq_param = param,
-        attains_ws_name = attains_ws_name,
-        attains_ws_field = attains_ws_field
-      ) |>
-      dplyr::arrange(eq_param)
-
-  # update for other domains
   param.cw <- utils::read.csv(
     system.file("extdata", "EQParamsCrosswalk.csv", package = "rExpertQuery"),
     stringsAsFactors = FALSE
   )
 
+  raw.data <- tryCatch(
+    jsonlite::fromJSON(paste0(base.url, "&api_key=", api_key)),
+    error = function(e) NULL
+  )
+
+  eq_domain_values_null <- raw.data |>
+    dplyr::select(domain) |>
+    dplyr::rename(attains_ws_name = domain) |>
+    dplyr::left_join(param.cw, by = "attains_ws_name") |>
+    dplyr::filter(!is.na(eq_name)) |>
+    dplyr::transmute(
+      eq_param = param,
+      attains_ws_name = attains_ws_name,
+      attains_ws_field = attains_ws_field
+    ) |>
+    dplyr::arrange(eq_param)
+
   param.cw <- param.cw |>
-    dplyr::select(attains_ws_name,
-                  attains_ws_field) |>
+    dplyr::select(attains_ws_name, attains_ws_field) |>
     dplyr::distinct() |>
-    dplyr::filter(attains_ws_name != "",
-                  !is.na(attains_ws_name))
+    dplyr::filter(attains_ws_name != "", !is.na(attains_ws_name))
 
   attains_ws_name <- param.cw |>
-    dplyr::select(attains_ws_name) |>
-    dplyr::filter(attains_ws_name != "" &
-                    !is.na(attains_ws_name)) |>
-    dplyr::distinct() |>
-    dplyr::pull()
+    dplyr::pull(attains_ws_name) |>
+    unique()
 
   fetch_one <- function(param.ws) {
     url <- paste0(base.url, "domainName=", param.ws, "&api_key=", api_key)
 
-    raw.data <- tryCatch(
+    tryCatch(
       jsonlite::fromJSON(url),
-      error = function(e) NULL)
-
-    raw.data
+      error = function(e) NULL
+    )
   }
 
-  eq_domain_values <- purrr::map_dfr(.x = attains_ws_name, .f = fetch_one)
+  eq_domain_values <- purrr::map_dfr(attains_ws_name, fetch_one)
 
   eq_domain_values <- eq_domain_values |>
-    dplyr::left_join(param.cw, by = c("domain" = "attains_ws_name"),
-                     relationship = "many-to-many") |>
+    dplyr::left_join(
+      param.cw,
+      by = c("domain" = "attains_ws_name"),
+      relationship = "many-to-many"
+    ) |>
     dplyr::rename(attains_ws_name = domain)
 
-  usethis::use_data(
-    eq_domain_values,
-    eq_domain_values_null,
-    internal = TRUE,
-    overwrite = TRUE
-  )
+  dir.create("data", recursive = TRUE, showWarnings = FALSE)
+
+  save(eq_domain_values, eq_domain_values_null, file = "data/ATTAINSDomainValues.rda")
+
+  invisible(list(
+    eq_domain_values = eq_domain_values,
+    eq_domain_values_null = eq_domain_values_null
+  ))
 }
