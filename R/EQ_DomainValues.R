@@ -122,8 +122,11 @@ EQ_DomainValues <- function(domain = NULL, api_key = NULL) {
       return(eq.params)
     } else {
       message("EQ_DomainValues: ATTAINS domain list unavailable; returning internal list (may be out of date).")
-      eq_domain_values_null <- utils::getFromNamespace("eq_domain_values_null", "rExpertQuery")
-      return(eq_domain_values_null)
+
+      ATTAINSDomainValues <- NULL
+      utils::data("ATTAINSDomainValues", package = "rExpertQuery", envir = environment())
+
+      return(ATTAINSDomainValues$eq_domain_values_null)
     }
 
   } else {
@@ -186,11 +189,17 @@ EQ_DomainValues <- function(domain = NULL, api_key = NULL) {
       # fallback to internal crosswalk-derived values (NOT the NULL-domain list)
       message("EQ_DomainValues: ATTAINS domain values unavailable; returning internal list (may be out of date).")
 
-      eq_domain_values <- utils::getFromNamespace("eq_domain_values", "rExpertQuery")
+      ATTAINSDomainValues <- NULL
+      utils::data("ATTAINSDomainValues", package = "rExpertQuery", envir = environment())
+
+      eq_domain_values <- ATTAINSDomainValues$eq_domain_values
 
       eq.params <- eq_domain_values |>
-        dplyr::left_join(param.cw, by = c("attains_ws_name", "attains_ws_field"),
-                         relationship = "many-to-many") |>
+        dplyr::left_join(
+          param.cw,
+          by = c("attains_ws_name", "attains_ws_field"),
+          relationship = "many-to-many"
+        ) |>
         dplyr::filter(param == dom) |>
         dplyr::rename(eq_param = param) |>
         dplyr::select(dplyr::all_of(retain.cols)) |>
