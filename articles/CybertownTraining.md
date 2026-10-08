@@ -64,7 +64,7 @@ remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TR
 
     ## 
     ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ## * checking for file ‘/tmp/RtmplGOJgH/remotes1f691c60e2aa/USEPA-rExpertQuery-0db9107/DESCRIPTION’ ... OK
+    ## * checking for file ‘/tmp/RtmpyjMTqZ/remotes1f7063d94377/USEPA-rExpertQuery-78a57f9/DESCRIPTION’ ... OK
     ## * preparing ‘rExpertQuery’:
     ## * checking DESCRIPTION meta-information ... OK
     ## * checking for LF line-endings in source and make files and shell scripts
