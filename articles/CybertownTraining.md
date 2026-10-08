@@ -64,7 +64,7 @@ remotes::install_github("USEPA/rExpertQuery", ref = "develop", dependencies = TR
 
     ## 
     ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ## * checking for file ‘/tmp/RtmpazxOV3/remotes225f3fcfb9c9/USEPA-rExpertQuery-ecb037d/DESCRIPTION’ ... OK
+    ## * checking for file ‘/tmp/RtmplGOJgH/remotes1f691c60e2aa/USEPA-rExpertQuery-0db9107/DESCRIPTION’ ... OK
     ## * preparing ‘rExpertQuery’:
     ## * checking DESCRIPTION meta-information ... OK
     ## * checking for LF line-endings in source and make files and shell scripts
@@ -243,7 +243,7 @@ A screenshot of the Expert Query National Downloads web page
     assessments.nat <- rExpertQuery::EQ_NationalExtract("assessments")
     ```
 
-        ## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on August 28, 2026 at 09:29 PM EDT."
+        ## [1] "EQ_NationalExtract: downloading Assessments Profile (Expert Query National Extract). It was last updated on October 02, 2026 at 11:37 PM EDT."
 
     ``` r
 
@@ -419,7 +419,7 @@ A screenshot of the Expert Query National Downloads web page
       dplyr::filter(epaIrCategory %in% c("4", "5"))
     ```
 
-    The resulting data frame is large, with 139,342 unique impaired
+    The resulting data frame is large, with 139,510 unique impaired
     waters nationally. Due to its size, we’ll include a random subset of
     250 results in a data table to review during the demo. You can view
     the full results by viewing the imp.waters df.
@@ -1046,7 +1046,7 @@ keyword.
     )
     ```
 
-    This query yields 16,998 results. As well as providing the actionId
+    This query yields 17,043 results. As well as providing the actionId
     and documentName for all results, *EQ_Actions()* also returns the
     column “actionDocumentUrl” containing the URL to link to the
     document. Because the query yields so many results, we’ll take a
@@ -1323,7 +1323,7 @@ specific assessment unit in catchment correspondence queries.
       dplyr::pull()
     ```
 
-    The total catchment area associated with IL_N-99 is 35.6019.
+    The total catchment area associated with IL_N-99 is 35.5815.
 
     To create map of IL_N-99 and and its associated catchments, we can
     create a leaflet map with the default Open Street Map tile then add
